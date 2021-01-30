@@ -1,15 +1,14 @@
 package com.bartlomiejpluta.samplegame.core.world.object;
 
-import com.bartlomiejpluta.samplegame.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.samplegame.core.gl.render.Renderable;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-@RequiredArgsConstructor
-public abstract class Object implements Renderable {
-   private final Mesh mesh;
+import static java.lang.Math.toRadians;
+
+public abstract class Object {
+   private final Matrix4f modelMatrix = new Matrix4f();
 
    @Getter
    private final Vector3f position = new Vector3f(0, 0, 0);
@@ -34,6 +33,20 @@ public abstract class Object implements Renderable {
       this.position.z = position.z;
       return this;
    }
+   
+   public Object movePosition(float x, float y, float z) {
+      position.x += x;
+      position.y += y;
+      position.z += z;
+      return this;
+   }
+
+   public Object movePosition(Vector3f position) {
+      this.position.x += position.x;
+      this.position.y += position.y;
+      this.position.z += position.z;
+      return this;
+   }
 
    public Object setRotation(float x, float y, float z) {
       rotation.x = x;
@@ -49,13 +62,27 @@ public abstract class Object implements Renderable {
       return this;
    }
 
-   @Override
-   public void render() {
-      mesh.render();
+   public Object moveRotation(float x, float y, float z) {
+      rotation.x += x;
+      rotation.y += y;
+      rotation.z += z;
+      return this;
    }
 
-   @Override
-   public void cleanUp() {
-      mesh.cleanUp();
+   public Object moveRotation(Vector3f rotation) {
+      this.rotation.x += rotation.x;
+      this.rotation.y += rotation.y;
+      this.rotation.z += rotation.z;
+      return this;
+   }
+   
+   public Matrix4f getModelMatrix() {
+      return modelMatrix
+              .identity()
+              .translate(position)
+              .rotateX((float) toRadians(-rotation.x))
+              .rotateY((float) toRadians(-rotation.y))
+              .rotateZ((float) toRadians(-rotation.z))
+              .scale(scale);
    }
 }

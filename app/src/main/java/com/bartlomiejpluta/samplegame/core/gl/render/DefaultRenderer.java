@@ -1,18 +1,14 @@
 package com.bartlomiejpluta.samplegame.core.gl.render;
 
-import com.bartlomiejpluta.samplegame.core.ui.Window;
+import com.bartlomiejpluta.samplegame.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.samplegame.core.ui.Window;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.lwjgl.system.MemoryStack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 @Slf4j
 @Component
@@ -23,7 +19,10 @@ public class DefaultRenderer implements Renderer {
    @Override
    public void init() {
       log.info("Initializing renderer");
-      shaderManager.createShader("default", "/shaders/default.vs", "/shaders/default.fs");
+      shaderManager
+              .createShader("default", "/shaders/default.vs", "/shaders/default.fs")
+              .selectShader("default")
+              .createUniform(UniformName.UNI_MODEL_MATRIX);
    }
 
    @Override
@@ -33,7 +32,7 @@ public class DefaultRenderer implements Renderer {
 
       shaderManager.selectShader("default").useSelectedShader();
 
-      renderable.render();
+      renderable.render(shaderManager);
 
       shaderManager.detachCurrentShader();
    }

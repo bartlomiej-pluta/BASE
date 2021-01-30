@@ -1,27 +1,31 @@
 package com.bartlomiejpluta.samplegame.core.world.scene;
 
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderable;
+import com.bartlomiejpluta.samplegame.core.gl.shader.constant.UniformName;
+import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.samplegame.core.world.object.RenderableObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scene implements Renderable {
-   private final List<Renderable> renderables = new ArrayList<>();
+   private final List<RenderableObject> objects = new ArrayList<>();
 
-   public Scene add(Renderable renderable) {
-      renderables.add(renderable);
+   public Scene add(RenderableObject object) {
+      objects.add(object);
       return this;
    }
 
    @Override
-   public void render() {
-      for(var renderable : renderables) {
-         renderable.render();
+   public void render(ShaderManager shaderManager) {
+      for(var object : objects) {
+         shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, object.getModelMatrix());
+         object.render(shaderManager);
       }
    }
 
    @Override
    public void cleanUp() {
-      renderables.forEach(Renderable::cleanUp);
+      objects.forEach(Renderable::cleanUp);
    }
 }
