@@ -3,12 +3,17 @@ package com.bartlomiejpluta.samplegame.core.world.scene;
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderable;
 import com.bartlomiejpluta.samplegame.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.samplegame.core.ui.Window;
+import com.bartlomiejpluta.samplegame.core.world.camera.Camera;
 import com.bartlomiejpluta.samplegame.core.world.object.RenderableObject;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class Scene implements Renderable {
+   private final Camera camera;
    private final List<RenderableObject> objects = new ArrayList<>();
 
    public Scene add(RenderableObject object) {
@@ -17,10 +22,13 @@ public class Scene implements Renderable {
    }
 
    @Override
-   public void render(ShaderManager shaderManager) {
+   public void render(Window window, ShaderManager shaderManager) {
+      shaderManager.setUniform(UniformName.UNI_PROJECTION_MATRIX, camera.getProjectionMatrix(window));
+      shaderManager.setUniform(UniformName.UNI_VIEW_MATRIX, camera.getViewMatrix());
+
       for(var object : objects) {
          shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, object.getModelMatrix());
-         object.render(shaderManager);
+         object.render(window, shaderManager);
       }
    }
 

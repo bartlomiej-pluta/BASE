@@ -11,14 +11,14 @@ public abstract class Object {
    private final Matrix4f modelMatrix = new Matrix4f();
 
    @Getter
-   private final Vector3f position = new Vector3f(0, 0, 0);
+   protected final Vector3f position = new Vector3f(0, 0, 0);
 
    @Getter
-   private final Vector3f rotation = new Vector3f(0, 0, 0);
+   protected final Vector3f rotation = new Vector3f(0, 0, 0);
 
    @Getter
    @Setter
-   private float scale = 1.0f;
+   protected float scale = 1.0f;
 
    public Object setPosition(float x, float y, float z) {
       position.x = x;

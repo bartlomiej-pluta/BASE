@@ -22,7 +22,9 @@ public class DefaultRenderer implements Renderer {
       shaderManager
               .createShader("default", "/shaders/default.vs", "/shaders/default.fs")
               .selectShader("default")
-              .createUniform(UniformName.UNI_MODEL_MATRIX);
+              .createUniform(UniformName.UNI_MODEL_MATRIX)
+              .createUniform(UniformName.UNI_VIEW_MATRIX)
+              .createUniform(UniformName.UNI_PROJECTION_MATRIX);
    }
 
    @Override
@@ -32,7 +34,7 @@ public class DefaultRenderer implements Renderer {
 
       shaderManager.selectShader("default").useSelectedShader();
 
-      renderable.render(shaderManager);
+      renderable.render(window, shaderManager);
 
       shaderManager.detachCurrentShader();
    }

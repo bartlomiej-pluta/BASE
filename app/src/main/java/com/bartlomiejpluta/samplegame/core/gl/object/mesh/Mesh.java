@@ -2,7 +2,7 @@ package com.bartlomiejpluta.samplegame.core.gl.object.mesh;
 
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderable;
 import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.samplegame.core.gl.shader.program.ShaderProgram;
+import com.bartlomiejpluta.samplegame.core.ui.Window;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.system.MemoryStack;
 
@@ -46,7 +46,7 @@ public class Mesh implements Renderable {
    }
 
    @Override
-   public void render(ShaderManager shaderManager) {
+   public void render(Window window, ShaderManager shaderManager) {
       glBindVertexArray(vaoId);
       glEnableVertexAttribArray(0);
       glDrawElements(GL_TRIANGLES, elementsCount, GL_UNSIGNED_INT, 0);

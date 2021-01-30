@@ -3,6 +3,7 @@ package com.bartlomiejpluta.samplegame.game.logic;
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderer;
 import com.bartlomiejpluta.samplegame.core.logic.GameLogic;
 import com.bartlomiejpluta.samplegame.core.ui.Window;
+import com.bartlomiejpluta.samplegame.core.world.camera.Camera;
 import com.bartlomiejpluta.samplegame.core.world.object.Sprite;
 import com.bartlomiejpluta.samplegame.core.world.scene.Scene;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultGameLogic implements GameLogic {
    private final Renderer renderer;
-   private final Scene scene = new Scene();
+   private final Camera camera = new Camera();
+   private final Scene scene = new Scene(camera);
 
    Sprite sprite;
 
@@ -26,6 +28,8 @@ public class DefaultGameLogic implements GameLogic {
       renderer.init();
 
       sprite = new Sprite();
+      sprite.setPosition(window.getWidth() / 2.0f, window.getHeight() / 2.0f, 0);
+      sprite.setScale(100);
       scene.add(sprite);
    }
 
