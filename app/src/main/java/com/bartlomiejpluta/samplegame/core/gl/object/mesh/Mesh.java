@@ -1,8 +1,12 @@
 package com.bartlomiejpluta.samplegame.core.gl.object.mesh;
 
+import com.bartlomiejpluta.samplegame.core.gl.object.material.Material;
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderable;
 import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.samplegame.core.ui.Window;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.system.MemoryStack;
 
@@ -17,6 +21,10 @@ public class Mesh implements Renderable {
    private final int vaoId;
    private final List<Integer> vboIds = new ArrayList<>(2);
    private final int elementsCount;
+
+   @Getter
+   @Setter
+   private Material material;
 
    public Mesh(float[] vertices, int[] elements) {
       try(var stack = MemoryStack.stackPush()) {

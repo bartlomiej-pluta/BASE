@@ -24,7 +24,8 @@ public class DefaultRenderer implements Renderer {
               .selectShader("default")
               .createUniform(UniformName.UNI_MODEL_MATRIX)
               .createUniform(UniformName.UNI_VIEW_MATRIX)
-              .createUniform(UniformName.UNI_PROJECTION_MATRIX);
+              .createUniform(UniformName.UNI_PROJECTION_MATRIX)
+              .createUniform(UniformName.UNI_OBJECT_COLOR);
    }
 
    @Override
