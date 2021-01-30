@@ -3,6 +3,8 @@ package com.bartlomiejpluta.samplegame.game.logic;
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderer;
 import com.bartlomiejpluta.samplegame.core.logic.GameLogic;
 import com.bartlomiejpluta.samplegame.core.ui.Window;
+import com.bartlomiejpluta.samplegame.core.world.object.Sprite;
+import com.bartlomiejpluta.samplegame.core.world.scene.Scene;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultGameLogic implements GameLogic {
    private final Renderer renderer;
+   private final Scene scene = new Scene();
 
    @Override
    public void init(Window window) {
       log.info("Initializing game logic");
       renderer.init();
+
+      scene.add(new Sprite());
    }
 
    @Override
@@ -32,7 +37,7 @@ public class DefaultGameLogic implements GameLogic {
 
    @Override
    public void render(Window window) {
-      renderer.render(window);
+      renderer.render(window, scene);
    }
 
    @Override

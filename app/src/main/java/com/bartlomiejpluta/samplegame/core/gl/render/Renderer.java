@@ -5,7 +5,7 @@ import com.bartlomiejpluta.samplegame.core.ui.Window;
 public interface Renderer {
    void init();
 
-   void render(Window window);
+   void render(Window window, Renderable renderable);
 
    void cleanUp();
 }

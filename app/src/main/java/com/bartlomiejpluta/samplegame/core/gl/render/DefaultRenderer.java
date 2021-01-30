@@ -27,13 +27,13 @@ public class DefaultRenderer implements Renderer {
    }
 
    @Override
-   public void render(Window window) {
+   public void render(Window window, Renderable renderable) {
       clear();
       updateViewport(window);
 
       shaderManager.selectShader("default").useSelectedShader();
 
-      // here the objects will be rendered with the default shader
+      renderable.render();
 
       shaderManager.detachCurrentShader();
    }
