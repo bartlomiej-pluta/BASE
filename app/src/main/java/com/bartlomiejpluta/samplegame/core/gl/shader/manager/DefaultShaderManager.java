@@ -84,6 +84,12 @@ public class DefaultShaderManager implements ShaderManager {
    }
 
    @Override
+   public ShaderManager setUniform(String uniformName, boolean value) {
+      current.setUniform(uniformName, value);
+      return this;
+   }
+
+   @Override
    public ShaderManager setUniform(String uniformName, float value) {
       current.setUniform(uniformName, value);
       return this;

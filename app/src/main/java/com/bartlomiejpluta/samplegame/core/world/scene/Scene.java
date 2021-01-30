@@ -29,6 +29,9 @@ public class Scene implements Renderable {
       for(var object : objects) {
          shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, object.getModelMatrix());
          shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, object.getMaterial().getColor());
+         shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, object.getMaterial().hasTexture());
+         shaderManager.setUniform(UniformName.UNI_TEXTURE_SAMPLER, 0);
+
          object.render(window, shaderManager);
       }
    }

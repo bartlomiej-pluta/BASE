@@ -25,7 +25,9 @@ public class DefaultRenderer implements Renderer {
               .createUniform(UniformName.UNI_MODEL_MATRIX)
               .createUniform(UniformName.UNI_VIEW_MATRIX)
               .createUniform(UniformName.UNI_PROJECTION_MATRIX)
-              .createUniform(UniformName.UNI_OBJECT_COLOR);
+              .createUniform(UniformName.UNI_OBJECT_COLOR)
+              .createUniform(UniformName.UNI_HAS_OBJECT_TEXTURE)
+              .createUniform(UniformName.UNI_TEXTURE_SAMPLER);
    }
 
    @Override
@@ -45,7 +47,7 @@ public class DefaultRenderer implements Renderer {
    }
 
    private void updateViewport(Window window) {
-      if(window.isResized()) {
+      if (window.isResized()) {
          glViewport(0, 0, window.getWidth(), window.getHeight());
          window.setResized(false);
       }

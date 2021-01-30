@@ -21,6 +21,7 @@ public abstract class RenderableObject extends Object implements Renderable {
 
    @Override
    public void render(Window window, ShaderManager shaderManager) {
+      getMaterial().activateTextureIfExists();
       mesh.render(window, shaderManager);
    }
 

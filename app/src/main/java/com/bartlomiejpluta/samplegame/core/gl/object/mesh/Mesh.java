@@ -26,12 +26,14 @@ public class Mesh implements Renderable {
    @Setter
    private Material material;
 
-   public Mesh(float[] vertices, int[] elements) {
+   public Mesh(float[] vertices, float[] texCoords, int[] elements) {
       try(var stack = MemoryStack.stackPush()) {
          elementsCount = elements.length;
          var verticesBuffer = stack.mallocFloat(vertices.length);
+         var texCoordsBuffer = stack.mallocFloat(texCoords.length);
          var elementsBuffer = stack.mallocInt(elementsCount);
          verticesBuffer.put(vertices).flip();
+         texCoordsBuffer.put(texCoords).flip();
          elementsBuffer.put(elements).flip();
 
          vaoId = glGenVertexArrays();
@@ -41,7 +43,13 @@ public class Mesh implements Renderable {
          vboIds.add(vboId);
          glBindBuffer(GL_ARRAY_BUFFER, vboId);
          glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
-         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+         glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+
+         vboId = glGenBuffers();
+         vboIds.add(vboId);
+         glBindBuffer(GL_ARRAY_BUFFER, vboId);
+         glBufferData(GL_ARRAY_BUFFER, texCoordsBuffer, GL_STATIC_DRAW);
+         glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
          vboId = glGenBuffers();
          vboIds.add(vboId);
@@ -57,8 +65,10 @@ public class Mesh implements Renderable {
    public void render(Window window, ShaderManager shaderManager) {
       glBindVertexArray(vaoId);
       glEnableVertexAttribArray(0);
+      glEnableVertexAttribArray(1);
       glDrawElements(GL_TRIANGLES, elementsCount, GL_UNSIGNED_INT, 0);
       glDisableVertexAttribArray(0);
+      glDisableVertexAttribArray(1);
       glBindVertexArray(0);
    }
 
