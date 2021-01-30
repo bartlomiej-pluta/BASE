@@ -1,6 +1,6 @@
-package com.bartlomiejpluta.samplegame.game.map;
+package com.bartlomiejpluta.samplegame.game.world.map;
 
-import com.bartlomiejpluta.samplegame.game.tile.Tile;
+import com.bartlomiejpluta.samplegame.game.world.tileset.model.Tile;
 import lombok.Getter;
 
 import java.util.Arrays;

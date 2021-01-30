@@ -1,6 +1,7 @@
-package com.bartlomiejpluta.samplegame.game.tile;
+package com.bartlomiejpluta.samplegame.game.world.tileset.manager;
 
 import com.bartlomiejpluta.samplegame.core.gl.object.texture.TextureManager;
+import com.bartlomiejpluta.samplegame.game.world.tileset.model.TileSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

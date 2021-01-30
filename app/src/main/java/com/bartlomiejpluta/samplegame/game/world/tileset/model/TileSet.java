@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.samplegame.game.tile;
+package com.bartlomiejpluta.samplegame.game.world.tileset.model;
 
 import com.bartlomiejpluta.samplegame.core.gl.object.texture.Texture;
 
