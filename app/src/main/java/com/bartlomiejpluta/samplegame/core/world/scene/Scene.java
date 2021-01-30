@@ -6,38 +6,47 @@ import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.samplegame.core.ui.Window;
 import com.bartlomiejpluta.samplegame.core.world.camera.Camera;
 import com.bartlomiejpluta.samplegame.core.world.object.RenderableObject;
-import lombok.RequiredArgsConstructor;
+import com.bartlomiejpluta.samplegame.game.map.GameMap;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class Scene implements Renderable {
    private final Camera camera;
-   private final List<RenderableObject> objects = new ArrayList<>();
 
-   public Scene add(RenderableObject object) {
-      objects.add(object);
-      return this;
-   }
+   @Setter
+   private GameMap map;
 
    @Override
    public void render(Window window, ShaderManager shaderManager) {
       shaderManager.setUniform(UniformName.UNI_PROJECTION_MATRIX, camera.getProjectionMatrix(window));
       shaderManager.setUniform(UniformName.UNI_VIEW_MATRIX, camera.getViewMatrix());
 
-      for(var object : objects) {
-         shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, object.getModelMatrix());
-         shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, object.getMaterial().getColor());
-         shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, object.getMaterial().hasTexture());
-         shaderManager.setUniform(UniformName.UNI_TEXTURE_SAMPLER, 0);
+      renderArray(map.getLayer(0), window, shaderManager);
+      renderArray(map.getLayer(1), window, shaderManager);
 
-         object.render(window, shaderManager);
+      // The player will be here
+
+      renderArray(map.getLayer(2), window, shaderManager);
+      renderArray(map.getLayer(3), window, shaderManager);
+
+   }
+
+   private <T extends RenderableObject> void renderArray(T[] objects, Window window, ShaderManager shaderManager) {
+      for (var object : objects) {
+         if (object != null) {
+            shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, object.getModelMatrix());
+            shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, object.getMaterial().getColor());
+            shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, object.getMaterial().hasTexture());
+            shaderManager.setUniform(UniformName.UNI_TEXTURE_SAMPLER, 0);
+
+            object.render(window, shaderManager);
+         }
       }
    }
 
    @Override
    public void cleanUp() {
-      objects.forEach(Renderable::cleanUp);
+      map.cleanUp();
    }
 }

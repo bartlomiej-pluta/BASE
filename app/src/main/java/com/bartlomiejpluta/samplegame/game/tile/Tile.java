@@ -41,12 +41,12 @@ public class Tile extends RenderableObject {
       };
    }
 
-   private static float[] getTextureCoordinates(int row, int col, int tileSize, int textureWidth, int textureHeight) {
+   private static float[] getTextureCoordinates(int col, int row, int tileSize, int textureWidth, int textureHeight) {
       return new float[]{
-              (row * tileSize) / (float) textureWidth, (col * tileSize) / (float) textureHeight,
-              (row * tileSize) / (float) textureWidth, ((col + 1) * tileSize) / (float) textureHeight,
-              ((row + 1) * tileSize) / (float) textureWidth, ((col + 1) * tileSize) / (float) textureHeight,
-              ((row + 1) * tileSize) / (float) textureWidth, (col * tileSize) / (float) textureHeight
+              (col * tileSize) / (float) textureWidth, (row * tileSize) / (float) textureHeight,
+              (col * tileSize) / (float) textureWidth, ((row + 1) * tileSize) / (float) textureHeight,
+              ((col + 1) * tileSize) / (float) textureWidth, ((row + 1) * tileSize) / (float) textureHeight,
+              ((col + 1) * tileSize) / (float) textureWidth, (row * tileSize) / (float) textureHeight
       };
    }
 }
