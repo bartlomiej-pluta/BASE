@@ -3,6 +3,8 @@ package com.bartlomiejpluta.samplegame.core.ui;
 import com.bartlomiejpluta.samplegame.core.error.AppException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -15,9 +17,16 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Window {
    private final String title;
-   private int width;
-   private int height;
    private long windowHandle;
+
+   @Getter
+   private int width;
+
+   @Getter
+   private int height;
+
+   @Getter
+   @Setter
    private boolean resized;
 
    public void init() {
@@ -102,6 +111,6 @@ public class Window {
    }
 
    public static Window create(String title, int width, int height) {
-      return new Window(title, width, height, -1, false);
+      return new Window(title, -1, width, height, false);
    }
 }

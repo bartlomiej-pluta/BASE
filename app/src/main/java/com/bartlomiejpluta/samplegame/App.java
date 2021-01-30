@@ -5,12 +5,14 @@ package com.bartlomiejpluta.samplegame;
 
 import com.bartlomiejpluta.samplegame.core.engine.GameEngine;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@Slf4j
 @SpringBootApplication
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class App implements ApplicationRunner {
@@ -18,6 +20,7 @@ public class App implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        log.info("Starting game engine");
         gameEngine.start();
     }
 

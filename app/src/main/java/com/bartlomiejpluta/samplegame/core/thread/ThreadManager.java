@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ThreadManager {
-   public Thread createThread(Runnable runnable) {
-      return new Thread(runnable);
+   public Thread createThread(String name, Runnable runnable) {
+      return new Thread(runnable, name);
    }
 }
