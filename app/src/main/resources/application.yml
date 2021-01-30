@@ -1,0 +1,8 @@
+app:
+  window:
+    title: "Simple Game"
+    width: 640
+    height: 480
+
+  core:
+    targetUps: 50 # Updates per second
