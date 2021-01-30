@@ -3,12 +3,20 @@
  */
 package com.bartlomiejpluta.samplegame;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class App implements ApplicationRunner {
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        SpringApplication.run(App.class, args);
+    }
+
+    @Override
+    public void run(ApplicationArguments args) {
+
     }
 }
