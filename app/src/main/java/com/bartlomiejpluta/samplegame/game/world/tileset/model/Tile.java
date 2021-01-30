@@ -1,16 +1,19 @@
 package com.bartlomiejpluta.samplegame.game.world.tileset.model;
 
-import com.bartlomiejpluta.samplegame.core.gl.object.texture.Texture;
-
-import com.bartlomiejpluta.samplegame.game.sprite.BaseSprite;
+import com.bartlomiejpluta.samplegame.core.gl.object.material.Material;
+import com.bartlomiejpluta.samplegame.core.gl.object.mesh.Mesh;
+import com.bartlomiejpluta.samplegame.core.world.object.RenderableObject;
 import lombok.Getter;
 
 @Getter
-public class Tile extends BaseSprite {
-   private final int size;
+public class Tile extends RenderableObject {
+   private final int width;
+   private final int height;
 
-   public Tile(Texture texture, int row, int col, int size) {
-      super(texture, row, col, size, size);
-      this.size = size;
+   Tile(Mesh mesh, Material material, int width, int height) {
+      super(mesh);
+      this.width = width;
+      this.height = height;
+      setMaterial(material);
    }
 }

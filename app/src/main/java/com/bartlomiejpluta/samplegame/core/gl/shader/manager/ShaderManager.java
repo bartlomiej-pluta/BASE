@@ -1,10 +1,7 @@
 package com.bartlomiejpluta.samplegame.core.gl.shader.manager;
 
 import com.bartlomiejpluta.samplegame.core.gl.shader.uniform.Uniform;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 
 public interface ShaderManager {
    ShaderManager createShader(String programName, String vertexShaderFilename, String fragmentShaderFilename);
@@ -28,6 +25,8 @@ public interface ShaderManager {
    ShaderManager setUniform(String uniformName, boolean value);
 
    ShaderManager setUniform(String uniformName, float value);
+
+   ShaderManager setUniform(String uniformName, Vector2f value);
 
    ShaderManager setUniform(String uniformName, Vector3f value);
 

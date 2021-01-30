@@ -29,7 +29,6 @@ public class Scene implements Renderable {
 
       renderArray(map.getLayer(2), window, shaderManager);
       renderArray(map.getLayer(3), window, shaderManager);
-
    }
 
    private <T extends RenderableObject> void renderArray(T[] objects, Window window, ShaderManager shaderManager) {
@@ -45,6 +44,8 @@ public class Scene implements Renderable {
       shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, object.getMaterial().getColor());
       shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, object.getMaterial().hasTexture());
       shaderManager.setUniform(UniformName.UNI_TEXTURE_SAMPLER, 0);
+      shaderManager.setUniform(UniformName.UNI_SPRITE_SIZE, object.getMaterial().getSpriteSize());
+      shaderManager.setUniform(UniformName.UNI_SPRITE_POSITION, object.getMaterial().getSpritePosition());
 
       object.render(window, shaderManager);
    }

@@ -1,25 +1,35 @@
 package com.bartlomiejpluta.samplegame.game.world.tileset.model;
 
+import com.bartlomiejpluta.samplegame.core.gl.object.material.Material;
+import com.bartlomiejpluta.samplegame.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.samplegame.core.gl.object.texture.Texture;
+import com.bartlomiejpluta.samplegame.core.world.object.RenderableObject;
 
 public class TileSet {
-   private static final int TILE_SIZE = 16;
-
    private final Texture texture;
    private final int rows;
-   private final int cols;
+   private final int columns;
+   private final float columnStep;
+   private final float rowStep;
+   private final int tileWidth;
+   private final int tileHeight;
+   private final Mesh mesh;
 
-   public TileSet(Texture texture) {
+   public TileSet(Texture texture, int rows, int columns, int tileWidth, int tileHeight) {
       this.texture = texture;
-      this.rows = texture.getHeight() / TILE_SIZE;
-      this.cols = texture.getWidth() / TILE_SIZE;
+      this.rows = rows;
+      this.columns = columns;
+      this.columnStep = 1/(float) columns;
+      this.rowStep = 1/(float) rows;
+      this.tileWidth = tileWidth;
+      this.tileHeight = tileHeight;
+      this.mesh = Mesh.quad(tileWidth, tileHeight);
    }
 
    public Tile getTile(int m, int n) {
-      return new Tile(texture, m, n, TILE_SIZE);
-   }
-
-   public Tile getTile(int i) {
-      return new Tile(texture, i % cols, i / rows, TILE_SIZE);
+      var material = Material.textured(texture);
+      material.setSpriteSize(columnStep, rowStep);
+      material.setSpritePosition(n * columnStep, m * rowStep);
+      return new Tile(mesh, material, tileWidth, tileHeight);
    }
 }

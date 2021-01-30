@@ -27,7 +27,9 @@ public class DefaultRenderer implements Renderer {
               .createUniform(UniformName.UNI_PROJECTION_MATRIX)
               .createUniform(UniformName.UNI_OBJECT_COLOR)
               .createUniform(UniformName.UNI_HAS_OBJECT_TEXTURE)
-              .createUniform(UniformName.UNI_TEXTURE_SAMPLER);
+              .createUniform(UniformName.UNI_TEXTURE_SAMPLER)
+              .createUniform(UniformName.UNI_SPRITE_SIZE)
+              .createUniform(UniformName.UNI_SPRITE_POSITION);
    }
 
    @Override

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultGameLogic implements GameLogic {
-   private static final float SCALE = 3.0f;
    private final Renderer renderer;
    private final TileSetManager tileSetManager;
 

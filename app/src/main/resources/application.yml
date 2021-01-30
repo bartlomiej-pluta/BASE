@@ -6,3 +6,8 @@ app:
 
   core:
     targetUps: 50 # Updates per second
+
+  map:
+    tile:
+      width: 50
+      height: 50

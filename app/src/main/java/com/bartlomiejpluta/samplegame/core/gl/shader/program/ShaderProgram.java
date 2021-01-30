@@ -3,10 +3,7 @@ package com.bartlomiejpluta.samplegame.core.gl.shader.program;
 import com.bartlomiejpluta.samplegame.core.error.AppException;
 import com.bartlomiejpluta.samplegame.core.gl.shader.uniform.Uniform;
 import lombok.extern.slf4j.Slf4j;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 import org.lwjgl.system.MemoryStack;
 
 import java.util.HashMap;
@@ -109,6 +106,10 @@ public class ShaderProgram {
 
    public void setUniform(String uniformName, float value) {
       glUniform1f(uniforms.get(uniformName), value);
+   }
+
+   public void setUniform(String uniformName, Vector2f value) {
+      glUniform2f(uniforms.get(uniformName), value.x, value.y);
    }
 
    public void setUniform(String uniformName, Vector3f value) {

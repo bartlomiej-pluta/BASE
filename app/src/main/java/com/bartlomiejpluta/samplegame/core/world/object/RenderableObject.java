@@ -5,19 +5,17 @@ import com.bartlomiejpluta.samplegame.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.samplegame.core.gl.render.Renderable;
 import com.bartlomiejpluta.samplegame.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.samplegame.core.ui.Window;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RequiredArgsConstructor
 public abstract class RenderableObject extends Object implements Renderable {
    private final Mesh mesh;
 
-   public void setMaterial(Material material) {
-      mesh.setMaterial(material);
-   }
-
-   public Material getMaterial() {
-      return mesh.getMaterial();
-   }
+   @Getter
+   @Setter
+   private Material material;
 
    @Override
    public void render(Window window, ShaderManager shaderManager) {

@@ -5,10 +5,7 @@ import com.bartlomiejpluta.samplegame.core.gl.shader.program.ShaderProgram;
 import com.bartlomiejpluta.samplegame.core.gl.shader.uniform.Uniform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -91,6 +88,12 @@ public class DefaultShaderManager implements ShaderManager {
 
    @Override
    public ShaderManager setUniform(String uniformName, float value) {
+      current.setUniform(uniformName, value);
+      return this;
+   }
+
+   @Override
+   public ShaderManager setUniform(String uniformName, Vector2f value) {
       current.setUniform(uniformName, value);
       return this;
    }

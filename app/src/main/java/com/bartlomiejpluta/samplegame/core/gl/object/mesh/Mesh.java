@@ -22,10 +22,6 @@ public class Mesh implements Renderable {
    private final List<Integer> vboIds = new ArrayList<>(2);
    private final int elementsCount;
 
-   @Getter
-   @Setter
-   private Material material;
-
    public Mesh(float[] vertices, float[] texCoords, int[] elements) {
       try(var stack = MemoryStack.stackPush()) {
          elementsCount = elements.length;
@@ -82,5 +78,23 @@ public class Mesh implements Renderable {
 
       glBindVertexArray(0);
       glDeleteVertexArrays(vaoId);
+   }
+
+   public static Mesh quad(float width, float height) {
+      var halfWidth = width/2;
+      var halfHeight = height/2;
+
+      var vertices = new float[] {
+              -halfWidth, -halfHeight,
+              -halfWidth, halfHeight,
+              halfWidth, halfHeight,
+              halfWidth, -halfHeight
+      };
+
+      var texCoords = new float[] { 0, 0, 0, 1, 1, 1, 1, 0 };
+
+      var elements = new int[] { 0, 1, 2, 2, 3, 0 };
+
+      return new Mesh(vertices, texCoords, elements);
    }
 }

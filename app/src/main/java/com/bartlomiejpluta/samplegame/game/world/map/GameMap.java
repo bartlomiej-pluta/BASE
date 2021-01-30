@@ -32,7 +32,7 @@ public class GameMap {
 
    private void recalculateTileGeometry(Tile tile, int i, int j) {
       tile.setScale(scale);
-      var size = tile.getSize();
+      var size = tile.getWidth();
       var offset = size * scale;
       tile.setPosition(i * offset, j * offset);
    }
