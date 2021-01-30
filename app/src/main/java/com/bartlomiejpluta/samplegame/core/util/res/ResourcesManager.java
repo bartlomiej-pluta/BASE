@@ -23,7 +23,7 @@ public class ResourcesManager {
 
    public ByteBuffer loadResourceAsByteBuffer(String fileName) {
       try {
-         var bytes = Texture.class.getResourceAsStream(fileName).readAllBytes();
+         var bytes = ResourcesManager.class.getResourceAsStream(fileName).readAllBytes();
          return ByteBuffer
                  .allocateDirect(bytes.length)
                  .order(ByteOrder.nativeOrder())
