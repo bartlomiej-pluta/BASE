@@ -17,6 +17,6 @@ public class Camera extends Object {
    public Matrix4f getViewMatrix() {
       return viewMatrix
               .identity()
-              .translate(-position.x, -position.y, -position.z);
+              .translate(-position.x, -position.y, 0);
    }
 }

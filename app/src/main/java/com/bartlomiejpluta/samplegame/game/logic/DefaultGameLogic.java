@@ -28,7 +28,7 @@ public class DefaultGameLogic implements GameLogic {
       renderer.init();
 
       sprite = new Sprite();
-      sprite.setPosition(window.getWidth() / 2.0f, window.getHeight() / 2.0f, 0);
+      sprite.setPosition(window.getWidth() / 2.0f, window.getHeight() / 2.0f);
       sprite.setScale(100);
       scene.add(sprite);
    }
