@@ -23,7 +23,10 @@ public abstract class MovableObject extends AnimationableObject implements Updat
    );
 
    private final Vector2f coordinateStepSize;
-   private Movement movement;
+
+
+   private int moveTime = 0;
+   private Vector2f movementVector;
 
    @Getter
    private final Vector2i coordinates = new Vector2i(0, 0);
@@ -46,18 +49,18 @@ public abstract class MovableObject extends AnimationableObject implements Updat
 
    @Override
    public boolean shouldAnimate() {
-      return movement != null;
+      return movementVector != null;
    }
 
    @Override
    public void update(float dt) {
-      if (movement != null) {
-         var dS = movement.getMovementVector();
-         if (dS != null) {
-            movePosition(dS);
+      if(movementVector != null) {
+         if(moveTime > 0) {
+            --moveTime;
+            movePosition(movementVector);
          } else {
             adjustCoordinates();
-            movement = null;
+            movementVector = null;
             setAnimationFrame(new Vector2f(DEFAULT_SPRITE, SPRITE_ROWS.get(faceDirection)));
          }
       }
@@ -69,11 +72,14 @@ public abstract class MovableObject extends AnimationableObject implements Updat
    }
 
    public void move(Direction direction) {
-      if (this.movement != null) {
+      if (this.movementVector != null) {
          return;
       }
+
       setFaceDirection(direction);
-      this.movement = new Movement(direction, coordinateStepSize, framesToCrossOneTile);
+      var speed = new Vector2f(coordinateStepSize).div(framesToCrossOneTile);
+      movementVector = direction.asFloatVector().mul(speed);
+      moveTime = framesToCrossOneTile;
    }
 
    public MovableObject setCoordinates(int x, int y) {
