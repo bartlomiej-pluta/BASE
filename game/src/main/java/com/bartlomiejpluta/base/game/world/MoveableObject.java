@@ -3,19 +3,82 @@ package com.bartlomiejpluta.base.game.world;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
+import com.bartlomiejpluta.base.game.logic.Updatable;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 @Slf4j
-@Getter
-public abstract class MoveableObject extends AnimationableObject {
+public abstract class MoveableObject extends AnimationableObject implements Updatable {
    private static final Vector2i SPRITE_DIMENSION = new Vector2i(4, 4);
+   private static final float tolerance = 1f;
 
    private final Vector2i coordinates = new Vector2i(0, 0);
-   private Direction direction = Direction.DOWN;
    private final Vector2f coordinateStepSize;
+   private Vector2i targetCoordinates;
+   private Vector2f targetPosition;
+   private Vector2f targetOffset;
+   private Vector2f dS;
+
+   @Getter
+   @Setter
+   private Direction faceDirection = Direction.DOWN;
+
+   @Getter
+   @Setter
+   private Direction movementDirection = Direction.DOWN;
+
+   @Getter
+   @Setter
+   private float speed;
+
+   @Override
+   public int getAnimationSpeed() {
+      return 100;
+   }
+
+   @Override
+   public boolean shouldAnimate() {
+      return targetCoordinates != null;
+   }
+
+   @Override
+   public void update(float dt) {
+      if(targetCoordinates != null) {
+         movePosition(dS);
+         var distance = new Vector2f(dS).add(getPosition()).distance(targetPosition);
+
+         log.info("Target: [{}, {}], Current: [{}, {}], distance: {}, dS: [{}, {}]", targetPosition.x, targetPosition.y, getPosition().x, getPosition().y, distance, dS.x, dS.y);
+
+         if(distance < tolerance) {
+            setCoordinates(new Vector2i(coordinates).add(targetCoordinates));
+            targetCoordinates = null;
+         }
+      }
+   }
+
+   public void move(Direction direction) {
+      if(this.targetCoordinates != null) {
+         return;
+      }
+
+      setFaceDirection(direction);
+      targetCoordinates = switch (direction) {
+         case UP -> new Vector2i(0, -1);
+         case DOWN -> new Vector2i(0, 1);
+         case LEFT -> new Vector2i(-1, 0);
+         case RIGHT -> new Vector2i(1, 0);
+      };
+
+      targetOffset = new Vector2f(targetCoordinates).mul(coordinateStepSize);
+      targetPosition = new Vector2f(getPosition()).add(targetOffset);
+      dS = new Vector2f(targetOffset).mul(speed);
+      log.info("TargetCoord: [{}, {}], targetOffset: [{}, {}], dS: [{}, {}], targetPos: [{}, {}]", targetCoordinates.x, targetCoordinates.y, targetOffset.x, targetOffset.y, dS.x, dS.y, targetPosition.x, targetPosition.y);
+
+      this.movementDirection = direction;
+   }
 
    public MoveableObject setCoordinates(int x, int y) {
       coordinates.x = x;
@@ -39,11 +102,6 @@ public abstract class MoveableObject extends AnimationableObject {
       return moveCoordinates(coordinates.x, coordinates.y);
    }
 
-   public MoveableObject setDirection(Direction direction) {
-      this.direction = direction;
-      return this;
-   }
-
    @Override
    public Vector2i getSpriteSheetDimensions() {
       return SPRITE_DIMENSION;
@@ -51,7 +109,7 @@ public abstract class MoveableObject extends AnimationableObject {
 
    @Override
    public Vector2f[] getSpriteAnimationFramesPositions() {
-      var row = switch (direction) {
+      var row = switch (faceDirection) {
          case DOWN -> 0;
          case LEFT -> 1;
          case RIGHT -> 2;
