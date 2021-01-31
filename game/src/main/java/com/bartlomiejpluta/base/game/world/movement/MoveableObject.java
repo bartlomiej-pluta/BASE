@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.game.world;
+package com.bartlomiejpluta.base.game.world.movement;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
@@ -13,14 +13,12 @@ import org.joml.Vector2i;
 @Slf4j
 public abstract class MoveableObject extends AnimationableObject implements Updatable {
    private static final Vector2i SPRITE_DIMENSION = new Vector2i(4, 4);
-   private static final float tolerance = 1f;
 
-   private final Vector2i coordinates = new Vector2i(0, 0);
    private final Vector2f coordinateStepSize;
-   private Vector2i targetCoordinates;
-   private Vector2f targetPosition;
-   private Vector2f targetOffset;
-   private Vector2f dS;
+   private Movement movement;
+
+   @Getter
+   private final Vector2i coordinates = new Vector2i(0, 0);
 
    @Getter
    @Setter
@@ -28,56 +26,45 @@ public abstract class MoveableObject extends AnimationableObject implements Upda
 
    @Getter
    @Setter
-   private Direction movementDirection = Direction.DOWN;
+   private int slowness;
 
-   @Getter
    @Setter
-   private float speed;
+   private int animationSpeed;
 
    @Override
    public int getAnimationSpeed() {
-      return 100;
+      return animationSpeed;
    }
 
    @Override
    public boolean shouldAnimate() {
-      return targetCoordinates != null;
+      return movement != null;
    }
 
    @Override
    public void update(float dt) {
-      if(targetCoordinates != null) {
-         movePosition(dS);
-         var distance = new Vector2f(dS).add(getPosition()).distance(targetPosition);
-
-         log.info("Target: [{}, {}], Current: [{}, {}], distance: {}, dS: [{}, {}]", targetPosition.x, targetPosition.y, getPosition().x, getPosition().y, distance, dS.x, dS.y);
-
-         if(distance < tolerance) {
-            setCoordinates(new Vector2i(coordinates).add(targetCoordinates));
-            targetCoordinates = null;
+      if(movement != null) {
+         var dS = movement.getMovementVector();
+         if(dS != null) {
+            movePosition(dS);
+         } else {
+            adjustCoordinates();
+            movement = null;
          }
       }
    }
 
+   private void adjustCoordinates() {
+      var position = new Vector2f(getPosition());
+      setCoordinates(new Vector2i((int) (position.x / coordinateStepSize.x), (int) (position.y / coordinateStepSize.y)));
+   }
+
    public void move(Direction direction) {
-      if(this.targetCoordinates != null) {
+      if(this.movement != null) {
          return;
       }
-
       setFaceDirection(direction);
-      targetCoordinates = switch (direction) {
-         case UP -> new Vector2i(0, -1);
-         case DOWN -> new Vector2i(0, 1);
-         case LEFT -> new Vector2i(-1, 0);
-         case RIGHT -> new Vector2i(1, 0);
-      };
-
-      targetOffset = new Vector2f(targetCoordinates).mul(coordinateStepSize);
-      targetPosition = new Vector2f(getPosition()).add(targetOffset);
-      dS = new Vector2f(targetOffset).mul(speed);
-      log.info("TargetCoord: [{}, {}], targetOffset: [{}, {}], dS: [{}, {}], targetPos: [{}, {}]", targetCoordinates.x, targetCoordinates.y, targetOffset.x, targetOffset.y, dS.x, dS.y, targetPosition.x, targetPosition.y);
-
-      this.movementDirection = direction;
+      this.movement = new Movement(direction, coordinateStepSize, 50);
    }
 
    public MoveableObject setCoordinates(int x, int y) {
@@ -89,17 +76,6 @@ public abstract class MoveableObject extends AnimationableObject implements Upda
 
    public MoveableObject setCoordinates(Vector2i coordinates) {
       return setCoordinates(coordinates.x, coordinates.y);
-   }
-
-   public MoveableObject moveCoordinates(int x, int y) {
-      coordinates.x += x;
-      coordinates.y += y;
-      movePosition(x * coordinateStepSize.x, y * coordinateStepSize.y);
-      return this;
-   }
-
-   public MoveableObject moveCoordinates(Vector2i coordinates) {
-      return moveCoordinates(coordinates.x, coordinates.y);
    }
 
    @Override
