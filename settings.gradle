@@ -8,4 +8,6 @@
  */
 
 rootProject.name = 'BASE'
-include('app')
+include('engine')
+include('game')
+

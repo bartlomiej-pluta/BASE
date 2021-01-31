@@ -1,0 +1,39 @@
+plugins {
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+    id 'java'
+    id 'application'
+}
+
+group 'com.bartlomiejpluta.base'
+version 'unspecified'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation project(":engine")
+
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // This dependency is used by the application.
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "org.joml:joml:${jomlVersion}"
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'com.bartlomiejpluta.base.game.App'
+}
