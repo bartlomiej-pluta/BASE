@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.core.world.tileset.model;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.gl.object.texture.Texture;
+import lombok.Getter;
 
 public class TileSet {
    private final Texture texture;
@@ -10,9 +11,13 @@ public class TileSet {
    private final int columns;
    private final float columnStep;
    private final float rowStep;
-   private final int tileWidth;
-   private final int tileHeight;
    private final Mesh mesh;
+
+   @Getter
+   private final int tileWidth;
+
+   @Getter
+   private final int tileHeight;
 
    public TileSet(Texture texture, int rows, int columns, int tileWidth, int tileHeight) {
       this.texture = texture;
@@ -22,7 +27,7 @@ public class TileSet {
       this.rowStep = 1/(float) rows;
       this.tileWidth = tileWidth;
       this.tileHeight = tileHeight;
-      this.mesh = Mesh.quad(tileWidth, tileHeight);
+      this.mesh = Mesh.quad(tileWidth, tileHeight, 0, 0);
    }
 
    public Tile getTile(int m, int n) {

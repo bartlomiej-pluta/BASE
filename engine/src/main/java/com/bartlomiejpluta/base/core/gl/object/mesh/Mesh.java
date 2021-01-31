@@ -76,15 +76,12 @@ public class Mesh implements Renderable {
       glDeleteVertexArrays(vaoId);
    }
 
-   public static Mesh quad(float width, float height) {
-      var halfWidth = width/2;
-      var halfHeight = height/2;
-
+   public static Mesh quad(float width, float height, float originX, float originY) {
       var vertices = new float[] {
-              -halfWidth, -halfHeight,
-              -halfWidth, halfHeight,
-              halfWidth, halfHeight,
-              halfWidth, -halfHeight
+         -originX, -originY,
+         -originX, height - originY,
+         width - originX, height - originY,
+         width - originX, - originY
       };
 
       var texCoords = new float[] { 0, 0, 0, 1, 1, 1, 1, 0 };

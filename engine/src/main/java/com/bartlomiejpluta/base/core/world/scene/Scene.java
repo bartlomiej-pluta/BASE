@@ -4,18 +4,30 @@ import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
+import com.bartlomiejpluta.base.core.world.animation.Animator;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import com.bartlomiejpluta.base.core.world.map.GameMap;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 public class Scene implements Renderable {
+   private final Animator animator;
    private final Camera camera;
+   private final List<AnimationableObject> objects = new ArrayList<>();
 
    @Setter
    private GameMap map;
+
+   public Scene addObject(AnimationableObject object) {
+      objects.add(object);
+      return this;
+   }
 
    @Override
    public void render(Window window, ShaderManager shaderManager) {
@@ -26,9 +38,19 @@ public class Scene implements Renderable {
       renderArray(map.getLayer(1), window, shaderManager);
 
       // Player will be rendered here
+      renderList(objects, window, shaderManager);
+      animator.animate(objects);
 
       renderArray(map.getLayer(2), window, shaderManager);
       renderArray(map.getLayer(3), window, shaderManager);
+   }
+
+   private <T extends RenderableObject> void renderList(List<T> objects, Window window, ShaderManager shaderManager) {
+      for (var object : objects) {
+         if (object != null) {
+            renderObject(object, window, shaderManager);
+         }
+      }
    }
 
    private <T extends RenderableObject> void renderArray(T[] objects, Window window, ShaderManager shaderManager) {

@@ -8,6 +8,23 @@ plugins {
 group 'com.bartlomiejpluta.base'
 version 'unspecified'
 
+import org.gradle.internal.os.OperatingSystem
+
+switch (OperatingSystem.current()) {
+    case OperatingSystem.LINUX:
+        def osArch = System.getProperty("os.arch")
+        project.ext.lwjglNatives = osArch.startsWith("arm") || osArch.startsWith("aarch64")
+                ? "natives-linux-${osArch.contains("64") || osArch.startsWith("armv8") ? "arm64" : "arm32"}"
+                : "natives-linux"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.lwjglNatives = "natives-macos"
+        break
+    case OperatingSystem.WINDOWS:
+        project.ext.lwjglNatives = System.getProperty("os.arch").contains("64") ? "natives-windows" : "natives-windows-x86"
+        break
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -21,6 +38,11 @@ repositories {
 
 dependencies {
     implementation project(":engine")
+
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+    // LWJGL
+    implementation "org.lwjgl:lwjgl-glfw"
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter'
