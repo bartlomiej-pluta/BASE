@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.game.world.movement;
+package com.bartlomiejpluta.base.core.world.movement;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
