@@ -5,9 +5,11 @@ import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.world.movement.Direction;
 import com.bartlomiejpluta.base.core.world.movement.MovableObject;
 import lombok.Setter;
+import org.checkerframework.common.value.qual.IntRange;
 import org.joml.Vector2f;
 
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class Entity extends MovableObject {
    private final Map<Direction, Integer> spriteDirectionRows;
@@ -21,7 +23,7 @@ public class Entity extends MovableObject {
 
    @Override
    public int getAnimationSpeed() {
-      return 100;
+      return animationSpeed;
    }
 
    @Override
@@ -32,7 +34,14 @@ public class Entity extends MovableObject {
    @Override
    public Vector2f[] getSpriteAnimationFramesPositions() {
       var row = spriteDirectionRows.get(faceDirection);
-      return new Vector2f[]{new Vector2f(0, row), new Vector2f(1, row), new Vector2f(2, row), new Vector2f(3, row)};
+      var frames = spriteSheetDimension.y;
+      var array = new Vector2f[frames];
+
+      for(int column=0; column<frames; ++column) {
+         array[column] = new Vector2f(column, row);
+      }
+
+      return array;
    }
 
    @Override

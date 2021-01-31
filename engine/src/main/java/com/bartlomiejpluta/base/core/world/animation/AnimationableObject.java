@@ -7,10 +7,14 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 public abstract class AnimationableObject extends RenderableObject {
+   protected final Vector2i spriteSheetDimension;
+
    public AnimationableObject(Mesh mesh, Material material, Vector2i spriteSheetDimension) {
       super(mesh);
+      this.spriteSheetDimension = spriteSheetDimension;
+
       setMaterial(material);
-      material.setSpriteSize(1 / (float) spriteSheetDimension.x, 1 / (float) spriteSheetDimension.y);
+      material.setSpriteSize(1 / (float) spriteSheetDimension.y, 1 / (float) spriteSheetDimension.x);
    }
 
    // Returns time in ms between frames

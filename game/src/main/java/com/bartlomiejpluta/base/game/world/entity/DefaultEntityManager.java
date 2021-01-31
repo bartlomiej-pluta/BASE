@@ -24,6 +24,6 @@ public class DefaultEntityManager implements EntityManager {
       var dimension = configuration.getDimension().asVector();
       var spriteWidth = texture.getWidth() / (float) dimension.y;
       var spriteHeight = texture.getHeight() / (float) dimension.x;
-      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2, spriteHeight);
+      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2, spriteHeight*0.9f);
    }
 }
