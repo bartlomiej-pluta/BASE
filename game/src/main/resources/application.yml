@@ -6,3 +6,17 @@ app:
 
   core:
     targetUps: 50 # Updates per second
+
+  sprite:
+    entity:
+      dimension:
+        rows: 4
+        cols: 4
+
+      default-sprite-column: 0
+
+      sprite-direction-rows:
+        down: 0
+        left: 1
+        right: 2
+        up: 3

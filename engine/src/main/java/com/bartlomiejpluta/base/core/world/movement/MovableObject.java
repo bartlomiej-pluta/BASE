@@ -68,8 +68,8 @@ public abstract class MovableObject extends AnimationableObject implements Updat
       return setCoordinates(coordinates.x, coordinates.y);
    }
 
-   public MovableObject(Mesh mesh, Material material, Vector2f coordinateStepSize) {
-      super(mesh, material);
+   public MovableObject(Mesh mesh, Material material, Vector2f coordinateStepSize, Vector2i spriteSheetDimensions) {
+      super(mesh, material, spriteSheetDimensions);
       this.coordinateStepSize = coordinateStepSize;
       setCoordinates(0, 0);
    }

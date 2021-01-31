@@ -19,7 +19,7 @@ public class TileSet {
    @Getter
    private final int tileHeight;
 
-   public TileSet(Texture texture, int rows, int columns, int tileWidth, int tileHeight) {
+   public TileSet(Mesh mesh, Texture texture, int rows, int columns, int tileWidth, int tileHeight) {
       this.texture = texture;
       this.rows = rows;
       this.columns = columns;
@@ -27,7 +27,7 @@ public class TileSet {
       this.rowStep = 1/(float) rows;
       this.tileWidth = tileWidth;
       this.tileHeight = tileHeight;
-      this.mesh = Mesh.quad(tileWidth, tileHeight, 0, 0);
+      this.mesh = mesh;
    }
 
    public Tile getTile(int m, int n) {
