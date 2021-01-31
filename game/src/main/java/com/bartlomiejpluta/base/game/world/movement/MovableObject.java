@@ -6,13 +6,21 @@ import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
 import com.bartlomiejpluta.base.game.logic.Updatable;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
-@Slf4j
-public abstract class MoveableObject extends AnimationableObject implements Updatable {
+import java.util.Map;
+
+
+public abstract class MovableObject extends AnimationableObject implements Updatable {
    private static final Vector2i SPRITE_DIMENSION = new Vector2i(4, 4);
+   private static final int DEFAULT_SPRITE = 0;
+   private static final Map<Direction, Integer> SPRITE_ROWS = Map.of(
+           Direction.DOWN, 0,
+           Direction.LEFT, 1,
+           Direction.RIGHT, 2,
+           Direction.UP, 3
+   );
 
    private final Vector2f coordinateStepSize;
    private Movement movement;
@@ -26,10 +34,10 @@ public abstract class MoveableObject extends AnimationableObject implements Upda
 
    @Getter
    @Setter
-   private int slowness;
+   private int framesToCrossOneTile = 1;
 
    @Setter
-   private int animationSpeed;
+   private int animationSpeed = 100;
 
    @Override
    public int getAnimationSpeed() {
@@ -43,13 +51,14 @@ public abstract class MoveableObject extends AnimationableObject implements Upda
 
    @Override
    public void update(float dt) {
-      if(movement != null) {
+      if (movement != null) {
          var dS = movement.getMovementVector();
-         if(dS != null) {
+         if (dS != null) {
             movePosition(dS);
          } else {
             adjustCoordinates();
             movement = null;
+            setAnimationFrame(new Vector2f(DEFAULT_SPRITE, SPRITE_ROWS.get(faceDirection)));
          }
       }
    }
@@ -60,21 +69,21 @@ public abstract class MoveableObject extends AnimationableObject implements Upda
    }
 
    public void move(Direction direction) {
-      if(this.movement != null) {
+      if (this.movement != null) {
          return;
       }
       setFaceDirection(direction);
-      this.movement = new Movement(direction, coordinateStepSize, 50);
+      this.movement = new Movement(direction, coordinateStepSize, framesToCrossOneTile);
    }
 
-   public MoveableObject setCoordinates(int x, int y) {
+   public MovableObject setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;
       setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
       return this;
    }
 
-   public MoveableObject setCoordinates(Vector2i coordinates) {
+   public MovableObject setCoordinates(Vector2i coordinates) {
       return setCoordinates(coordinates.x, coordinates.y);
    }
 
@@ -85,17 +94,11 @@ public abstract class MoveableObject extends AnimationableObject implements Upda
 
    @Override
    public Vector2f[] getSpriteAnimationFramesPositions() {
-      var row = switch (faceDirection) {
-         case DOWN -> 0;
-         case LEFT -> 1;
-         case RIGHT -> 2;
-         case UP -> 3;
-      };
-
+      var row = SPRITE_ROWS.get(faceDirection);
       return new Vector2f[]{new Vector2f(0, row), new Vector2f(1, row), new Vector2f(2, row), new Vector2f(3, row)};
    }
 
-   public MoveableObject(Material material, Vector2f coordinateStepSize, float scale) {
+   public MovableObject(Material material, Vector2f coordinateStepSize, float scale) {
       super(buildMesh(material), material);
       this.coordinateStepSize = coordinateStepSize;
       this.setScale(scale);

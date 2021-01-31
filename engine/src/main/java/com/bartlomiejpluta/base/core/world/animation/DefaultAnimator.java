@@ -17,9 +17,8 @@ public class DefaultAnimator implements Animator {
          var positions = object.getSpriteAnimationFramesPositions();
          var delay = object.getAnimationSpeed();
          var currentPosition = (int) (System.currentTimeMillis() % (positions.length * delay)) / delay;
-         var spriteSize = object.getMaterial().getSpriteSize();
          var current = positions[currentPosition];
-         object.getMaterial().setSpritePosition(spriteSize.x * current.x, spriteSize.y * current.y);
+         object.setAnimationFrame(current);
       }
    }
 }

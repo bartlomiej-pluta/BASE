@@ -22,4 +22,10 @@ public abstract class AnimationableObject extends RenderableObject {
    public abstract boolean shouldAnimate();
 
    public abstract Vector2f[] getSpriteAnimationFramesPositions();
+
+   protected void setAnimationFrame(Vector2f framePosition) {
+      var material = this.getMaterial();
+      var spriteSize = material.getSpriteSize();
+      material.setSpritePosition(spriteSize.x * framePosition.x, spriteSize.y * framePosition.y);
+   }
 }
