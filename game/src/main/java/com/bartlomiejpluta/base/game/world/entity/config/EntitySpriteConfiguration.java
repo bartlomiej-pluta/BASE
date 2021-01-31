@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.game.world.entity;
+package com.bartlomiejpluta.base.game.world.entity.config;
 
 import com.bartlomiejpluta.base.core.world.movement.Direction;
 import lombok.Data;

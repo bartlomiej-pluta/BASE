@@ -1,15 +1,14 @@
-package com.bartlomiejpluta.base.game.world.entity;
+package com.bartlomiejpluta.base.game.world.entity.model;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.world.movement.Direction;
 import com.bartlomiejpluta.base.core.world.movement.MovableObject;
+import com.bartlomiejpluta.base.game.world.entity.config.EntitySpriteConfiguration;
 import lombok.Setter;
-import org.checkerframework.common.value.qual.IntRange;
 import org.joml.Vector2f;
 
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class Entity extends MovableObject {
    private final Map<Direction, Integer> spriteDirectionRows;
