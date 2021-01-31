@@ -82,5 +82,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.bartlomiejpluta.samplegame.App'
+    mainClass = 'com.bartlomiejpluta.base.App'
 }
