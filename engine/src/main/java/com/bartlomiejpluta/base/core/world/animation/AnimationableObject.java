@@ -13,8 +13,8 @@ public abstract class AnimationableObject extends RenderableObject {
       super(mesh);
       this.spriteSheetDimension = spriteSheetDimension;
 
-      setMaterial(material);
       material.setSpriteSize(1 / (float) spriteSheetDimension.y, 1 / (float) spriteSheetDimension.x);
+      setMaterial(material);
    }
 
    // Returns time in ms between frames
@@ -25,8 +25,7 @@ public abstract class AnimationableObject extends RenderableObject {
    public abstract Vector2f[] getSpriteAnimationFramesPositions();
 
    protected void setAnimationFrame(Vector2f framePosition) {
-      var material = this.getMaterial();
-      var spriteSize = material.getSpriteSize();
-      material.setSpritePosition(spriteSize.x * framePosition.x, spriteSize.y * framePosition.y);
+      var spriteSize = getMaterial().getSpriteSize();
+      setSpritePosition(spriteSize.x * framePosition.x, spriteSize.y * framePosition.y);
    }
 }

@@ -2,12 +2,14 @@ package com.bartlomiejpluta.base.core.gl.object.texture;
 
 import com.bartlomiejpluta.base.core.util.res.ResourcesManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultTextureManager implements TextureManager {
@@ -17,13 +19,14 @@ public class DefaultTextureManager implements TextureManager {
    @Override
    public Texture loadTexture(String textureFileName) {
       var texture = loadedTextures.get(textureFileName);
-      if(texture != null) {
-         return texture;
+
+      if (texture == null) {
+         log.info("Loading [{}] texture to cache", textureFileName);
+         var buffer = resourcesManager.loadResourceAsByteBuffer(textureFileName);
+         texture = new Texture(textureFileName, buffer);
+         loadedTextures.put(textureFileName, texture);
       }
 
-      var buffer = resourcesManager.loadResourceAsByteBuffer(textureFileName);
-      texture = new Texture(textureFileName, buffer);
-      loadedTextures.put(textureFileName, texture);
       return texture;
    }
 }

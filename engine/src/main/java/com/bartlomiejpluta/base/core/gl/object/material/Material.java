@@ -17,6 +17,17 @@ public class Material {
       setColor(r, g, b, alpha);
    }
 
+   public void setAlpha(float alpha) {
+      this.color.w = alpha;
+   }
+
+   public void setColor(Vector4f color) {
+      this.color.x = color.x;
+      this.color.y = color.y;
+      this.color.z = color.z;
+      this.color.w = color.w;
+   }
+
    public void setColor(float r, float g, float b, float alpha) {
       color.x = r;
       color.y = g;

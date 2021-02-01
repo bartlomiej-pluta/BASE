@@ -2,12 +2,14 @@ package com.bartlomiejpluta.base.core.util.mesh;
 
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.joml.Vector2f;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class DefaultMeshManager implements MeshManager {
    private final Map<QuadDimension, Mesh> quads = new HashMap<>();
@@ -18,6 +20,7 @@ public class DefaultMeshManager implements MeshManager {
       var mesh = quads.get(dim);
 
       if(mesh == null) {
+         log.info("Creating [w:{}, h:{} | O:{},{}] and putting it into the cache", width, height, originX, originY);
          mesh = Mesh.quad(width, height, originX, originY);
          quads.put(dim, mesh);
       }
