@@ -39,9 +39,9 @@ public class GameMap {
       Arrays.fill(passageMap, 0, rows * cols, PassageAbility.ALLOW);
    }
 
-   public void setTile(int layer, int row, int col, Tile tile) {
-      recalculateTileGeometry(tile, row, col);
-      map[layer][row * cols + col] = tile;
+   public void setTile(int layer, int row,  int col, Tile tile) {
+      recalculateTileGeometry(tile, col, row);
+      map[layer][col * cols + row] = tile;
    }
 
    private void recalculateTileGeometry(Tile tile, int i, int j) {
