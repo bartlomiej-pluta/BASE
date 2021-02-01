@@ -45,7 +45,11 @@ public abstract class MovableObject extends AnimationableObject implements Updat
       setCoordinates(new Vector2i((int) (position.x / coordinateStepSize.x), (int) (position.y / coordinateStepSize.y)));
    }
 
-   public boolean move(Direction direction) {
+   public Movement prepareMovement(Direction direction) {
+      return new Movement(this, direction);
+   }
+
+   protected boolean move(Direction direction) {
       if (this.movementVector != null) {
          return false;
       }

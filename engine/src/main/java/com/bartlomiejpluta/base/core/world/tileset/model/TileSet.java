@@ -30,10 +30,10 @@ public class TileSet {
       this.mesh = mesh;
    }
 
-   public Tile getTile(int m, int n) {
+   public Tile getTile(int row, int column) {
       var material = Material.textured(texture);
       material.setSpriteSize(columnStep, rowStep);
-      material.setSpritePosition(n * columnStep, m * rowStep);
+      material.setSpritePosition(column * columnStep, row * rowStep);
       return new Tile(mesh, material, tileWidth, tileHeight);
    }
 }

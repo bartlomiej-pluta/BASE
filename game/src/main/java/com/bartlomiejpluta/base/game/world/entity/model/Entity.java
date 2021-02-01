@@ -49,7 +49,7 @@ public class Entity extends MovableObject {
    }
 
    @Override
-   public boolean move(Direction direction) {
+   protected boolean move(Direction direction) {
       if(super.move(direction)) {
          faceDirection = direction;
          return true;
