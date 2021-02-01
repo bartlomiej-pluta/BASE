@@ -28,6 +28,13 @@ public class DefaultMeshManager implements MeshManager {
       return mesh;
    }
 
+   @Override
+   public void cleanUp() {
+      log.info("Disposing meshes");
+      quads.forEach((dim, mesh) -> mesh.dispose());
+      log.info("{} meshes has been disposed", quads.size());
+   }
+
    @Data
    private static class QuadDimension {
       private final Vector2f size;

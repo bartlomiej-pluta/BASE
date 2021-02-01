@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.core.gl.object.texture;
 
-public interface TextureManager {
+import com.bartlomiejpluta.base.core.gc.Cleanable;
+
+public interface TextureManager extends Cleanable {
    Texture loadTexture(String textureFileName);
 }

@@ -1,9 +1,10 @@
 package com.bartlomiejpluta.base.core.gl.shader.manager;
 
+import com.bartlomiejpluta.base.core.gc.Cleanable;
 import com.bartlomiejpluta.base.core.gl.shader.uniform.Uniform;
 import org.joml.*;
 
-public interface ShaderManager {
+public interface ShaderManager extends Cleanable {
    ShaderManager createShader(String programName, String vertexShaderFilename, String fragmentShaderFilename);
 
    ShaderManager selectShader(String programName);
@@ -41,6 +42,4 @@ public interface ShaderManager {
    ShaderManager setUniform(String uniformName, int index, Uniform uniform);
 
    ShaderManager setUniforms(String uniformName, Uniform[] uniforms);
-
-   void cleanUp();
 }

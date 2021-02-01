@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.core.gl.object.texture;
 
 import com.bartlomiejpluta.base.core.error.AppException;
+import com.bartlomiejpluta.base.core.gc.Disposable;
 import lombok.Getter;
 import org.lwjgl.system.MemoryStack;
 
@@ -12,7 +13,7 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 
-public class Texture {
+public class Texture implements Disposable {
    private static final int DESIRED_CHANNELS = 4;
 
    private final int textureId;
@@ -56,5 +57,10 @@ public class Texture {
    public void activate() {
       glActiveTexture(GL_TEXTURE0);
       glBindTexture(GL_TEXTURE_2D, textureId);
+   }
+
+   @Override
+   public void dispose() {
+      glDeleteTextures(textureId);
    }
 }

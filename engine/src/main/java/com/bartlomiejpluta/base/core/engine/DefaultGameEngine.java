@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.core.engine;
 
+import com.bartlomiejpluta.base.core.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.core.logic.GameLogic;
 import com.bartlomiejpluta.base.core.thread.ThreadManager;
 import com.bartlomiejpluta.base.core.time.ChronoMeter;
@@ -18,6 +19,7 @@ public class DefaultGameEngine implements GameEngine {
    private final WindowManager windowManager;
    private final ThreadManager threadManager;
    private final GameLogic logic;
+   private final OffHeapGarbageCollector garbageCollector;
 
    private final Thread thread;
    private final Window window;
@@ -30,6 +32,7 @@ public class DefaultGameEngine implements GameEngine {
    public DefaultGameEngine(WindowManager windowManager,
                             ThreadManager threadManager,
                             GameLogic logic,
+                            OffHeapGarbageCollector garbageCollector,
                             @Value("${app.window.title}") String title,
                             @Value("${app.window.width}") int width,
                             @Value("${app.window.height}") int height,
@@ -37,6 +40,7 @@ public class DefaultGameEngine implements GameEngine {
       this.windowManager = windowManager;
       this.threadManager = threadManager;
       this.logic = logic;
+      this.garbageCollector = garbageCollector;
 
       this.window = windowManager.createWindow(title, width, height);
       this.thread = threadManager.createThread(THREAD_NAME, this::run);
@@ -96,7 +100,8 @@ public class DefaultGameEngine implements GameEngine {
    }
 
    private void cleanUp() {
-      logic.cleanUp();
+      log.info("Performing off heap garbage collection");
+      garbageCollector.cleanUp();
    }
 
    @Override

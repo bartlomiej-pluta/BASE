@@ -142,7 +142,8 @@ public class DefaultShaderManager implements ShaderManager {
 
    @Override
    public void cleanUp() {
-      log.info("Cleaning up shaders");
-      shaders.forEach((name, program) -> program.cleanUp());
+      log.info("Disposing shaders");
+      shaders.forEach((name, program) -> program.dispose());
+      log.info("{} shaders has been disposed", shaders.size());
    }
 }

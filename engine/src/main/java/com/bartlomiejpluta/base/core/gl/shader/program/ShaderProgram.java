@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.core.gl.shader.program;
 
 import com.bartlomiejpluta.base.core.error.AppException;
+import com.bartlomiejpluta.base.core.gc.Disposable;
 import com.bartlomiejpluta.base.core.gl.shader.uniform.Uniform;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.*;
@@ -13,7 +14,7 @@ import static java.lang.String.format;
 import static org.lwjgl.opengl.GL20.*;
 
 @Slf4j
-public class ShaderProgram {
+public class ShaderProgram implements Disposable {
    private final int programId;
    private final int vertexShaderId;
    private final int fragmentShaderId;
@@ -159,7 +160,8 @@ public class ShaderProgram {
       glUseProgram(0);
    }
 
-   public void cleanUp() {
+   @Override
+   public void dispose() {
       glUseProgram(0);
 
       if(programId != 0) {

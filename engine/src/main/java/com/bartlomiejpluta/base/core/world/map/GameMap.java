@@ -5,14 +5,11 @@ import com.bartlomiejpluta.base.core.world.movement.Movement;
 import com.bartlomiejpluta.base.core.world.tileset.model.Tile;
 import com.bartlomiejpluta.base.core.world.tileset.model.TileSet;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 import java.util.Arrays;
-import java.util.Objects;
 
-@Slf4j
 public class GameMap {
    private static final int LAYERS = 4;
    private final TileSet tileSet;
@@ -91,9 +88,5 @@ public class GameMap {
       };
 
       return isTargetReachable && canMoveFromCurrentTile;
-   }
-
-   public void cleanUp() {
-      Arrays.stream(map).flatMap(Arrays::stream).filter(Objects::nonNull).forEach(Tile::cleanUp);
    }
 }

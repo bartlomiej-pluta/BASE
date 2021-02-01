@@ -7,8 +7,8 @@ import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
 import com.bartlomiejpluta.base.core.world.animation.Animator;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import com.bartlomiejpluta.base.core.world.map.GameMap;
+import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 
@@ -70,10 +70,5 @@ public class Scene implements Renderable {
       shaderManager.setUniform(UniformName.UNI_SPRITE_POSITION, object.getMaterial().getSpritePosition());
 
       object.render(window, shaderManager);
-   }
-
-   @Override
-   public void cleanUp() {
-      map.cleanUp();
    }
 }

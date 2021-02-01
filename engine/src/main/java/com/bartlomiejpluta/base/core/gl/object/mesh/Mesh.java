@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.core.gl.object.mesh;
 
+import com.bartlomiejpluta.base.core.gc.Disposable;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
@@ -13,7 +14,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class Mesh implements Renderable {
+public class Mesh implements Renderable, Disposable {
    private final int vaoId;
    private final List<Integer> vboIds = new ArrayList<>(2);
    private final int elementsCount;
@@ -65,7 +66,7 @@ public class Mesh implements Renderable {
    }
 
    @Override
-   public void cleanUp() {
+   public void dispose() {
       glDisableVertexAttribArray(0);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

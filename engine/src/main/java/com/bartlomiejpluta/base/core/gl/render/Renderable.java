@@ -5,5 +5,4 @@ import com.bartlomiejpluta.base.core.ui.Window;
 
 public interface Renderable {
    void render(Window window, ShaderManager shaderManager);
-   void cleanUp();
 }

@@ -34,4 +34,9 @@ public class DefaultTileSetManager implements TileSetManager {
 
       return tileset;
    }
+
+   @Override
+   public void cleanUp() {
+      log.info("There is nothing to clean up here");
+   }
 }

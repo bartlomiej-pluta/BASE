@@ -25,11 +25,6 @@ public abstract class RenderableObject extends Object implements Renderable {
       mesh.render(window, shaderManager);
    }
 
-   @Override
-   public void cleanUp() {
-      mesh.cleanUp();
-   }
-
    public void setAlpha(float alpha) {
       material.setAlpha(alpha);
    }

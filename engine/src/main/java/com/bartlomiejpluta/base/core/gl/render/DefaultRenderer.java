@@ -57,6 +57,6 @@ public class DefaultRenderer implements Renderer {
 
    @Override
    public void cleanUp() {
-      shaderManager.cleanUp();
+      log.info("There is nothing to clean up here");
    }
 }
