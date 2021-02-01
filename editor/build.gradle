@@ -1,5 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'idea'
 }
 
 group 'com.bartlomiejpluta.base'
@@ -13,6 +15,22 @@ sourceSets {
     main.kotlin.srcDirs += 'src/main/kotlin'
 }
 
+javafx {
+    version = "11.0.2"
+    modules = ['javafx.controls', 'javafx.graphics']
+}
+
+
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "14"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "14"
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "no.tornado:tornadofx:${tornadoFxVersion}"
 }
