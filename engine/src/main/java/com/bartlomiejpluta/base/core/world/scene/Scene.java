@@ -10,6 +10,7 @@ import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.map.GameMap;
 import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -22,10 +23,16 @@ public class Scene implements Renderable {
    private final List<AnimationableObject> objects = new ArrayList<>();
 
    @Setter
+   @Getter
    private GameMap map;
 
    public Scene addObject(AnimationableObject object) {
       objects.add(object);
+      return this;
+   }
+
+   public Scene removeObject(AnimationableObject object) {
+      objects.remove(object);
       return this;
    }
 

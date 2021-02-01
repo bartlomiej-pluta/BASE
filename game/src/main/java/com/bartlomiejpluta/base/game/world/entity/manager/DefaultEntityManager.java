@@ -3,11 +3,11 @@ package com.bartlomiejpluta.base.game.world.entity.manager;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
-import com.bartlomiejpluta.base.game.world.entity.model.Entity;
+import com.bartlomiejpluta.base.core.world.scene.Scene;
 import com.bartlomiejpluta.base.game.world.entity.config.EntitySpriteConfiguration;
+import com.bartlomiejpluta.base.game.world.entity.model.Entity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.joml.Vector2f;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +19,8 @@ public class DefaultEntityManager implements EntityManager {
    private final EntitySpriteConfiguration configuration;
 
    @Override
-   public Entity createEntity(Material material, Vector2f coordinateStepSize) {
-      return new Entity(buildMesh(material), material, coordinateStepSize, configuration);
+   public Entity createEntity(Material material, Scene scene) {
+      return new Entity(scene, buildMesh(material), material, scene.getMap().getStepSize(), configuration);
    }
 
    private Mesh buildMesh(Material material) {

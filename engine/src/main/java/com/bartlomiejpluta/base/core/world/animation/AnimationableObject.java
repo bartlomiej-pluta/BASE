@@ -3,9 +3,11 @@ package com.bartlomiejpluta.base.core.world.animation;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.world.object.RenderableObject;
+import lombok.EqualsAndHashCode;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
+@EqualsAndHashCode(callSuper = true)
 public abstract class AnimationableObject extends RenderableObject {
    protected final Vector2i spriteSheetDimension;
 

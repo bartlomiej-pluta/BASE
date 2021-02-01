@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.core.world.object;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joml.Matrix4f;
@@ -7,7 +8,8 @@ import org.joml.Vector2f;
 
 import static java.lang.Math.toRadians;
 
-public abstract class Object {
+@EqualsAndHashCode
+public abstract class PositionableObject {
    private final Matrix4f modelMatrix = new Matrix4f();
 
    @Getter
@@ -21,31 +23,31 @@ public abstract class Object {
    @Setter
    protected float scale = 1.0f;
 
-   public Object setPosition(float x, float y) {
+   public PositionableObject setPosition(float x, float y) {
       position.x = x;
       position.y = y;
       return this;
    }
 
-   public Object setPosition(Vector2f position) {
+   public PositionableObject setPosition(Vector2f position) {
       this.position.x = position.x;
       this.position.y = position.y;
       return this;
    }
    
-   public Object movePosition(float x, float y) {
+   public PositionableObject movePosition(float x, float y) {
       position.x += x;
       position.y += y;
       return this;
    }
 
-   public Object movePosition(Vector2f position) {
+   public PositionableObject movePosition(Vector2f position) {
       this.position.x += position.x;
       this.position.y += position.y;
       return this;
    }
 
-   public Object moveRotation(float rotation) {
+   public PositionableObject moveRotation(float rotation) {
       this.rotation += rotation;
       return this;
    }

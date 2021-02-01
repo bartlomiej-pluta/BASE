@@ -4,11 +4,12 @@ import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
-
+@EqualsAndHashCode(callSuper = true)
 public abstract class MovableObject extends AnimationableObject implements Updatable {
    private final Vector2f coordinateStepSize;
 

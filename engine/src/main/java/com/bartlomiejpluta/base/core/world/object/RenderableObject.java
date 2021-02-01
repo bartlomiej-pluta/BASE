@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,8 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 @RequiredArgsConstructor
-public abstract class RenderableObject extends Object implements Renderable {
+@EqualsAndHashCode(callSuper = true)
+public abstract class RenderableObject extends PositionableObject implements Renderable {
    private final Mesh mesh;
 
    @Getter
