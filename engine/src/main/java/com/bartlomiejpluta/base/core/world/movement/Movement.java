@@ -10,9 +10,11 @@ import org.joml.Vector2i;
 public class Movement {
    private final MovableObject object;
    private final Direction direction;
+   private boolean performed = false;
 
    public boolean perform() {
-      return object.move(direction);
+      performed = object.move(direction);
+      return performed;
    }
 
    public Vector2i getSourceCoordinate() {

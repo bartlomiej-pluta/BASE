@@ -27,7 +27,7 @@ public class GameMap {
    @Getter
    private final int cols;
 
-   public GameMap(TileSet tileSet, int rows, int cols, float scale) {
+   private GameMap(TileSet tileSet, int rows, int cols, float scale) {
       this.tileSet = tileSet;
       this.rows = rows;
       this.cols = cols;
@@ -37,6 +37,16 @@ public class GameMap {
       map = new Tile[LAYERS][rows * cols];
       passageMap = new PassageAbility[rows * cols];
       Arrays.fill(passageMap, 0, rows * cols, PassageAbility.ALLOW);
+
+      for(int i=0; i<rows; ++i) {
+         setPassageAbility(i, 0, PassageAbility.BLOCK);
+         setPassageAbility(i, cols-1, PassageAbility.BLOCK);
+      }
+
+      for(int i=0; i<cols; ++i) {
+         setPassageAbility( 0, i, PassageAbility.BLOCK);
+         setPassageAbility( rows-1, i, PassageAbility.BLOCK);
+      }
    }
 
    public void setTile(int layer, int row,  int col, Tile tile) {
@@ -88,5 +98,9 @@ public class GameMap {
       };
 
       return isTargetReachable && canMoveFromCurrentTile;
+   }
+
+   public static GameMap empty(TileSet tileSet, int rows, int cols, float scale) {
+      return new GameMap(tileSet, rows, cols, scale);
    }
 }
