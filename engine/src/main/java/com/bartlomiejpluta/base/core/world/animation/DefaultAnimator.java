@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class DefaultAnimator implements Animator {
 
    @Override
-   public void animate(Iterable<AnimationableObject> objects) {
+   public void animate(Iterable<? extends AnimationableObject> objects) {
       for (var object : objects) {
          animate(object);
       }

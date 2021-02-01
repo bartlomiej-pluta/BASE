@@ -26,6 +26,7 @@ public class Entity extends MovableObject {
    private int animationSpeed = 100;
 
    @Setter
+   @Getter
    private Direction faceDirection;
 
    @Override
@@ -94,5 +95,6 @@ public class Entity extends MovableObject {
       this.defaultSpriteColumn = configuration.getDefaultSpriteColumn();
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
       this.onScene = false;
+      this.faceDirection = Direction.DOWN;
    }
 }

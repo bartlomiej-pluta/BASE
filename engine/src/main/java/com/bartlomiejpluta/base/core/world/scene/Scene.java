@@ -3,11 +3,13 @@ package com.bartlomiejpluta.base.core.world.scene;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
 import com.bartlomiejpluta.base.core.world.animation.Animator;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.map.GameMap;
+import com.bartlomiejpluta.base.core.world.movement.MovableObject;
 import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,21 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class Scene implements Renderable {
+public class Scene implements Renderable, Updatable {
    private final Animator animator;
    private final Camera camera;
-   private final List<AnimationableObject> objects = new ArrayList<>();
+   private final List<MovableObject> objects = new ArrayList<>();
 
    @Setter
    @Getter
    private GameMap map;
 
-   public Scene addObject(AnimationableObject object) {
+   public Scene addObject(MovableObject object) {
       objects.add(object);
       return this;
    }
 
-   public Scene removeObject(AnimationableObject object) {
+   public Scene removeObject(MovableObject object) {
       objects.remove(object);
       return this;
    }
@@ -50,6 +52,13 @@ public class Scene implements Renderable {
 
       renderArray(map.getLayer(2), window, shaderManager);
       renderArray(map.getLayer(3), window, shaderManager);
+   }
+
+   @Override
+   public void update(float dt) {
+      for(var object : objects) {
+         object.update(dt);
+      }
    }
 
    private <T extends RenderableObject> void renderList(List<T> objects, Window window, ShaderManager shaderManager) {

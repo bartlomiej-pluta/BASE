@@ -22,6 +22,10 @@ public class Movement {
    public Vector2i getTargetCoordinate() {
       return direction.asIntVector().add(object.getCoordinates());
    }
+
+   public Movement getAnother() {
+      return object.prepareMovement(direction);
+   }
 }
 //@Data
 //public class Movement {
