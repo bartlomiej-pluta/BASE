@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.core.world.map;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.base.core.image.Image;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.animation.Animator;
@@ -80,6 +81,12 @@ public class GameMap implements Renderable, Updatable {
       return this;
    }
 
+   public GameMap createImageLayer(Image image, ImageLayer.Mode imageDisplayMode) {
+      layers.add(new ImageLayer(this, image, imageDisplayMode));
+
+      return this;
+   }
+
    public GameMap addObject(int layerIndex, MovableObject object) {
       ((ObjectLayer) layers.get(layerIndex)).addObject(object);
 
@@ -99,6 +106,12 @@ public class GameMap implements Renderable, Updatable {
 
    public GameMap setTile(int layerIndex, int row, int column, Tile tile) {
       ((TileLayer) layers.get(layerIndex)).setTile(row, column, tile);
+
+      return this;
+   }
+
+   public GameMap setImage(int layerIndex, Image image) {
+      ((ImageLayer) layers.get(layerIndex)).setImage(image);
 
       return this;
    }

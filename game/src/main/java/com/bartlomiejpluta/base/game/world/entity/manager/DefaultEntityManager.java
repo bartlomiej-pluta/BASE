@@ -33,6 +33,6 @@ public class DefaultEntityManager implements EntityManager {
 
    @Override
    public void cleanUp() {
-      log.info("There is nothing to clean up");
+      log.info("There is nothing to clean up here");
    }
 }

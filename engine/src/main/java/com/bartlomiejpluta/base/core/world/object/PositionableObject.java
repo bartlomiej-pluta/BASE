@@ -21,7 +21,11 @@ public abstract class PositionableObject {
 
    @Getter
    @Setter
-   protected float scale = 1.0f;
+   protected float scaleX = 1.0f;
+
+   @Getter
+   @Setter
+   protected float scaleY = 1.0f;
 
    public PositionableObject setPosition(float x, float y) {
       position.x = x;
@@ -51,12 +55,24 @@ public abstract class PositionableObject {
       this.rotation += rotation;
       return this;
    }
-   
+
+   public PositionableObject setScale(float scale) {
+      this.scaleX = scale;
+      this.scaleY = scale;
+      return this;
+   }
+
+   public PositionableObject setScale(float scaleX, float scaleY) {
+      this.scaleX = scaleX;
+      this.scaleY = scaleY;
+      return this;
+   }
+
    public Matrix4f getModelMatrix() {
       return modelMatrix
               .identity()
               .translate(position.x, position.y, 0)
               .rotateZ((float) toRadians(-rotation))
-              .scale(scale);
+              .scaleXY(scaleX, scaleY);
    }
 }
