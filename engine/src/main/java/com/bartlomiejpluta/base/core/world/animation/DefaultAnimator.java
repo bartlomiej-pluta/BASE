@@ -6,13 +6,7 @@ import org.springframework.stereotype.Component;
 public class DefaultAnimator implements Animator {
 
    @Override
-   public void animate(Iterable<? extends AnimationableObject> objects) {
-      for (var object : objects) {
-         animate(object);
-      }
-   }
-
-   private void animate(AnimationableObject object) {
+   public void animate(AnimationableObject object) {
       if(object.shouldAnimate()) {
          var positions = object.getSpriteAnimationFramesPositions();
          var delay = object.getAnimationSpeed();

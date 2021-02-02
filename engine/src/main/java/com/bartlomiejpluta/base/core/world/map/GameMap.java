@@ -1,106 +1,119 @@
 package com.bartlomiejpluta.base.core.world.map;
 
-import com.bartlomiejpluta.base.core.world.movement.Direction;
+import com.bartlomiejpluta.base.core.gl.render.Renderable;
+import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
+import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.base.core.logic.Updatable;
+import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.animation.Animator;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
+import com.bartlomiejpluta.base.core.world.movement.MovableObject;
 import com.bartlomiejpluta.base.core.world.movement.Movement;
 import com.bartlomiejpluta.base.core.world.tileset.model.Tile;
 import com.bartlomiejpluta.base.core.world.tileset.model.TileSet;
 import lombok.Getter;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class GameMap {
-   private static final int LAYERS = 4;
+public class GameMap implements Renderable, Updatable {
+   private final Animator animator;
+
+   private final Camera camera;
    private final TileSet tileSet;
-   private final Tile[][] map;
+   private final List<Layer> layers = new ArrayList<>();
+
    private final float scale;
-
-   private final PassageAbility[] passageMap;
-
-   @Getter
-   private final Vector2f stepSize;
 
    @Getter
    private final int rows;
 
    @Getter
-   private final int cols;
+   private final int columns;
 
-   private GameMap(TileSet tileSet, int rows, int cols, float scale) {
+   @Getter
+   private final Vector2f stepSize;
+
+   public GameMap(Animator animator, Camera camera, TileSet tileSet, int rows, int columns, float scale) {
+      this.animator = animator;
+      this.camera = camera;
       this.tileSet = tileSet;
-      this.rows = rows;
-      this.cols = cols;
       this.scale = scale;
+      this.rows = rows;
+      this.columns = columns;
       this.stepSize = new Vector2f(this.scale * this.tileSet.getTileWidth(), this.scale * this.tileSet.getTileHeight());
+   }
 
-      map = new Tile[LAYERS][rows * cols];
-      passageMap = new PassageAbility[rows * cols];
-      Arrays.fill(passageMap, 0, rows * cols, PassageAbility.ALLOW);
+   @Override
+   public void render(Window window, ShaderManager shaderManager) {
+      shaderManager.setUniform(UniformName.UNI_PROJECTION_MATRIX, camera.getProjectionMatrix(window));
+      shaderManager.setUniform(UniformName.UNI_VIEW_MATRIX, camera.getViewMatrix());
 
-      for(int i=0; i<rows; ++i) {
-         setPassageAbility(i, 0, PassageAbility.BLOCK);
-         setPassageAbility(i, cols-1, PassageAbility.BLOCK);
-      }
-
-      for(int i=0; i<cols; ++i) {
-         setPassageAbility( 0, i, PassageAbility.BLOCK);
-         setPassageAbility( rows-1, i, PassageAbility.BLOCK);
+      for (var layer : layers) {
+         layer.render(window, shaderManager);
       }
    }
 
-   public void setTile(int layer, int row,  int col, Tile tile) {
-      recalculateTileGeometry(tile, col, row);
-      map[layer][col * cols + row] = tile;
+   @Override
+   public void update(float dt) {
+      for (var layer : layers) {
+         layer.update(dt);
+      }
    }
 
-   private void recalculateTileGeometry(Tile tile, int i, int j) {
-      tile.setScale(scale);
-      tile.setPosition(i * stepSize.x, j * stepSize.y);
+   public GameMap createObjectLayer() {
+      var passageMap = new PassageAbility[rows][columns];
+      for (int i = 0; i < rows; ++i) {
+         Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
+      }
+
+      layers.add(new ObjectLayer(animator, new ArrayList<>(), passageMap));
+
+      return this;
    }
 
-   public Tile[] getLayer(int layer) {
-      return map[layer];
+   public GameMap createTileLayer() {
+      layers.add(new TileLayer(new Tile[rows][columns], stepSize, scale));
+
+      return this;
    }
 
-   public void setPassageAbility(int row, int col, PassageAbility passageAbility) {
-      passageMap[row * cols + col] = passageAbility;
+   public GameMap addObject(int layerIndex, MovableObject object) {
+      ((ObjectLayer) layers.get(layerIndex)).addObject(object);
+
+      return this;
    }
 
-   private PassageAbility getPassageAbility(Vector2i coordinates) {
-      return passageMap[coordinates.y * cols + coordinates.x];
+   public GameMap removeObject(int layerIndex, MovableObject object) {
+      ((ObjectLayer) layers.get(layerIndex)).removeObject(object);
+
+      return this;
    }
 
-   private PassageAbility getPassageAbility(int row, int col) {
-      return passageMap[row * cols + col];
+   public GameMap setPassageAbility(int layerIndex, int row, int column, PassageAbility passageAbility) {
+      ((ObjectLayer) layers.get(layerIndex)).setPassageAbility(row, column, passageAbility);
+      return this;
    }
 
-   public boolean isMovementPossible(Movement movement) {
-      var source = movement.getSourceCoordinate();
+   public GameMap setTile(int layerIndex, int row, int column, Tile tile) {
+      ((TileLayer) layers.get(layerIndex)).setTile(row, column, tile);
+
+      return this;
+   }
+
+   public boolean isMovementPossible(int layerIndex, Movement movement) {
       var target = movement.getTargetCoordinate();
+
+      // Is trying to go beyond the map
+      if(target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
+         return false;
+      }
+
+      var source = movement.getSourceCoordinate();
       var direction = movement.getDirection();
 
-      var isTargetReachable = switch(getPassageAbility(target)) {
-         case UP_ONLY -> direction != Direction.DOWN;
-         case DOWN_ONLY -> direction != Direction.UP;
-         case LEFT_ONLY -> direction != Direction.RIGHT;
-         case RIGHT_ONLY -> direction != Direction.LEFT;
-         case BLOCK -> false;
-         case ALLOW -> true;
-      };
-
-      var canMoveFromCurrentTile = switch(getPassageAbility(source)) {
-         case UP_ONLY -> direction == Direction.UP;
-         case DOWN_ONLY -> direction == Direction.DOWN;
-         case LEFT_ONLY -> direction == Direction.LEFT;
-         case RIGHT_ONLY -> direction == Direction.RIGHT;
-         default -> true;
-      };
-
-      return isTargetReachable && canMoveFromCurrentTile;
-   }
-
-   public static GameMap empty(TileSet tileSet, int rows, int cols, float scale) {
-      return new GameMap(tileSet, rows, cols, scale);
+      return ((ObjectLayer) layers.get(layerIndex)).isMovementPossible(source, target, direction);
    }
 }
