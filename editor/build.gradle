@@ -34,4 +34,5 @@ compileTestKotlin {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "no.tornado:tornadofx:${tornadoFxVersion}"
+    implementation "org.joml:joml:${jomlVersion}"
 }
