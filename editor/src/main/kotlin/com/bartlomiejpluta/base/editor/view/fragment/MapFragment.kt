@@ -2,13 +2,18 @@ package com.bartlomiejpluta.base.editor.view.fragment
 
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
-import tornadofx.Fragment
-import tornadofx.group
-import tornadofx.plusAssign
-import tornadofx.scrollpane
+import javafx.beans.property.SimpleDoubleProperty
+import javafx.scene.transform.Scale
+import tornadofx.*
 
 class MapFragment : Fragment() {
     private val pane = MapPane()
+    val scaleProperty = SimpleDoubleProperty(1.0)
+
+    private val transformation = Scale(1.0, 1.0, 0.0, 0.0).apply {
+        xProperty().bind(scaleProperty)
+        yProperty().bind(scaleProperty)
+    }
 
     fun updateMap(map: GameMap) {
         pane.updateMap(map)
@@ -21,6 +26,7 @@ class MapFragment : Fragment() {
         group {
             group {
                 this += pane
+                transforms += transformation
             }
         }
     }

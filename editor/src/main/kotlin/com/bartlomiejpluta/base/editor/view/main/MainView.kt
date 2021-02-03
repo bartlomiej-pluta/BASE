@@ -21,7 +21,20 @@ class MainView : View() {
                     mapFragment.updateMap(mapController.getMap(2))
                 }
             }
+
+            button("+") {
+                action {
+                    mapFragment.scaleProperty.value += 0.1
+                }
+            }
+
+            button("-") {
+                action {
+                    mapFragment.scaleProperty.value -= 0.1
+                }
+            }
         }
+
         center = mapFragment.root
     }
 }

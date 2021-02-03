@@ -13,7 +13,6 @@ class Renderer(
     override fun handle(now: Long) {
         val dt = (now - previous) / 1000000000.0
         previous = now
-        gc.isImageSmoothing = false
 
         render()
     }
