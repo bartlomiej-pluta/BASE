@@ -29,10 +29,12 @@ public class TileLayer implements Layer {
 
    @Override
    public void render(Window window, ShaderManager shaderManager) {
-      for(var row : layer) {
-         for(var tile : row) {
-            shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, tile.getModelMatrix());
-            tile.render(window, shaderManager);
+      for (var row : layer) {
+         for (var tile : row) {
+            if (tile != null) {
+               shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, tile.getModelMatrix());
+               tile.render(window, shaderManager);
+            }
          }
       }
    }

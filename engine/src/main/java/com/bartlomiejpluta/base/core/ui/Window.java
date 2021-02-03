@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -76,7 +77,7 @@ public class Window {
       glfwMakeContextCurrent(windowHandle);
 
       // Enable V-Sync
-      glfwSwapInterval(1);
+//      glfwSwapInterval(1);
 
       // Make the window visible
       glfwShowWindow(windowHandle);
@@ -106,6 +107,10 @@ public class Window {
 
    public boolean shouldClose() {
       return glfwWindowShouldClose(windowHandle);
+   }
+
+   public Vector2f getSize() {
+      return new Vector2f(width, height);
    }
 
    public static Window create(String title, int width, int height) {

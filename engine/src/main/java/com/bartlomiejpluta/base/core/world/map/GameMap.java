@@ -64,6 +64,10 @@ public class GameMap implements Renderable, Updatable {
       }
    }
 
+   public Vector2f getSize() {
+      return new Vector2f(columns * stepSize.x, rows * stepSize.y);
+   }
+
    public GameMap createObjectLayer() {
       var passageMap = new PassageAbility[rows][columns];
       for (int i = 0; i < rows; ++i) {
