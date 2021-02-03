@@ -1,5 +1,6 @@
-package com.bartlomiejpluta.base.editor.view.render
+package com.bartlomiejpluta.base.editor.view.render.renderer
 
+import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.animation.AnimationTimer
 import javafx.scene.canvas.GraphicsContext
 

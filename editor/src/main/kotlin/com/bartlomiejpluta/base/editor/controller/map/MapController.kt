@@ -1,8 +1,7 @@
 package com.bartlomiejpluta.base.editor.controller.map
 
 import com.bartlomiejpluta.base.editor.controller.tileset.TileSetController
-import com.bartlomiejpluta.base.editor.model.map.GameMap
-import com.bartlomiejpluta.base.editor.model.map.tileset.TileSet
+import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import tornadofx.Controller
 
 class MapController : Controller() {

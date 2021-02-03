@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.view.fragment
 
-import com.bartlomiejpluta.base.editor.model.map.GameMap
+import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
 import tornadofx.Fragment
 import tornadofx.group

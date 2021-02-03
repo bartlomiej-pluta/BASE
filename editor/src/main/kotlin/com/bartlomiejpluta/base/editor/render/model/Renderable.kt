@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.view.render
+package com.bartlomiejpluta.base.editor.render.model
 
 import javafx.scene.canvas.GraphicsContext
 
