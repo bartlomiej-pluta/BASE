@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.core.stat;
+package com.bartlomiejpluta.base.core.profiling.fps;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

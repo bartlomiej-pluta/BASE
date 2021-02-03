@@ -7,6 +7,9 @@ app:
   core:
     targetUps: 50 # Updates per second
 
+  profiling:
+    aspects: false
+
   sprite:
     entity:
       dimension:
@@ -20,3 +23,8 @@ app:
         left: 1
         right: 2
         up: 3
+
+
+logging:
+  level:
+    com.bartlomiejpluta.base.core.profiling.time.aspect.ExecutionTimeAspect: DEBUG
