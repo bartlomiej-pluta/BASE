@@ -8,12 +8,15 @@ import tornadofx.plusAssign
 import tornadofx.scrollpane
 
 class MapFragment : Fragment() {
-    val map: GameMap by param()
-    val pane = MapPane(map)
+    private val pane = MapPane()
+
+    fun updateMap(map: GameMap) {
+        pane.updateMap(map)
+    }
 
     override val root = scrollpane {
-        prefWidth = 300.0
-        prefHeight = 300.0
+        prefWidth = 640.0
+        prefHeight = 480.0
 
         group {
             group {

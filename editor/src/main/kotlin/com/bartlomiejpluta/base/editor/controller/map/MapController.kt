@@ -7,11 +7,24 @@ import tornadofx.Controller
 class MapController : Controller() {
     private val tileSetController: TileSetController by inject()
 
-    val map = GameMap(tileSetController.tileset, 20, 20)
+    private val map1 = GameMap(tileSetController.tileset, 20, 20)
         .createTileLayer(0)
         .createTileLayer(3, 5)
         .createTileLayer(3, 5)
         .createTileLayer(3, 5)
         .createTileLayer(3, 5)
         .createTileLayer(3, 5)
+
+    private val map2 = GameMap(tileSetController.tileset, 50, 50)
+        .createTileLayer(3)
+        .createTileLayer(3, 5)
+        .createTileLayer(3, 5)
+        .createTileLayer(3, 5)
+        .createTileLayer(3, 5)
+        .createTileLayer(3, 5)
+
+    fun getMap(id: Int) = when(id) {
+        1 -> map1
+        else -> map2
+    }
 }

@@ -39,4 +39,8 @@ class GameMap(val tileSet: TileSet, val rows: Int, val columns: Int) {
     fun setTile(layer: Int, row: Int, column: Int, tileRow: Int, tileColumn: Int) = apply {
         (layers[layer] as TileLayer).setTile(row, column, tileSet.getTile(tileRow, tileColumn))
     }
+
+    companion object {
+        val EMPTY_8x8 = GameMap(TileSet.EMPTY, 8, 8)
+    }
 }

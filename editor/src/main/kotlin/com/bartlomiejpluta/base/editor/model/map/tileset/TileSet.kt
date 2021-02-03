@@ -28,4 +28,8 @@ class TileSet(private val image: Image, val rows: Int, val columns: Int) {
     fun getTile(row: Int, column: Int) = tiles[row][column]
 
     fun getTile(id: Int) = tiles[id / rows][id % columns]
+
+    companion object {
+        val EMPTY = TileSet(Image("/textures/tileset.png"), 1, 1)
+    }
 }
