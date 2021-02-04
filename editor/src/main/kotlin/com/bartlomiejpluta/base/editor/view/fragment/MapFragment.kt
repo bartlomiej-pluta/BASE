@@ -39,7 +39,7 @@ class MapFragment : Fragment() {
 
                 // Let the ScrollPane.viewRect only pan on middle button.
                 addEventHandler(MouseEvent.ANY) {
-                    if(it.button != MouseButton.MIDDLE) {
+                    if (it.button != MouseButton.MIDDLE) {
                         it.consume()
                     }
                 }
@@ -51,8 +51,25 @@ class MapFragment : Fragment() {
             }
         }
 
-        right = scrollpane {
-            this += tileSetPane
+        right = drawer(multiselect = true) {
+            item("Layers") {
+                borderpane {
+                    center = listview(observableListOf("Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6"))
+                    bottom = hbox {
+                        button("New")
+                        button("Up")
+                        button("Down")
+                        button("Delete")
+                    }
+                }
+            }
+
+            item("Tile Set") {
+                scrollpane {
+                    maxHeightProperty().bind(this@item.heightProperty())
+                    this += tileSetPane
+                }
+            }
         }
     }
 }
