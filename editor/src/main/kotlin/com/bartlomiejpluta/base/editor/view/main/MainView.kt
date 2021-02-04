@@ -1,10 +1,12 @@
 package com.bartlomiejpluta.base.editor.view.main
 
+import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.controller.map.MapController
 import com.bartlomiejpluta.base.editor.view.fragment.MapFragment
 import tornadofx.*
 
 class MainView : View() {
+    private val undoRedoService: UndoRedoService by di()
     private val mapController: MapController by di()
     private val mapFragment = find<MapFragment>()
 
@@ -31,6 +33,20 @@ class MainView : View() {
             button("-") {
                 action {
                     mapFragment.scaleProperty.value -= 0.1
+                }
+            }
+
+            button("Undo") {
+                action {
+                    undoRedoService.undo()
+                    mapFragment.redraw()
+                }
+            }
+
+            button("Redo") {
+                action {
+                    undoRedoService.redo()
+                    mapFragment.redraw()
                 }
             }
         }

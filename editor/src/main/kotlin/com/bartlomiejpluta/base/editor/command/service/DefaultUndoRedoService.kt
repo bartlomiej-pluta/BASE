@@ -1,10 +1,11 @@
 package com.bartlomiejpluta.base.editor.command.service
 
 import com.bartlomiejpluta.base.editor.command.model.Undoable
-import org.springframework.stereotype.Service
+import org.apache.commons.logging.LogFactory
+import org.springframework.stereotype.Component
 import java.util.*
 
-@Service
+@Component
 class DefaultUndoRedoService : UndoRedoService {
     private val undo: Deque<Undoable> = ArrayDeque()
     private val redo: Deque<Undoable> = ArrayDeque()
@@ -22,9 +23,11 @@ class DefaultUndoRedoService : UndoRedoService {
 
     override fun push(undoable: Undoable) {
         if(undo.size == sizeMax) {
+            log.debug("The max size of [undo] list has been reached. Removing the last item...")
             undo.removeLast()
         }
 
+        log.debug("Pushing item to [undo] list: ${undoable.commandName}")
         undo.push(undoable)
         redo.clear()
     }
@@ -32,6 +35,7 @@ class DefaultUndoRedoService : UndoRedoService {
     override fun undo() {
         if(undo.isNotEmpty()) {
             undo.pop().let {
+                log.debug("Performing undo: ${it.commandName}")
                 it.undo()
                 redo.push(it)
             }
@@ -41,6 +45,7 @@ class DefaultUndoRedoService : UndoRedoService {
     override fun redo() {
         if(redo.isNotEmpty()) {
             redo.pop().let {
+                log.debug("Performing redo: ${it.commandName}")
                 it.redo()
                 undo.push(it)
             }
@@ -58,4 +63,8 @@ class DefaultUndoRedoService : UndoRedoService {
 
     override val redoCommandName: String
         get() = redo.last?.commandName ?: ""
+
+    companion object {
+        private val log = LogFactory.getLog(DefaultUndoRedoService::class.java)
+    }
 }

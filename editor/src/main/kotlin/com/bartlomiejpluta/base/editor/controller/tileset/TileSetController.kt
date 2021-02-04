@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.controller.tileset
 
-import com.bartlomiejpluta.base.editor.model.map.tileset.TileSet
+import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import org.springframework.stereotype.Component
 import tornadofx.Controller
 
