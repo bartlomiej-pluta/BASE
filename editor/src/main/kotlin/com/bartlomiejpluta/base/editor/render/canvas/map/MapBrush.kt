@@ -10,7 +10,7 @@ class MapBrush(
     private val map: GameMap,
     private val brush: Array<Array<Tile>>,
     private val paintingCallback: (MapPaintingTrace) -> Unit
-) : Renderable {
+) : Renderable, MapMouseEventHandler {
     private val tileWidth = map.tileSet.tileWidth.toDouble()
     private val tileHeight = map.tileSet.tileHeight.toDouble()
     private val centerRow: Int
@@ -52,7 +52,7 @@ class MapBrush(
         )
     }
 
-    fun handleMouseInput(event: MapMouseEvent) {
+    override fun handleMouseInput(event: MapMouseEvent) {
         mouseRow = event.row
         mouseColumn = event.column
 
@@ -63,10 +63,13 @@ class MapBrush(
         }
     }
 
-    private fun commitTrace() {
-        currentTrace?.let {
-            paintingCallback(it)
-            currentTrace = null
+    private fun beginTrace() {
+        currentTrace = MapPaintingTrace(map, "Paint trace").apply {
+            for ((row, columns) in brush.withIndex()) {
+                for ((column, tile) in columns.withIndex()) {
+                    paint(0, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+                }
+            }
         }
     }
 
@@ -80,13 +83,10 @@ class MapBrush(
         }
     }
 
-    private fun beginTrace() {
-        currentTrace = MapPaintingTrace(map, "Paint trace").apply {
-            for ((row, columns) in brush.withIndex()) {
-                for ((column, tile) in columns.withIndex()) {
-                    paint(0, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
-                }
-            }
+    private fun commitTrace() {
+        currentTrace?.let {
+            paintingCallback(it)
+            currentTrace = null
         }
     }
 }
