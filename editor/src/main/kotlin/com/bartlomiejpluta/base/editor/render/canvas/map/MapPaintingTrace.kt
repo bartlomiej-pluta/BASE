@@ -10,7 +10,7 @@ data class MapPaintingTrace(val map: GameMap, override val commandName: String) 
     private val trace = mutableListOf<Element>()
 
     fun paint(layerIndex: Int, row: Int, column: Int, tile: Tile?) {
-        if (row >= map.rows || column >= map.columns) {
+        if (row >= map.rows || column >= map.columns || row < 0 || column < 0) {
             return
         }
 

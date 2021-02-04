@@ -3,16 +3,13 @@ package com.bartlomiejpluta.base.editor.render.canvas.map
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
-import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
-import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
 import org.apache.commons.logging.LogFactory
 
 
-class MapCanvas(private val map: GameMap, private val paintingCallback: (MapPaintingTrace) -> Unit) : Renderable {
-    private var tileSet = map.tileSet
+class MapCanvas(val map: GameMap, var brush: MapBrush) : Renderable {
+    var tileSet = map.tileSet
     private var layers = map.layers
     private var rows = map.rows
     private var columns = map.columns
@@ -21,10 +18,20 @@ class MapCanvas(private val map: GameMap, private val paintingCallback: (MapPain
     private var mapWidth = map.width.toDouble()
     private var mapHeight = map.height.toDouble()
 
-    private var mouseColumn = -1
-    private var mouseRow = -1
+    var mouseColumn = -1
+        private set
 
-    private var currentTrace: MapPaintingTrace? = null
+    var mouseRow = -1
+        private set
+
+    //    private val brush = MapBrush(
+//        this, arrayOf(
+//            arrayOf(tileSet.getTile(140, 4), tileSet.getTile(140, 4), tileSet.getTile(140, 4)),
+//            arrayOf(tileSet.getTile(140, 4), tileSet.getTile(140, 4), tileSet.getTile(140, 4)),
+//            arrayOf(tileSet.getTile(140, 4), tileSet.getTile(140, 4), tileSet.getTile(140, 4))
+//        )
+//    )
+
 
 
     override fun render(gc: GraphicsContext) {
@@ -64,42 +71,40 @@ class MapCanvas(private val map: GameMap, private val paintingCallback: (MapPain
     }
 
     private fun renderCursor(gc: GraphicsContext) {
-        if (mouseColumn >= 0 && mouseRow >= 0) {
-            gc.fill = CURSOR_BRUSH
-            gc.fillRect(mouseColumn * tileWidth, mouseRow * tileHeight, tileWidth, tileHeight)
+//        if (mouseColumn >= 4 && mouseRow >= 4) {
+//            gc.globalAlpha.let { alpha ->
+//                gc.globalAlpha = 0.4
+//                gc.drawImage(tile.image, mouseColumn * tileWidth, mouseRow * tileHeight)
+//                gc.globalAlpha = alpha
+//            }
 
-            gc.fill = CURSOR_STROKE_BRUSH
-            gc.strokeRect(mouseColumn * tileWidth, mouseRow * tileHeight, tileWidth, tileHeight)
-        }
+            brush.render(gc)
+//        }
     }
 
     fun handleMouseInput(event: MapMouseEvent) {
         mouseRow = event.row
         mouseColumn = event.column
 
-        val tile = tileSet.getTile(24, 4)
-
-        when (event.type) {
-            MouseEvent.MOUSE_PRESSED -> {
-                currentTrace = MapPaintingTrace(map, "Paint trace").apply {
-                    paint(0, mouseRow, mouseColumn, tile)
-                }
-            }
-
-            MouseEvent.MOUSE_DRAGGED -> currentTrace?.apply {
-                paint(0, mouseRow, mouseColumn, tile)
-            }
-
-            MouseEvent.MOUSE_RELEASED -> currentTrace?.let {
-                paintingCallback(it)
-                currentTrace = null
-            }
-        }
+//        when (event.type) {
+//            MouseEvent.MOUSE_PRESSED -> {
+//                currentTrace = MapPaintingTrace(map, "Paint trace").apply {
+//                    paint(0, mouseRow, mouseColumn, tile)
+//                }
+//            }
+//
+//            MouseEvent.MOUSE_DRAGGED -> currentTrace?.apply {
+//                paint(0, mouseRow, mouseColumn, tile)
+//            }
+//
+//            MouseEvent.MOUSE_RELEASED -> currentTrace?.let {
+//                paintingCallback(it)
+//                currentTrace = null
+//            }
+//        }
     }
 
     companion object {
-        val CURSOR_BRUSH = Color.color(0.7, 0.3, 0.8, 0.6)
-        val CURSOR_STROKE_BRUSH = Color.color(0.7, 0.3, 0.8, 1.0)
         private val log = LogFactory.getLog(MapCanvas::class.java)
     }
 }
