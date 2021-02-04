@@ -26,7 +26,7 @@ class TileSet(private val image: Image, val rows: Int, val columns: Int) {
         return Tile(this, row, column, tile)
     }
 
-    fun getTile(row: Int, column: Int) = tiles[row][column]
+    fun getTile(row: Int, column: Int) = tiles[row.coerceIn(0 until rows)][column.coerceIn(0 until columns)]
 
-    fun getTile(id: Int) = tiles[id / rows][id % columns]
+    fun getTile(id: Int) = tiles[id / columns][id % columns]
 }

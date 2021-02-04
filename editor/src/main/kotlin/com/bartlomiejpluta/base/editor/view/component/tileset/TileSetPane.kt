@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.view.component.tileset
 
+import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.tileset.TileSetCanvas
@@ -7,8 +8,8 @@ import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
-class TileSetPane(private val tileSet: TileSet) : Canvas(), EventHandler<MouseEvent> {
-    private val tileSetCanvas = TileSetCanvas(tileSet)
+class TileSetPane(private val tileSet: TileSet, selectionCallback: (Array<Array<Tile>>) -> Unit) : Canvas(), EventHandler<MouseEvent> {
+    private val tileSetCanvas = TileSetCanvas(tileSet, selectionCallback)
 
     init {
         onMouseMoved = this

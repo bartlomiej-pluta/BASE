@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.render.canvas.tileset
 
+import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
@@ -7,11 +8,10 @@ import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
 
-class TileSetCanvas(private val tileSet: TileSet) : Renderable, MapMouseEventHandler {
+class TileSetCanvas(tileSet: TileSet, selectionCallback: (Array<Array<Tile>>) -> Unit) : Renderable, MapMouseEventHandler {
     private val tiles = tileSet.tiles
-    private var selection = TileSetSelection(tileSet)
+    private var selection = TileSetSelection(tileSet, selectionCallback)
 
     private var mouseRow = -1
     private var mouseColumn = -1
@@ -38,6 +38,7 @@ class TileSetCanvas(private val tileSet: TileSet) : Renderable, MapMouseEventHan
         when (event.type) {
             MouseEvent.MOUSE_PRESSED -> beginSelection(event)
             MouseEvent.MOUSE_DRAGGED -> proceedSelection(event)
+            MouseEvent.MOUSE_RELEASED -> finishSelection(event)
         }
     }
 
@@ -48,6 +49,12 @@ class TileSetCanvas(private val tileSet: TileSet) : Renderable, MapMouseEventHan
     }
 
     private fun proceedSelection(event: MapMouseEvent) {
+        if(event.button == MouseButton.PRIMARY) {
+            selection.proceed(event.row.toDouble(), event.column.toDouble())
+        }
+    }
+
+    private fun finishSelection(event: MapMouseEvent) {
         if(event.button == MouseButton.PRIMARY) {
             selection.finish(event.row.toDouble(), event.column.toDouble())
         }

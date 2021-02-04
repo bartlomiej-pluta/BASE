@@ -17,7 +17,8 @@ class MapFragment : Fragment() {
     val scaleProperty = SimpleDoubleProperty(1.0)
     val map: GameMap by param()
 
-    private val pane = MapPane(map) { undoRedoService.push(it) }
+    private val mapPane = MapPane(map) { undoRedoService.push(it) }
+    private val tileSetPane = TileSetPane(map.tileSet) { mapPane.setBrush(it) }
 
     private val transformation = Scale(1.0, 1.0, 0.0, 0.0).apply {
         xProperty().bind(scaleProperty)
@@ -25,7 +26,7 @@ class MapFragment : Fragment() {
     }
 
     init {
-        subscribe<RedrawMapRequestEvent> { pane.render() }
+        subscribe<RedrawMapRequestEvent> { mapPane.render() }
     }
 
     override val root = borderpane {
@@ -44,14 +45,14 @@ class MapFragment : Fragment() {
                 }
 
                 group {
-                    this += pane
+                    this += mapPane
                     transforms += transformation
                 }
             }
         }
 
         right = scrollpane {
-            this += TileSetPane(map.tileSet)
+            this += tileSetPane
         }
     }
 }

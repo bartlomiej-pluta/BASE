@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.view.component.map
 
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
+import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapCanvas
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPaintingTrace
@@ -24,6 +25,8 @@ class MapPane(map: GameMap, paintingCallback: (MapPaintingTrace) -> Unit) : Canv
         height = map.height.toDouble()
         render()
     }
+
+    fun setBrush(brush: Array<Array<Tile>>) = mapCanvas.setBrush(brush)
 
     fun render() {
         mapCanvas.render(graphicsContext2D)
