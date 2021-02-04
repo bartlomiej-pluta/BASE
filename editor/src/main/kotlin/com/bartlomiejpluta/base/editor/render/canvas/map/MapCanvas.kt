@@ -4,6 +4,8 @@ import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
+import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
+import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
 

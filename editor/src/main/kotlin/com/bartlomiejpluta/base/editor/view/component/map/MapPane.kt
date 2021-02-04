@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.editor.view.component.map
 
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapCanvas
-import com.bartlomiejpluta.base.editor.render.canvas.map.MapMouseEvent
+import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPaintingTrace
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas

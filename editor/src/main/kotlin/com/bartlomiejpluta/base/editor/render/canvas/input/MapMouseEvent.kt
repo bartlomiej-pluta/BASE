@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.render.canvas.map
+package com.bartlomiejpluta.base.editor.render.canvas.input
 
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import javafx.event.EventType

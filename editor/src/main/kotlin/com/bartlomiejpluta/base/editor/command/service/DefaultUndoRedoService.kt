@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.command.service
 
 import com.bartlomiejpluta.base.editor.command.model.Undoable
 import org.apache.commons.logging.LogFactory
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -65,6 +66,6 @@ class DefaultUndoRedoService : UndoRedoService {
         get() = redo.last?.commandName ?: ""
 
     companion object {
-        private val log = LogFactory.getLog(DefaultUndoRedoService::class.java)
+        private val log = LoggerFactory.getLogger(DefaultUndoRedoService::class.java)
     }
 }
