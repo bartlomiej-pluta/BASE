@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.editor.view.fragment.MapFragment
 import tornadofx.*
 
 class MainView : View() {
-    private val mapController: MapController by inject()
+    private val mapController: MapController by di()
     private val mapFragment = find<MapFragment>()
 
     override val root = borderpane {

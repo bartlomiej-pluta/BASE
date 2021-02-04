@@ -1,6 +1,8 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
     id 'idea'
 }
 
@@ -35,4 +37,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "no.tornado:tornadofx:${tornadoFxVersion}"
     implementation "org.joml:joml:${jomlVersion}"
+
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter'
 }

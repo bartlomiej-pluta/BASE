@@ -2,8 +2,10 @@ package com.bartlomiejpluta.base.editor.controller.map
 
 import com.bartlomiejpluta.base.editor.controller.tileset.TileSetController
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
+import org.springframework.stereotype.Component
 import tornadofx.Controller
 
+@Component
 class MapController : Controller() {
     private val tileSetController: TileSetController by inject()
 
