@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 class MapBrush(
@@ -57,17 +58,19 @@ class MapBrush(
         mouseColumn = event.column
 
         when (event.type) {
-            MouseEvent.MOUSE_PRESSED -> beginTrace()
+            MouseEvent.MOUSE_PRESSED -> beginTrace(event)
             MouseEvent.MOUSE_DRAGGED -> proceedTrace()
-            MouseEvent.MOUSE_RELEASED -> commitTrace()
+            MouseEvent.MOUSE_RELEASED -> commitTrace(event)
         }
     }
 
-    private fun beginTrace() {
-        currentTrace = MapPaintingTrace(map, "Paint trace").apply {
-            for ((row, columns) in brush.withIndex()) {
-                for ((column, tile) in columns.withIndex()) {
-                    paint(0, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+    private fun beginTrace(event: MapMouseEvent) {
+        if (event.button == MouseButton.PRIMARY) {
+            currentTrace = MapPaintingTrace(map, "Paint trace").apply {
+                for ((row, columns) in brush.withIndex()) {
+                    for ((column, tile) in columns.withIndex()) {
+                        paint(0, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+                    }
                 }
             }
         }
@@ -83,10 +86,12 @@ class MapBrush(
         }
     }
 
-    private fun commitTrace() {
-        currentTrace?.let {
-            paintingCallback(it)
-            currentTrace = null
+    private fun commitTrace(event: MapMouseEvent) {
+        if (event.button == MouseButton.PRIMARY) {
+            currentTrace?.let {
+                paintingCallback(it)
+                currentTrace = null
+            }
         }
     }
 }

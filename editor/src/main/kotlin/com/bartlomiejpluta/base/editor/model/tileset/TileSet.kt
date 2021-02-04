@@ -8,10 +8,11 @@ import java.nio.ByteBuffer
 
 class TileSet(private val image: Image, val rows: Int, val columns: Int) {
     val tileWidth = image.width.toInt() / columns
-
     val tileHeight = image.height.toInt()  / rows
+    val width = tileWidth * columns
+    val height = tileHeight * rows
 
-    private val tiles: Array<Array<Tile>> =
+    val tiles: Array<Array<Tile>> =
         Array(rows) { row -> Array(columns) { column -> cropTile(row, column) } }
 
     private fun cropTile(row: Int, column: Int): Tile {
