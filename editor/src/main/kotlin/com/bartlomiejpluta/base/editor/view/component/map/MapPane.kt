@@ -9,22 +9,19 @@ import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
-class MapPane(paintingCallback: (MapPaintingTrace) -> Unit) : Canvas(), EventHandler<MouseEvent> {
-    private var tileSet: TileSet? = null
-    private val mapCanvas = MapCanvas(paintingCallback)
+class MapPane(map: GameMap, paintingCallback: (MapPaintingTrace) -> Unit) : Canvas(), EventHandler<MouseEvent> {
+    private var tileSet = map.tileSet
+    private val mapCanvas = MapCanvas(map, paintingCallback)
 
     init {
         onMouseMoved = this
         onMouseDragged = this
         onMousePressed = this
         onMouseReleased = this
-    }
 
-    fun updateMap(map: GameMap) {
         tileSet = map.tileSet
         width = map.width.toDouble()
         height = map.height.toDouble()
-        mapCanvas.updateMap(map)
         render()
     }
 
@@ -33,8 +30,8 @@ class MapPane(paintingCallback: (MapPaintingTrace) -> Unit) : Canvas(), EventHan
     }
 
     override fun handle(event: MouseEvent?) {
-        if (event != null && tileSet != null) {
-            mapCanvas.handleMouseInput(MapMouseEvent.of(event, tileSet!!))
+        if (event != null) {
+            mapCanvas.handleMouseInput(MapMouseEvent.of(event, tileSet))
         }
 
         mapCanvas.render(graphicsContext2D)

@@ -11,38 +11,26 @@ import javafx.scene.paint.Color
 import org.apache.commons.logging.LogFactory
 
 
-class MapCanvas(private val paintingCallback: (MapPaintingTrace) -> Unit) : Renderable {
-    private var map: GameMap? = null
-    private var tileSet: TileSet? = null
-    private var layers: List<Layer>? = null
-    private var rows: Int? = null
-    private var columns: Int? = null
-    private var tileWidth: Double? = null
-    private var tileHeight: Double? = null
-    private var mapWidth: Double? = null
-    private var mapHeight: Double? = null
+class MapCanvas(private val map: GameMap, private val paintingCallback: (MapPaintingTrace) -> Unit) : Renderable {
+    private var tileSet = map.tileSet
+    private var layers = map.layers
+    private var rows = map.rows
+    private var columns = map.columns
+    private var tileWidth = tileSet.tileWidth.toDouble()
+    private var tileHeight = tileSet.tileHeight.toDouble()
+    private var mapWidth = map.width.toDouble()
+    private var mapHeight = map.height.toDouble()
 
     private var mouseColumn = -1
     private var mouseRow = -1
 
     private var currentTrace: MapPaintingTrace? = null
 
-    fun updateMap(gameMap: GameMap) {
-        map = gameMap
-        tileSet = gameMap.tileSet
-        layers = gameMap.layers
-        rows = gameMap.rows
-        columns = gameMap.columns
-        tileWidth = gameMap.tileSet.tileWidth.toDouble()
-        tileHeight = gameMap.tileSet.tileHeight.toDouble()
-        mapWidth = gameMap.columns * gameMap.tileSet.tileWidth.toDouble()
-        mapHeight = gameMap.rows * gameMap.tileSet.tileHeight.toDouble()
-    }
 
     override fun render(gc: GraphicsContext) {
         gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height);
 
-        layers?.forEach { dispatchLayerRender(gc, it) }
+        layers.forEach { dispatchLayerRender(gc, it) }
         renderGrid(gc)
         renderCursor(gc)
     }
@@ -66,22 +54,22 @@ class MapCanvas(private val paintingCallback: (MapPaintingTrace) -> Unit) : Rend
     private fun renderGrid(gc: GraphicsContext) {
         gc.lineWidth = 1.5
 
-        for (row in 0 until (rows ?: 0)) {
-            gc.strokeLine(0.0, row * (tileHeight ?: 0.0), (mapWidth ?: 0.0), row * (tileHeight ?: 0.0))
+        for (row in 0..rows - 1) {
+            gc.strokeLine(0.0, row * tileHeight, mapWidth, row * tileHeight)
         }
 
-        for (column in 0 until (columns ?: 0)) {
-            gc.strokeLine(column * (tileWidth ?: 0.0), 0.0, column * (tileWidth ?: 0.0), (mapHeight ?: 0.0))
+        for (column in 0 until columns) {
+            gc.strokeLine(column * tileWidth, 0.0, column * tileWidth, mapHeight)
         }
     }
 
     private fun renderCursor(gc: GraphicsContext) {
-        if(mouseColumn >= 0 && mouseRow >= 0) {
+        if (mouseColumn >= 0 && mouseRow >= 0) {
             gc.fill = CURSOR_BRUSH
-            gc.fillRect(mouseColumn * (tileWidth ?: 0.0), mouseRow * (tileHeight ?: 0.0), tileWidth ?: 0.0, tileHeight ?: 0.0)
-            gc.fill = CURSOR_STROKE_BRUSH
-            gc.strokeRect(mouseColumn * (tileWidth ?: 0.0), mouseRow * (tileHeight ?: 0.0), tileWidth ?: 0.0, tileHeight ?: 0.0)
+            gc.fillRect(mouseColumn * tileWidth, mouseRow * tileHeight, tileWidth, tileHeight)
 
+            gc.fill = CURSOR_STROKE_BRUSH
+            gc.strokeRect(mouseColumn * tileWidth, mouseRow * tileHeight, tileWidth, tileHeight)
         }
     }
 
@@ -89,11 +77,11 @@ class MapCanvas(private val paintingCallback: (MapPaintingTrace) -> Unit) : Rend
         mouseRow = event.row
         mouseColumn = event.column
 
-        val tile = tileSet?.getTile(24, 4)
+        val tile = tileSet.getTile(24, 4)
 
-        when(event.type) {
-            MouseEvent.MOUSE_PRESSED -> map?.let {
-                currentTrace = MapPaintingTrace(it, "Paint trace").apply {
+        when (event.type) {
+            MouseEvent.MOUSE_PRESSED -> {
+                currentTrace = MapPaintingTrace(map, "Paint trace").apply {
                     paint(0, mouseRow, mouseColumn, tile)
                 }
             }
