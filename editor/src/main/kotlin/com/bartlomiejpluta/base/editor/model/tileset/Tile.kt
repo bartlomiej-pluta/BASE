@@ -1,12 +1,10 @@
-package com.bartlomiejpluta.base.editor.model.map.tileset
+package com.bartlomiejpluta.base.editor.model.tileset
 
 import javafx.scene.image.Image
 
 import javafx.scene.image.PixelReader
 
 import javafx.scene.image.WritableImage
-import javafx.scene.image.PixelWriter
-import javafx.scene.paint.Color
 
 
 class Tile(

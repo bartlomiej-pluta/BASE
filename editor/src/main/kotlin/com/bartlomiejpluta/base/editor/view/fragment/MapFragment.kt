@@ -4,7 +4,10 @@ import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.transform.Scale
-import tornadofx.*
+import tornadofx.Fragment
+import tornadofx.group
+import tornadofx.plusAssign
+import tornadofx.scrollpane
 
 class MapFragment : Fragment() {
     private val pane = MapPane()
@@ -17,6 +20,7 @@ class MapFragment : Fragment() {
 
     fun updateMap(map: GameMap) {
         pane.updateMap(map)
+        pane.render()
     }
 
     override val root = scrollpane {
