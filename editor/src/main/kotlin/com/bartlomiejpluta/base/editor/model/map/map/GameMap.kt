@@ -13,7 +13,7 @@ class GameMap(val tileSet: TileSet, val rows: Int, val columns: Int) {
 
     val height = columns * tileSet.tileWidth
 
-    fun createTileLayer(tile: Int) = createTileLayer().apply {
+    fun createTileLayer(name: String, tile: Int) = createTileLayer(name).apply {
         val layerId = layers.size - 1
         for (row in 0 until rows) {
             for (column in 0 until columns) {
@@ -22,7 +22,7 @@ class GameMap(val tileSet: TileSet, val rows: Int, val columns: Int) {
         }
     }
 
-    fun createTileLayer(tileRow: Int, tileColumn: Int) = createTileLayer().apply {
+    fun createTileLayer(name: String, tileRow: Int, tileColumn: Int) = createTileLayer(name).apply {
         val layerId = layers.size - 1
         for (row in 0 until rows) {
             for (column in 0 until columns) {
@@ -31,7 +31,7 @@ class GameMap(val tileSet: TileSet, val rows: Int, val columns: Int) {
         }
     }
 
-    fun createTileLayer() = apply { layers.add(TileLayer(Array(rows) { Array(columns) { null } })) }
+    fun createTileLayer(name: String) = apply { layers.add(TileLayer(name, Array(rows) { Array(columns) { null } })) }
 
     fun setTile(layer: Int, row: Int, column: Int, tile: Int) = apply {
         (layers[layer] as TileLayer).setTile(row, column, tileSet.getTile(tile))

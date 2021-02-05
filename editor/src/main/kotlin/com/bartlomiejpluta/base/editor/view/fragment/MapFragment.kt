@@ -2,15 +2,18 @@ package com.bartlomiejpluta.base.editor.view.fragment
 
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
 import com.bartlomiejpluta.base.editor.view.component.tileset.TileSetPane
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Scale
+import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 
@@ -24,7 +27,9 @@ class MapFragment : Fragment() {
 
     val scaleProperty = SimpleDoubleProperty(1.0)
 
-    private val mapPane = MapPane(mapVM, brushVM) { undoRedoService.push(it) }
+    private val selectedLayer = SimpleIntegerProperty(0)
+
+    private val mapPane = MapPane(mapVM, brushVM, selectedLayer) { undoRedoService.push(it) }
     private val tileSetPane = TileSetPane(map.tileSet, brushVM)
 
     private val transformation = Scale(1.0, 1.0, 0.0, 0.0).apply {
@@ -61,12 +66,20 @@ class MapFragment : Fragment() {
         right = drawer(multiselect = true) {
             item("Layers", expanded = true) {
                 borderpane {
-                    center = listview(observableListOf("Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6"))
-                    bottom = hbox {
-                        button("New")
-                        button("Up")
-                        button("Down")
-                        button("Delete")
+                    center = tableview(mapVM.layers) {
+                        column("Layer Name", Layer::nameProperty).makeEditable()
+
+                        selectedLayer.bind(selectionModel.selectedIndexProperty())
+                    }
+
+                    bottom = toolbar {
+                        button(graphic = FontIcon("fa-plus")) {
+                            action { mapVM.item.createTileLayer("Layer ${mapVM.item.layers.size+1}") }
+                        }
+
+                        button(graphic = FontIcon("fa-chevron-up"))
+                        button(graphic = FontIcon("fa-chevron-down"))
+                        button(graphic = FontIcon("fa-trash"))
                     }
                 }
             }

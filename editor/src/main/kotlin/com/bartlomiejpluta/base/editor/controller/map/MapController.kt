@@ -12,15 +12,8 @@ class MapController : Controller() {
     private val tileSetController: TileSetController by inject()
 
     private val map1 = GameMap(tileSetController.tileset, 20, 20)
-        .createTileLayer(0)
 
     private val map2 = GameMap(tileSetController.tileset, 50, 50)
-        .createTileLayer(3)
-        .createTileLayer(3, 5)
-        .createTileLayer(3, 5)
-        .createTileLayer(3, 5)
-        .createTileLayer(3, 5)
-        .createTileLayer(3, 5)
 
     fun getMap(id: Int) = when(id) {
         1 -> map1
