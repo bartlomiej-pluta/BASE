@@ -10,6 +10,7 @@ import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.scene.control.TableView
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Scale
@@ -31,6 +32,7 @@ class MapFragment : Fragment() {
 
     private val mapPane = MapPane(mapVM, brushVM, selectedLayer) { undoRedoService.push(it) }
     private val tileSetPane = TileSetPane(map.tileSet, brushVM)
+    private var layersPane: TableView<Layer> by singleAssign()
 
     private val transformation = Scale(1.0, 1.0, 0.0, 0.0).apply {
         xProperty().bind(scaleProperty)
@@ -66,20 +68,55 @@ class MapFragment : Fragment() {
         right = drawer(multiselect = true) {
             item("Layers", expanded = true) {
                 borderpane {
-                    center = tableview(mapVM.layers) {
+                    layersPane = tableview(mapVM.layers) {
                         column("Layer Name", Layer::nameProperty).makeEditable()
 
                         selectedLayer.bind(selectionModel.selectedIndexProperty())
                     }
 
+                    center = layersPane
+
                     bottom = toolbar {
                         button(graphic = FontIcon("fa-plus")) {
-                            action { mapVM.item.createTileLayer("Layer ${mapVM.item.layers.size+1}") }
+                            action {
+                                mapVM.item.createTileLayer("Layer ${mapVM.layers.size+1}")
+                                layersPane.selectionModel.select(mapVM.layers.size - 1)
+                            }
                         }
 
-                        button(graphic = FontIcon("fa-chevron-up"))
-                        button(graphic = FontIcon("fa-chevron-down"))
-                        button(graphic = FontIcon("fa-trash"))
+                        button(graphic = FontIcon("fa-chevron-up")) {
+                            enableWhen(selectedLayer.greaterThan(0))
+                            action {
+                                val newIndex = selectedLayer.value-1
+                                mapVM.layers.swap(selectedLayer.value, newIndex)
+                                layersPane.selectionModel.select(newIndex)
+                                fire(RedrawMapRequestEvent)
+                            }
+                        }
+
+                        button(graphic = FontIcon("fa-chevron-down")) {
+                            enableWhen(selectedLayer.lessThan(mapVM.layers.sizeProperty().minus(1)).and(selectedLayer.greaterThanOrEqualTo(0)))
+                            action {
+                                val newIndex = selectedLayer.value+1
+                                mapVM.layers.swap(selectedLayer.value, newIndex)
+                                layersPane.selectionModel.select(newIndex)
+                                fire(RedrawMapRequestEvent)
+                            }
+                        }
+
+                        button(graphic = FontIcon("fa-trash")) {
+                            enableWhen(selectedLayer.greaterThanOrEqualTo(0))
+                            action {
+                                var index = selectedLayer.value
+                                mapVM.layers.removeAt(index)
+
+                                if(--index >= 0) {
+                                    layersPane.selectionModel.select(index)
+                                }
+
+                                fire(RedrawMapRequestEvent)
+                            }
+                        }
                     }
                 }
             }

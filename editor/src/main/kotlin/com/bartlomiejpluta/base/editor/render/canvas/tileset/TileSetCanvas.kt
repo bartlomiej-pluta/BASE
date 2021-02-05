@@ -66,6 +66,5 @@ class TileSetCanvas(private val tileSet: TileSet, brushVM: BrushVM) : Renderable
     companion object {
         private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
         private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
-        private const val BACKGROUND_TILE_SIZE_FACTOR = 4.0
     }
 }
