@@ -6,19 +6,17 @@ import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
-import javafx.beans.property.IntegerProperty
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 class MapPainter(
-   private val map: GameMapVM,
+   private val mapVM: GameMapVM,
    private val brushVM: BrushVM,
-   private val selectedLayer: IntegerProperty,
    private val paintingCallback: (MapPaintingTrace) -> Unit
 ) : Renderable, MapMouseEventHandler {
-   private val tileWidth = map.tileSet.tileWidth.toDouble()
-   private val tileHeight = map.tileSet.tileHeight.toDouble()
+   private val tileWidth = mapVM.tileSet.tileWidth.toDouble()
+   private val tileHeight = mapVM.tileSet.tileHeight.toDouble()
 
    private var mouseRow = -1
    private var mouseColumn = -1
@@ -56,10 +54,10 @@ class MapPainter(
 
    private fun beginTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY) {
-         currentTrace = MapPaintingTrace(map, "Paint trace").apply {
+         currentTrace = MapPaintingTrace(mapVM, "Paint trace").apply {
             brushVM.forEach { row, column, tile ->
                paint(
-                  selectedLayer.value,
+                  map.selectedLayer,
                   mouseRow - brushVM.centerRow + row,
                   mouseColumn - brushVM.centerColumn + column,
                   tile
@@ -74,7 +72,7 @@ class MapPainter(
          currentTrace?.apply {
             brushVM.forEach { row, column, tile ->
                paint(
-                  selectedLayer.value,
+                  map.selectedLayer,
                   mouseRow - brushVM.centerRow + row,
                   mouseColumn - brushVM.centerColumn + column,
                   tile

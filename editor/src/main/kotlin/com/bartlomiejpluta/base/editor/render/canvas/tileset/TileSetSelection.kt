@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.TileSetVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 import kotlin.math.abs
@@ -12,21 +13,24 @@ import kotlin.math.min
 
 
 class TileSetSelection(
-   private val tileSet: TileSet,
+   private val tileSetVM: TileSetVM,
    private val brushVM: BrushVM
 ) : Renderable {
-   private val tileWidth = tileSet.tileWidth.toDouble()
-   private val tileHeight = tileSet.tileHeight.toDouble()
-
    private var startRow = 0.0
    private var startColumn = 0.0
    private var offsetRow = 0.0
    private var offsetColumn = 0.0
    private var x = 0.0
    private var y = 0.0
-   private var width = tileWidth
-   private var height = tileHeight
+   private var width = 0.0
+   private var height = 0.0
 
+   init {
+      tileSetVM.itemProperty.addListener { _, _, tileSet ->
+         width = tileSet.tileWidth.toDouble()
+         height = tileSet.tileHeight.toDouble()
+      }
+   }
 
    fun begin(row: Double, column: Double) {
       startRow = row
@@ -38,10 +42,10 @@ class TileSetSelection(
    }
 
    private fun updateRect(row: Double, column: Double) {
-      x = min(column, startColumn) * tileWidth
-      y = min(row, startRow) * tileHeight
-      width = (offsetColumn + 1) * tileWidth
-      height = (offsetRow + 1) * tileHeight
+      x = min(column, startColumn) * tileSetVM.tileWidth
+      y = min(row, startRow) * tileSetVM.tileHeight
+      width = (offsetColumn + 1) * tileSetVM.tileWidth
+      height = (offsetRow + 1) * tileSetVM.tileHeight
    }
 
    fun proceed(row: Double, column: Double) {
@@ -62,9 +66,9 @@ class TileSetSelection(
       val rows = offsetRow.toInt() + 1
       val columns = offsetColumn.toInt() + 1
 
-      var brushArray = Array<Array<Tile>>(rows) { rowIndex ->
-         Array<Tile>(columns) { columnIndex ->
-            tileSet.getTile(firstRow + rowIndex, firstColumn + columnIndex)
+      val brushArray = Array(rows) { rowIndex ->
+         Array(columns) { columnIndex ->
+            tileSetVM.getTile(firstRow + rowIndex, firstColumn + columnIndex)
          }
       }
 

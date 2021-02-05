@@ -1,23 +1,38 @@
 package com.bartlomiejpluta.base.editor.model.tileset
 
 import com.bartlomiejpluta.base.editor.model.map.brush.Brush
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.scene.image.Image
 import javafx.scene.image.PixelFormat
 import javafx.scene.image.WritableImage
+import tornadofx.getValue
+import tornadofx.toObservable
 import java.nio.ByteBuffer
 
 
-class TileSet(private val image: Image, val rows: Int, val columns: Int) {
-   val tileWidth = image.width.toInt() / columns
-   val tileHeight = image.height.toInt() / rows
-   val width = tileWidth * columns
-   val height = tileHeight * rows
+class TileSet(private val image: Image, rows: Int, columns: Int) {
+   val rowsProperty = SimpleIntegerProperty(rows)
+   val rows by rowsProperty
 
-   val tiles: Array<Array<Tile>> =
-      Array(rows) { row -> Array(columns) { column -> cropTile(row, column) } }
+   val columnsProperty = SimpleIntegerProperty(columns)
+   val columns by columnsProperty
+
+   val tileWidthProperty = SimpleIntegerProperty(image.width.toInt() / columns)
+   val tileWidth by tileWidthProperty
+
+   val tileHeightProperty = SimpleIntegerProperty(image.height.toInt() / rows)
+   val tileHeight by tileHeightProperty
+
+   val widthProperty = SimpleIntegerProperty(tileWidth * columns)
+   val width by widthProperty
+
+   val heightProperty = SimpleIntegerProperty(tileHeight * rows)
+   val height by heightProperty
+
+   val tiles = (0 until rows * columns).map { cropTile(it / columns, it % columns) }.toObservable()
 
    val baseBrush: Brush
-      get() = Brush(arrayOf(arrayOf(tiles[0][0])))
+      get() = Brush(arrayOf(arrayOf(tiles[0])))
 
    private fun cropTile(row: Int, column: Int): Tile {
       val reader = image.pixelReader
@@ -38,7 +53,11 @@ class TileSet(private val image: Image, val rows: Int, val columns: Int) {
       return Tile(this, row, column, tile)
    }
 
-   fun getTile(row: Int, column: Int) = tiles[row.coerceIn(0 until rows)][column.coerceIn(0 until columns)]
+   fun getTile(row: Int, column: Int) = tiles[(row.coerceIn(0 until rows)) * columns + column.coerceIn(0 until columns)]
 
-   fun getTile(id: Int) = tiles[id / columns][id % columns]
+   fun getTile(id: Int) = tiles[id]
+
+   fun forEach(consumer: (row: Int, column: Int, tile: Tile) -> Unit) = tiles.forEachIndexed { id, tile ->
+      consumer(id / columns, id % columns, tile)
+   }
 }

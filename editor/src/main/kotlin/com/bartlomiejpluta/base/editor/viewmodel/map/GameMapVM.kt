@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.viewmodel.map
 
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
+import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleListProperty
 import tornadofx.ItemViewModel
 import tornadofx.getValue
@@ -23,6 +24,9 @@ class GameMapVM : ItemViewModel<GameMap>() {
 
    val heightProperty = bind(GameMap::height)
    val height by heightProperty
+
+   val selectedLayerProperty = SimpleIntegerProperty(0)
+   val selectedLayer by selectedLayerProperty
 }
 
 

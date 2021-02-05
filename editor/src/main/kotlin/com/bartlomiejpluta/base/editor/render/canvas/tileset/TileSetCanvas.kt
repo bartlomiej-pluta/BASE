@@ -1,18 +1,17 @@
 package com.bartlomiejpluta.base.editor.render.canvas.tileset
 
-import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.TileSetVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
-class TileSetCanvas(private val tileSet: TileSet, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
-   private val tiles = tileSet.tiles
-   private var selection = TileSetSelection(tileSet, brushVM)
+class TileSetCanvas(private val tileSetVM: TileSetVM, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
+   private var selection = TileSetSelection(tileSetVM, brushVM)
 
    private var mouseRow = -1
    private var mouseColumn = -1
@@ -20,22 +19,20 @@ class TileSetCanvas(private val tileSet: TileSet, brushVM: BrushVM) : Renderable
    override fun render(gc: GraphicsContext) {
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
-       renderTiles(gc)
+      renderTiles(gc)
       selection.render(gc)
    }
 
    private fun renderTiles(gc: GraphicsContext) {
-      for ((row, columns) in tiles.withIndex()) {
-         for ((column, tile) in columns.withIndex()) {
-            gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
-            gc.fillRect(
-               column * tile.image.width,
-               row * tile.image.height,
-               tileSet.tileWidth.toDouble(),
-               tileSet.tileHeight.toDouble()
-            )
-            gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
-         }
+      tileSetVM.forEach { row, column, tile ->
+         gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
+         gc.fillRect(
+            column * tile.image.width,
+            row * tile.image.height,
+            tileSetVM.tileWidth.toDouble(),
+            tileSetVM.tileHeight.toDouble()
+         )
+         gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
       }
    }
 
