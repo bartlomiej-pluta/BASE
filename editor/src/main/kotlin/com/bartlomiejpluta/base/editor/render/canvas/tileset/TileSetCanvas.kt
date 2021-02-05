@@ -11,60 +11,65 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
 class TileSetCanvas(private val tileSet: TileSet, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
-    private val tiles = tileSet.tiles
-    private var selection = TileSetSelection(tileSet, brushVM)
+   private val tiles = tileSet.tiles
+   private var selection = TileSetSelection(tileSet, brushVM)
 
-    private var mouseRow = -1
-    private var mouseColumn = -1
+   private var mouseRow = -1
+   private var mouseColumn = -1
 
-    override fun render(gc: GraphicsContext) {
-        gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height);
+   override fun render(gc: GraphicsContext) {
+      gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
-        renderTiles(gc)
-        selection.render(gc)
-    }
+       renderTiles(gc)
+      selection.render(gc)
+   }
 
-    private fun renderTiles(gc: GraphicsContext) {
-        for ((row, columns) in tiles.withIndex()) {
-            for ((column, tile) in columns.withIndex()) {
-                gc.fill = if((row+column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
-                gc.fillRect(column * tile.image.width, row * tile.image.height, tileSet.tileWidth.toDouble(), tileSet.tileHeight.toDouble())
-                gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
-            }
-        }
-    }
+   private fun renderTiles(gc: GraphicsContext) {
+      for ((row, columns) in tiles.withIndex()) {
+         for ((column, tile) in columns.withIndex()) {
+            gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
+            gc.fillRect(
+               column * tile.image.width,
+               row * tile.image.height,
+               tileSet.tileWidth.toDouble(),
+               tileSet.tileHeight.toDouble()
+            )
+            gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
+         }
+      }
+   }
 
-    override fun handleMouseInput(event: MapMouseEvent) {
-        mouseRow = event.row
-        mouseColumn = event.column
+   override fun handleMouseInput(event: MapMouseEvent) {
+      mouseRow = event.row
+      mouseColumn = event.column
 
-        when (event.type) {
-            MouseEvent.MOUSE_PRESSED -> beginSelection(event)
-            MouseEvent.MOUSE_DRAGGED -> proceedSelection(event)
-            MouseEvent.MOUSE_RELEASED -> finishSelection(event)
-        }
-    }
+      when (event.type) {
+         MouseEvent.MOUSE_PRESSED -> beginSelection(event)
+         MouseEvent.MOUSE_DRAGGED -> proceedSelection(event)
+         MouseEvent.MOUSE_RELEASED -> finishSelection(event)
+      }
+   }
 
-    private fun beginSelection(event: MapMouseEvent) {
-        if(event.button == MouseButton.PRIMARY) {
-            selection.begin(event.row.toDouble(), event.column.toDouble())
-        }
-    }
+   private fun beginSelection(event: MapMouseEvent) {
+      if (event.button == MouseButton.PRIMARY) {
+         selection.begin(event.row.toDouble(), event.column.toDouble())
+      }
+   }
 
-    private fun proceedSelection(event: MapMouseEvent) {
-        if(event.button == MouseButton.PRIMARY) {
-            selection.proceed(event.row.toDouble(), event.column.toDouble())
-        }
-    }
+   private fun proceedSelection(event: MapMouseEvent) {
+      if (event.button == MouseButton.PRIMARY) {
+         selection.proceed(event.row.toDouble(), event.column.toDouble())
+      }
+   }
 
-    private fun finishSelection(event: MapMouseEvent) {
-        if(event.button == MouseButton.PRIMARY) {
-            selection.finish(event.row.toDouble(), event.column.toDouble())
-        }
-    }
+   private fun finishSelection(event: MapMouseEvent) {
+      if (event.button == MouseButton.PRIMARY) {
+         selection.finish(event.row.toDouble(), event.column.toDouble())
+      }
+   }
 
-    companion object {
-        private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
-        private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
-    }
+   companion object {
+      private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
+      private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
+   }
 }

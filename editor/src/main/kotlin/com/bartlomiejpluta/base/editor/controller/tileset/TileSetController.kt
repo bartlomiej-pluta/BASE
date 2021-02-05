@@ -6,5 +6,5 @@ import tornadofx.Controller
 
 @Component
 class TileSetController : Controller() {
-    val tileset = TileSet(resources.image("/textures/tileset.png"), 160, 8)
+   val tileset = TileSet(resources.image("/textures/tileset.png"), 160, 8)
 }

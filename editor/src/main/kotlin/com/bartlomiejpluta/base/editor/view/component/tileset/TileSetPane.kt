@@ -9,29 +9,29 @@ import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
 class TileSetPane(private val tileSet: TileSet, brushVM: BrushVM) : Canvas(), EventHandler<MouseEvent> {
-    private val tileSetCanvas = TileSetCanvas(tileSet, brushVM)
+   private val tileSetCanvas = TileSetCanvas(tileSet, brushVM)
 
-    init {
-        onMouseMoved = this
-        onMouseDragged = this
-        onMousePressed = this
-        onMouseReleased = this
+   init {
+      onMouseMoved = this
+      onMouseDragged = this
+      onMousePressed = this
+      onMouseReleased = this
 
-        width = tileSet.width.toDouble()
-        height = tileSet.height.toDouble()
+      width = tileSet.width.toDouble()
+      height = tileSet.height.toDouble()
 
-        render()
-    }
+      render()
+   }
 
-    fun render() {
-        tileSetCanvas.render(graphicsContext2D)
-    }
+   fun render() {
+      tileSetCanvas.render(graphicsContext2D)
+   }
 
-    override fun handle(event: MouseEvent?) {
-        if (event != null) {
-            tileSetCanvas.handleMouseInput(MapMouseEvent.of(event, tileSet))
-        }
+   override fun handle(event: MouseEvent?) {
+      if (event != null) {
+         tileSetCanvas.handleMouseInput(MapMouseEvent.of(event, tileSet))
+      }
 
-        tileSetCanvas.render(graphicsContext2D)
-    }
+      tileSetCanvas.render(graphicsContext2D)
+   }
 }
