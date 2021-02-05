@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.command.model
+package com.bartlomiejpluta.base.editor.command.model.base
 
 interface Undoable {
    fun undo()

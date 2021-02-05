@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.editor.view.map
 
+import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
@@ -8,6 +10,10 @@ import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 class MapLayersView : View() {
+   private val undoRedoService: UndoRedoService by di()
+
+   override val scope = super.scope as UndoableScope
+
    private val mapVM = find<GameMapVM>()
 
    private var layersPane = TableView(mapVM.layers).apply {

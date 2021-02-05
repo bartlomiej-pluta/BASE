@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.view.map
 
+import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
@@ -18,16 +19,19 @@ import tornadofx.scrollpane
 class MapView : View() {
    private val undoRedoService: UndoRedoService by di()
 
+   override val scope = super.scope as UndoableScope
+
    val zoomProperty = SimpleDoubleProperty(1.0)
+
    private val zoom = Scale(1.0, 1.0, 0.0, 0.0).apply {
       xProperty().bind(zoomProperty)
       yProperty().bind(zoomProperty)
    }
-
    private val mapVM = find<GameMapVM>()
+
    private val brushVM = find<BrushVM>()
 
-   private val mapPane = MapPane(mapVM, brushVM) { undoRedoService.push(it) }
+   private val mapPane = MapPane(mapVM, brushVM) { undoRedoService.push(it, scope) }
 
    init {
       brushVM.item = mapVM.tileSet.baseBrush

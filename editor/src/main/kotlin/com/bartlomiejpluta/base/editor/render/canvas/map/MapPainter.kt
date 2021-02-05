@@ -53,7 +53,7 @@ class MapPainter(
    }
 
    private fun beginTrace(event: MapMouseEvent) {
-      if (event.button == MouseButton.PRIMARY) {
+      if (event.button == MouseButton.PRIMARY && mapVM.selectedLayer >= 0) {
          currentTrace = MapPaintingTrace(mapVM, "Paint trace").apply {
             brushVM.forEach { row, column, tile ->
                paint(

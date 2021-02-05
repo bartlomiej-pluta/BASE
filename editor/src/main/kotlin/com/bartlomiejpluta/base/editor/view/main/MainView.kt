@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.view.main
 
+import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.controller.map.MapController
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
@@ -18,7 +19,7 @@ class MainView : View() {
          button("Map 1") {
             action {
                val map = mapController.getMap(1)
-               tabPane += find<MapFragment>(Scope(), MapFragment::map to map).apply {
+               tabPane += find<MapFragment>(UndoableScope(), MapFragment::map to map).apply {
                   title = "Map 1"
                }
             }
@@ -27,7 +28,7 @@ class MainView : View() {
          button("Map 2") {
             action {
                val map = mapController.getMap(2)
-               tabPane += find<MapFragment>(Scope(), MapFragment::map to map).apply {
+               tabPane += find<MapFragment>(UndoableScope(), MapFragment::map to map).apply {
                   title = "Map 2"
                }
             }

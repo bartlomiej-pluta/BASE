@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.command.model
+package com.bartlomiejpluta.base.editor.command.model.base
 
 class SimpleCommand<T>(
    override val commandName: String,

@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.render.canvas.map
 
-import com.bartlomiejpluta.base.editor.command.model.Undoable
+import com.bartlomiejpluta.base.editor.command.model.base.Undoable
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
