@@ -3,9 +3,9 @@ package com.bartlomiejpluta.base.editor.view.fragment
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
-import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
 import com.bartlomiejpluta.base.editor.view.component.tileset.TileSetPane
+import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
@@ -16,12 +16,13 @@ import tornadofx.*
 class MapFragment : Fragment() {
     private val undoRedoService: UndoRedoService by di()
 
-    private val brush = Brush()
-    val scaleProperty = SimpleDoubleProperty(1.0)
     val map: GameMap by param()
 
-    private val mapPane = MapPane(map, brush) { undoRedoService.push(it) }
-    private val tileSetPane = TileSetPane(map.tileSet, brush)
+    private val brushVM = find<BrushVM>()
+    val scaleProperty = SimpleDoubleProperty(1.0)
+
+    private val mapPane = MapPane(map, brushVM) { undoRedoService.push(it) }
+    private val tileSetPane = TileSetPane(map.tileSet, brushVM)
 
     private val transformation = Scale(1.0, 1.0, 0.0, 0.0).apply {
         xProperty().bind(scaleProperty)
@@ -30,6 +31,7 @@ class MapFragment : Fragment() {
 
     init {
         subscribe<RedrawMapRequestEvent> { mapPane.render() }
+        brushVM.item = map.tileSet.baseBrush
     }
 
     override val root = borderpane {

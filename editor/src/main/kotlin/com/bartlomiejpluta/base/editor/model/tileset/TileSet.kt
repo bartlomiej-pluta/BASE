@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.model.tileset
 
+import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import javafx.scene.image.Image
 import javafx.scene.image.PixelFormat
 import javafx.scene.image.WritableImage
@@ -14,6 +15,9 @@ class TileSet(private val image: Image, val rows: Int, val columns: Int) {
 
     val tiles: Array<Array<Tile>> =
         Array(rows) { row -> Array(columns) { column -> cropTile(row, column) } }
+
+    val baseBrush: Brush
+        get() = Brush(arrayOf(arrayOf(tiles[0][0])))
 
     private fun cropTile(row: Int, column: Int): Tile {
         val reader = image.pixelReader

@@ -1,20 +1,19 @@
 package com.bartlomiejpluta.base.editor.view.component.map
 
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
-import com.bartlomiejpluta.base.editor.model.tileset.Tile
-import com.bartlomiejpluta.base.editor.render.canvas.map.MapCanvas
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
-import com.bartlomiejpluta.base.editor.model.map.brush.Brush
+import com.bartlomiejpluta.base.editor.render.canvas.map.MapCanvas
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPainter
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPaintingTrace
+import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
 
-class MapPane(map: GameMap, brush: Brush, paintingCallback: (MapPaintingTrace) -> Unit) : Canvas(), EventHandler<MouseEvent> {
+class MapPane(map: GameMap, brushVM: BrushVM, paintingCallback: (MapPaintingTrace) -> Unit) : Canvas(), EventHandler<MouseEvent> {
     private var tileSet = map.tileSet
-    private val painter = MapPainter(map, brush, paintingCallback)
+    private val painter = MapPainter(map, brushVM, paintingCallback)
     private val mapCanvas = MapCanvas(map, painter)
 
     init {

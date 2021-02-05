@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.model.Renderable
+import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 import kotlin.math.abs
@@ -12,7 +13,7 @@ import kotlin.math.min
 
 class TileSetSelection(
     private val tileSet: TileSet,
-    private val brush: Brush
+    private val brushVM: BrushVM
 ) : Renderable {
     private val tileWidth = tileSet.tileWidth.toDouble()
     private val tileHeight = tileSet.tileHeight.toDouble()
@@ -67,7 +68,7 @@ class TileSetSelection(
             }
         }
 
-        brush.updateBrush(brushArray)
+        brushVM.item = Brush(brushArray)
     }
 
     override fun render(gc: GraphicsContext) {

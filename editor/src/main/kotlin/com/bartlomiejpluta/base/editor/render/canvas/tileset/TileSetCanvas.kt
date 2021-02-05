@@ -6,14 +6,15 @@ import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
+import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
-class TileSetCanvas(private val tileSet: TileSet, brush: Brush) : Renderable, MapMouseEventHandler {
+class TileSetCanvas(private val tileSet: TileSet, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
     private val tiles = tileSet.tiles
-    private var selection = TileSetSelection(tileSet, brush)
+    private var selection = TileSetSelection(tileSet, brushVM)
 
     private var mouseRow = -1
     private var mouseColumn = -1

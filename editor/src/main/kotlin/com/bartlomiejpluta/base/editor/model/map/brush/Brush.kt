@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import javafx.beans.property.SimpleIntegerProperty
 import tornadofx.*
 
-class Brush {
+class Brush(newBrush: Array<Array<Tile>>) {
     val brush = observableListOf<Tile>()
     val rowsProperty = SimpleIntegerProperty(this, "", 0)
     var rows by rowsProperty
@@ -15,10 +15,7 @@ class Brush {
     val centerColumnProperty = SimpleIntegerProperty(0)
     var centerColumn by centerColumnProperty
 
-
-    fun updateBrush(newBrush: Array<Array<Tile>>) {
-        brush.clear()
-        columns = 0
+    init {
         rowsProperty.value = newBrush.size
 
         newBrush.forEach { brush.addAll(it) }
@@ -30,8 +27,6 @@ class Brush {
         centerRow = rows/2
         centerColumn = columns/2
     }
-
-    fun tileAt(row: Int, column: Int) = brush[row * columns + column]
 
     fun forEach(consumer: (row: Int, column: Int, tile: Tile) -> Unit) {
         brush.forEachIndexed { id, tile ->
