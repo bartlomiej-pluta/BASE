@@ -2,11 +2,11 @@ package com.bartlomiejpluta.base.editor.render.canvas.map
 
 import com.bartlomiejpluta.base.editor.command.model.Undoable
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
-import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
+import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 
 
-data class MapPaintingTrace(val map: GameMap, override val commandName: String) : Undoable {
+data class MapPaintingTrace(val map: GameMapVM, override val commandName: String) : Undoable {
     private val trace = mutableListOf<Element>()
 
     fun paint(layerIndex: Int, row: Int, column: Int, tile: Tile?) {

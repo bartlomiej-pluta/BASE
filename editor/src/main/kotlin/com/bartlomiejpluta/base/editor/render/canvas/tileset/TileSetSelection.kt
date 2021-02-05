@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.model.Renderable
-import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 import kotlin.math.abs

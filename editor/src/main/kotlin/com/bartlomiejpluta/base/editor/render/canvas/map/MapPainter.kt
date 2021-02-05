@@ -1,17 +1,17 @@
 package com.bartlomiejpluta.base.editor.render.canvas.map
 
-import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
-import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 class MapPainter(
-    private val map: GameMap,
+    private val map: GameMapVM,
     private val brushVM: BrushVM,
     private val paintingCallback: (MapPaintingTrace) -> Unit
 ) : Renderable, MapMouseEventHandler {

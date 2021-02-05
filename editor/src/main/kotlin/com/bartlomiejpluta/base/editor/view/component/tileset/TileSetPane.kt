@@ -1,11 +1,9 @@
 package com.bartlomiejpluta.base.editor.view.component.tileset
 
-import com.bartlomiejpluta.base.editor.model.map.brush.Brush
-import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.tileset.TileSetCanvas
-import com.bartlomiejpluta.base.editor.viewmodel.map.brush.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent

@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.viewmodel.map.brush
+package com.bartlomiejpluta.base.editor.viewmodel.map
 
 import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.model.tileset.Tile

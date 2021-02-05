@@ -2,15 +2,12 @@ package com.bartlomiejpluta.base.editor.render.canvas.map
 
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
-import com.bartlomiejpluta.base.editor.model.map.map.GameMap
-import com.bartlomiejpluta.base.editor.model.tileset.Tile
-import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
-import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
+import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 
 
-class MapCanvas(val map: GameMap, private val painter: MapPainter) : Renderable {
+class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderable {
     var tileSet = map.tileSet
     private var layers = map.layers
     private var rows = map.rows
