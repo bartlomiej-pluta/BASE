@@ -1,23 +1,18 @@
 package com.bartlomiejpluta.base.editor.render.canvas.tileset
 
+import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.model.Renderable
-import javafx.collections.ObservableList
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
-import org.apache.commons.logging.LogFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import tornadofx.observableListOf
 import kotlin.math.abs
-import kotlin.math.max
 import kotlin.math.min
 
 
 class TileSetSelection(
     private val tileSet: TileSet,
-    private val selectionCallback: (Array<Array<Tile>>) -> Unit
+    private val brush: Brush
 ) : Renderable {
     private val tileWidth = tileSet.tileWidth.toDouble()
     private val tileHeight = tileSet.tileHeight.toDouble()
@@ -66,13 +61,13 @@ class TileSetSelection(
         val rows = offsetRow.toInt() + 1
         val columns = offsetColumn.toInt() + 1
 
-        var brush = Array<Array<Tile>>(rows) { rowIndex ->
+        var brushArray = Array<Array<Tile>>(rows) { rowIndex ->
             Array<Tile>(columns) { columnIndex ->
                 tileSet.getTile(firstRow + rowIndex, firstColumn + columnIndex)
             }
         }
 
-        selectionCallback(brush)
+        brush.updateBrush(brushArray)
     }
 
     override fun render(gc: GraphicsContext) {

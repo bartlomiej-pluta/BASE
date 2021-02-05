@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.render.canvas.map
 
+import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
@@ -9,39 +10,24 @@ import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
-class MapBrush(
+class MapPainter(
     private val map: GameMap,
-    private val brush: Array<Array<Tile>>,
+    private val brush: Brush,
     private val paintingCallback: (MapPaintingTrace) -> Unit
 ) : Renderable, MapMouseEventHandler {
     private val tileWidth = map.tileSet.tileWidth.toDouble()
     private val tileHeight = map.tileSet.tileHeight.toDouble()
-    private val centerRow: Int
-    private val centerColumn: Int
 
     private var mouseRow = -1
     private var mouseColumn = -1
 
     private var currentTrace: MapPaintingTrace? = null
 
-    init {
-        if (brush.isEmpty() || brush[0].isEmpty()) {
-            throw IllegalStateException("Brush size must be at least 1x1")
-        }
-
-        centerRow = brush.size / 2
-        centerColumn = brush[0].size / 2
-    }
-
     override fun render(gc: GraphicsContext) {
         val alpha = gc.globalAlpha
         gc.globalAlpha = 0.4
 
-        for ((row, columns) in brush.withIndex()) {
-            for ((column, tile) in columns.withIndex()) {
-                renderTile(gc, tile, column, row)
-            }
-        }
+        brush.forEach { row, column, tile -> renderTile(gc, tile, column, row) }
 
         gc.globalAlpha = alpha
 
@@ -50,8 +36,8 @@ class MapBrush(
     private fun renderTile(gc: GraphicsContext, tile: Tile, column: Int, row: Int) {
         gc.drawImage(
             tile.image,
-            tileWidth * (mouseColumn - centerColumn + column),
-            tileHeight * (mouseRow - centerRow + row)
+            tileWidth * (mouseColumn - brush.centerColumn + column),
+            tileHeight * (mouseRow - brush.centerRow + row)
         )
     }
 
@@ -69,10 +55,8 @@ class MapBrush(
     private fun beginTrace(event: MapMouseEvent) {
         if (event.button == MouseButton.PRIMARY) {
             currentTrace = MapPaintingTrace(map, "Paint trace").apply {
-                for ((row, columns) in brush.withIndex()) {
-                    for ((column, tile) in columns.withIndex()) {
-                        paint(0, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
-                    }
+                brush.forEach { row, column, tile ->
+                    paint(0, mouseRow - brush.centerRow + row, mouseColumn - brush.centerColumn + column, tile)
                 }
             }
         }
@@ -81,10 +65,8 @@ class MapBrush(
     private fun proceedTrace(event: MapMouseEvent) {
         if (event.button == MouseButton.PRIMARY) {
             currentTrace?.apply {
-                for ((row, columns) in brush.withIndex()) {
-                    for ((column, tile) in columns.withIndex()) {
-                        paint(0, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
-                    }
+                brush.forEach { row, column, tile ->
+                    paint(0, mouseRow - brush.centerRow + row, mouseColumn - brush.centerColumn + column, tile)
                 }
             }
         }

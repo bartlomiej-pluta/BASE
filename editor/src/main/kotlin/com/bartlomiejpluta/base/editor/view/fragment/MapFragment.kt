@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.view.fragment
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.map.GameMap
+import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
 import com.bartlomiejpluta.base.editor.view.component.tileset.TileSetPane
 import javafx.beans.property.SimpleDoubleProperty
@@ -14,11 +15,13 @@ import tornadofx.*
 
 class MapFragment : Fragment() {
     private val undoRedoService: UndoRedoService by di()
+
+    private val brush = Brush()
     val scaleProperty = SimpleDoubleProperty(1.0)
     val map: GameMap by param()
 
-    private val mapPane = MapPane(map) { undoRedoService.push(it) }
-    private val tileSetPane = TileSetPane(map.tileSet) { mapPane.setBrush(it) }
+    private val mapPane = MapPane(map, brush) { undoRedoService.push(it) }
+    private val tileSetPane = TileSetPane(map.tileSet, brush)
 
     private val transformation = Scale(1.0, 1.0, 0.0, 0.0).apply {
         xProperty().bind(scaleProperty)
