@@ -52,7 +52,7 @@ class MapFragment : Fragment() {
         }
 
         right = drawer(multiselect = true) {
-            item("Layers") {
+            item("Layers", expanded = true) {
                 borderpane {
                     center = listview(observableListOf("Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 5", "Layer 6"))
                     bottom = hbox {
@@ -64,7 +64,7 @@ class MapFragment : Fragment() {
                 }
             }
 
-            item("Tile Set") {
+            item("Tile Set", expanded = true) {
                 scrollpane {
                     maxHeightProperty().bind(this@item.heightProperty())
                     this += tileSetPane
