@@ -6,15 +6,12 @@ import com.bartlomiejpluta.base.editor.render.canvas.map.MapPainter
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPaintingTrace
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
-import com.bartlomiejpluta.base.editor.viewmodel.map.TileSetVM
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
 
-class MapPane(
-   mapVM: GameMapVM,
-   private val tileSetVM: TileSetVM,
+class MapPane(private val mapVM: GameMapVM,
    brushVM: BrushVM,
    paintingCallback: (MapPaintingTrace) -> Unit
 ) : Canvas(), EventHandler<MouseEvent> {
@@ -29,9 +26,9 @@ class MapPane(
 
       width = mapVM.width.toDouble()
       height = mapVM.height.toDouble()
+
       render()
    }
-
 
    fun render() {
       mapCanvas.render(graphicsContext2D)
@@ -39,7 +36,7 @@ class MapPane(
 
    override fun handle(event: MouseEvent?) {
       if (event != null) {
-         painter.handleMouseInput(MapMouseEvent.of(event, tileSetVM))
+         painter.handleMouseInput(MapMouseEvent.of(event, mapVM.tileSet))
       }
 
       mapCanvas.render(graphicsContext2D)

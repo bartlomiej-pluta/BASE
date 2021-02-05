@@ -3,13 +3,13 @@ package com.bartlomiejpluta.base.editor.view.component.tileset
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.tileset.TileSetCanvas
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
-import com.bartlomiejpluta.base.editor.viewmodel.map.TileSetVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
-class TileSetPane(private val tileSetVM: TileSetVM, brushVM: BrushVM) : Canvas(), EventHandler<MouseEvent> {
-   private val tileSetCanvas = TileSetCanvas(tileSetVM, brushVM)
+class TileSetPane(private val gameMapVM: GameMapVM, brushVM: BrushVM) : Canvas(), EventHandler<MouseEvent> {
+   private val tileSetCanvas = TileSetCanvas(gameMapVM, brushVM)
 
    init {
       onMouseMoved = this
@@ -17,10 +17,10 @@ class TileSetPane(private val tileSetVM: TileSetVM, brushVM: BrushVM) : Canvas()
       onMousePressed = this
       onMouseReleased = this
 
-      widthProperty().bind(tileSetVM.widthProperty)
-      heightProperty().bind(tileSetVM.heightProperty)
+      width = gameMapVM.tileSet.width.toDouble()
+      height = gameMapVM.tileSet.height.toDouble()
 
-      tileSetVM.itemProperty.addListener { _, _, _ -> render() }
+      render()
    }
 
    private fun render() {
@@ -29,7 +29,7 @@ class TileSetPane(private val tileSetVM: TileSetVM, brushVM: BrushVM) : Canvas()
 
    override fun handle(event: MouseEvent?) {
       if (event != null) {
-         tileSetCanvas.handleMouseInput(MapMouseEvent.of(event, tileSetVM))
+         tileSetCanvas.handleMouseInput(MapMouseEvent.of(event, gameMapVM.tileSet))
       }
 
       tileSetCanvas.render(graphicsContext2D)

@@ -4,14 +4,14 @@ import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
-import com.bartlomiejpluta.base.editor.viewmodel.map.TileSetVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
-class TileSetCanvas(private val tileSetVM: TileSetVM, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
-   private var selection = TileSetSelection(tileSetVM, brushVM)
+class TileSetCanvas(private val gameMapVM: GameMapVM, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
+   private var selection = TileSetSelection(gameMapVM, brushVM)
 
    private var mouseRow = -1
    private var mouseColumn = -1
@@ -24,13 +24,13 @@ class TileSetCanvas(private val tileSetVM: TileSetVM, brushVM: BrushVM) : Render
    }
 
    private fun renderTiles(gc: GraphicsContext) {
-      tileSetVM.forEach { row, column, tile ->
+      gameMapVM.tileSet.forEach { row, column, tile ->
          gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
          gc.fillRect(
             column * tile.image.width,
             row * tile.image.height,
-            tileSetVM.tileWidth.toDouble(),
-            tileSetVM.tileHeight.toDouble()
+            gameMapVM.tileSet.tileWidth.toDouble(),
+            gameMapVM.tileSet.tileHeight.toDouble()
          )
          gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
       }
