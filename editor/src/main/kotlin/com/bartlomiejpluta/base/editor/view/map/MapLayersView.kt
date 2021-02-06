@@ -1,9 +1,14 @@
 package com.bartlomiejpluta.base.editor.view.map
 
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.command.model.map.CreateLayerCommand
+import com.bartlomiejpluta.base.editor.command.model.map.MoveLayerCommand
+import com.bartlomiejpluta.base.editor.command.model.map.RemoveLayerCommand
+import com.bartlomiejpluta.base.editor.command.model.map.RenameLayerCommand
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
+import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.control.TableView
 import org.kordamp.ikonli.javafx.FontIcon
@@ -17,7 +22,11 @@ class MapLayersView : View() {
    private val mapVM = find<GameMapVM>()
 
    private var layersPane = TableView(mapVM.layers).apply {
-      column("Layer Name", Layer::nameProperty).makeEditable()
+      column("Layer Name", Layer::nameProperty).makeEditable().setOnEditCommit {
+         val command = RenameLayerCommand(it.rowValue, it.newValue)
+         command.execute()
+         undoRedoService.push(command, scope)
+      }
 
       mapVM.selectedLayerProperty.bind(selectionModel.selectedIndexProperty())
    }
@@ -28,8 +37,11 @@ class MapLayersView : View() {
       bottom = toolbar {
          button(graphic = FontIcon("fa-plus")) {
             action {
-               mapVM.item.createTileLayer("Layer ${mapVM.layers.size + 1}")
+               val tileLayer = TileLayer.empty("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
+               val command = CreateLayerCommand(mapVM.item, tileLayer)
+               command.execute()
                layersPane.selectionModel.select(mapVM.layers.size - 1)
+               undoRedoService.push(command, scope)
             }
          }
 
@@ -37,9 +49,11 @@ class MapLayersView : View() {
             enableWhen(mapVM.selectedLayerProperty.greaterThan(0))
             action {
                val newIndex = mapVM.selectedLayer - 1
-               mapVM.layers.swap(mapVM.selectedLayer, newIndex)
+               val command = MoveLayerCommand(mapVM.item, mapVM.selectedLayer, newIndex)
+               command.execute()
                layersPane.selectionModel.select(newIndex)
                fire(RedrawMapRequestEvent)
+               undoRedoService.push(command, scope)
             }
          }
 
@@ -50,9 +64,11 @@ class MapLayersView : View() {
             )
             action {
                val newIndex = mapVM.selectedLayer + 1
-               mapVM.layers.swap(mapVM.selectedLayer, newIndex)
+               val command = MoveLayerCommand(mapVM.item, mapVM.selectedLayer, newIndex)
+               command.execute()
                layersPane.selectionModel.select(newIndex)
                fire(RedrawMapRequestEvent)
+               undoRedoService.push(command, scope)
             }
          }
 
@@ -60,13 +76,15 @@ class MapLayersView : View() {
             enableWhen(mapVM.selectedLayerProperty.greaterThanOrEqualTo(0))
             action {
                var index = mapVM.selectedLayer
-               mapVM.layers.removeAt(index)
+               val command = RemoveLayerCommand(mapVM.item, index)
+               command.execute()
 
                if (--index >= 0) {
                   layersPane.selectionModel.select(index)
                }
 
                fire(RedrawMapRequestEvent)
+               undoRedoService.push(command, scope)
             }
          }
       }
