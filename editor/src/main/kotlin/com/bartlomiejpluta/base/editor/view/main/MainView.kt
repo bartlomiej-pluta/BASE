@@ -19,7 +19,7 @@ class MainView : View() {
          button(graphic = FontIcon("fa-file-o")) {
             action {
                val tileSet = tileSetController.tileset
-               val map = mapController.createMap(tileSet, 25, 25)
+               val map = mapController.createMap(tileSet, 5, 5)
                tabPane += find<MapFragment>(UndoableScope(), MapFragment::map to map).apply {
                   title = "Map 1"
                }

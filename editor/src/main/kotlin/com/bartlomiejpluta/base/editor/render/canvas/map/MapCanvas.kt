@@ -6,25 +6,23 @@ import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
+import org.slf4j.LoggerFactory
 
 
 class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderable {
    var tileSet = map.tileSet
-   private var layers = map.layers
-   private var rows = map.rows
-   private var columns = map.columns
    private var tileWidth = tileSet.tileWidth.toDouble()
    private var tileHeight = tileSet.tileHeight.toDouble()
-   private var mapWidth = map.width.toDouble()
-   private var mapHeight = map.height.toDouble()
 
 
    override fun render(gc: GraphicsContext) {
+      log.debug("vm.dim = ${map.rows}x${map.columns} | map.dim = ${map.item.rows}x${map.item.columns}")
+//      log.debug("vm.size = ${map.width}x${map.height} | map.size = ${map.item.width}x${map.item.height}")
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
-       renderBackground(gc)
+      renderBackground(gc)
 
-      layers.forEach { dispatchLayerRender(gc, it) }
+      map.layers.forEach { dispatchLayerRender(gc, it) }
 
       renderGrid(gc)
 
@@ -38,8 +36,8 @@ class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderabl
    }
 
    private fun renderBackground(gc: GraphicsContext) {
-      for (row in 0 until rows) {
-         for (column in 0 until columns) {
+      for (row in 0 until map.rows) {
+         for (column in 0 until map.columns) {
             gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
             gc.fillRect(column * tileWidth, row * tileHeight, tileWidth, tileHeight)
          }
@@ -59,21 +57,22 @@ class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderabl
    private fun renderGrid(gc: GraphicsContext) {
       gc.lineWidth = 1.5
 
-      gc.strokeLine(0.0, 0.0, mapWidth, 0.0)
-      gc.strokeLine(0.0, 0.0, 0.0, mapHeight)
-      gc.strokeLine(mapWidth, 0.0, mapWidth, mapHeight)
-      gc.strokeLine(0.0, mapHeight, mapWidth, mapHeight)
+      gc.strokeLine(0.0, 0.0, map.width, 0.0)
+      gc.strokeLine(0.0, 0.0, 0.0, map.height)
+      gc.strokeLine(map.width, 0.0, map.width, map.height)
+      gc.strokeLine(0.0, map.height, map.width, map.height)
 
-      for (row in 0 until rows) {
-         gc.strokeLine(0.0, row * tileHeight, mapWidth, row * tileHeight)
+      for (row in 0 until map.rows) {
+         gc.strokeLine(0.0, row * tileHeight, map.width, row * tileHeight)
       }
 
-      for (column in 0 until columns) {
-         gc.strokeLine(column * tileWidth, 0.0, column * tileWidth, mapHeight)
+      for (column in 0 until map.columns) {
+         gc.strokeLine(column * tileWidth, 0.0, column * tileWidth, map.height)
       }
    }
 
    companion object {
+      private val log = LoggerFactory.getLogger(MapCanvas::class.java)
       private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
       private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
    }

@@ -38,6 +38,22 @@ class MapFragment : Fragment() {
                fire(RedrawMapRequestEvent)
             }
          }
+
+         button(graphic = FontIcon("fa-plus")) {
+            action {
+               mapVM.rows = mapVM.rows + 1
+               mapVM.commit()
+               fire(RedrawMapRequestEvent)
+            }
+         }
+
+         button(graphic = FontIcon("fa-plus")) {
+            action {
+               mapVM.columns = mapVM.columns + 1
+               mapVM.commit()
+               fire(RedrawMapRequestEvent)
+            }
+         }
       }
 
       center = mapView.root

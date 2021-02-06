@@ -2,13 +2,18 @@ package com.bartlomiejpluta.base.editor.model.map.map
 
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
-import tornadofx.observableListOf
+import javafx.beans.property.ReadOnlyDoubleWrapper
+import javafx.beans.property.SimpleIntegerProperty
+import tornadofx.*
 
 
-class GameMap(val tileSet: TileSet, val rows: Int, val columns: Int) {
+class GameMap(val tileSet: TileSet, initialColumns: Int, initialRows: Int) {
    val layers = observableListOf<Layer>()
+   val mapProperties = observableListOf<MapProperty>()
 
-   val width = columns * tileSet.tileWidth
+   val rowsProperty = SimpleIntegerProperty(initialRows)
+   val rows by rowsProperty
 
-   val height = columns * tileSet.tileWidth
+   val columnsProperty = SimpleIntegerProperty(initialColumns)
+   val columns by columnsProperty
 }

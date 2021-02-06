@@ -24,8 +24,8 @@ class MapPane(private val mapVM: GameMapVM,
       onMousePressed = this
       onMouseReleased = this
 
-      width = mapVM.width.toDouble()
-      height = mapVM.height.toDouble()
+      widthProperty().bind(mapVM.widthProperty)
+      heightProperty().bind(mapVM.heightProperty)
 
       render()
    }
