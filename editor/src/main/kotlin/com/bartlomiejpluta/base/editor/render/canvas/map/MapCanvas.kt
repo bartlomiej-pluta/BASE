@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory
 
 class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderable {
    var tileSet = map.tileSet
-   private var tileWidth = tileSet.tileWidth.toDouble()
-   private var tileHeight = tileSet.tileHeight.toDouble()
+   private var tileWidth = map.tileWidth
+   private var tileHeight = map.tileHeight
 
 
    override fun render(gc: GraphicsContext) {
       log.debug("vm.dim = ${map.rows}x${map.columns} | map.dim = ${map.item.rows}x${map.item.columns}")
-//      log.debug("vm.size = ${map.width}x${map.height} | map.size = ${map.item.width}x${map.item.height}")
+      log.debug("vm.size = ${map.width}x${map.height} | map.size = ${map.item.width}x${map.item.height}")
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
       renderBackground(gc)
