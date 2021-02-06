@@ -1,8 +1,6 @@
 package com.bartlomiejpluta.base.editor.render.canvas.tileset
 
 import com.bartlomiejpluta.base.editor.model.map.brush.Brush
-import com.bartlomiejpluta.base.editor.model.tileset.Tile
-import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
@@ -23,13 +21,23 @@ class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: Br
    private var height = gameMapVM.tileSet.tileHeight.toDouble()
 
 
+   fun shrinkToTopLeftTile() {
+      proceed(startRow, startColumn)
+   }
+
    fun begin(row: Double, column: Double) {
+      resetBrushRange()
+
       startRow = row
       offsetRow = 0.0
       startColumn = column
       offsetColumn = 0.0
 
       updateRect(row, column)
+   }
+
+   private fun resetBrushRange() {
+      brushVM.brushRange = 1
    }
 
    private fun updateRect(row: Double, column: Double) {

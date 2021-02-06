@@ -8,14 +8,21 @@ import tornadofx.setValue
 
 class Brush(newBrush: Array<Array<Tile>>) {
    val brush = observableListOf<Tile>()
+
    val rowsProperty = SimpleIntegerProperty(this, "", 0)
    var rows by rowsProperty
+
    val columnsProperty = SimpleIntegerProperty(0)
    var columns by columnsProperty
+
    val centerRowProperty = SimpleIntegerProperty(0)
    var centerRow by centerRowProperty
+
    val centerColumnProperty = SimpleIntegerProperty(0)
    var centerColumn by centerColumnProperty
+
+   val brushRangeProperty = SimpleIntegerProperty(1)
+   var brushRange by brushRangeProperty
 
    init {
       rowsProperty.value = newBrush.size
@@ -35,4 +42,6 @@ class Brush(newBrush: Array<Array<Tile>>) {
          consumer(id / columns, id % columns, tile)
       }
    }
+
+   fun withBrushRange(range: Int) = Brush(Array(range) { Array(range) { brush[0] } }).apply { brushRange = range }
 }

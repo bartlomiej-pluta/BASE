@@ -10,9 +10,7 @@ import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
-class TileSetCanvas(private val gameMapVM: GameMapVM, brushVM: BrushVM) : Renderable, MapMouseEventHandler {
-   private var selection = TileSetSelection(gameMapVM, brushVM)
-
+class TileSetCanvas(private val gameMapVM: GameMapVM, private val selection: TileSetSelection) : Renderable, MapMouseEventHandler {
    private var mouseRow = -1
    private var mouseColumn = -1
 

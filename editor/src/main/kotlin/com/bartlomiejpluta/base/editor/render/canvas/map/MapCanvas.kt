@@ -16,8 +16,6 @@ class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderabl
 
 
    override fun render(gc: GraphicsContext) {
-      log.debug("vm.dim = ${map.rows}x${map.columns} | map.dim = ${map.item.rows}x${map.item.columns}")
-      log.debug("vm.size = ${map.width}x${map.height} | map.size = ${map.item.width}x${map.item.height}")
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
       renderBackground(gc)
@@ -72,7 +70,6 @@ class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderabl
    }
 
    companion object {
-      private val log = LoggerFactory.getLogger(MapCanvas::class.java)
       private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
       private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
    }
