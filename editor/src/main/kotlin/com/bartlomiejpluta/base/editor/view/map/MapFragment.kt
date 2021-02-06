@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.model.map.map.GameMap
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
+import kotlin.math.max
 
 
 class MapFragment : Fragment() {
@@ -39,17 +40,33 @@ class MapFragment : Fragment() {
             }
          }
 
-         button(graphic = FontIcon("fa-plus")) {
+         button(text = "Rows", graphic = FontIcon("fa-minus")) {
             action {
-               mapVM.rows = mapVM.rows + 1
+               mapVM.rows = max(mapVM.rows - 1, 1)
                mapVM.commit()
                fire(RedrawMapRequestEvent)
             }
          }
 
-         button(graphic = FontIcon("fa-plus")) {
+         button(text = "Columns", graphic = FontIcon("fa-minus")) {
             action {
-               mapVM.columns = mapVM.columns + 1
+               mapVM.columns = max(mapVM.columns - 1, 1)
+               mapVM.commit()
+               fire(RedrawMapRequestEvent)
+            }
+         }
+
+         button(text = "Rows", graphic = FontIcon("fa-plus")) {
+            action {
+               ++mapVM.rows
+               mapVM.commit()
+               fire(RedrawMapRequestEvent)
+            }
+         }
+
+         button(text = "Columns", graphic = FontIcon("fa-plus")) {
+            action {
+               ++mapVM.columns
                mapVM.commit()
                fire(RedrawMapRequestEvent)
             }

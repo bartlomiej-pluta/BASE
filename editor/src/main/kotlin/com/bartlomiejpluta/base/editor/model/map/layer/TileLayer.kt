@@ -2,17 +2,21 @@ package com.bartlomiejpluta.base.editor.model.map.layer
 
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
+import tornadofx.getValue
+import tornadofx.setValue
 
-class TileLayer(name: String, val layer: Array<Array<Tile?>>) : Layer {
-
-   fun setTile(row: Int, column: Int, tile: Tile?) = apply { layer[row][column] = tile }
+class TileLayer(name: String, rows: Int, columns: Int) : Layer {
+   var layer: Array<Array<Tile?>> = Array(rows) { Array(columns) { null } }
+      private set
 
    override val nameProperty = SimpleStringProperty(name)
-
    override var name: String by nameProperty
 
-   companion object {
-      fun empty(name: String, rows: Int ,columns: Int) = TileLayer(name, Array(rows) { Array(columns) { null } })
+   override fun resize(rows: Int, columns: Int) {
+      layer = Array(rows) { row ->
+         Array(columns) { column ->
+            layer.getOrNull(row) ?. getOrNull(column)
+         }
+      }
    }
 }

@@ -2,17 +2,15 @@ package com.bartlomiejpluta.base.editor.model.map.map
 
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
-import javafx.beans.property.ReadOnlyDoubleWrapper
-import javafx.beans.property.ReadOnlyFloatProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
-import tornadofx.*
+import tornadofx.getValue
+import tornadofx.observableListOf
+import tornadofx.setValue
 
 
 class GameMap(val tileSet: TileSet, initialColumns: Int, initialRows: Int) {
    val layers = observableListOf<Layer>()
-   val mapProperties = observableListOf<MapProperty>()
-
 
    val tileWidth = tileSet.tileWidth.toDouble()
    val tileHeight = tileSet.tileHeight.toDouble()
@@ -33,11 +31,15 @@ class GameMap(val tileSet: TileSet, initialColumns: Int, initialRows: Int) {
 
    init {
       rowsProperty.addListener { _, _, newValue ->
-         height = newValue.toInt() * tileWidth
+         val newRows = newValue.toInt()
+         height = newRows * tileWidth
+         layers.forEach { it.resize(newRows, columns) }
       }
 
       columnsProperty.addListener { _, _, newValue ->
-         width = newValue.toInt() * tileWidth
+         val newColumns = newValue.toInt()
+         width = newColumns * tileWidth
+         layers.forEach { it.resize(rows, newColumns) }
       }
    }
 }

@@ -37,7 +37,7 @@ class MapLayersView : View() {
       bottom = toolbar {
          button(graphic = FontIcon("fa-plus")) {
             action {
-               val tileLayer = TileLayer.empty("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
+               val tileLayer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
                val command = CreateLayerCommand(mapVM.item, tileLayer)
                command.execute()
                layersPane.selectionModel.select(mapVM.layers.size - 1)
