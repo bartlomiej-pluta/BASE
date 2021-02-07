@@ -9,8 +9,14 @@ class MainMenuView : View() {
    override val root = menubar {
       menu("File") {
          menu("New") {
-            item("Project...")
+            item("Project...") {
+               action {
+                  mainController.createEmptyProject()
+               }
+            }
+
             item("Map...") {
+               enableWhen(mainController.openProject.isNotNull)
                action {
                   mainController.createEmptyMap()
                }

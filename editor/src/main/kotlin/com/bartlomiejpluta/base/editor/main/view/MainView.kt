@@ -11,6 +11,13 @@ class MainView : View("BASE Game Editor") {
 
    private val mainMenuView = find<MainMenuView>()
 
+   init {
+      mainController.openProject.addListener { _, _, project ->
+         val projectName = project?.let { " :: ${it.name}" } ?: ""
+         title = "BASE Game Editor$projectName"
+      }
+   }
+
    override val root = borderpane {
       top = mainMenuView.root
 

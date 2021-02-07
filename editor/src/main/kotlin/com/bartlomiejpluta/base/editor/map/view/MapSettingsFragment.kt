@@ -12,7 +12,7 @@ class MapSettingsFragment : Fragment("Map Settings") {
 
    private val mapVM = find<GameMapVM>()
 
-   var result: Boolean = false
+   var result = false
       private set
 
    override val root = form {
@@ -63,20 +63,16 @@ class MapSettingsFragment : Fragment("Map Settings") {
             shortcut("Enter")
 
             action {
-               if(mapVM.valid.value) {
-                  mapVM.commit {
-                     result = true
-                     undoRedoService.clear(scope)
-                     close()
-                  }
+               mapVM.commit {
+                  result = true
+                  undoRedoService.clear(scope)
+                  close()
                }
             }
          }
 
          button("Reset") {
-            action {
-               mapVM.rollback()
-            }
+            action { mapVM.rollback() }
          }
 
          button("Cancel") {

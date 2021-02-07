@@ -10,7 +10,6 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import javafx.scene.control.ToggleGroup
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
-import kotlin.math.max
 
 class MapToolbarView : View() {
    private val undoRedoService: UndoRedoService by di()
@@ -40,38 +39,6 @@ class MapToolbarView : View() {
          shortcut("Ctrl+Shift+Z")
          action {
             undoRedoService.redo(scope)
-            fire(RedrawMapRequestEvent)
-         }
-      }
-
-      button(text = "Rows", graphic = FontIcon("fa-minus")) {
-         action {
-            mapVM.rows = max(mapVM.rows - 1, 1)
-            mapVM.commit()
-            fire(RedrawMapRequestEvent)
-         }
-      }
-
-      button(text = "Columns", graphic = FontIcon("fa-minus")) {
-         action {
-            mapVM.columns = max(mapVM.columns - 1, 1)
-            mapVM.commit()
-            fire(RedrawMapRequestEvent)
-         }
-      }
-
-      button(text = "Rows", graphic = FontIcon("fa-plus")) {
-         action {
-            ++mapVM.rows
-            mapVM.commit()
-            fire(RedrawMapRequestEvent)
-         }
-      }
-
-      button(text = "Columns", graphic = FontIcon("fa-plus")) {
-         action {
-            ++mapVM.columns
-            mapVM.commit()
             fire(RedrawMapRequestEvent)
          }
       }
