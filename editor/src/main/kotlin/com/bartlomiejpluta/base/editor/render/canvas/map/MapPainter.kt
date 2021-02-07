@@ -27,7 +27,7 @@ class MapPainter(
       val alpha = gc.globalAlpha
       gc.globalAlpha = 0.4
 
-      brushVM.forEach { row, column, tile -> renderTile(gc, tile, column, row) }
+      brushVM.forEach { row, column, tile -> tile?.let { renderTile(gc, it, column, row) } }
 
       gc.globalAlpha = alpha
 

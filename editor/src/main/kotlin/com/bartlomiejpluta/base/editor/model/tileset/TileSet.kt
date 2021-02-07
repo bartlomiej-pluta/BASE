@@ -32,7 +32,7 @@ class TileSet(private val image: Image, rows: Int, columns: Int) {
    val tiles = (0 until rows * columns).map { cropTile(it / columns, it % columns) }.toObservable()
 
    val baseBrush: Brush
-      get() = Brush(arrayOf(arrayOf(tiles[0])))
+      get() = Brush.of(arrayOf(arrayOf(tiles[0])))
 
    private fun cropTile(row: Int, column: Int): Tile {
       val reader = image.pixelReader

@@ -18,7 +18,11 @@ class MapToolbarView : View() {
    private val mapVM = find<GameMapVM>()
    private val brushVM = find<BrushVM>()
 
-   private val tool = ToggleGroup()
+   private val tool = ToggleGroup().apply {
+      brushVM.erasingProperty.addListener { observable, oldValue, newValue ->
+         selectedValueProperty<Boolean>().value = newValue
+      }
+   }
 
    override val root = toolbar {
       button(graphic = FontIcon("fa-undo")) {
@@ -69,12 +73,20 @@ class MapToolbarView : View() {
          }
       }
 
-      togglebutton(tool) {
+      togglebutton(value = false, group = tool) {
          graphic = FontIcon("fa-paint-brush")
+
+         action {
+            brushVM.item = brushVM.withPaintingMode()
+         }
       }
 
-      togglebutton(tool) {
+      togglebutton(value = true, group = tool) {
          graphic = FontIcon("fa-eraser")
+
+         action {
+            brushVM.item = brushVM.withErasingMode()
+         }
       }
 
       this += FontIcon("fa-paint-brush").apply { iconSize = 10 }
