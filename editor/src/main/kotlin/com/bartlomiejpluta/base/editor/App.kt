@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor
 
-import com.bartlomiejpluta.base.editor.view.main.MainView
+import com.bartlomiejpluta.base.editor.main.view.MainView
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ConfigurableApplicationContext
