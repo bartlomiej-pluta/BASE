@@ -16,7 +16,9 @@ class MainView : View("BASE Game Editor") {
 
       center = tabpane {
          tabs.bind(mainController.openMaps) { scope, map ->
-            Tab(map.name, find<MapFragment>(scope).root).apply {
+            Tab().apply {
+               textProperty().bindBidirectional(map.nameProperty)
+               content = find<MapFragment>(scope).root
                setOnClosed { mainController.openMaps.remove(scope) }
             }
          }

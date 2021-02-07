@@ -30,6 +30,9 @@ class MapPane(
       widthProperty().bind(mapVM.widthProperty)
       heightProperty().bind(mapVM.heightProperty)
 
+      mapVM.item.rowsProperty.addListener { _, _, _ -> render() }
+      mapVM.item.columnsProperty.addListener { _, _, _ -> render() }
+
       editorStateVM.showGridProperty.addListener { _, _, _ -> render() }
       editorStateVM.selectedLayerProperty.addListener { _, _, _ -> render() }
       editorStateVM.coverUnderlyingLayersProperty.addListener { _, _, _ -> render() }
