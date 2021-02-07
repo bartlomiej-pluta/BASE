@@ -39,6 +39,7 @@ class MapView : View() {
 
    init {
       brushVM.item = mapVM.tileSet.baseBrush
+      brushVM.commit()
 
       subscribe<RedrawMapRequestEvent> { mapPane.render() }
    }

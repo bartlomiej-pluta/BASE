@@ -62,6 +62,7 @@ class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: Br
       }
 
       brushVM.item = Brush.of(brushArray)
+      brushVM.commit()
    }
 
    override fun render(gc: GraphicsContext) {

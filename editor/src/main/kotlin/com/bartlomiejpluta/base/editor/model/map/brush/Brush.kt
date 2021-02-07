@@ -12,7 +12,7 @@ import tornadofx.setValue
 class Brush {
    val brush: ObservableList<Tile>
 
-   val rowsProperty = SimpleIntegerProperty(this, "", 0)
+   val rowsProperty = SimpleIntegerProperty(0)
    var rows by rowsProperty
       private set
 
@@ -87,7 +87,7 @@ class Brush {
       this.range = range
    }
 
-   fun withBrushMode(mode: BrushMode) = clone().apply {
+   fun withMode(mode: BrushMode) = clone().apply {
       this.mode = mode
    }
 

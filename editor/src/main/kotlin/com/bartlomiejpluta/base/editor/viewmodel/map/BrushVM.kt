@@ -25,5 +25,5 @@ class BrushVM : ItemViewModel<Brush>(Brush.of(arrayOf(arrayOf()))) {
 
    fun withRange(range: Int) = item.withRange(range)
 
-   fun withMode(mode: BrushMode) = item.withBrushMode(mode)
+   fun withMode(mode: BrushMode) = item.withMode(mode)
 }

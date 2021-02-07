@@ -101,6 +101,7 @@ class MapToolbarView : View() {
 
          action {
             brushVM.item = brushVM.withMode(BrushMode.PAINTING_MODE)
+            brushVM.commit()
          }
       }
 
@@ -109,6 +110,7 @@ class MapToolbarView : View() {
 
          action {
             brushVM.item = brushVM.withMode(BrushMode.ERASING_MODE)
+            brushVM.commit()
          }
       }
 
@@ -121,6 +123,7 @@ class MapToolbarView : View() {
 
          valueProperty().addListener { _, _, newValue ->
             brushVM.item = brushVM.withRange(newValue.toInt())
+            brushVM.commit()
          }
 
          brushVM.itemProperty.addListener { _, _, brush ->
