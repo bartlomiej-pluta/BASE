@@ -40,7 +40,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderUnderlyingLayers(gc: GraphicsContext) {
-      for(layer in map.layers.dropLast( map.layers.size - editorStateVM.selectedLayer)) {
+      for(layer in map.layers.dropLast(if(editorStateVM.selectedLayer < 0) 0 else map.layers.size - editorStateVM.selectedLayer)) {
          dispatchLayerRender(gc, layer)
       }
    }

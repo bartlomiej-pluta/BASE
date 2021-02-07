@@ -19,4 +19,8 @@ class TileLayer(name: String, rows: Int, columns: Int) : Layer {
          }
       }
    }
+
+   override fun clone() = TileLayer(name, 0, 0).apply {
+      layer = this@TileLayer.layer
+   }
 }

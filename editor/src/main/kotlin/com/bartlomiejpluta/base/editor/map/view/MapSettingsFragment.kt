@@ -1,10 +1,15 @@
 package com.bartlomiejpluta.base.editor.map.view
 
+import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 class MapSettingsFragment : Fragment("Map Settings") {
+   override val scope = super.scope as UndoableScope
+   private val undoRedoService: UndoRedoService by di()
+
    private val mapVM = find<GameMapVM>()
 
    var result: Boolean = false
@@ -49,6 +54,8 @@ class MapSettingsFragment : Fragment("Map Settings") {
                }
             }
          }
+
+         label("Warning: Submitting the form will clear related undo/redo stacks!")
       }
 
       buttonbar {
@@ -56,9 +63,12 @@ class MapSettingsFragment : Fragment("Map Settings") {
             shortcut("Enter")
 
             action {
-               mapVM.commit {
-                  result = true
-                  close()
+               if(mapVM.valid.value) {
+                  mapVM.commit {
+                     result = true
+                     undoRedoService.clear(scope)
+                     close()
+                  }
                }
             }
          }

@@ -80,6 +80,18 @@ class DefaultUndoRedoService : UndoRedoService {
       }
    }
 
+   override fun clear() {
+      log.debug("Clearing [undo] and [redo] stacks")
+      undo.clear()
+      redo.clear()
+   }
+
+   override fun clear(context: UndoableContext) {
+      log.debug("Clearing [undo] and [redo] stacks (ctx: ${toHexString(context.hashCode())})")
+      undo.removeIf { it.second == context }
+      redo.removeIf { it.second == context }
+   }
+
    override val lastUndoable: Undoable?
       get() = undo.first?.first
 

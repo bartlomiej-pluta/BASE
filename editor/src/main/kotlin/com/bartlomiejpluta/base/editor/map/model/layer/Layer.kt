@@ -7,4 +7,6 @@ interface Layer {
    val nameProperty: StringProperty
 
    fun resize(rows: Int, columns: Int)
+
+   fun clone(): Layer
 }
