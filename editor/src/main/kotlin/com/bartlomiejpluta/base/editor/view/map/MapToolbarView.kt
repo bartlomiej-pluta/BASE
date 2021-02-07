@@ -80,7 +80,7 @@ class MapToolbarView : View() {
          graphic = FontIcon("fa-paint-brush")
 
          action {
-            brushVM.item = brushVM.withPaintingMode()
+            brushVM.item = brushVM.withMode(BrushMode.PAINTING_MODE)
          }
       }
 
@@ -88,7 +88,7 @@ class MapToolbarView : View() {
          graphic = FontIcon("fa-eraser")
 
          action {
-            brushVM.item = brushVM.withErasingMode()
+            brushVM.item = brushVM.withMode(BrushMode.ERASING_MODE)
          }
       }
 
@@ -100,11 +100,11 @@ class MapToolbarView : View() {
          minorTickCount = 0
 
          valueProperty().addListener { _, _, newValue ->
-            brushVM.item = brushVM.withBrushRange(newValue.toInt())
+            brushVM.item = brushVM.withRange(newValue.toInt())
          }
 
          brushVM.itemProperty.addListener { _, _, brush ->
-            value = brush.brushRange.toDouble()
+            value = brush.range.toDouble()
          }
       }
 

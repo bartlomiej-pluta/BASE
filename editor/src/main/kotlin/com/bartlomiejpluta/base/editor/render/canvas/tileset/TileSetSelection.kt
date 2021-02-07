@@ -21,10 +21,6 @@ class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: Br
    private var height = gameMapVM.tileSet.tileHeight.toDouble()
 
 
-   fun shrinkToTopLeftTile() {
-      proceed(startRow, startColumn)
-   }
-
    fun begin(row: Double, column: Double) {
       startRow = row
       offsetRow = 0.0

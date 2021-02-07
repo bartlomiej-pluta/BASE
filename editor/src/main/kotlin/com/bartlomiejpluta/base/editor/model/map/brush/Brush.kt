@@ -20,8 +20,8 @@ class Brush {
    var columns by columnsProperty
       private set
 
-   val brushRangeProperty = SimpleIntegerProperty(1)
-   var brushRange by brushRangeProperty
+   val rangeProperty = SimpleIntegerProperty(1)
+   var range by rangeProperty
       private set
 
    val modeProperty = SimpleObjectProperty(BrushMode.PAINTING_MODE)
@@ -49,16 +49,16 @@ class Brush {
 
    fun forEach(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) {
       return when {
-         brushRange > 1 || mode == BrushMode.ERASING_MODE -> forEachInRangedBrush(consumer)
+         range > 1 || mode == BrushMode.ERASING_MODE -> forEachInRangedBrush(consumer)
          else -> forEachInRegularBrush(consumer)
       }
    }
 
    private fun forEachInRangedBrush(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) {
-      val center = brushRange / 2
+      val center = range / 2
 
-      (0 until brushRange).forEach { row ->
-         (0 until brushRange).forEach { column ->
+      (0 until range).forEach { row ->
+         (0 until range).forEach { column ->
             consumer(row, column, center, center, getTileByMode(brush[0]))
          }
       }
@@ -79,20 +79,16 @@ class Brush {
    }
 
    private fun clone() = Brush(brush, rows, columns).apply {
-      brushRange = this@Brush.brushRange
-      mode = this@Brush.mode
+      this.range = this@Brush.range
+      this.mode = this@Brush.mode
    }
 
-   fun withBrushRange(range: Int) = clone().apply {
-      brushRange = range
+   fun withRange(range: Int) = clone().apply {
+      this.range = range
    }
 
-   fun withErasingMode() = clone().apply {
-      mode = BrushMode.ERASING_MODE
-   }
-
-   fun withPaintingMode() = clone().apply {
-      mode = BrushMode.PAINTING_MODE
+   fun withBrushMode(mode: BrushMode) = clone().apply {
+      this.mode = mode
    }
 
    companion object {

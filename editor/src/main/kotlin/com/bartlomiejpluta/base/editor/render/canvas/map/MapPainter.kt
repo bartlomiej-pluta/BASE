@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
+import javafx.scene.paint.Color
 
 class MapPainter(
    private val mapVM: GameMapVM,
@@ -28,21 +29,28 @@ class MapPainter(
       gc.globalAlpha = 0.4
 
       brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-         tile?.let {
-            renderTile(gc, it, column, row, centerRow, centerColumn)
-         }
+         renderTile(gc, row, column, centerRow, centerColumn, tile)
       }
 
       gc.globalAlpha = alpha
-
    }
 
-   private fun renderTile(gc: GraphicsContext, tile: Tile, column: Int, row: Int, centerRow: Int, centerColumn: Int) {
-      gc.drawImage(
-         tile.image,
-         tileWidth * (mouseColumn - centerColumn + column),
-         tileHeight * (mouseRow - centerRow + row)
-      )
+   private fun renderTile(gc: GraphicsContext, row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) {
+      val x = tileWidth * (mouseColumn - centerColumn + column)
+      val y = tileHeight * (mouseRow - centerRow + row)
+
+      when {
+         tile != null -> renderPaintingBrushTile(gc, tile, x, y)
+         else -> renderEraserTile(gc, x, y)
+      }
+   }
+
+   private fun renderPaintingBrushTile(gc: GraphicsContext, tile: Tile, x: Double, y: Double) =
+      gc.drawImage(tile.image, x, y)
+
+   private fun renderEraserTile(gc: GraphicsContext, x: Double, y: Double) {
+      gc.fill = Color.WHITE
+      gc.fillRect(x, y, tileWidth, tileHeight)
    }
 
    override fun handleMouseInput(event: MapMouseEvent) {
