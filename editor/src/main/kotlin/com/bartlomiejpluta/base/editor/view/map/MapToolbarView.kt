@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.brush.BrushMode
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.control.ToggleGroup
 import org.kordamp.ikonli.javafx.FontIcon
@@ -20,6 +21,7 @@ class MapToolbarView : View() {
 
    private val mapVM = find<GameMapVM>()
    private val brushVM = find<BrushVM>()
+   private val editorOptionsVM = find<EditorOptionsVM>()
 
    private val brushMode = ToggleGroup().apply {
       brushVM.itemProperty.addListener { _, _, brush ->
@@ -73,6 +75,15 @@ class MapToolbarView : View() {
             ++mapVM.columns
             mapVM.commit()
             fire(RedrawMapRequestEvent)
+         }
+      }
+
+      togglebutton {
+         graphic = FontIcon("fa-th")
+
+         action {
+            editorOptionsVM.showGrid = isSelected
+            editorOptionsVM.commit()
          }
       }
 

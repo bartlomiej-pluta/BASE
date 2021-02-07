@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.view.component.map.MapPane
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.scene.input.MouseButton
@@ -27,11 +28,14 @@ class MapView : View() {
       xProperty().bind(zoomProperty)
       yProperty().bind(zoomProperty)
    }
+
    private val mapVM = find<GameMapVM>()
 
    private val brushVM = find<BrushVM>()
 
-   private val mapPane = MapPane(mapVM, brushVM) { undoRedoService.push(it, scope) }
+   private val editorOptionsVM = find<EditorOptionsVM>()
+
+   private val mapPane = MapPane(mapVM, brushVM, editorOptionsVM) { undoRedoService.push(it, scope) }
 
    init {
       brushVM.item = mapVM.tileSet.baseBrush

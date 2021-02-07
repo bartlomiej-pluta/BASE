@@ -5,18 +5,21 @@ import com.bartlomiejpluta.base.editor.render.canvas.map.MapCanvas
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPainter
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPaintingTrace
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
 
-class MapPane(private val mapVM: GameMapVM,
+class MapPane(
+   private val mapVM: GameMapVM,
    brushVM: BrushVM,
+   editorOptionsVM: EditorOptionsVM,
    paintingCallback: (MapPaintingTrace) -> Unit
 ) : Canvas(), EventHandler<MouseEvent> {
-   private val painter = MapPainter(mapVM, brushVM, paintingCallback)
-   private val mapCanvas = MapCanvas(mapVM, painter)
+   private val painter = MapPainter(mapVM, brushVM, editorOptionsVM, paintingCallback)
+   private val mapCanvas = MapCanvas(mapVM, editorOptionsVM, painter)
 
    init {
       onMouseMoved = this
@@ -26,6 +29,8 @@ class MapPane(private val mapVM: GameMapVM,
 
       widthProperty().bind(mapVM.widthProperty)
       heightProperty().bind(mapVM.heightProperty)
+
+      editorOptionsVM.showGridProperty.addListener { _, _, _ -> render() }
 
       render()
    }

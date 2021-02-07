@@ -3,13 +3,13 @@ package com.bartlomiejpluta.base.editor.render.canvas.map
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
 import com.bartlomiejpluta.base.editor.render.model.Renderable
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
-import org.slf4j.LoggerFactory
 
 
-class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderable {
+class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM, private val painter: MapPainter) : Renderable {
    var tileSet = map.tileSet
    private var tileWidth = map.tileWidth
    private var tileHeight = map.tileHeight
@@ -22,7 +22,9 @@ class MapCanvas(val map: GameMapVM, private val painter: MapPainter) : Renderabl
 
       map.layers.forEach { dispatchLayerRender(gc, it) }
 
-      renderGrid(gc)
+      if (editorOptionsVM.showGrid) {
+         renderGrid(gc)
+      }
 
       painter.render(gc)
    }

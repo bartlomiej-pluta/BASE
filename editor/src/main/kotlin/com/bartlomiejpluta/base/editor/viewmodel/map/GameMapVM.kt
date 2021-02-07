@@ -31,9 +31,6 @@ class GameMapVM : ItemViewModel<GameMap>() {
 
    val heightProperty = bind(GameMap::heightProperty)
    val height by heightProperty
-
-   val selectedLayerProperty = SimpleIntegerProperty(0)
-   val selectedLayer by selectedLayerProperty
 }
 
 
