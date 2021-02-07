@@ -10,4 +10,7 @@ class EditorOptionsVM : ItemViewModel<EditorOptions>(EditorOptions()) {
 
    val showGridProperty = bind(EditorOptions::showGrid)
    var showGrid by showGridProperty
+
+   val coverUnderlyingLayersProperty = bind(EditorOptions::coverUnderlyingLayers)
+   var coverUnderlyingLayers by coverUnderlyingLayersProperty
 }

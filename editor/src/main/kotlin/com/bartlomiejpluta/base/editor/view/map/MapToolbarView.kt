@@ -79,6 +79,15 @@ class MapToolbarView : View() {
       }
 
       togglebutton {
+         graphic = FontIcon("fa-window-restore")
+
+         action {
+            editorOptionsVM.coverUnderlyingLayers = isSelected
+            editorOptionsVM.commit()
+         }
+      }
+
+      togglebutton {
          graphic = FontIcon("fa-th")
 
          action {

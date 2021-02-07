@@ -19,14 +19,30 @@ class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
       renderBackground(gc)
+      renderUnderlyingLayers(gc)
+      renderCover(gc)
+      renderSelectedLayer(gc)
+      renderGrid(gc)
+      painter.render(gc)
+   }
 
-      map.layers.forEach { dispatchLayerRender(gc, it) }
+   private fun renderSelectedLayer(gc: GraphicsContext) {
+      map.layers.getOrNull(editorOptionsVM.selectedLayer) ?. let { dispatchLayerRender(gc, it) }
+   }
 
-      if (editorOptionsVM.showGrid) {
-         renderGrid(gc)
+   private fun renderCover(gc: GraphicsContext) {
+      if(!editorOptionsVM.coverUnderlyingLayers) {
+         return
       }
 
-      painter.render(gc)
+      gc.fill = Color.color(0.0, 0.0, 0.0, 0.4)
+      gc.fillRect(0.0, 0.0, map.width, map.height)
+   }
+
+   private fun renderUnderlyingLayers(gc: GraphicsContext) {
+      for(layer in map.layers.dropLast( map.layers.size - editorOptionsVM.selectedLayer)) {
+         dispatchLayerRender(gc, layer)
+      }
    }
 
    private fun dispatchLayerRender(gc: GraphicsContext, layer: Layer) {
@@ -55,6 +71,10 @@ class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM
    }
 
    private fun renderGrid(gc: GraphicsContext) {
+      if(!editorOptionsVM.showGrid) {
+         return
+      }
+
       gc.lineWidth = 1.5
 
       gc.strokeLine(0.0, 0.0, map.width, 0.0)
@@ -73,6 +93,6 @@ class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM
 
    companion object {
       private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
-      private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
+      private val BACKGROUND_COLOR2 = Color.color(0.8, 0.8, 0.8, 1.0)
    }
 }

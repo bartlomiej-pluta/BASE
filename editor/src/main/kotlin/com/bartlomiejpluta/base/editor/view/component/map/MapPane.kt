@@ -31,6 +31,8 @@ class MapPane(
       heightProperty().bind(mapVM.heightProperty)
 
       editorOptionsVM.showGridProperty.addListener { _, _, _ -> render() }
+      editorOptionsVM.selectedLayerProperty.addListener { _, _, _ -> render() }
+      editorOptionsVM.coverUnderlyingLayersProperty.addListener { _, _, _ -> render() }
 
       render()
    }
