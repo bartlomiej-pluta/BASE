@@ -1,32 +1,25 @@
 package com.bartlomiejpluta.base.editor.view.main
 
-import com.bartlomiejpluta.base.editor.command.context.UndoableScope
-import com.bartlomiejpluta.base.editor.controller.map.MapController
-import com.bartlomiejpluta.base.editor.controller.tileset.TileSetController
+import com.bartlomiejpluta.base.editor.controller.main.MainController
 import com.bartlomiejpluta.base.editor.view.map.MapFragment
-import javafx.scene.control.TabPane
-import org.kordamp.ikonli.javafx.FontIcon
+import javafx.scene.control.Tab
 import tornadofx.*
 
 
-class MainView : View() {
-   private val mapController: MapController by di()
-   private val tileSetController: TileSetController by di()
-   private val tabPane = TabPane()
+class MainView : View("BASE Game Editor") {
+   private val mainController: MainController by di()
+
+   private val mainMenuView = find<MainMenuView>()
 
    override val root = borderpane {
-      top = toolbar {
-         button(graphic = FontIcon("fa-file-o")) {
-            action {
-               val tileSet = tileSetController.tileset
-               val map = mapController.createMap(tileSet, 5, 5)
-               tabPane += find<MapFragment>(UndoableScope(), MapFragment::map to map).apply {
-                  title = "Map 1"
-               }
+      top = mainMenuView.root
+
+      center = tabpane {
+         tabs.bind(mainController.openMaps) { scope, map ->
+            Tab(map.name, find<MapFragment>(scope).root).apply {
+               setOnClosed { mainController.openMaps.remove(scope) }
             }
          }
       }
-
-      center = tabPane
    }
 }

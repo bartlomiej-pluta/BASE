@@ -4,28 +4,32 @@ import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.tileset.TileSet
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
 import tornadofx.observableListOf
 import tornadofx.setValue
 
 
-class GameMap(val tileSet: TileSet, initialColumns: Int, initialRows: Int) {
+class GameMap(val tileSet: TileSet) {
    val layers = observableListOf<Layer>()
+
+   val nameProperty = SimpleStringProperty()
+   var name by nameProperty
 
    val tileWidth = tileSet.tileWidth.toDouble()
    val tileHeight = tileSet.tileHeight.toDouble()
 
-   val rowsProperty = SimpleIntegerProperty(initialRows)
+   val rowsProperty = SimpleIntegerProperty(INITIAL_ROWS)
    val rows by rowsProperty
 
-   val columnsProperty = SimpleIntegerProperty(initialColumns)
+   val columnsProperty = SimpleIntegerProperty(INITIAL_COLUMNS)
    val columns by columnsProperty
 
-   val widthProperty = SimpleDoubleProperty(initialColumns * tileWidth)
+   val widthProperty = SimpleDoubleProperty(INITIAL_COLUMNS * tileWidth)
    var width by widthProperty
       private set
 
-   val heightProperty = SimpleDoubleProperty(initialRows * tileHeight)
+   val heightProperty = SimpleDoubleProperty(INITIAL_ROWS * tileHeight)
    var height by heightProperty
       private set
 
@@ -41,5 +45,10 @@ class GameMap(val tileSet: TileSet, initialColumns: Int, initialRows: Int) {
          width = newColumns * tileWidth
          layers.forEach { it.resize(rows, newColumns) }
       }
+   }
+
+   companion object {
+      private const val INITIAL_ROWS = 20
+      private const val INITIAL_COLUMNS = 20
    }
 }
