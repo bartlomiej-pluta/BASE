@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.editor.render.canvas.map.MapCanvas
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPainter
 import com.bartlomiejpluta.base.editor.render.canvas.map.MapPaintingTrace
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
-import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorStateVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
@@ -15,11 +15,11 @@ import javafx.scene.input.MouseEvent
 class MapPane(
    private val mapVM: GameMapVM,
    brushVM: BrushVM,
-   editorOptionsVM: EditorOptionsVM,
+   editorStateVM: EditorStateVM,
    paintingCallback: (MapPaintingTrace) -> Unit
 ) : Canvas(), EventHandler<MouseEvent> {
-   private val painter = MapPainter(mapVM, brushVM, editorOptionsVM, paintingCallback)
-   private val mapCanvas = MapCanvas(mapVM, editorOptionsVM, painter)
+   private val painter = MapPainter(mapVM, brushVM, editorStateVM, paintingCallback)
+   private val mapCanvas = MapCanvas(mapVM, editorStateVM, painter)
 
    init {
       onMouseMoved = this
@@ -30,9 +30,9 @@ class MapPane(
       widthProperty().bind(mapVM.widthProperty)
       heightProperty().bind(mapVM.heightProperty)
 
-      editorOptionsVM.showGridProperty.addListener { _, _, _ -> render() }
-      editorOptionsVM.selectedLayerProperty.addListener { _, _, _ -> render() }
-      editorOptionsVM.coverUnderlyingLayersProperty.addListener { _, _, _ -> render() }
+      editorStateVM.showGridProperty.addListener { _, _, _ -> render() }
+      editorStateVM.selectedLayerProperty.addListener { _, _, _ -> render() }
+      editorStateVM.coverUnderlyingLayersProperty.addListener { _, _, _ -> render() }
 
       render()
    }

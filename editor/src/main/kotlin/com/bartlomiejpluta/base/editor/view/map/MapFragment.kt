@@ -17,6 +17,7 @@ class MapFragment : Fragment() {
    private val layersView = find<MapLayersView>()
    private val tileSetView = find<TileSetView>()
    private val toolbarView = find<MapToolbarView>()
+   private val statusBarView = find<MapStatusBarView>()
 
 
    override val root = borderpane {
@@ -35,5 +36,7 @@ class MapFragment : Fragment() {
             }
          }
       }
+
+      bottom = statusBarView.root
    }
 }

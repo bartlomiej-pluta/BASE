@@ -3,13 +3,13 @@ package com.bartlomiejpluta.base.editor.render.canvas.map
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
 import com.bartlomiejpluta.base.editor.render.model.Renderable
-import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorStateVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
 
-class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM, private val painter: MapPainter) : Renderable {
+class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, private val painter: MapPainter) : Renderable {
    var tileSet = map.tileSet
    private var tileWidth = map.tileWidth
    private var tileHeight = map.tileHeight
@@ -27,11 +27,11 @@ class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM
    }
 
    private fun renderSelectedLayer(gc: GraphicsContext) {
-      map.layers.getOrNull(editorOptionsVM.selectedLayer) ?. let { dispatchLayerRender(gc, it) }
+      map.layers.getOrNull(editorStateVM.selectedLayer) ?. let { dispatchLayerRender(gc, it) }
    }
 
    private fun renderCover(gc: GraphicsContext) {
-      if(!editorOptionsVM.coverUnderlyingLayers) {
+      if(!editorStateVM.coverUnderlyingLayers) {
          return
       }
 
@@ -40,7 +40,7 @@ class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM
    }
 
    private fun renderUnderlyingLayers(gc: GraphicsContext) {
-      for(layer in map.layers.dropLast( map.layers.size - editorOptionsVM.selectedLayer)) {
+      for(layer in map.layers.dropLast( map.layers.size - editorStateVM.selectedLayer)) {
          dispatchLayerRender(gc, layer)
       }
    }
@@ -71,7 +71,7 @@ class MapCanvas(val map: GameMapVM, private val editorOptionsVM: EditorOptionsVM
    }
 
    private fun renderGrid(gc: GraphicsContext) {
-      if(!editorOptionsVM.showGrid) {
+      if(!editorStateVM.showGrid) {
          return
       }
 

@@ -9,7 +9,7 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.layer.Layer
 import com.bartlomiejpluta.base.editor.model.map.layer.TileLayer
-import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorStateVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.control.TableView
 import org.kordamp.ikonli.javafx.FontIcon
@@ -22,7 +22,7 @@ class MapLayersView : View() {
 
    private val mapVM = find<GameMapVM>()
 
-   private val editorOptionsVM = find<EditorOptionsVM>()
+   private val editorOptionsVM = find<EditorStateVM>()
 
    private var layersPane = TableView(mapVM.layers).apply {
       column("Layer Name", Layer::nameProperty).makeEditable().setOnEditCommit {

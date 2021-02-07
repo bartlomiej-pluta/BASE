@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.canvas.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
-import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorStateVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
@@ -15,7 +15,7 @@ import javafx.scene.paint.Color
 class MapPainter(
    private val mapVM: GameMapVM,
    private val brushVM: BrushVM,
-   private val editorOptionsVM: EditorOptionsVM,
+   private val editorStateVM: EditorStateVM,
    private val paintingCallback: (MapPaintingTrace) -> Unit
 ) : Renderable, MapMouseEventHandler {
    private val tileWidth = mapVM.tileSet.tileWidth.toDouble()
@@ -67,10 +67,10 @@ class MapPainter(
    }
 
    private fun beginTrace(event: MapMouseEvent) {
-      if (event.button == MouseButton.PRIMARY && editorOptionsVM.selectedLayer >= 0) {
+      if (event.button == MouseButton.PRIMARY && editorStateVM.selectedLayer >= 0) {
          currentTrace = MapPaintingTrace(mapVM, "Paint trace").apply {
             brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-               paint(editorOptionsVM.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+               paint(editorStateVM.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
             }
          }
       }
@@ -80,7 +80,7 @@ class MapPainter(
       if (event.button == MouseButton.PRIMARY) {
          currentTrace?.apply {
             brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-               paint(editorOptionsVM.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+               paint(editorStateVM.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
             }
          }
       }

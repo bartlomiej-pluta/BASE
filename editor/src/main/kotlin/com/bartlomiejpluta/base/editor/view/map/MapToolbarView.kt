@@ -5,13 +5,11 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.model.map.brush.BrushMode
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
-import com.bartlomiejpluta.base.editor.viewmodel.map.EditorOptionsVM
+import com.bartlomiejpluta.base.editor.viewmodel.map.EditorStateVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.control.ToggleGroup
 import org.kordamp.ikonli.javafx.FontIcon
-import org.slf4j.LoggerFactory
 import tornadofx.*
-import java.util.*
 import kotlin.math.max
 
 class MapToolbarView : View() {
@@ -21,7 +19,7 @@ class MapToolbarView : View() {
 
    private val mapVM = find<GameMapVM>()
    private val brushVM = find<BrushVM>()
-   private val editorOptionsVM = find<EditorOptionsVM>()
+   private val editorOptionsVM = find<EditorStateVM>()
 
    private val brushMode = ToggleGroup().apply {
       brushVM.itemProperty.addListener { _, _, brush ->
