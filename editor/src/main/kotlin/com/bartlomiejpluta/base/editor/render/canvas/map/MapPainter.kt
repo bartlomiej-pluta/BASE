@@ -27,17 +27,21 @@ class MapPainter(
       val alpha = gc.globalAlpha
       gc.globalAlpha = 0.4
 
-      brushVM.forEach { row, column, tile -> tile?.let { renderTile(gc, it, column, row) } }
+      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+         tile?.let {
+            renderTile(gc, it, column, row, centerRow, centerColumn)
+         }
+      }
 
       gc.globalAlpha = alpha
 
    }
 
-   private fun renderTile(gc: GraphicsContext, tile: Tile, column: Int, row: Int) {
+   private fun renderTile(gc: GraphicsContext, tile: Tile, column: Int, row: Int, centerRow: Int, centerColumn: Int) {
       gc.drawImage(
          tile.image,
-         tileWidth * (mouseColumn - brushVM.centerColumn + column),
-         tileHeight * (mouseRow - brushVM.centerRow + row)
+         tileWidth * (mouseColumn - centerColumn + column),
+         tileHeight * (mouseRow - centerRow + row)
       )
    }
 
@@ -55,13 +59,8 @@ class MapPainter(
    private fun beginTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY && mapVM.selectedLayer >= 0) {
          currentTrace = MapPaintingTrace(mapVM, "Paint trace").apply {
-            brushVM.forEach { row, column, tile ->
-               paint(
-                  map.selectedLayer,
-                  mouseRow - brushVM.centerRow + row,
-                  mouseColumn - brushVM.centerColumn + column,
-                  tile
-               )
+            brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+               paint(map.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
             }
          }
       }
@@ -70,13 +69,8 @@ class MapPainter(
    private fun proceedTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY) {
          currentTrace?.apply {
-            brushVM.forEach { row, column, tile ->
-               paint(
-                  map.selectedLayer,
-                  mouseRow - brushVM.centerRow + row,
-                  mouseColumn - brushVM.centerColumn + column,
-                  tile
-               )
+            brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+               paint(map.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
             }
          }
       }

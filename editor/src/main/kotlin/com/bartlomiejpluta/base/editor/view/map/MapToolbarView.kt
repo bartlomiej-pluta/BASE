@@ -8,7 +8,9 @@ import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.control.ToggleGroup
 import org.kordamp.ikonli.javafx.FontIcon
+import org.slf4j.LoggerFactory
 import tornadofx.*
+import java.util.*
 import kotlin.math.max
 
 class MapToolbarView : View() {
@@ -20,8 +22,8 @@ class MapToolbarView : View() {
    private val brushVM = find<BrushVM>()
 
    private val brushMode = ToggleGroup().apply {
-      brushVM.erasingProperty.addListener { _, _, newValue ->
-         selectedValueProperty<BrushMode>().value = newValue
+      brushVM.itemProperty.addListener { _, _, brush ->
+         selectedValueProperty<BrushMode>().value = brush.mode
       }
    }
 
@@ -101,8 +103,8 @@ class MapToolbarView : View() {
             brushVM.item = brushVM.withBrushRange(newValue.toInt())
          }
 
-         brushVM.brushRangeProperty.addListener { _, _, newValue ->
-            value = newValue.toDouble()
+         brushVM.itemProperty.addListener { _, _, brush ->
+            value = brush.brushRange.toDouble()
          }
       }
 

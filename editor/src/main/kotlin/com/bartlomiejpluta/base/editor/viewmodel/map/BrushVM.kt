@@ -2,7 +2,8 @@ package com.bartlomiejpluta.base.editor.viewmodel.map
 
 import com.bartlomiejpluta.base.editor.model.map.brush.Brush
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
-import tornadofx.*
+import tornadofx.ItemViewModel
+import tornadofx.getValue
 
 class BrushVM : ItemViewModel<Brush>(Brush.of(arrayOf(arrayOf()))) {
    val brush = bind(Brush::brush)
@@ -13,19 +14,13 @@ class BrushVM : ItemViewModel<Brush>(Brush.of(arrayOf(arrayOf()))) {
    val columnsProperty = bind(Brush::columnsProperty)
    val columns by columnsProperty
 
-   val centerRowProperty = bind(Brush::centerRowProperty)
-   val centerRow by centerRowProperty
-
-   val centerColumnProperty = bind(Brush::centerColumnProperty)
-   val centerColumn by centerColumnProperty
-
    val brushRangeProperty = bind(Brush::brushRangeProperty)
-   var brushRange by brushRangeProperty
+   val brushRange by brushRangeProperty
 
-   val erasingProperty = bind(Brush::modeProperty)
-   var erasing by erasingProperty
+   val modeProperty = bind(Brush::modeProperty)
+   val mode by modeProperty
 
-   fun forEach(consumer: (row: Int, column: Int, tile: Tile?) -> Unit) = item.forEach(consumer)
+   fun forEach(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) = item.forEach(consumer)
 
    fun withBrushRange(range: Int) = item.withBrushRange(range)
 

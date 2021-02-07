@@ -26,11 +26,12 @@ class TileSetPane(private val gameMapVM: GameMapVM, brushVM: BrushVM) : Canvas()
       // when brush range (size) is increased to 2 or more
       // (because the range-increased brush can only include
       // the tile of one type).
-      brushVM.brushRangeProperty.addListener { _, _, newValue ->
-         if (newValue.toInt() > 1) {
+      brushVM.itemProperty.addListener { _, _, brush ->
+         if (brush.brushRange > 1) {
             selection.shrinkToTopLeftTile()
-            render()
          }
+
+         render()
       }
 
       render()

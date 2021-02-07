@@ -14,21 +14,19 @@ class Brush {
 
    val rowsProperty = SimpleIntegerProperty(this, "", 0)
    var rows by rowsProperty
+      private set
 
    val columnsProperty = SimpleIntegerProperty(0)
    var columns by columnsProperty
-
-   val centerRowProperty = SimpleIntegerProperty(0)
-   var centerRow by centerRowProperty
-
-   val centerColumnProperty = SimpleIntegerProperty(0)
-   var centerColumn by centerColumnProperty
+      private set
 
    val brushRangeProperty = SimpleIntegerProperty(1)
    var brushRange by brushRangeProperty
+      private set
 
    val modeProperty = SimpleObjectProperty(BrushMode.PAINTING_MODE)
    var mode by modeProperty
+      private set
 
    private constructor(brushArray: Array<Array<Tile>>) {
       rowsProperty.value = brushArray.size
@@ -40,9 +38,6 @@ class Brush {
       if (rowsProperty.value > 0) {
          columns = brush.size / rowsProperty.value
       }
-
-      centerRow = rows / 2
-      centerColumn = columns / 2
    }
 
    private constructor(brush: List<Tile>, rows: Int, columns: Int) {
@@ -50,32 +45,53 @@ class Brush {
       this.columns = columns
 
       this.brush = brush.asObservable()
-
-      centerRow = rows / 2
-      centerColumn = columns / 2
    }
 
-   fun forEach(consumer: (row: Int, column: Int, tile: Tile?) -> Unit) {
-      brush.forEachIndexed { id, tile ->
-         consumer(id / columns, id % columns, when(mode) {
-            BrushMode.PAINTING_MODE -> tile
-            BrushMode.ERASING_MODE -> null
-         })
+   fun forEach(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) {
+      return when {
+         brushRange > 1 || mode == BrushMode.ERASING_MODE -> forEachInRangedBrush(consumer)
+         else -> forEachInRegularBrush(consumer)
       }
    }
 
-   fun withBrushRange(range: Int) = Brush(Array(range) { Array(range) { brush[0] } }).apply {
-      brushRange = range
+   private fun forEachInRangedBrush(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) {
+      val center = brushRange / 2
+
+      (0 until brushRange).forEach { row ->
+         (0 until brushRange).forEach { column ->
+            consumer(row, column, center, center, getTileByMode(brush[0]))
+         }
+      }
+   }
+
+   private fun getTileByMode(tile: Tile) = when (mode) {
+      BrushMode.PAINTING_MODE -> tile
+      BrushMode.ERASING_MODE -> null
+   }
+
+   private fun forEachInRegularBrush(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) {
+      val centerRow = rows / 2
+      val centerColumn = columns / 2
+
+      brush.forEachIndexed { id, tile ->
+         consumer(id / columns, id % columns, centerRow, centerColumn, getTileByMode(tile))
+      }
+   }
+
+   private fun clone() = Brush(brush, rows, columns).apply {
+      brushRange = this@Brush.brushRange
       mode = this@Brush.mode
    }
 
-   fun withErasingMode() = Brush(brush, rows, columns).apply {
-      brushRange = this@Brush.brushRange
+   fun withBrushRange(range: Int) = clone().apply {
+      brushRange = range
+   }
+
+   fun withErasingMode() = clone().apply {
       mode = BrushMode.ERASING_MODE
    }
 
-   fun withPaintingMode() = Brush(brush, rows, columns).apply {
-      brushRange = this@Brush.brushRange
+   fun withPaintingMode() = clone().apply {
       mode = BrushMode.PAINTING_MODE
    }
 
