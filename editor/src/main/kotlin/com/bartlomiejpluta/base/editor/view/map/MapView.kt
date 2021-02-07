@@ -25,13 +25,13 @@ class MapView : View() {
 
    private val brushVM = find<BrushVM>()
 
-   private val editorOptionsVM = find<EditorStateVM>()
+   private val editorStateVM = find<EditorStateVM>()
 
-   private val mapPane = MapPane(mapVM, brushVM, editorOptionsVM) { undoRedoService.push(it, scope) }
+   private val mapPane = MapPane(mapVM, brushVM, editorStateVM) { undoRedoService.push(it, scope) }
 
    private val zoom = Scale(1.0, 1.0, 0.0, 0.0).apply {
-      xProperty().bind(editorOptionsVM.zoomProperty)
-      yProperty().bind(editorOptionsVM.zoomProperty)
+      xProperty().bind(editorStateVM.zoomProperty)
+      yProperty().bind(editorStateVM.zoomProperty)
    }
 
    init {

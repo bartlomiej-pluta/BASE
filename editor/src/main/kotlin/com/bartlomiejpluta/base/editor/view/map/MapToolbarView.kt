@@ -19,7 +19,7 @@ class MapToolbarView : View() {
 
    private val mapVM = find<GameMapVM>()
    private val brushVM = find<BrushVM>()
-   private val editorOptionsVM = find<EditorStateVM>()
+   private val editorStateVM = find<EditorStateVM>()
 
    private val brushMode = ToggleGroup().apply {
       brushVM.itemProperty.addListener { _, _, brush ->
@@ -80,8 +80,7 @@ class MapToolbarView : View() {
          graphic = FontIcon("fa-window-restore")
 
          action {
-            editorOptionsVM.coverUnderlyingLayers = isSelected
-            editorOptionsVM.commit()
+            editorStateVM.coverUnderlyingLayers = isSelected
          }
       }
 
@@ -89,8 +88,7 @@ class MapToolbarView : View() {
          graphic = FontIcon("fa-th")
 
          action {
-            editorOptionsVM.showGrid = isSelected
-            editorOptionsVM.commit()
+            editorStateVM.showGrid = isSelected
          }
       }
 

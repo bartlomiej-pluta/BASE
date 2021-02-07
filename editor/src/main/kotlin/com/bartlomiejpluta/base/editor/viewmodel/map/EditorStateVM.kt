@@ -1,20 +1,22 @@
 package com.bartlomiejpluta.base.editor.viewmodel.map
 
-import com.bartlomiejpluta.base.editor.model.map.editor.EditorState
-import javafx.beans.property.DoubleProperty
-import javafx.beans.property.IntegerProperty
-import tornadofx.*
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleDoubleProperty
+import javafx.beans.property.SimpleIntegerProperty
+import tornadofx.ViewModel
+import tornadofx.getValue
+import tornadofx.setValue
 
-class EditorStateVM : ItemViewModel<EditorState>(EditorState()) {
-   val selectedLayerProperty = bind(EditorState::selectedLayer) as IntegerProperty
+class EditorStateVM : ViewModel() {
+   val selectedLayerProperty = SimpleIntegerProperty(0)
    var selectedLayer by selectedLayerProperty
 
-   val showGridProperty = bind(EditorState::showGrid)
+   val showGridProperty = SimpleBooleanProperty(true)
    var showGrid by showGridProperty
 
-   val coverUnderlyingLayersProperty = bind(EditorState::coverUnderlyingLayers)
+   val coverUnderlyingLayersProperty = SimpleBooleanProperty(true)
    var coverUnderlyingLayers by coverUnderlyingLayersProperty
 
-   val zoomProperty = bind(EditorState::zoom) as DoubleProperty
+   val zoomProperty = SimpleDoubleProperty(1.0)
    var zoom by zoomProperty
 }

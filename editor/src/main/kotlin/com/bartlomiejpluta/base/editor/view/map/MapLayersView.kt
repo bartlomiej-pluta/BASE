@@ -22,7 +22,7 @@ class MapLayersView : View() {
 
    private val mapVM = find<GameMapVM>()
 
-   private val editorOptionsVM = find<EditorStateVM>()
+   private val editorStateVM = find<EditorStateVM>()
 
    private var layersPane = TableView(mapVM.layers).apply {
       column("Layer Name", Layer::nameProperty).makeEditable().setOnEditCommit {
@@ -31,7 +31,7 @@ class MapLayersView : View() {
          undoRedoService.push(command, scope)
       }
 
-      editorOptionsVM.selectedLayerProperty.bind(selectionModel.selectedIndexProperty())
+      editorStateVM.selectedLayerProperty.bind(selectionModel.selectedIndexProperty())
    }
 
    override val root = borderpane {
@@ -49,10 +49,10 @@ class MapLayersView : View() {
          }
 
          button(graphic = FontIcon("fa-chevron-up")) {
-            enableWhen(editorOptionsVM.selectedLayerProperty.greaterThan(0))
+            enableWhen(editorStateVM.selectedLayerProperty.greaterThan(0))
             action {
-               val newIndex = editorOptionsVM.selectedLayer - 1
-               val command = MoveLayerCommand(mapVM.item, editorOptionsVM.selectedLayer, newIndex)
+               val newIndex = editorStateVM.selectedLayer - 1
+               val command = MoveLayerCommand(mapVM.item, editorStateVM.selectedLayer, newIndex)
                command.execute()
                layersPane.selectionModel.select(newIndex)
                fire(RedrawMapRequestEvent)
@@ -62,12 +62,12 @@ class MapLayersView : View() {
 
          button(graphic = FontIcon("fa-chevron-down")) {
             enableWhen(
-               editorOptionsVM.selectedLayerProperty.lessThan(mapVM.layers.sizeProperty().minus(1))
-                  .and(editorOptionsVM.selectedLayerProperty.greaterThanOrEqualTo(0))
+               editorStateVM.selectedLayerProperty.lessThan(mapVM.layers.sizeProperty().minus(1))
+                  .and(editorStateVM.selectedLayerProperty.greaterThanOrEqualTo(0))
             )
             action {
-               val newIndex = editorOptionsVM.selectedLayer + 1
-               val command = MoveLayerCommand(mapVM.item, editorOptionsVM.selectedLayer, newIndex)
+               val newIndex = editorStateVM.selectedLayer + 1
+               val command = MoveLayerCommand(mapVM.item, editorStateVM.selectedLayer, newIndex)
                command.execute()
                layersPane.selectionModel.select(newIndex)
                fire(RedrawMapRequestEvent)
@@ -76,9 +76,9 @@ class MapLayersView : View() {
          }
 
          button(graphic = FontIcon("fa-trash")) {
-            enableWhen(editorOptionsVM.selectedLayerProperty.greaterThanOrEqualTo(0))
+            enableWhen(editorStateVM.selectedLayerProperty.greaterThanOrEqualTo(0))
             action {
-               var index = editorOptionsVM.selectedLayer
+               var index = editorStateVM.selectedLayer
                val command = RemoveLayerCommand(mapVM.item, index)
                command.execute()
 

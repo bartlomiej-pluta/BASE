@@ -7,7 +7,7 @@ import tornadofx.*
 
 class MapStatusBarView : View() {
 
-   private val editorOptionsVM = find<EditorStateVM>()
+   private val editorStateVM = find<EditorStateVM>()
 
    override val root = hbox {
       spacing = 1.0
@@ -16,7 +16,7 @@ class MapStatusBarView : View() {
       this += FontIcon("fa-search-minus")
 
       slider(0.5..5.0) {
-         bind(editorOptionsVM.zoomProperty)
+         bind(editorStateVM.zoomProperty)
       }
 
       this += FontIcon("fa-search-plus")
