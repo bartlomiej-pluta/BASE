@@ -20,7 +20,6 @@ class MapToolbarView : View() {
 
    private val tool = ToggleGroup()
 
-
    override val root = toolbar {
       button(graphic = FontIcon("fa-undo")) {
          shortcut("Ctrl+Z")
@@ -78,20 +77,22 @@ class MapToolbarView : View() {
          graphic = FontIcon("fa-eraser")
       }
 
-      this += FontIcon("fa-paint-brush")
+      this += FontIcon("fa-paint-brush").apply { iconSize = 10 }
 
-      button(graphic = FontIcon("fa-plus")) {
-         enableWhen(brushVM.brushRangeProperty.lessThan(5))
-         action {
-            brushVM.item = brushVM.withBrushRange(brushVM.brushRange + 1)
+      slider(1..5) {
+         majorTickUnit = 1.0
+         isSnapToTicks = true
+         minorTickCount = 0
+
+         valueProperty().addListener { _, _, newValue ->
+            brushVM.item = brushVM.withBrushRange(newValue.toInt())
+         }
+
+         brushVM.brushRangeProperty.addListener { _, _, newValue ->
+            value = newValue.toDouble()
          }
       }
 
-      button(graphic = FontIcon("fa-minus")) {
-         enableWhen(brushVM.brushRangeProperty.greaterThan(1))
-         action {
-            brushVM.item = brushVM.withBrushRange(brushVM.brushRange - 1)
-         }
-      }
+      this += FontIcon("fa-paint-brush").apply { iconSize = 15 }
    }
 }
