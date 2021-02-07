@@ -21,9 +21,6 @@ class MapPainter(
    private val tileWidth = mapVM.tileSet.tileWidth.toDouble()
    private val tileHeight = mapVM.tileSet.tileHeight.toDouble()
 
-   private var mouseRow = -1
-   private var mouseColumn = -1
-
    private var currentTrace: MapPaintingTrace? = null
 
    override fun render(gc: GraphicsContext) {
@@ -38,8 +35,8 @@ class MapPainter(
    }
 
    private fun renderTile(gc: GraphicsContext, row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) {
-      val x = tileWidth * (mouseColumn - centerColumn + column)
-      val y = tileHeight * (mouseRow - centerRow + row)
+      val x = tileWidth * (editorStateVM.cursorColumn - centerColumn + column)
+      val y = tileHeight * (editorStateVM.cursorRow - centerRow + row)
 
       when {
          tile != null -> renderPaintingBrushTile(gc, tile, x, y)
@@ -56,8 +53,8 @@ class MapPainter(
    }
 
    override fun handleMouseInput(event: MapMouseEvent) {
-      mouseRow = event.row
-      mouseColumn = event.column
+      editorStateVM.cursorRowProperty.value = event.row
+      editorStateVM.cursorColumnProperty.value = event.column
 
       when (event.type) {
          MouseEvent.MOUSE_PRESSED -> beginTrace(event)
@@ -70,7 +67,7 @@ class MapPainter(
       if (event.button == MouseButton.PRIMARY && editorStateVM.selectedLayer >= 0) {
          currentTrace = MapPaintingTrace(mapVM, "Paint trace").apply {
             brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-               paint(editorStateVM.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+               paint(editorStateVM.selectedLayer, editorStateVM.cursorRow - centerRow + row, editorStateVM.cursorColumn - centerColumn + column, tile)
             }
          }
       }
@@ -80,7 +77,7 @@ class MapPainter(
       if (event.button == MouseButton.PRIMARY) {
          currentTrace?.apply {
             brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-               paint(editorStateVM.selectedLayer, mouseRow - centerRow + row, mouseColumn - centerColumn + column, tile)
+               paint(editorStateVM.selectedLayer, editorStateVM.cursorRow - centerRow + row, editorStateVM.cursorColumn - centerColumn + column, tile)
             }
          }
       }
