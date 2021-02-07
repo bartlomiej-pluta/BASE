@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.view.map
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.model.map.brush.BrushMode
 import com.bartlomiejpluta.base.editor.viewmodel.map.BrushVM
 import com.bartlomiejpluta.base.editor.viewmodel.map.GameMapVM
 import javafx.scene.control.ToggleGroup
@@ -18,9 +19,9 @@ class MapToolbarView : View() {
    private val mapVM = find<GameMapVM>()
    private val brushVM = find<BrushVM>()
 
-   private val tool = ToggleGroup().apply {
-      brushVM.erasingProperty.addListener { observable, oldValue, newValue ->
-         selectedValueProperty<Boolean>().value = newValue
+   private val brushMode = ToggleGroup().apply {
+      brushVM.erasingProperty.addListener { _, _, newValue ->
+         selectedValueProperty<BrushMode>().value = newValue
       }
    }
 
@@ -73,7 +74,7 @@ class MapToolbarView : View() {
          }
       }
 
-      togglebutton(value = false, group = tool) {
+      togglebutton(value = BrushMode.PAINTING_MODE, group = brushMode) {
          graphic = FontIcon("fa-paint-brush")
 
          action {
@@ -81,7 +82,7 @@ class MapToolbarView : View() {
          }
       }
 
-      togglebutton(value = true, group = tool) {
+      togglebutton(value = BrushMode.ERASING_MODE, group = brushMode) {
          graphic = FontIcon("fa-eraser")
 
          action {

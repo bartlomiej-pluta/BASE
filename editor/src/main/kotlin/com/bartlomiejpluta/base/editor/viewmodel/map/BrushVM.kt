@@ -22,7 +22,7 @@ class BrushVM : ItemViewModel<Brush>(Brush.of(arrayOf(arrayOf()))) {
    val brushRangeProperty = bind(Brush::brushRangeProperty)
    var brushRange by brushRangeProperty
 
-   val erasingProperty = bind(Brush::erasingProperty)
+   val erasingProperty = bind(Brush::modeProperty)
    var erasing by erasingProperty
 
    fun forEach(consumer: (row: Int, column: Int, tile: Tile?) -> Unit) = item.forEach(consumer)

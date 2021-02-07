@@ -1,9 +1,8 @@
 package com.bartlomiejpluta.base.editor.model.map.brush
 
 import com.bartlomiejpluta.base.editor.model.tileset.Tile
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
-import javafx.collections.FXCollections
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import tornadofx.asObservable
 import tornadofx.getValue
@@ -28,8 +27,8 @@ class Brush {
    val brushRangeProperty = SimpleIntegerProperty(1)
    var brushRange by brushRangeProperty
 
-   val erasingProperty = SimpleBooleanProperty(false)
-   var erasing by erasingProperty
+   val modeProperty = SimpleObjectProperty(BrushMode.PAINTING_MODE)
+   var mode by modeProperty
 
    private constructor(brushArray: Array<Array<Tile>>) {
       rowsProperty.value = brushArray.size
@@ -58,23 +57,26 @@ class Brush {
 
    fun forEach(consumer: (row: Int, column: Int, tile: Tile?) -> Unit) {
       brush.forEachIndexed { id, tile ->
-         consumer(id / columns, id % columns, if(erasing) null else tile)
+         consumer(id / columns, id % columns, when(mode) {
+            BrushMode.PAINTING_MODE -> tile
+            BrushMode.ERASING_MODE -> null
+         })
       }
    }
 
    fun withBrushRange(range: Int) = Brush(Array(range) { Array(range) { brush[0] } }).apply {
       brushRange = range
-      erasing = this@Brush.erasing
+      mode = this@Brush.mode
    }
 
    fun withErasingMode() = Brush(brush, rows, columns).apply {
       brushRange = this@Brush.brushRange
-      erasing = true
+      mode = BrushMode.ERASING_MODE
    }
 
    fun withPaintingMode() = Brush(brush, rows, columns).apply {
       brushRange = this@Brush.brushRange
-      erasing = false
+      mode = BrushMode.PAINTING_MODE
    }
 
    companion object {

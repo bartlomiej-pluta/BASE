@@ -26,18 +26,12 @@ class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: Br
    }
 
    fun begin(row: Double, column: Double) {
-      resetBrushRange()
-
       startRow = row
       offsetRow = 0.0
       startColumn = column
       offsetColumn = 0.0
 
       updateRect(row, column)
-   }
-
-   private fun resetBrushRange() {
-      brushVM.brushRange = 1
    }
 
    private fun updateRect(row: Double, column: Double) {
