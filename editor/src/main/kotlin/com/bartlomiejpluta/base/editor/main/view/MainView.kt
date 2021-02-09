@@ -13,7 +13,7 @@ class MainView : View("BASE Game Editor") {
 
    init {
       mainController.openProject.addListener { _, _, project ->
-         val projectName = project?.let { " :: ${it.name}" } ?: ""
+         val projectName = project?.let { " :: ${it.name} (${it.sourceDirectory.absolutePath})" } ?: ""
          title = "BASE Game Editor$projectName"
       }
    }
