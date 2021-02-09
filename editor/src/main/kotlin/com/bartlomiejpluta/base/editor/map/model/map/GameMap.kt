@@ -20,10 +20,10 @@ class GameMap(val tileSet: TileSet) {
    val tileHeight = tileSet.tileHeight.toDouble()
 
    val rowsProperty = SimpleIntegerProperty(INITIAL_ROWS)
-   val rows by rowsProperty
+   var rows by rowsProperty
 
    val columnsProperty = SimpleIntegerProperty(INITIAL_COLUMNS)
-   val columns by columnsProperty
+   var columns by columnsProperty
 
    val widthProperty = SimpleDoubleProperty(INITIAL_COLUMNS * tileWidth)
    var width by widthProperty

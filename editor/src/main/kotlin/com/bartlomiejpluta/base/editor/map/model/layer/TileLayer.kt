@@ -5,8 +5,13 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
 import tornadofx.setValue
 
-class TileLayer(name: String, rows: Int, columns: Int) : Layer {
-   var layer: Array<Array<Tile?>> = Array(rows) { Array(columns) { null } }
+class TileLayer(
+   name: String,
+   rows: Int,
+   columns: Int,
+   layer: Array<Array<Tile?>> = Array(rows) { Array(columns) { null } }
+) : Layer {
+   var layer = layer
       private set
 
    override val nameProperty = SimpleStringProperty(name)
@@ -15,7 +20,7 @@ class TileLayer(name: String, rows: Int, columns: Int) : Layer {
    override fun resize(rows: Int, columns: Int) {
       layer = Array(rows) { row ->
          Array(columns) { column ->
-            layer.getOrNull(row) ?. getOrNull(column)
+            layer.getOrNull(row)?.getOrNull(column)
          }
       }
    }
