@@ -10,13 +10,13 @@ import java.io.OutputStream
 @Component
 class ProtobufMapSerializer : MapSerializer {
 
-   override fun serialize(map: GameMap, output: OutputStream) {
+   override fun serialize(item: GameMap, output: OutputStream) {
       val protoMap = GameMapProto.GameMap.newBuilder()
-      protoMap.name = map.name
-      protoMap.rows = map.rows
-      protoMap.columns = map.columns
+      protoMap.name = item.name
+      protoMap.rows = item.rows
+      protoMap.columns = item.columns
 
-      map.layers.forEach { layer -> protoMap.addLayers(serializeLayer(layer)) }
+      item.layers.forEach { layer -> protoMap.addLayers(serializeLayer(layer)) }
 
       protoMap.build().writeTo(output)
    }

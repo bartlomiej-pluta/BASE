@@ -1,0 +1,8 @@
+package com.bartlomiejpluta.base.proto;
+
+option java_package = "com.bartlomiejpluta.base.proto";
+option java_outer_classname = "ProjectProto";
+
+message Project {
+  required string name = 1;
+}
