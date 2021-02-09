@@ -38,6 +38,7 @@ repositories {
 
 dependencies {
     implementation project(":engine")
+    implementation project(":proto")
 
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
@@ -59,4 +60,8 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'com.bartlomiejpluta.base.game.App'
+}
+
+build {
+    dependsOn(":proto:build")
 }
