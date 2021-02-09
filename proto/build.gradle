@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id "com.google.protobuf" version "$protobufPluginVersion"
 }
 
 group 'com.bartlomiejpluta.base'
@@ -10,9 +11,35 @@ repositories {
 }
 
 dependencies {
-
+    api "com.google.protobuf:protobuf-java:$protobufVersion"
 }
 
 test {
     useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs "$projectDir/build/proto/main/java"
+        }
+    }
+}
+
+protobuf {
+    // Fetch protoc compiler
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protobufVersion"
+    }
+
+    generatedFilesBaseDir = "$projectDir/build/proto/"
+
+    // Enable compiling proto files to Java
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java { }
+            }
+        }
+    }
 }
