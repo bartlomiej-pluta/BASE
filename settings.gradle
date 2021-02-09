@@ -11,4 +11,5 @@ rootProject.name = 'BASE'
 include('engine')
 include('game')
 include('editor')
+include('proto')
 

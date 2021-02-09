@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+}
+
+group 'com.bartlomiejpluta.base'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
+
+test {
+    useJUnitPlatform()
+}
