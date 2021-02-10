@@ -40,21 +40,8 @@ dependencies {
     implementation project(":engine")
     implementation project(":proto")
 
-    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
-
-    // LWJGL
-    implementation "org.lwjgl:lwjgl-glfw"
-
-    // Spring
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // This dependency is used by the application.
-    implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "org.joml:joml:${jomlVersion}"
 }
 
 application {
@@ -63,5 +50,6 @@ application {
 }
 
 build {
+    dependsOn(":engine:build")
     dependsOn(":proto:build")
 }

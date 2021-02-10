@@ -7,9 +7,9 @@
  */
 
 plugins {
+    id 'java-library'
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
-    id 'java'
 }
 
 import org.gradle.internal.os.OperatingSystem
@@ -41,22 +41,22 @@ repositories {
     jcenter()
 }
 
-bootJar {
-    enabled = false
-}
+ bootJar {
+     enabled = false
+ }
 
-jar {
-    enabled = true
-}
+ jar {
+     enabled = true
+ }
 
 dependencies {
-    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    api platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     // LWJGL
+    api "org.lwjgl:lwjgl-glfw"
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"
     implementation "org.lwjgl:lwjgl-bgfx"
-    implementation "org.lwjgl:lwjgl-glfw"
     implementation "org.lwjgl:lwjgl-nanovg"
     implementation "org.lwjgl:lwjgl-nuklear"
     implementation "org.lwjgl:lwjgl-openal"
@@ -75,16 +75,11 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
 
     // Spring
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    api 'org.springframework.boot:spring-boot-starter'
+    api 'org.springframework.boot:spring-boot-starter-aop'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // Use JUnit test framework.
-    testImplementation 'junit:junit:4.13'
 
     // This dependency is used by the application.
-    implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "org.joml:joml:${jomlVersion}"
+    api "org.joml:joml:${jomlVersion}"
 }
