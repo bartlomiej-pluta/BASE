@@ -13,7 +13,7 @@ import java.io.InputStream
 @Component
 class ProtobufMapDeserializer : MapDeserializer {
    private val resources = ResourceLookup(this)
-   private val tileset = TileSet(resources.image("/textures/tileset.png"), 160, 8)
+   private val tileset = TileSet("Test TileSet", resources.image("/textures/tileset.png"), 160, 8)
 
    override fun deserialize(input: InputStream): GameMap {
       val map = GameMap(tileset)

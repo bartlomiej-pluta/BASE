@@ -15,10 +15,4 @@ class MapCreationWizard : Wizard("New Map", "Provide map information") {
       add(MapCreationBasicDataView::class)
       add(MapTileSetSelectionView::class)
    }
-
-   override fun onSave() {
-      if(mapBuilderVM.commit()) {
-         super.onSave()
-      }
-   }
 }

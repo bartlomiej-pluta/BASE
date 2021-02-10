@@ -7,26 +7,21 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 class GameMapBuilder {
-   val tileSetProperty = SimpleObjectProperty(TILESET)
+   val tileSetProperty = SimpleObjectProperty<TileSet>()
    var tileSet by tileSetProperty
 
    val nameProperty = SimpleStringProperty("")
    var name by nameProperty
 
-   val rowsProperty = SimpleIntegerProperty(1)
+   val rowsProperty = SimpleIntegerProperty(20)
    var rows by rowsProperty
 
-   val columnsProperty = SimpleIntegerProperty(1)
+   val columnsProperty = SimpleIntegerProperty(20)
    var columns by columnsProperty
 
    fun build() = GameMap(tileSet).apply {
       name = this@GameMapBuilder.name
       rows = this@GameMapBuilder.rows
       columns = this@GameMapBuilder.columns
-   }
-
-   companion object {
-      // TODO(Hardcoded tileset here - to remove when tileset is choosable from map creation wizard)
-      private val TILESET = TileSet(ResourceLookup(this).image("/textures/tileset.png"), 160, 8)
    }
 }

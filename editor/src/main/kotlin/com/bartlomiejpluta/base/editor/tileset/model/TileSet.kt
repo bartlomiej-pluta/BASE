@@ -2,6 +2,8 @@ package com.bartlomiejpluta.base.editor.tileset.model
 
 import com.bartlomiejpluta.base.editor.map.model.brush.Brush
 import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.image.Image
 import javafx.scene.image.PixelFormat
 import javafx.scene.image.WritableImage
@@ -10,7 +12,13 @@ import tornadofx.toObservable
 import java.nio.ByteBuffer
 
 
-class TileSet(private val image: Image, rows: Int, columns: Int) {
+class TileSet(name: String, image: Image, rows: Int, columns: Int) {
+   val nameProperty = SimpleStringProperty(name)
+   val name by nameProperty
+
+   val imageProperty = SimpleObjectProperty(image)
+   val image by imageProperty
+
    val rowsProperty = SimpleIntegerProperty(rows)
    val rows by rowsProperty
 

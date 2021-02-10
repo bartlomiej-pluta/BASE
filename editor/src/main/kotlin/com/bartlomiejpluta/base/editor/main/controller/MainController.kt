@@ -8,7 +8,6 @@ import com.bartlomiejpluta.base.editor.project.manager.ProjectManager
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.view.ProjectSettingsFragment
 import com.bartlomiejpluta.base.editor.project.viewmodel.ProjectVM
-import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.beans.property.SimpleObjectProperty
 import javafx.stage.FileChooser
 import org.springframework.stereotype.Component
@@ -17,8 +16,6 @@ import kotlin.collections.set
 
 @Component
 class MainController : Controller() {
-   // In the future it'll be pulled from TileSetService or something like that
-   private val tileset = TileSet(resources.image("/textures/tileset.png"), 160, 8)
    private val projectManager: ProjectManager by di()
 
    val openProject = SimpleObjectProperty<Project?>()
