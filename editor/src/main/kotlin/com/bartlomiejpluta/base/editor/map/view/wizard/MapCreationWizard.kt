@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.map.view
+package com.bartlomiejpluta.base.editor.map.view.wizard
 
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import org.kordamp.ikonli.javafx.FontIcon

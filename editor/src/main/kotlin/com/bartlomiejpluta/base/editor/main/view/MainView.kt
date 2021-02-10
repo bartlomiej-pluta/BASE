@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.main.controller.MainController
-import com.bartlomiejpluta.base.editor.map.view.MapFragment
+import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import javafx.scene.control.Tab
 import tornadofx.*

@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.map.view
+package com.bartlomiejpluta.base.editor.map.view.editor
 
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import javafx.beans.binding.Bindings

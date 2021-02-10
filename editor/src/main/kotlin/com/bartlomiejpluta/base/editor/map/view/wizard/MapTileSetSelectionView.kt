@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.map.view
+package com.bartlomiejpluta.base.editor.map.view.wizard
 
 import tornadofx.View
 import tornadofx.hbox
