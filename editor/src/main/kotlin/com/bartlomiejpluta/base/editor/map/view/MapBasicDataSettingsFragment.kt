@@ -3,10 +3,9 @@ package com.bartlomiejpluta.base.editor.map.view
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
-import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
-class MapSettingsFragment : Fragment("Map Settings") {
+class MapBasicDataSettingsFragment : Fragment("Map Settings") {
    override val scope = super.scope as UndoableScope
    private val undoRedoService: UndoRedoService by di()
 
@@ -16,8 +15,6 @@ class MapSettingsFragment : Fragment("Map Settings") {
       private set
 
    override val root = form {
-      icon = FontIcon("fa-map-o")
-
       fieldset("Map Settings") {
          field("Map name") {
             textfield(mapVM.nameProperty) {

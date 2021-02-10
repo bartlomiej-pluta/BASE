@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.view.MapFragment
+import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import javafx.scene.control.Tab
 import tornadofx.*
 
@@ -24,6 +25,8 @@ class MainView : View("BASE Game Editor") {
       center = tabpane {
          tabs.bind(mainController.openMaps) { scope, map ->
             Tab().apply {
+               val vm = GameMapVM(map)
+               setInScope(vm, scope)
                textProperty().bindBidirectional(map.nameProperty)
                content = find<MapFragment>(scope).root
                setOnClosed { mainController.openMaps.remove(scope) }

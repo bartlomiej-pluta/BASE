@@ -2,7 +2,8 @@ package com.bartlomiejpluta.base.editor.main.controller
 
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
-import com.bartlomiejpluta.base.editor.map.view.MapSettingsFragment
+import com.bartlomiejpluta.base.editor.map.view.MapCreationWizard
+import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.project.manager.ProjectManager
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -38,15 +39,16 @@ class MainController : Controller() {
    }
 
    fun createEmptyMap() {
-      val map = GameMap(tileset)
       val scope = UndoableScope()
-      val vm = GameMapVM(map)
+      val vm = GameMapBuilderVM()
       setInScope(vm, scope)
 
-      val modal = find<MapSettingsFragment>(scope).apply { openModal(block = true, resizable = false) }
-
-      if (modal.result) {
-         openMaps[scope] = map
+      find<MapCreationWizard>(scope).apply {
+         onComplete {
+            openMaps[scope] = vm.item.build()
+         }
+         
+         openModal(block = true)
       }
    }
 

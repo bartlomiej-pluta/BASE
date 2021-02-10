@@ -98,7 +98,7 @@ class MapToolbarView : View() {
 
       button(graphic = FontIcon("fa-sliders")) {
          action {
-            find<MapSettingsFragment>().openModal(block = true, resizable = false)
+            find<MapBasicDataSettingsFragment>().openModal(block = true, resizable = false)
          }
       }
    }
