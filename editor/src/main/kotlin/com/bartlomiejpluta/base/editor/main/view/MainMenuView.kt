@@ -1,10 +1,12 @@
 package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.main.controller.MainController
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import tornadofx.*
 
 class MainMenuView : View() {
    private val mainController: MainController by di()
+   private val projectContext: ProjectContext by di()
 
    override val root = menubar {
       menu("File") {
@@ -16,7 +18,7 @@ class MainMenuView : View() {
             }
 
             item("Map...") {
-               enableWhen(mainController.openProject.isNotNull)
+               enableWhen(projectContext.projectProperty.isNotNull)
                action {
                   mainController.createEmptyMap()
                }
