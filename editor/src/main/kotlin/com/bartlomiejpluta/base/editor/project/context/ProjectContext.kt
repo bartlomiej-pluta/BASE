@@ -12,5 +12,5 @@ interface ProjectContext {
    fun save()
    fun open(file: File)
 
-   fun attachMap(map: GameMap)
+   fun importMap(name: String, map: GameMap)
 }

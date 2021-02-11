@@ -40,7 +40,7 @@ class MainController : Controller() {
       find<MapCreationWizard>(scope).apply {
          onComplete {
             vm.item.build().let { map ->
-               projectContext.attachMap(map)
+               projectContext.importMap(vm.name, map)
                openMaps[scope] = map
             }
          }

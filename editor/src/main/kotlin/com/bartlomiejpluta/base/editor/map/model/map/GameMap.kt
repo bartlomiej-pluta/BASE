@@ -17,9 +17,6 @@ class GameMap(val tileSet: TileSet) {
 
    val layers = observableListOf<Layer>()
 
-   val nameProperty = SimpleStringProperty()
-   var name by nameProperty
-
    val tileWidth = tileSet.tileWidth.toDouble()
    val tileHeight = tileSet.tileHeight.toDouble()
 

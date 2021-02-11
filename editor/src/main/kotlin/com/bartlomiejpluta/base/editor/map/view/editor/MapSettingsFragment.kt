@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import tornadofx.*
 
-class MapBasicDataSettingsFragment : Fragment("Map Settings") {
+class MapSettingsFragment : Fragment("Map Settings") {
    override val scope = super.scope as UndoableScope
    private val undoRedoService: UndoRedoService by di()
 
@@ -16,13 +16,6 @@ class MapBasicDataSettingsFragment : Fragment("Map Settings") {
 
    override val root = form {
       fieldset("Map Settings") {
-         field("Map name") {
-            textfield(mapVM.nameProperty) {
-               required()
-               whenDocked { requestFocus() }
-            }
-         }
-
          field("Rows") {
 
             textfield(mapVM.rowsProperty) {

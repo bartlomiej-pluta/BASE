@@ -10,9 +10,6 @@ import tornadofx.setValue
 class GameMapVM(map: GameMap) : ItemViewModel<GameMap>(map) {
    val layers: SimpleListProperty<Layer> = bind(GameMap::layers)
 
-   val nameProperty = bind(GameMap::nameProperty)
-   var name by nameProperty
-
    val tileSetProperty = bind(GameMap::tileSet)
    val tileSet by tileSetProperty
 

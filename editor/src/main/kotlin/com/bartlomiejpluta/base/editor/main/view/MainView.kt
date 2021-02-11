@@ -29,7 +29,7 @@ class MainView : View("BASE Game Editor") {
             Tab().apply {
                val vm = GameMapVM(map)
                setInScope(vm, scope)
-               textProperty().bindBidirectional(map.nameProperty)
+               projectContext.project?.maps?.get(map.uid)?.let { textProperty().bindBidirectional(it.nameProperty) }
                content = find<MapFragment>(scope).root
                setOnClosed { mainController.openMaps.remove(scope) }
             }

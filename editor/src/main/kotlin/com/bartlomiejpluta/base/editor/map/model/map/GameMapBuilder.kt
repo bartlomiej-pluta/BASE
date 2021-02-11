@@ -20,8 +20,7 @@ class GameMapBuilder {
    var columns by columnsProperty
 
    fun build() = GameMap(tileSet).apply {
-      name = this@GameMapBuilder.name
-      rows = this@GameMapBuilder.rows
-      columns = this@GameMapBuilder.columns
+      this.rows = this@GameMapBuilder.rows
+      this.columns = this@GameMapBuilder.columns
    }
 }

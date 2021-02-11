@@ -12,7 +12,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
    override fun serialize(item: Project, output: OutputStream) {
       val proto = ProjectProto.Project.newBuilder()
       proto.name = item.name
-      proto.addAllMaps(item.maps.map(this::serializeMap))
+      proto.addAllMaps(item.maps.values.map(this::serializeMap))
       proto.build().writeTo(output)
    }
 

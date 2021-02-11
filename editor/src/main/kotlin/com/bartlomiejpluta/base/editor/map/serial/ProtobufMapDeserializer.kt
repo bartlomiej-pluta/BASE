@@ -19,7 +19,6 @@ class ProtobufMapDeserializer : MapDeserializer {
       val map = GameMap(tileset)
       val proto = GameMapProto.GameMap.parseFrom(input)
       map.uid = proto.uid
-      map.name = proto.name
       map.rows = proto.rows
       map.columns = proto.columns
 
