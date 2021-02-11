@@ -1,8 +1,11 @@
 package com.bartlomiejpluta.base.editor.project.model
 
+import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
+import tornadofx.getValue
+import tornadofx.observableListOf
+import tornadofx.setValue
 import java.io.File
 
 class Project {
@@ -12,5 +15,5 @@ class Project {
    val sourceDirectoryProperty = SimpleObjectProperty<File>()
    val sourceDirectory by sourceDirectoryProperty
 
-   val maps = observableListOf<String>()
+   val maps = observableListOf<GameMapAsset>()
 }
