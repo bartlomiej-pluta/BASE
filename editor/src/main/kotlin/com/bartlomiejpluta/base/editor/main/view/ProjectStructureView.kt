@@ -1,18 +1,20 @@
 package com.bartlomiejpluta.base.editor.main.view
 
+import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
-import com.bartlomiejpluta.base.editor.util.fx.BindingUtil
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.TreeItem
+import javafx.scene.input.MouseEvent
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 
 class ProjectStructureView : View() {
    private val projectContext: ProjectContext by di()
+   private val mainController: MainController by di()
 
    private val structureMaps = StructureCategory("Maps")
 
@@ -23,6 +25,7 @@ class ProjectStructureView : View() {
          project?.let {
             structureRoot.nameProperty.bind(it.nameProperty)
             Bindings.bindContent(structureMaps.items, project.maps)
+            root.root.expandAll()
             root.refresh()
          }
       }
@@ -50,6 +53,14 @@ class ProjectStructureView : View() {
          when (val value = it.value) {
             is StructureCategory -> value.items
             else -> null
+         }
+      }
+
+      setOnMouseClicked { event ->
+         if(event.clickCount == 2) {
+            when(val item = selectionModel?.selectedItem?.value) {
+               is GameMapAsset -> mainController.openMap(item.uid)
+            }
          }
       }
    }

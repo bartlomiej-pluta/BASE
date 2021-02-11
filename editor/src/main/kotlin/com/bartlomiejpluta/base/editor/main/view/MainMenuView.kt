@@ -28,7 +28,7 @@ class MainMenuView : View() {
          menu("Open") {
             item("Project...") {
                action {
-                  mainController.loadProject()
+                  mainController.openProject()
                }
             }
          }

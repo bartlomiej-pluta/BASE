@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.wizard.MapCreationWizard
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
+import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.view.ProjectSettingsFragment
@@ -27,6 +28,7 @@ class MainController : Controller() {
       val modal = find<ProjectSettingsFragment>().apply { openModal(block = true, resizable = false) }
 
       if (modal.result) {
+         openMaps.clear()
          projectContext.project = project
          projectContext.save()
       }
@@ -49,10 +51,24 @@ class MainController : Controller() {
       }
    }
 
-   fun loadProject() {
+   fun openProject() {
       chooseFile(
          title = "Load Project",
          filters = arrayOf(FileChooser.ExtensionFilter("BASE Editor Project (*.bep)", "*.bep")),
-      ).getOrNull(0)?.let { projectContext.open(it) }
+      ).getOrNull(0)?.let {
+         openMaps.clear()
+         projectContext.open(it)
+      }
+   }
+
+   fun openMap(uid: String) {
+      if (openMaps.count { (_, map) -> map.uid == uid } == 0) {
+         val map = projectContext.loadMap(uid)
+         val vm = GameMapVM(map)
+         val scope = UndoableScope()
+         setInScope(vm, scope)
+
+         openMaps[scope] = map
+      }
    }
 }

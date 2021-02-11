@@ -13,4 +13,5 @@ interface ProjectContext {
    fun open(file: File)
 
    fun importMap(name: String, map: GameMap)
+   fun loadMap(uid: String): GameMap
 }
