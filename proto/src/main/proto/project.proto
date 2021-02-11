@@ -8,11 +8,8 @@ message Project {
   repeated GameMapAsset maps = 2;
 }
 
-// TODO(Add tileSetUID field)
 message GameMapAsset {
   required string uid = 1;
   required string source = 2;
   required string name = 3;
-  required uint32 rows = 4;
-  required uint32 columns = 5;
 }

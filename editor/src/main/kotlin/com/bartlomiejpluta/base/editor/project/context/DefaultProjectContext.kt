@@ -63,7 +63,7 @@ class DefaultProjectContext : ProjectContext {
    override fun importMap(name: String, map: GameMap) {
       project?.let {
          UID.next(it.maps.map(Asset::uid)).let { uid ->
-            val asset = GameMapAsset(uid, name, map.rows, map.columns)
+            val asset = GameMapAsset(uid, name)
             map.uid = uid
             it.maps += asset
 

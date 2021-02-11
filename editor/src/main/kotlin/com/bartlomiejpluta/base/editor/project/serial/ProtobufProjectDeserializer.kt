@@ -18,10 +18,5 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       return project
    }
 
-   private fun deserializeMap(map: ProjectProto.GameMapAsset) = GameMapAsset(
-      uid = map.uid,
-      name = map.name,
-      rows = map.rows,
-      columns = map.columns
-   )
+   private fun deserializeMap(map: ProjectProto.GameMapAsset) = GameMapAsset(uid = map.uid, name = map.name)
 }

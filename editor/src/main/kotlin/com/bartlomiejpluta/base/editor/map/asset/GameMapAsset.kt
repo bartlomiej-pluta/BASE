@@ -2,15 +2,10 @@ package com.bartlomiejpluta.base.editor.map.asset
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
+import tornadofx.getValue
+import tornadofx.setValue
 
-// TODO(Add tileSetUID field)
-class GameMapAsset(
-   override val uid: String,
-   name: String,
-   val rows: Int,
-   val columns: Int,
-) : Asset {
+class GameMapAsset(override val uid: String, name: String) : Asset {
    override val source = "$uid.dat"
 
    val nameProperty = SimpleStringProperty(name)

@@ -20,8 +20,6 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setUid(map.uid)
       .setSource(map.source)
       .setName(map.name)
-      .setRows(map.rows)
-      .setColumns(map.columns)
       .build()
 
 }
