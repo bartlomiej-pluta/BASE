@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.proto.ProjectProto
 import org.springframework.stereotype.Component
 import java.io.OutputStream
@@ -13,6 +14,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       val proto = ProjectProto.Project.newBuilder()
       proto.name = item.name
       proto.addAllMaps(item.maps.map(this::serializeMap))
+      proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
       proto.build().writeTo(output)
    }
 
@@ -22,4 +24,9 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(map.name)
       .build()
 
+   private fun serializeTileSet(tileSet: TileSetAsset) = ProjectProto.TileSetAsset.newBuilder()
+      .setUid(tileSet.uid)
+      .setSource(tileSet.source)
+      .setName(tileSet.name)
+      .build()
 }
