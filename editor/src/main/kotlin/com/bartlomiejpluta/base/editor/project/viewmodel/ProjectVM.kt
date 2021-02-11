@@ -9,4 +9,6 @@ class ProjectVM(project: Project) : ItemViewModel<Project>(project) {
 
    val sourceDirectoryProperty = bind(Project::sourceDirectoryProperty)
    val sourceDirectory by sourceDirectoryProperty
+
+   val maps = bind(Project::maps)
 }

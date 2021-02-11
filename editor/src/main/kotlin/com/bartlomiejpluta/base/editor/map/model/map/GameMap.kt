@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.map.model.map
 
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
+import javafx.beans.property.ReadOnlyStringWrapper
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
@@ -11,6 +12,9 @@ import tornadofx.setValue
 
 
 class GameMap(val tileSet: TileSet) {
+   val uidProperty = SimpleStringProperty()
+   var uid by uidProperty
+
    val layers = observableListOf<Layer>()
 
    val nameProperty = SimpleStringProperty()

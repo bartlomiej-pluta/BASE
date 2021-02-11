@@ -11,4 +11,6 @@ class Project {
 
    val sourceDirectoryProperty = SimpleObjectProperty<File>()
    val sourceDirectory by sourceDirectoryProperty
+
+   val maps = observableListOf<String>()
 }

@@ -5,4 +5,5 @@ option java_outer_classname = "ProjectProto";
 
 message Project {
   required string name = 1;
+  repeated string maps = 2;
 }

@@ -12,6 +12,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       val proto = ProjectProto.Project.parseFrom(input)
       val project = Project()
       project.name = proto.name
+      project.maps.addAll(proto.mapsList)
 
       return project
    }

@@ -11,6 +11,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
    override fun serialize(item: Project, output: OutputStream) {
       val proto = ProjectProto.Project.newBuilder()
       proto.name = item.name
+      proto.addAllMaps(item.maps)
       proto.build().writeTo(output)
    }
 }

@@ -12,6 +12,7 @@ class ProtobufMapSerializer : MapSerializer {
 
    override fun serialize(item: GameMap, output: OutputStream) {
       val protoMap = GameMapProto.GameMap.newBuilder()
+      protoMap.uid = item.uid
       protoMap.name = item.name
       protoMap.rows = item.rows
       protoMap.columns = item.columns

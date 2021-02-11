@@ -26,7 +26,7 @@ class MainController : Controller() {
       setInScope(vm)
       val modal = find<ProjectSettingsFragment>().apply { openModal(block = true, resizable = false) }
 
-      if(modal.result) {
+      if (modal.result) {
          projectContext.project = project
          projectContext.save()
       }
@@ -39,9 +39,12 @@ class MainController : Controller() {
 
       find<MapCreationWizard>(scope).apply {
          onComplete {
-            openMaps[scope] = vm.item.build()
+            vm.item.build().let { map ->
+               projectContext.attachMap(map)
+               openMaps[scope] = map
+            }
          }
-         
+
          openModal(block = true)
       }
    }
