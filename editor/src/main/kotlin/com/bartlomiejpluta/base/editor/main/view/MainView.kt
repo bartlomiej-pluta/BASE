@@ -13,6 +13,7 @@ class MainView : View("BASE Game Editor") {
    private val projectContext: ProjectContext by di()
 
    private val mainMenuView = find<MainMenuView>()
+   private val projectStructureView = find<ProjectStructureView>()
 
    init {
       projectContext.projectProperty.addListener { _, _, project ->
@@ -35,5 +36,7 @@ class MainView : View("BASE Game Editor") {
             }
          }
       }
+
+      left = projectStructureView.root
    }
 }
