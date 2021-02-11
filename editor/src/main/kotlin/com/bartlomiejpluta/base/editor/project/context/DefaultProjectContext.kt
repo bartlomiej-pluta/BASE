@@ -71,10 +71,10 @@ class DefaultProjectContext : ProjectContext {
 
    override fun importMap(name: String, map: GameMap) {
       project?.let {
-         UID.next(it.maps.keys).let { uid ->
+         UID.next(it.maps.map(Asset::uid)).let { uid ->
             val asset = GameMapAsset(uid, name, map.rows, map.columns)
             map.uid = uid
-            it.maps[uid] = asset
+            it.maps += asset
 
             save()
             File(mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }

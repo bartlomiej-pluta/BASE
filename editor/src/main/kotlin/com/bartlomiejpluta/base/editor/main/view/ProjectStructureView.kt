@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.main.view
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.util.fx.BindingUtil
+import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.TreeItem
@@ -21,7 +22,7 @@ class ProjectStructureView : View() {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
             structureRoot.nameProperty.bind(it.nameProperty)
-            BindingUtil.bindMapValues(structureMaps.items, project.maps)
+            Bindings.bindContent(structureMaps.items, project.maps)
             root.refresh()
          }
       }

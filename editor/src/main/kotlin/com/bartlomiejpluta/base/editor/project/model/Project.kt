@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
 import tornadofx.observableListOf
-import tornadofx.observableMapOf
 import tornadofx.setValue
 import java.io.File
 
@@ -16,5 +15,5 @@ class Project {
    val sourceDirectoryProperty = SimpleObjectProperty<File>()
    val sourceDirectory by sourceDirectoryProperty
 
-   val maps = observableMapOf<String, GameMapAsset>()
+   val maps = observableListOf<GameMapAsset>()
 }
