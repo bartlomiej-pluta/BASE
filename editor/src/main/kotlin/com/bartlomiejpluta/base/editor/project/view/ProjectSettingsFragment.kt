@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.view
 
+import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.viewmodel.ProjectVM
 import javafx.beans.binding.Bindings
 import javafx.beans.binding.Bindings.createStringBinding
@@ -9,19 +10,23 @@ import java.io.File
 
 class ProjectSettingsFragment : Fragment("Project Settings") {
    private val projectVM = find<ProjectVM>(FX.defaultScope)
-
    private val rootDirectory = SimpleStringProperty("")
+
    private val projectDirectory = SimpleStringProperty("")
    private val directory = createStringBinding({
       File(rootDirectory.value, projectDirectory.value).absolutePath
    }, rootDirectory, projectDirectory)
 
+   private var onCompleteConsumer: ((Project) -> Unit)? = null
+
    init {
       directory.addListener { _, _, path -> projectVM.sourceDirectoryProperty.value = File(path) }
+      projectVM.nameProperty.addListener { _, _, name -> projectDirectory.value = name }
    }
 
-   var result = false
-      private set
+   fun onComplete(consumer: (Project) -> Unit) {
+      this.onCompleteConsumer = consumer
+   }
 
    override val root = form {
       fieldset("Project Settings") {
@@ -76,16 +81,12 @@ class ProjectSettingsFragment : Fragment("Project Settings") {
          button("Ok") {
             action {
                projectVM.commit {
-                  result = true
+                  onCompleteConsumer?.let { it(projectVM.item) }
                   close()
                }
             }
 
             shortcut("Enter")
-         }
-
-         button("Reset") {
-            action { projectVM.rollback() }
          }
 
          button("Cancel") {

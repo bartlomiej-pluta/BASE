@@ -23,16 +23,17 @@ class MainController : Controller() {
    val openMaps = observableMapOf<Scope, GameMap>()
 
    fun createEmptyProject() {
-      val project = Project()
-      val vm = ProjectVM(project)
+      val vm = ProjectVM(Project())
 
       setInScope(vm)
-      val modal = find<ProjectSettingsFragment>().apply { openModal(block = true, resizable = false) }
+      find<ProjectSettingsFragment>().apply {
+         onComplete {
+            openMaps.clear()
+            projectContext.project = it
+            projectContext.save()
+         }
 
-      if (modal.result) {
-         openMaps.clear()
-         projectContext.project = project
-         projectContext.save()
+         openModal(block = true, resizable = false)
       }
    }
 
