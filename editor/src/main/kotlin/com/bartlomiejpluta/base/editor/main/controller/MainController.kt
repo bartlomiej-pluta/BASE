@@ -50,7 +50,7 @@ class MainController : Controller() {
             }
          }
 
-         openModal(block = true)
+         openModal(block = true, resizable = false)
       }
    }
 
@@ -85,7 +85,7 @@ class MainController : Controller() {
             projectContext.importTileSet(it)
          }
 
-         openModal(block = true)
+         openModal(block = true, resizable = false)
       }
    }
 }
