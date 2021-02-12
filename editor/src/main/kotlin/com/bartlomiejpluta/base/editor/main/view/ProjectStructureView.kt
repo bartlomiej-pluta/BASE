@@ -1,13 +1,14 @@
 package com.bartlomiejpluta.base.editor.main.view
 
+import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import javafx.scene.control.TreeItem
-import javafx.scene.input.MouseEvent
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
@@ -17,14 +18,19 @@ class ProjectStructureView : View() {
    private val mainController: MainController by di()
 
    private val structureMaps = StructureCategory("Maps")
+   private val structureTileSets = StructureCategory("Tile Sets")
 
-   private val structureRoot = StructureCategory(name = "Project", items = observableListOf(structureMaps))
+   private val structureRoot = StructureCategory(name = "Project", items = observableListOf(
+      structureMaps,
+      structureTileSets
+   ))
 
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
             structureRoot.nameProperty.bind(it.nameProperty)
-            Bindings.bindContent(structureMaps.items, project.maps)
+            Bindings.bindContent(structureMaps.items, it.maps)
+            Bindings.bindContent(structureTileSets.items, it.tileSets)
             root.root.expandAll()
             root.refresh()
          }
@@ -35,16 +41,17 @@ class ProjectStructureView : View() {
       root = TreeItem(structureRoot)
 
       cellFormat {
-         graphic = when(it) {
+         graphic = when (it) {
             structureRoot -> FontIcon("fa-cog")
             is StructureCategory -> FontIcon("fa-folder")
             is GameMapAsset -> FontIcon("fa-map")
+            is TileSetAsset -> FontIcon("fa-th")
             else -> null
          }
 
          text = when (it) {
             is StructureCategory -> it.name
-            is GameMapAsset -> it.name
+            is Asset -> it.name
             else -> throw IllegalStateException("Unsupported structure item type")
          }
       }
@@ -57,8 +64,8 @@ class ProjectStructureView : View() {
       }
 
       setOnMouseClicked { event ->
-         if(event.clickCount == 2) {
-            when(val item = selectionModel?.selectedItem?.value) {
+         if (event.clickCount == 2) {
+            when (val item = selectionModel?.selectedItem?.value) {
                is GameMapAsset -> mainController.openMap(item.uid)
             }
          }

@@ -49,6 +49,10 @@ class MainView : View("BASE Game Editor") {
          })
       }
 
-      left = projectStructureView.root
+      left = drawer(multiselect = true) {
+         item("Project Structure", expanded = true) {
+            this += projectStructureView
+         }
+      }
    }
 }
