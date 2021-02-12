@@ -28,5 +28,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setUid(tileSet.uid)
       .setSource(tileSet.source)
       .setName(tileSet.name)
+      .setRows(tileSet.rows)
+      .setColumns(tileSet.columns)
       .build()
 }

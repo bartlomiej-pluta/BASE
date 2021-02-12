@@ -34,6 +34,16 @@ class MainMenuView : View() {
          }
       }
 
+      menu("Project") {
+         item("Import Tile Set...") {
+            enableWhen(projectContext.projectProperty.isNotNull)
+
+            action {
+               mainController.importTileSet()
+            }
+         }
+      }
+
       menu("Edit") {
          item("Undo")
          item("Redo")

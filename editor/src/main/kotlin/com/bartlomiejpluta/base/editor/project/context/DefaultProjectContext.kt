@@ -8,6 +8,8 @@ import com.bartlomiejpluta.base.editor.map.serial.MapSerializer
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.serial.ProjectDeserializer
 import com.bartlomiejpluta.base.editor.project.serial.ProjectSerializer
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetBuilder
 import com.bartlomiejpluta.base.editor.util.uid.UID
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -79,4 +81,17 @@ class DefaultProjectContext : ProjectContext {
 
       File(it.mapsDirectory, asset.source).inputStream().use { fis -> mapDeserializer.deserialize(fis) }
    } ?: throw IllegalStateException("There is no open project in the context")
+
+   override fun importTileSet(builder: TileSetAssetBuilder) {
+      project?.let {
+         UID.next(it.tileSets.map(Asset::uid)).let { uid ->
+            val source = "$uid.${builder.file.extension}"
+            val targetFile = File(it.tileSetsDirectory, source)
+            builder.file.copyTo(targetFile)
+            it.tileSets += TileSetAsset(uid, source, builder.name, builder.rows, builder.columns)
+
+            save()
+         }
+      }
+   }
 }

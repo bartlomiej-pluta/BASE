@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.view.editor
 
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
-import com.bartlomiejpluta.base.editor.tileset.view.TileSetView
+import com.bartlomiejpluta.base.editor.tileset.view.editor.TileSetView
 import tornadofx.*
 
 

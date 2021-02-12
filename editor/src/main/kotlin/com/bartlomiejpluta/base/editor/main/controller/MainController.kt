@@ -9,6 +9,8 @@ import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.view.ProjectSettingsFragment
 import com.bartlomiejpluta.base.editor.project.viewmodel.ProjectVM
+import com.bartlomiejpluta.base.editor.tileset.view.importing.ImportTileSetFragment
+import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetBuilderVM
 import javafx.stage.FileChooser
 import org.springframework.stereotype.Component
 import tornadofx.*
@@ -69,6 +71,20 @@ class MainController : Controller() {
          setInScope(vm, scope)
 
          openMaps[scope] = map
+      }
+   }
+
+   fun importTileSet() {
+      val vm = TileSetAssetBuilderVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportTileSetFragment>(scope).apply {
+         onComplete {
+            projectContext.importTileSet(it)
+         }
+
+         openModal(block = true)
       }
    }
 }

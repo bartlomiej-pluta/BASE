@@ -1,8 +1,8 @@
-package com.bartlomiejpluta.base.editor.tileset.view
+package com.bartlomiejpluta.base.editor.tileset.view.editor
 
-import com.bartlomiejpluta.base.editor.tileset.component.TileSetPane
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.tileset.component.TileSetPane
 import tornadofx.View
 import tornadofx.plusAssign
 import tornadofx.scrollpane
