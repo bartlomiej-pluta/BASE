@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.project.context
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetBuilder
+import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.beans.property.ObjectProperty
 import java.io.File
 
@@ -17,4 +18,5 @@ interface ProjectContext {
    fun loadMap(uid: String): GameMap
 
    fun importTileSet(builder: TileSetAssetBuilder)
+   fun loadTileSet(uid: String): TileSet
 }

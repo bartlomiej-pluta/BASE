@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.map.view.wizard
 
+import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.scene.control.ListView
 import tornadofx.*
@@ -10,11 +12,15 @@ class MapTileSetSelectionView : View("Tile Set") {
 
    private var tileSetsListView: ListView<TileSet> by singleAssign()
 
-   // TODO(Fetch it from project assets)
-   private val tileSets = listOf(
-      TileSet("Big TileSet", resources.image("/textures/tileset.png"), 160, 8),
-      TileSet("Mage City", resources.image("/textures/magecity.png"), 44, 8)
-   ).asObservable()
+   private val projectContext: ProjectContext by di()
+
+   // FIXME
+   // Because of loading all the images at once and storing them in cache
+   // this solution is not best efficient. It could be better to store images
+   // in the local cache, scoped to this view.
+   private val tileSets =
+      projectContext.project?.tileSets?.map(Asset::uid)?.map(projectContext::loadTileSet)?.asObservable()
+         ?: throw IllegalStateException("There is no open project in the context")
 
 
    // FIXME

@@ -10,9 +10,11 @@ import com.bartlomiejpluta.base.editor.project.serial.ProjectDeserializer
 import com.bartlomiejpluta.base.editor.project.serial.ProjectSerializer
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetBuilder
+import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import com.bartlomiejpluta.base.editor.util.uid.UID
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
+import javafx.scene.image.Image
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import tornadofx.getValue
@@ -23,6 +25,7 @@ import java.io.FileOutputStream
 
 @Component
 class DefaultProjectContext : ProjectContext {
+   private val tileSetCache = mutableMapOf<String, TileSet>()
 
    @Autowired
    private lateinit var projectSerializer: ProjectSerializer
@@ -42,6 +45,7 @@ class DefaultProjectContext : ProjectContext {
    init {
       projectProperty.addListener { _, _, newProject ->
          newProject?.mkdirs()
+         tileSetCache.clear()
       }
    }
 
@@ -93,5 +97,16 @@ class DefaultProjectContext : ProjectContext {
             save()
          }
       }
+   }
+
+   override fun loadTileSet(uid: String) = tileSetCache.getOrPut(uid) {
+      project?.let {
+         val asset = it.tileSets.first { tileSet -> tileSet.uid == uid }
+            ?: throw IllegalStateException("The Tile Set with uid [$uid] does not exist ")
+
+         val image = File(it.tileSetsDirectory, asset.source).inputStream().use { fis -> Image(fis) }
+
+         TileSet(uid, asset.name, image, asset.rows, asset.columns)
+      } ?: throw IllegalStateException("There is no open project in the context")
    }
 }
