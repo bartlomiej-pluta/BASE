@@ -80,11 +80,20 @@ class DefaultProjectContext : ProjectContext {
    }
 
    override fun loadMap(uid: String) = project?.let {
-      val asset = it.maps.first { map -> map.uid == uid }
+      val asset = it.maps.firstOrNull { map -> map.uid == uid }
          ?: throw IllegalStateException("The map with uid [$uid] does not exist ")
 
       File(it.mapsDirectory, asset.source).inputStream().use { fis -> mapDeserializer.deserialize(fis) }
    } ?: throw IllegalStateException("There is no open project in the context")
+
+   override fun saveMap(map: GameMap) {
+      project?.let {
+         val asset = it.maps.firstOrNull { asset -> asset.uid == map.uid }
+            ?: throw IllegalStateException("The map with uid [${map.uid}] does not exist ")
+
+         File(it.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
+      }
+   }
 
    override fun importTileSet(builder: TileSetAssetBuilder) {
       project?.let {
@@ -101,7 +110,7 @@ class DefaultProjectContext : ProjectContext {
 
    override fun loadTileSet(uid: String) = tileSetCache.getOrPut(uid) {
       project?.let {
-         val asset = it.tileSets.first { tileSet -> tileSet.uid == uid }
+         val asset = it.tileSets.firstOrNull { tileSet -> tileSet.uid == uid }
             ?: throw IllegalStateException("The Tile Set with uid [$uid] does not exist ")
 
          val image = File(it.tileSetsDirectory, asset.source).inputStream().use { fis -> Image(fis) }

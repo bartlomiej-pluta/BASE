@@ -16,6 +16,7 @@ interface ProjectContext {
 
    fun importMap(name: String, map: GameMap)
    fun loadMap(uid: String): GameMap
+   fun saveMap(map: GameMap)
 
    fun importTileSet(builder: TileSetAssetBuilder)
    fun loadTileSet(uid: String): TileSet

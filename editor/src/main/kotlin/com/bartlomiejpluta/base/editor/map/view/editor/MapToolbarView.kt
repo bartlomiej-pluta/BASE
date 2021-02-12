@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.map.view.editor
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.map.controller.MapController
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
@@ -13,6 +14,7 @@ import tornadofx.*
 
 class MapToolbarView : View() {
    private val undoRedoService: UndoRedoService by di()
+   private val mapController: MapController by di()
 
    override val scope = super.scope as UndoableScope
 
@@ -27,6 +29,13 @@ class MapToolbarView : View() {
    }
 
    override val root = toolbar {
+      button(graphic = FontIcon("fa-floppy-o")) {
+         shortcut("Ctrl+S")
+         action {
+            mapController.saveMap(mapVM.item)
+         }
+      }
+
       button(graphic = FontIcon("fa-undo")) {
          shortcut("Ctrl+Z")
          action {
