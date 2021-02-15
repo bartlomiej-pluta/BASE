@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2f;
@@ -34,9 +35,9 @@ public abstract class AnimationableObject extends RenderableObject {
    }
 
    @Override
-   public void render(Window window, ShaderManager shaderManager) {
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
       animate();
-      super.render(window, shaderManager);
+      super.render(window, camera, shaderManager);
    }
 
    private void animate() {

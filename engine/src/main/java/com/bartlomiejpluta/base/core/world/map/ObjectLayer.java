@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.core.world.map;
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.movement.Direction;
 import com.bartlomiejpluta.base.core.world.movement.MovableObject;
 import org.joml.Vector2i;
@@ -53,10 +54,9 @@ public class ObjectLayer implements Layer {
    }
 
    @Override
-   public void render(Window window, ShaderManager shaderManager) {
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
       for (var object : objects) {
-         shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, object.getModelMatrix());
-         object.render(window, shaderManager);
+         object.render(window, camera, shaderManager);
       }
    }
 

@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.core.gl.render;
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,14 @@ public class DefaultRenderer implements Renderer {
    }
 
    @Override
-   public void render(Window window, Renderable renderable) {
+   public void render(Window window, Camera camera, Renderable renderable) {
       clear();
       updateViewport(window);
 
       shaderManager.selectShader("default").useSelectedShader();
 
-      renderable.render(window, shaderManager);
+      camera.render(window, shaderManager);
+      renderable.render(window, camera, shaderManager);
 
       shaderManager.detachCurrentShader();
    }

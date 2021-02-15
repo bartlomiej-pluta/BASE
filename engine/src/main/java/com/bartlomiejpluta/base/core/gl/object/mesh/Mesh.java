@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.core.gc.Disposable;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.system.MemoryStack;
 
@@ -55,7 +56,7 @@ public class Mesh implements Renderable, Disposable {
    }
 
    @Override
-   public void render(Window window, ShaderManager shaderManager) {
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
       glBindVertexArray(vaoId);
       glEnableVertexAttribArray(0);
       glEnableVertexAttribArray(1);

@@ -4,13 +4,14 @@ import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.image.Image;
 import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
 
 public class ImageLayer implements Layer {
 
    public enum Mode {
       NORMAL,
       FIT_SCREEN,
-      FIT_MAP;
+      FIT_MAP
    }
 
    private final float mapWidth;
@@ -36,7 +37,7 @@ public class ImageLayer implements Layer {
    }
 
    @Override
-   public void render(Window window, ShaderManager shaderManager) {
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
       if (image == null) {
          return;
       }
@@ -48,7 +49,7 @@ public class ImageLayer implements Layer {
          case FIT_MAP -> image.setScale(mapWidth / imageInitialWidth, mapHeight / imageInitialHeight);
       }
 
-      image.render(window, shaderManager);
+      image.render(window, camera, shaderManager);
    }
 
    @Override

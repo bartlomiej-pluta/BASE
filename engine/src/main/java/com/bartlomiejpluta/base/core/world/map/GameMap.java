@@ -1,7 +1,6 @@
 package com.bartlomiejpluta.base.core.world.map;
 
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
-import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.image.Image;
 import com.bartlomiejpluta.base.core.logic.Updatable;
@@ -19,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameMap implements Renderable, Updatable {
-   private final Camera camera;
    private final TileSet tileSet;
    private final List<Layer> layers = new ArrayList<>();
 
@@ -34,8 +32,7 @@ public class GameMap implements Renderable, Updatable {
    @Getter
    private final Vector2f stepSize;
 
-   public GameMap(Camera camera, TileSet tileSet, int rows, int columns, float scale) {
-      this.camera = camera;
+   public GameMap(TileSet tileSet, int rows, int columns, float scale) {
       this.tileSet = tileSet;
       this.scale = scale;
       this.rows = rows;
@@ -44,12 +41,9 @@ public class GameMap implements Renderable, Updatable {
    }
 
    @Override
-   public void render(Window window, ShaderManager shaderManager) {
-      shaderManager.setUniform(UniformName.UNI_PROJECTION_MATRIX, camera.getProjectionMatrix(window));
-      shaderManager.setUniform(UniformName.UNI_VIEW_MATRIX, camera.getViewMatrix());
-
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
       for (var layer : layers) {
-         layer.render(window, shaderManager);
+         layer.render(window, camera, shaderManager);
       }
    }
 
@@ -120,7 +114,7 @@ public class GameMap implements Renderable, Updatable {
       var target = movement.getTargetCoordinate();
 
       // Is trying to go beyond the map
-      if(target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
+      if (target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
          return false;
       }
 
