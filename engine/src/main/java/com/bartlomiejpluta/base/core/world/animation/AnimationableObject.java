@@ -2,6 +2,8 @@ package com.bartlomiejpluta.base.core.world.animation;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
+import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.object.RenderableObject;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2f;
@@ -29,5 +31,21 @@ public abstract class AnimationableObject extends RenderableObject {
    protected void setAnimationFrame(Vector2f framePosition) {
       var spriteSize = getMaterial().getSpriteSize();
       setSpritePosition(spriteSize.x * framePosition.x, spriteSize.y * framePosition.y);
+   }
+
+   @Override
+   public void render(Window window, ShaderManager shaderManager) {
+      animate();
+      super.render(window, shaderManager);
+   }
+
+   private void animate() {
+      if (shouldAnimate()) {
+         var positions = getSpriteAnimationFramesPositions();
+         var delay = getAnimationSpeed();
+         var currentPosition = (int) (System.currentTimeMillis() % (positions.length * delay)) / delay;
+         var current = positions[currentPosition];
+         setAnimationFrame(current);
+      }
    }
 }

@@ -6,7 +6,6 @@ import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.image.Image;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.core.ui.Window;
-import com.bartlomiejpluta.base.core.world.animation.Animator;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.movement.MovableObject;
 import com.bartlomiejpluta.base.core.world.movement.Movement;
@@ -20,8 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameMap implements Renderable, Updatable {
-   private final Animator animator;
-
    private final Camera camera;
    private final TileSet tileSet;
    private final List<Layer> layers = new ArrayList<>();
@@ -37,8 +34,7 @@ public class GameMap implements Renderable, Updatable {
    @Getter
    private final Vector2f stepSize;
 
-   public GameMap(Animator animator, Camera camera, TileSet tileSet, int rows, int columns, float scale) {
-      this.animator = animator;
+   public GameMap(Camera camera, TileSet tileSet, int rows, int columns, float scale) {
       this.camera = camera;
       this.tileSet = tileSet;
       this.scale = scale;
@@ -74,7 +70,7 @@ public class GameMap implements Renderable, Updatable {
          Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
       }
 
-      layers.add(new ObjectLayer(animator, new ArrayList<>(), passageMap));
+      layers.add(new ObjectLayer(new ArrayList<>(), passageMap));
 
       return this;
    }
