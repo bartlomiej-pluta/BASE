@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.core.gl.render.Renderer;
 import com.bartlomiejpluta.base.core.image.ImageManager;
 import com.bartlomiejpluta.base.core.logic.GameLogic;
 import com.bartlomiejpluta.base.core.profiling.fps.FPSMonitor;
+import com.bartlomiejpluta.base.core.profiling.time.TimeProfilerService;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.core.world.map.GameMap;
@@ -26,6 +27,7 @@ public class DefaultGameLogic implements GameLogic {
    private final TextureManager textureManager;
    private final EntityManager entityManager;
    private final ImageManager imageManager;
+   private final TimeProfilerService profiler;
    private final FPSMonitor fpsMonitor;
 
    private GameMap map;
