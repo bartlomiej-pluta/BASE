@@ -1,30 +1,30 @@
-package com.bartlomiejpluta.base.core.world.map;
+package com.bartlomiejpluta.base.game.world.layer.object;
 
-import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import com.bartlomiejpluta.base.core.world.movement.Direction;
-import com.bartlomiejpluta.base.core.world.movement.MovableObject;
+import com.bartlomiejpluta.base.game.world.layer.base.Layer;
+import com.bartlomiejpluta.base.game.world.movement.Direction;
+import com.bartlomiejpluta.base.game.world.movement.MovableSprite;
 import org.joml.Vector2i;
 
 import java.util.List;
 
 public class ObjectLayer implements Layer {
-   private final List<MovableObject> objects;
+   private final List<MovableSprite> objects;
 
    private final PassageAbility[][] passageMap;
 
-   public ObjectLayer(List<MovableObject> objects, PassageAbility[][] passageMap) {
+   public ObjectLayer(List<MovableSprite> objects, PassageAbility[][] passageMap) {
       this.objects = objects;
       this.passageMap = passageMap;
    }
 
-   public void addObject(MovableObject object) {
+   public void addObject(MovableSprite object) {
       objects.add(object);
    }
 
-   public void removeObject(MovableObject object) {
+   public void removeObject(MovableSprite object) {
       objects.remove(object);
    }
 

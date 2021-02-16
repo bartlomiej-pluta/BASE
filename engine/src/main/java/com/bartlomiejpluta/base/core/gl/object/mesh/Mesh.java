@@ -21,34 +21,32 @@ public class Mesh implements Renderable, Disposable {
    private final int elementsCount;
 
    public Mesh(float[] vertices, float[] texCoords, int[] elements) {
-      try(var stack = MemoryStack.stackPush()) {
-         elementsCount = elements.length;
-         var verticesBuffer = stack.mallocFloat(vertices.length);
-         var texCoordsBuffer = stack.mallocFloat(texCoords.length);
-         var elementsBuffer = stack.mallocInt(elementsCount);
-         verticesBuffer.put(vertices).flip();
-         texCoordsBuffer.put(texCoords).flip();
-         elementsBuffer.put(elements).flip();
+      elementsCount = elements.length;
 
+      var vboId = 0;
+      try(var stack = MemoryStack.stackPush()) {
          vaoId = glGenVertexArrays();
          glBindVertexArray(vaoId);
 
-         int vboId = glGenBuffers();
-         vboIds.add(vboId);
-         glBindBuffer(GL_ARRAY_BUFFER, vboId);
-         glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
-         glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
-
+         // Vertices VBO
          vboId = glGenBuffers();
          vboIds.add(vboId);
          glBindBuffer(GL_ARRAY_BUFFER, vboId);
-         glBufferData(GL_ARRAY_BUFFER, texCoordsBuffer, GL_STATIC_DRAW);
+         glBufferData(GL_ARRAY_BUFFER, stack.mallocFloat(vertices.length).put(vertices).flip(), GL_STATIC_DRAW);
+         glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+
+         // Texture Coordinates VBO
+         vboId = glGenBuffers();
+         vboIds.add(vboId);
+         glBindBuffer(GL_ARRAY_BUFFER, vboId);
+         glBufferData(GL_ARRAY_BUFFER, stack.mallocFloat(texCoords.length).put(texCoords).flip(), GL_STATIC_DRAW);
          glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
+         // Elements VBO
          vboId = glGenBuffers();
          vboIds.add(vboId);
          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId);
-         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementsBuffer, GL_STATIC_DRAW);
+         glBufferData(GL_ELEMENT_ARRAY_BUFFER, stack.mallocInt(elementsCount).put(elements).flip(), GL_STATIC_DRAW);
 
          glBindBuffer(GL_ARRAY_BUFFER, 0);
          glBindVertexArray(0);
@@ -58,17 +56,23 @@ public class Mesh implements Renderable, Disposable {
    @Override
    public void render(Window window, Camera camera, ShaderManager shaderManager) {
       glBindVertexArray(vaoId);
+
       glEnableVertexAttribArray(0);
       glEnableVertexAttribArray(1);
+
       glDrawElements(GL_TRIANGLES, elementsCount, GL_UNSIGNED_INT, 0);
+
       glDisableVertexAttribArray(0);
       glDisableVertexAttribArray(1);
+
       glBindVertexArray(0);
    }
 
    @Override
    public void dispose() {
       glDisableVertexAttribArray(0);
+      glDisableVertexAttribArray(1);
+
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 

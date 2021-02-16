@@ -3,10 +3,10 @@ package com.bartlomiejpluta.base.core.world.camera;
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
-import com.bartlomiejpluta.base.core.world.object.PositionableObject;
+import com.bartlomiejpluta.base.core.world.object.Model;
 import org.joml.Matrix4f;
 
-public class Camera extends PositionableObject {
+public class Camera extends Model {
    private final Matrix4f projectionMatrix = new Matrix4f();
    private final Matrix4f viewMatrix = new Matrix4f();
 

@@ -1,16 +1,16 @@
-package com.bartlomiejpluta.base.core.world.movement;
+package com.bartlomiejpluta.base.game.world.movement;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.logic.Updatable;
-import com.bartlomiejpluta.base.core.world.animation.AnimationableObject;
+import com.bartlomiejpluta.base.game.world.animation.AnimatedSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class MovableObject extends AnimationableObject implements Updatable {
+public abstract class MovableSprite extends AnimatedSprite implements Updatable {
    private final Vector2f coordinateStepSize;
 
    private int moveTime = 0;
@@ -62,18 +62,18 @@ public abstract class MovableObject extends AnimationableObject implements Updat
       return true;
    }
 
-   public MovableObject setCoordinates(int x, int y) {
+   public MovableSprite setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;
       setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
       return this;
    }
 
-   public MovableObject setCoordinates(Vector2i coordinates) {
+   public MovableSprite setCoordinates(Vector2i coordinates) {
       return setCoordinates(coordinates.x, coordinates.y);
    }
 
-   public MovableObject(Mesh mesh, Material material, Vector2f coordinateStepSize) {
+   public MovableSprite(Mesh mesh, Material material, Vector2f coordinateStepSize) {
       super(mesh, material);
       this.coordinateStepSize = coordinateStepSize;
       setCoordinates(0, 0);

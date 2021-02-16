@@ -9,7 +9,7 @@ import org.joml.Vector2f;
 import static java.lang.Math.toRadians;
 
 @EqualsAndHashCode
-public abstract class PositionableObject {
+public abstract class Model {
    private final Matrix4f modelMatrix = new Matrix4f();
 
    @Getter
@@ -27,42 +27,42 @@ public abstract class PositionableObject {
    @Setter
    protected float scaleY = 1.0f;
 
-   public PositionableObject setPosition(float x, float y) {
+   public Model setPosition(float x, float y) {
       position.x = x;
       position.y = y;
       return this;
    }
 
-   public PositionableObject setPosition(Vector2f position) {
+   public Model setPosition(Vector2f position) {
       this.position.x = position.x;
       this.position.y = position.y;
       return this;
    }
    
-   public PositionableObject movePosition(float x, float y) {
+   public Model movePosition(float x, float y) {
       position.x += x;
       position.y += y;
       return this;
    }
 
-   public PositionableObject movePosition(Vector2f position) {
+   public Model movePosition(Vector2f position) {
       this.position.x += position.x;
       this.position.y += position.y;
       return this;
    }
 
-   public PositionableObject moveRotation(float rotation) {
+   public Model moveRotation(float rotation) {
       this.rotation += rotation;
       return this;
    }
 
-   public PositionableObject setScale(float scale) {
+   public Model setScale(float scale) {
       this.scaleX = scale;
       this.scaleY = scale;
       return this;
    }
 
-   public PositionableObject setScale(float scaleX, float scaleY) {
+   public Model setScale(float scaleX, float scaleY) {
       this.scaleX = scaleX;
       this.scaleY = scaleY;
       return this;

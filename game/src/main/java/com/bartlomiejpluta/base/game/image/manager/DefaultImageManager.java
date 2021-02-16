@@ -1,9 +1,10 @@
-package com.bartlomiejpluta.base.core.image;
+package com.bartlomiejpluta.base.game.image.manager;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.core.util.math.MathUtil;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
+import com.bartlomiejpluta.base.game.image.model.Image;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

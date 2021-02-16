@@ -1,18 +1,18 @@
-package com.bartlomiejpluta.base.core.world.animation;
+package com.bartlomiejpluta.base.game.world.animation;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import com.bartlomiejpluta.base.core.world.object.RenderableObject;
+import com.bartlomiejpluta.base.core.world.object.Sprite;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2f;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class AnimationableObject extends RenderableObject {
+public abstract class AnimatedSprite extends Sprite {
 
-   public AnimationableObject(Mesh mesh, Material material) {
+   public AnimatedSprite(Mesh mesh, Material material) {
       super(mesh, material);
    }
 

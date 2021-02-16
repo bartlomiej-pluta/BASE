@@ -1,10 +1,12 @@
-package com.bartlomiejpluta.base.core.world.map;
+package com.bartlomiejpluta.base.game.world.layer.image;
 
 import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.base.core.image.Image;
+import com.bartlomiejpluta.base.game.image.model.Image;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
+import com.bartlomiejpluta.base.game.world.layer.base.Layer;
+import com.bartlomiejpluta.base.game.world.map.GameMap;
 
 public class ImageLayer implements Layer {
 

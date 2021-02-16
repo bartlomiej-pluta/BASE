@@ -1,30 +1,31 @@
-package com.bartlomiejpluta.base.core.world.map;
+package com.bartlomiejpluta.base.game.world.layer.tile;
 
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import com.bartlomiejpluta.base.core.world.tileset.model.Tile;
-import org.joml.Vector2f;
+import com.bartlomiejpluta.base.game.world.layer.base.Layer;
+import com.bartlomiejpluta.base.game.world.tileset.model.Tile;
+
+import java.util.Arrays;
 
 public class TileLayer implements Layer {
    private final Tile[][] layer;
-   private final Vector2f stepSize;
-   private final float scale;
+   private final int rows;
+   private final int columns;
 
-   public TileLayer(Tile[][] layer, Vector2f stepSize, float scale) {
-      this.layer = layer;
-      this.stepSize = stepSize;
-      this.scale = scale;
+   public TileLayer(int rows, int columns) {
+      this.rows = rows;
+      this.columns = columns;
+      layer = new Tile[rows][columns];
+      Arrays.stream(layer).forEach(tiles -> Arrays.fill(tiles, null));
    }
 
    public void setTile(int row, int column, Tile tile) {
       layer[row][column] = tile;
-      recalculateTileGeometry(tile, row, column);
-   }
 
-   private void recalculateTileGeometry(Tile tile, int row, int column) {
-      tile.setScale(scale);
-      tile.setPosition(column * stepSize.x, row * stepSize.y);
+      if(tile != null) {
+         tile.setCoordinates(row, column);
+      }
    }
 
    @Override

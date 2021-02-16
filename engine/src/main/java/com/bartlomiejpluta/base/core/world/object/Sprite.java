@@ -14,7 +14,8 @@ import lombok.Setter;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public abstract class RenderableObject extends PositionableObject implements Renderable {
+public abstract class Sprite extends Model implements Renderable {
+
    @NonNull
    protected final Mesh mesh;
 

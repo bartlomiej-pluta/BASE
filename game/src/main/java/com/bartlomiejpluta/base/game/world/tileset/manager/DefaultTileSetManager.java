@@ -1,8 +1,8 @@
-package com.bartlomiejpluta.base.core.world.tileset.manager;
+package com.bartlomiejpluta.base.game.world.tileset.manager;
 
 import com.bartlomiejpluta.base.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
-import com.bartlomiejpluta.base.core.world.tileset.model.TileSet;
+import com.bartlomiejpluta.base.game.world.tileset.model.TileSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.String.format;
 
 @Slf4j
 @Component
@@ -21,15 +23,16 @@ public class DefaultTileSetManager implements TileSetManager {
 
    @Override
    public TileSet createTileSet(String tileSetFileName, int rows, int columns) {
-      var tileset = tileSets.get(tileSetFileName);
+      var key = format("%dx%d__%s", rows, columns, tileSetFileName);
+      var tileset = tileSets.get(key);
 
-      if(tileset == null) {
-         log.info("Loading [{}] tileset to cache", tileSetFileName);
-         var texture = textureManager.loadTexture(tileSetFileName);
-         var tileWidth = texture.getWidth() / columns;
-         var tileHeight = texture.getHeight() / rows;
-         var mesh = meshManager.createQuad(tileWidth, tileHeight, 0, 0);
-         tileset =  new TileSet(mesh, texture, rows, columns, tileWidth, tileHeight);
+      if (tileset == null) {
+         var texture = textureManager.loadTexture(tileSetFileName, rows, columns);
+         var size = texture.getSpriteSize();
+         var mesh = meshManager.createQuad(size.x, size.y, 0, 0);
+         tileset = new TileSet(texture, mesh);
+         log.info("Loading [{}] tileset to cache under the key: [{}]", tileSetFileName, key);
+         tileSets.put(key, tileset);
       }
 
       return tileset;
