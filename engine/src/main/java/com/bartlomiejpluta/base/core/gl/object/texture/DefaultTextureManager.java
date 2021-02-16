@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.String.format;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -18,13 +20,19 @@ public class DefaultTextureManager implements TextureManager {
 
    @Override
    public Texture loadTexture(String textureFileName) {
-      var texture = loadedTextures.get(textureFileName);
+      return loadTexture(textureFileName, 1, 1);
+   }
+
+   @Override
+   public Texture loadTexture(String textureFileName, int rows, int columns) {
+      var key = format("%dx%d__%s", rows, columns, textureFileName);
+      var texture = loadedTextures.get(key);
 
       if (texture == null) {
-         log.info("Loading [{}] texture to cache", textureFileName);
+         log.info("Loading [{}] texture to cache under the key: [{}]", textureFileName, key);
          var buffer = resourcesManager.loadResourceAsByteBuffer(textureFileName);
-         texture = new Texture(textureFileName, buffer);
-         loadedTextures.put(textureFileName, texture);
+         texture = new Texture(textureFileName, buffer, rows, columns);
+         loadedTextures.put(key, texture);
       }
 
       return texture;

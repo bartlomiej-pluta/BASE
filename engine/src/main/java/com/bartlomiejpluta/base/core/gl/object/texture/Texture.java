@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.core.gl.object.texture;
 import com.bartlomiejpluta.base.core.error.AppException;
 import com.bartlomiejpluta.base.core.gc.Disposable;
 import lombok.Getter;
+import org.joml.Vector2f;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
@@ -27,7 +28,20 @@ public class Texture implements Disposable {
    @Getter
    private final int height;
 
-   Texture(String textureFilename, ByteBuffer buffer) {
+   @Getter
+   private final int rows;
+
+   @Getter
+   private final int columns;
+
+   @Getter
+   private final Vector2f spriteFragment;
+
+   @Getter
+   private final Vector2f spriteSize;
+
+
+   Texture(String textureFilename, ByteBuffer buffer, int rows, int columns) {
       try (var stack = MemoryStack.stackPush()) {
          var widthBuffer = stack.mallocInt(1);
          var heightBuffer = stack.mallocInt(1);
@@ -51,6 +65,11 @@ public class Texture implements Disposable {
          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
          fileName = textureFilename;
+
+         this.rows = rows;
+         this.columns = columns;
+         this.spriteFragment = new Vector2f(1 / (float) columns, 1 / (float) rows);
+         this.spriteSize = new Vector2f(width, height).mul(spriteFragment);
       }
    }
 

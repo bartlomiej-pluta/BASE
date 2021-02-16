@@ -4,4 +4,5 @@ import com.bartlomiejpluta.base.core.gc.Cleanable;
 
 public interface TextureManager extends Cleanable {
    Texture loadTexture(String textureFileName);
+   Texture loadTexture(String textureFileName, int rows, int columns);
 }
