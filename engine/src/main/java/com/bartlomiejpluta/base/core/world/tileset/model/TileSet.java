@@ -32,7 +32,6 @@ public class TileSet {
 
    public Tile getTile(int row, int column) {
       var material = Material.textured(texture);
-      material.setSpriteSize(columnStep, rowStep);
       material.setSpritePosition(column * columnStep, row * rowStep);
       return new Tile(mesh, material, tileWidth, tileHeight);
    }

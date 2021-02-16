@@ -11,9 +11,8 @@ public class Image extends RenderableObject {
    private final int initialHeight;
 
    Image(Mesh mesh, Material texture, int initialWidth, int initialHeight) {
-      super(mesh);
+      super(mesh, texture);
       this.initialWidth = initialWidth;
       this.initialHeight = initialHeight;
-      setMaterial(texture);
    }
 }

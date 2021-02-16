@@ -11,9 +11,8 @@ public class Tile extends RenderableObject {
    private final int height;
 
    Tile(Mesh mesh, Material material, int width, int height) {
-      super(mesh);
+      super(mesh, material);
       this.width = width;
       this.height = height;
-      setMaterial(material);
    }
 }

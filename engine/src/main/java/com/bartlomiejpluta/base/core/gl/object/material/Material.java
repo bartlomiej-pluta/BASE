@@ -1,20 +1,39 @@
 package com.bartlomiejpluta.base.core.gl.object.material;
 
 import com.bartlomiejpluta.base.core.gl.object.texture.Texture;
+import com.bartlomiejpluta.base.core.gl.render.Renderable;
+import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
+import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
+import com.bartlomiejpluta.base.core.ui.Window;
+import com.bartlomiejpluta.base.core.world.camera.Camera;
 import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 @Getter
-public class Material {
+public class Material implements Renderable {
    private final Vector4f color = new Vector4f();
-   private final Vector2f spriteSize = new Vector2f(1, 1);
    private final Vector2f spritePosition = new Vector2f(0, 0);
    private final Texture texture;
 
    private Material(Texture texture, float r, float g, float b, float alpha) {
       this.texture = texture;
       setColor(r, g, b, alpha);
+   }
+
+   @Override
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+      shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, color);
+
+      if(texture != null) {
+         shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, true);
+         shaderManager.setUniform(UniformName.UNI_SPRITE_SIZE, texture.getSpriteFragment());
+         shaderManager.setUniform(UniformName.UNI_SPRITE_POSITION, spritePosition);
+         shaderManager.setUniform(UniformName.UNI_TEXTURE_SAMPLER, 0);
+         texture.activate();
+      } else {
+         shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, false);
+      }
    }
 
    public void setAlpha(float alpha) {
@@ -35,33 +54,19 @@ public class Material {
       color.w = alpha;
    }
 
-   public void setSpriteSize(Vector2f spriteSize) {
-      this.spriteSize.x = spriteSize.x;
-      this.spriteSize.y = spriteSize.y;
-   }
-
-   public void setSpriteSize(float w, float h) {
-      this.spriteSize.x = w;
-      this.spriteSize.y = h;
-   }
-
    public void setSpritePosition(Vector2f spritePosition) {
-      this.spritePosition.x = spritePosition.x;
-      this.spritePosition.y = spritePosition.y;
+      if(texture != null) {
+         var size = texture.getSpriteFragment();
+         this.spritePosition.x = size.x * spritePosition.x;
+         this.spritePosition.y = size.y * spritePosition.y;
+      }
    }
 
    public void setSpritePosition(float x, float y) {
-      this.spritePosition.x = x;
-      this.spritePosition.y = y;
-   }
-
-   public boolean hasTexture() {
-      return texture != null;
-   }
-
-   public void activateTextureIfExists() {
-      if(hasTexture()) {
-         texture.activate();
+      if(texture != null) {
+         var size = texture.getSpriteFragment();
+         this.spritePosition.x = size.x * x;
+         this.spritePosition.y = size.y * y;
       }
    }
 

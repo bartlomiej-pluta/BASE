@@ -8,6 +8,7 @@ import com.bartlomiejpluta.base.game.world.entity.config.EntitySpriteConfigurati
 import com.bartlomiejpluta.base.game.world.entity.model.Entity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joml.Vector2f;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -37,7 +37,7 @@ public class Entity extends MovableObject {
    @Override
    public Vector2f[] getSpriteAnimationFramesPositions() {
       var row = spriteDirectionRows.get(faceDirection);
-      var frames = spriteSheetDimension.y;
+      var frames = material.getTexture().getRows();
       var array = new Vector2f[frames];
 
       for(int column=0; column<frames; ++column) {
@@ -49,7 +49,7 @@ public class Entity extends MovableObject {
 
    @Override
    protected void setDefaultAnimationFrame() {
-      setAnimationFrame(new Vector2f(defaultSpriteColumn, spriteDirectionRows.get(faceDirection)));
+      material.setSpritePosition(new Vector2f(defaultSpriteColumn, spriteDirectionRows.get(faceDirection)));
    }
 
    @Override
@@ -71,7 +71,7 @@ public class Entity extends MovableObject {
    }
 
    public Entity(Mesh mesh, Material material, Vector2f coordinateStepSize, EntitySpriteConfiguration configuration) {
-      super(mesh, material, coordinateStepSize, configuration.getDimension().asVector());
+      super(mesh, material, coordinateStepSize);
       this.defaultSpriteColumn = configuration.getDefaultSpriteColumn();
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
       this.faceDirection = Direction.DOWN;
