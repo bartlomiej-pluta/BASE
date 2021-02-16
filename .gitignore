@@ -136,3 +136,6 @@ gradle-app.setting
 *.png
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
+
+# BASE sample data
+**/resources/project/

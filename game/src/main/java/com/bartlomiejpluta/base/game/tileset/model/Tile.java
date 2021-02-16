@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.game.world.tileset.model;
+package com.bartlomiejpluta.base.game.tileset.model;
 
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;

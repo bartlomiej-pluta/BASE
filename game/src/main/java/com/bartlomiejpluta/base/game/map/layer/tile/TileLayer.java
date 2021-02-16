@@ -1,10 +1,10 @@
-package com.bartlomiejpluta.base.game.world.layer.tile;
+package com.bartlomiejpluta.base.game.map.layer.tile;
 
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import com.bartlomiejpluta.base.game.world.layer.base.Layer;
-import com.bartlomiejpluta.base.game.world.tileset.model.Tile;
+import com.bartlomiejpluta.base.game.map.layer.base.Layer;
+import com.bartlomiejpluta.base.game.tileset.model.Tile;
 
 import java.util.Arrays;
 

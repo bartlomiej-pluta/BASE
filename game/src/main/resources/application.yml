@@ -7,6 +7,10 @@ app:
   core:
     targetUps: 50 # Updates per second
 
+  project:
+    main-file: project.bep
+    resource-path: /project
+
   sprite:
     entity:
       dimension:

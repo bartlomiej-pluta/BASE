@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.game.world.entity.manager;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
-import com.bartlomiejpluta.base.game.world.map.GameMap;
+import com.bartlomiejpluta.base.game.map.model.GameMap;
 import com.bartlomiejpluta.base.game.world.entity.config.EntitySpriteConfiguration;
 import com.bartlomiejpluta.base.game.world.entity.model.Entity;
 import lombok.RequiredArgsConstructor;

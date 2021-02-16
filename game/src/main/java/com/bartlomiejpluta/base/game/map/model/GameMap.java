@@ -1,19 +1,19 @@
-package com.bartlomiejpluta.base.game.world.map;
+package com.bartlomiejpluta.base.game.map.model;
 
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.base.game.image.model.Image;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import com.bartlomiejpluta.base.game.world.layer.base.Layer;
-import com.bartlomiejpluta.base.game.world.layer.image.ImageLayer;
-import com.bartlomiejpluta.base.game.world.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.game.world.layer.object.PassageAbility;
-import com.bartlomiejpluta.base.game.world.layer.tile.TileLayer;
+import com.bartlomiejpluta.base.game.image.model.Image;
+import com.bartlomiejpluta.base.game.map.layer.base.Layer;
+import com.bartlomiejpluta.base.game.map.layer.image.ImageLayer;
+import com.bartlomiejpluta.base.game.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
+import com.bartlomiejpluta.base.game.map.layer.tile.TileLayer;
+import com.bartlomiejpluta.base.game.tileset.model.TileSet;
 import com.bartlomiejpluta.base.game.world.movement.MovableSprite;
 import com.bartlomiejpluta.base.game.world.movement.Movement;
-import com.bartlomiejpluta.base.game.world.tileset.model.TileSet;
 import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2f;
@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GameMap implements Renderable, Updatable {
+   @Getter
    private final List<Layer> layers = new ArrayList<>();
 
    @NonNull
@@ -62,7 +63,7 @@ public class GameMap implements Renderable, Updatable {
       return new Vector2f(columns * stepSize.x, rows * stepSize.y);
    }
 
-   public GameMap createObjectLayer() {
+   public int createObjectLayer() {
       var passageMap = new PassageAbility[rows][columns];
       for (int i = 0; i < rows; ++i) {
          Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
@@ -70,19 +71,19 @@ public class GameMap implements Renderable, Updatable {
 
       layers.add(new ObjectLayer(new ArrayList<>(), passageMap));
 
-      return this;
+      return layers.size() - 1;
    }
 
-   public GameMap createTileLayer() {
+   public int createTileLayer() {
       layers.add(new TileLayer(rows, columns));
 
-      return this;
+      return layers.size() - 1;
    }
 
-   public GameMap createImageLayer(Image image, ImageLayer.Mode imageDisplayMode) {
+   public int createImageLayer(Image image, ImageLayer.Mode imageDisplayMode) {
       layers.add(new ImageLayer(this, image, imageDisplayMode));
 
-      return this;
+      return layers.size() - 1;
    }
 
    public GameMap addObject(int layerIndex, MovableSprite object) {
