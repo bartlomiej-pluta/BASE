@@ -42,7 +42,7 @@ public class ImageLayer implements Layer {
          return;
       }
 
-      shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, image.getModelMatrix());
+      shaderManager.setUniform(UniformName.UNI_VIEW_MODEL_MATRIX, camera.computeViewModelMatrix(image.getModelMatrix()));
 
       switch (mode) {
          case FIT_SCREEN -> image.setScale(window.getWidth() / imageInitialWidth, window.getHeight() / imageInitialHeight);

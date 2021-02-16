@@ -27,7 +27,7 @@ public abstract class RenderableObject extends PositionableObject implements Ren
    public void render(Window window, Camera camera, ShaderManager shaderManager) {
       material.activateTextureIfExists();
 
-      shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, getModelMatrix());
+      shaderManager.setUniform(UniformName.UNI_VIEW_MODEL_MATRIX, camera.computeViewModelMatrix(getModelMatrix()));
       shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, material.getColor());
       shaderManager.setUniform(UniformName.UNI_HAS_OBJECT_TEXTURE, material.hasTexture());
       shaderManager.setUniform(UniformName.UNI_TEXTURE_SAMPLER, 0);
