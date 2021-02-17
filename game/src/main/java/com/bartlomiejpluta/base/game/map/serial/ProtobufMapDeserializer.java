@@ -31,6 +31,10 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    private void deserializeLayer(GameMap map, GameMapProto.Layer proto) {
       if (proto.hasTileLayer()) {
          deserializeTileLayer(map, proto);
+      } else if (proto.hasObjectLayer()) {
+         deserializeObjectLayer(map, proto);
+      } else if (proto.hasImageLayer()) {
+         deserializeImageLayer(map, proto);
       } else {
          throw new AppException("Not supported layer type");
       }
@@ -50,5 +54,13 @@ public class ProtobufMapDeserializer extends MapDeserializer {
             map.setTile(layer, i / columns, i % columns, tile - 1);
          }
       }
+   }
+
+   private void deserializeObjectLayer(GameMap map, GameMapProto.Layer proto) {
+      var layer = map.createObjectLayer();
+   }
+
+   private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {
+      // TODO(return new ImageLayer(...))
    }
 }

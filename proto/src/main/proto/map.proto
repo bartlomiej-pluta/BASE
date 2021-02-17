@@ -16,9 +16,20 @@ message Layer {
 
   oneof layer {
     TileLayer tileLayer = 2;
+    ObjectLayer objectLayer = 3;
+    ImageLayer imageLayer = 4;
   }
 }
 
 message TileLayer {
   repeated uint32 tiles = 1;
+}
+
+message ObjectLayer {
+  // TODO list of passage abilities
+}
+
+message ImageLayer {
+  // TODO optional imageUID
+  // TODO r, g, b, alpha
 }

@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.map.serial
 
+import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.proto.GameMapProto
@@ -28,6 +30,14 @@ class ProtobufMapSerializer : MapSerializer {
             .fold(GameMapProto.TileLayer.newBuilder()) { acc, tile -> acc.addTiles((tile?.id?.plus(1)) ?: 0) }
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setTileLayer(it).build() }
+
+         is ObjectLayer -> GameMapProto.ObjectLayer.newBuilder()
+            .build()
+            .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }
+
+         is ImageLayer -> GameMapProto.ImageLayer.newBuilder()
+            .build()
+            .let { GameMapProto.Layer.newBuilder().setName(layer.name).setImageLayer(it).build() }
 
          else -> throw IllegalStateException("Not supported layer type")
       }

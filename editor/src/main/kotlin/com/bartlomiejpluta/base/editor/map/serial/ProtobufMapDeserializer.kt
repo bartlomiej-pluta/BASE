@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.map.serial
 
+import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -35,6 +37,8 @@ class ProtobufMapDeserializer : MapDeserializer {
    private fun deserializeLayer(rows: Int, columns: Int, tileSet: TileSet, proto: GameMapProto.Layer): Layer {
       return when {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, tileSet, proto)
+         proto.hasObjectLayer() -> deserializeObjectLayer(proto)
+         proto.hasImageLayer() -> deserializeImageLayer(proto)
 
          else -> throw IllegalStateException("Not supported layer type")
       }
@@ -44,12 +48,20 @@ class ProtobufMapDeserializer : MapDeserializer {
       val layer: Array<Array<Tile?>> = Array(rows) { Array(columns) { null } }
 
       proto.tileLayer.tilesList.forEachIndexed { index, tile ->
-         layer[index / columns][index % columns] = when(tile) {
+         layer[index / columns][index % columns] = when (tile) {
             0 -> null
-            else -> tileSet.getTile(tile-1)
+            else -> tileSet.getTile(tile - 1)
          }
       }
 
       return TileLayer(proto.name, rows, columns, layer)
+   }
+
+   private fun deserializeObjectLayer(proto: GameMapProto.Layer): Layer {
+      return ObjectLayer(proto.name)
+   }
+
+   private fun deserializeImageLayer(proto: GameMapProto.Layer): Layer {
+      return ImageLayer(proto.name)
    }
 }
