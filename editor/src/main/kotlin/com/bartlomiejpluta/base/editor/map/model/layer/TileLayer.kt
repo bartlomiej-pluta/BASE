@@ -24,8 +24,4 @@ class TileLayer(
          }
       }
    }
-
-   override fun clone() = TileLayer(name, 0, 0).apply {
-      layer = this@TileLayer.layer
-   }
 }

@@ -2,9 +2,9 @@ package com.bartlomiejpluta.base.editor.map.canvas
 
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
-import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
@@ -27,7 +27,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderSelectedLayer(gc: GraphicsContext) {
-      map.layers.getOrNull(editorStateVM.selectedLayer) ?. let { dispatchLayerRender(gc, it) }
+      map.layers.getOrNull(editorStateVM.selectedLayerIndex)?.let { dispatchLayerRender(gc, it) }
    }
 
    private fun renderCover(gc: GraphicsContext) {
@@ -40,7 +40,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderUnderlyingLayers(gc: GraphicsContext) {
-      for(layer in map.layers.dropLast(if(editorStateVM.selectedLayer < 0) 0 else map.layers.size - editorStateVM.selectedLayer)) {
+      for (layer in map.layers.dropLast(if (editorStateVM.selectedLayerIndex < 0) 0 else map.layers.size - editorStateVM.selectedLayerIndex)) {
          dispatchLayerRender(gc, layer)
       }
    }

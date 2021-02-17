@@ -1,55 +1,44 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
-import com.bartlomiejpluta.base.editor.tileset.model.Tile
-import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
-import com.bartlomiejpluta.base.editor.render.input.MapMouseEventHandler
-import com.bartlomiejpluta.base.editor.render.model.Renderable
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
+import com.bartlomiejpluta.base.editor.render.input.MapMouseEventHandler
+import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
 
 class MapPainter(
    private val mapVM: GameMapVM,
    private val brushVM: BrushVM,
    private val editorStateVM: EditorStateVM,
-   private val paintingCallback: (MapPaintingTrace) -> Unit
+   private val paintingCallback: (PaintingTrace) -> Unit
 ) : Renderable, MapMouseEventHandler {
    private val tileWidth = mapVM.tileSet.tileWidth.toDouble()
    private val tileHeight = mapVM.tileSet.tileHeight.toDouble()
 
-   private var currentTrace: MapPaintingTrace? = null
+   private var cursor: PaintingCursor? = null
+   private var currentTrace: PaintingTrace? = null
+
+   init {
+      editorStateVM.selectedLayerProperty.addListener { _, _, layer ->
+         cursor = when (layer) {
+            is TileLayer -> TilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
+            else -> null
+         }
+      }
+   }
 
    override fun render(gc: GraphicsContext) {
       val alpha = gc.globalAlpha
       gc.globalAlpha = 0.4
 
-      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-         renderTile(gc, row, column, centerRow, centerColumn, tile)
-      }
+      cursor?.render(gc)
 
       gc.globalAlpha = alpha
-   }
-
-   private fun renderTile(gc: GraphicsContext, row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) {
-      val x = tileWidth * (editorStateVM.cursorColumn - centerColumn + column)
-      val y = tileHeight * (editorStateVM.cursorRow - centerRow + row)
-
-      when {
-         tile != null -> renderPaintingBrushTile(gc, tile, x, y)
-         else -> renderEraserTile(gc, x, y)
-      }
-   }
-
-   private fun renderPaintingBrushTile(gc: GraphicsContext, tile: Tile, x: Double, y: Double) =
-      gc.drawImage(tile.image, x, y)
-
-   private fun renderEraserTile(gc: GraphicsContext, x: Double, y: Double) {
-      gc.fill = Color.WHITE
-      gc.fillRect(x, y, tileWidth, tileHeight)
    }
 
    override fun handleMouseInput(event: MapMouseEvent) {
@@ -64,28 +53,24 @@ class MapPainter(
    }
 
    private fun beginTrace(event: MapMouseEvent) {
-      if (event.button == MouseButton.PRIMARY && editorStateVM.selectedLayer >= 0) {
-         currentTrace = MapPaintingTrace(mapVM, "Paint trace").apply {
-            brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-               paint(editorStateVM.selectedLayer, editorStateVM.cursorRow - centerRow + row, editorStateVM.cursorColumn - centerColumn + column, tile)
-            }
-         }
+      if (event.button == MouseButton.PRIMARY && editorStateVM.selectedLayerIndex >= 0) {
+         currentTrace = when (editorStateVM.selectedLayer) {
+            is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
+            else -> null
+         }?.apply { beginTrace(editorStateVM, brushVM) }
       }
    }
 
    private fun proceedTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY) {
-         currentTrace?.apply {
-            brushVM.forEach { row, column, centerRow, centerColumn, tile ->
-               paint(editorStateVM.selectedLayer, editorStateVM.cursorRow - centerRow + row, editorStateVM.cursorColumn - centerColumn + column, tile)
-            }
-         }
+         currentTrace?.proceedTrace(editorStateVM, brushVM)
       }
    }
 
    private fun commitTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY) {
          currentTrace?.let {
+            it.commitTrace(editorStateVM, brushVM)
             paintingCallback(it)
             currentTrace = null
          }

@@ -1,15 +1,16 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
-import com.bartlomiejpluta.base.editor.command.model.base.Undoable
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
-import com.bartlomiejpluta.base.editor.tileset.model.Tile
+import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
+import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.tileset.model.Tile
 
 
-data class MapPaintingTrace(val map: GameMapVM, override val commandName: String) : Undoable {
+data class TilePaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
    private val trace = mutableListOf<Element>()
 
-   fun paint(layerIndex: Int, row: Int, column: Int, tile: Tile?) {
+   private fun paint(layerIndex: Int, row: Int, column: Int, tile: Tile?) {
       if (row >= map.rows || column >= map.columns || row < 0 || column < 0 || layerIndex < 0) {
          return
       }
@@ -30,6 +31,32 @@ data class MapPaintingTrace(val map: GameMapVM, override val commandName: String
          trace += Element(layerIndex, row, column, formerTile, tile)
          layer[row][column] = tile
       }
+   }
+
+   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+         paint(
+            editorStateVM.selectedLayerIndex,
+            editorStateVM.cursorRow - centerRow + row,
+            editorStateVM.cursorColumn - centerColumn + column,
+            tile
+         )
+      }
+   }
+
+   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+         paint(
+            editorStateVM.selectedLayerIndex,
+            editorStateVM.cursorRow - centerRow + row,
+            editorStateVM.cursorColumn - centerColumn + column,
+            tile
+         )
+      }
+   }
+
+   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+
    }
 
    override fun undo() {

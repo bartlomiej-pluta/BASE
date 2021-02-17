@@ -7,11 +7,12 @@ import com.bartlomiejpluta.base.editor.command.model.map.RemoveLayerCommand
 import com.bartlomiejpluta.base.editor.command.model.map.RenameLayerCommand
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
-import javafx.beans.value.ObservableValue
 import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
 import javafx.scene.control.cell.TextFieldListCell
@@ -40,28 +41,51 @@ class MapLayersView : View() {
          }
       }
 
-      editorStateVM.selectedLayerProperty.bind(selectionModel.selectedIndexProperty())
+      editorStateVM.selectedLayerIndexProperty.bind(selectionModel.selectedIndexProperty())
+      editorStateVM.selectedLayerProperty.bind(selectionModel.selectedItemProperty())
    }
 
    override val root = borderpane {
       center = layersPane
 
       bottom = toolbar {
-         button(graphic = FontIcon("fa-plus")) {
-            action {
-               val tileLayer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
-               val command = CreateLayerCommand(mapVM.item, tileLayer)
-               command.execute()
-               layersPane.selectionModel.select(mapVM.layers.size - 1)
-               undoRedoService.push(command, scope)
+         menubutton(graphic = FontIcon("fa-plus")) {
+            item("Tile Layer", graphic = FontIcon("fa-th")) {
+               action {
+                  val layer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
+                  val command = CreateLayerCommand(mapVM.item, layer)
+                  command.execute()
+                  layersPane.selectionModel.select(mapVM.layers.size - 1)
+                  undoRedoService.push(command, scope)
+               }
+            }
+
+            item("Object Layer", graphic = FontIcon("fa-cube")) {
+               action {
+                  val layer = ObjectLayer("Layer ${mapVM.layers.size + 1}")
+                  val command = CreateLayerCommand(mapVM.item, layer)
+                  command.execute()
+                  layersPane.selectionModel.select(mapVM.layers.size - 1)
+                  undoRedoService.push(command, scope)
+               }
+            }
+
+            item("Image Layer", graphic = FontIcon("fa-image")) {
+               action {
+                  val layer = ImageLayer("Layer ${mapVM.layers.size + 1}")
+                  val command = CreateLayerCommand(mapVM.item, layer)
+                  command.execute()
+                  layersPane.selectionModel.select(mapVM.layers.size - 1)
+                  undoRedoService.push(command, scope)
+               }
             }
          }
 
          button(graphic = FontIcon("fa-chevron-up")) {
-            enableWhen(editorStateVM.selectedLayerProperty.greaterThan(0))
+            enableWhen(editorStateVM.selectedLayerIndexProperty.greaterThan(0))
             action {
-               val newIndex = editorStateVM.selectedLayer - 1
-               val command = MoveLayerCommand(mapVM.item, editorStateVM.selectedLayer, newIndex)
+               val newIndex = editorStateVM.selectedLayerIndex - 1
+               val command = MoveLayerCommand(mapVM.item, editorStateVM.selectedLayerIndex, newIndex)
                command.execute()
                layersPane.selectionModel.select(newIndex)
                fire(RedrawMapRequestEvent)
@@ -71,12 +95,12 @@ class MapLayersView : View() {
 
          button(graphic = FontIcon("fa-chevron-down")) {
             enableWhen(
-               editorStateVM.selectedLayerProperty.lessThan(mapVM.layers.sizeProperty().minus(1))
-                  .and(editorStateVM.selectedLayerProperty.greaterThanOrEqualTo(0))
+               editorStateVM.selectedLayerIndexProperty.lessThan(mapVM.layers.sizeProperty().minus(1))
+                  .and(editorStateVM.selectedLayerIndexProperty.greaterThanOrEqualTo(0))
             )
             action {
-               val newIndex = editorStateVM.selectedLayer + 1
-               val command = MoveLayerCommand(mapVM.item, editorStateVM.selectedLayer, newIndex)
+               val newIndex = editorStateVM.selectedLayerIndex + 1
+               val command = MoveLayerCommand(mapVM.item, editorStateVM.selectedLayerIndex, newIndex)
                command.execute()
                layersPane.selectionModel.select(newIndex)
                fire(RedrawMapRequestEvent)
@@ -85,9 +109,9 @@ class MapLayersView : View() {
          }
 
          button(graphic = FontIcon("fa-trash")) {
-            enableWhen(editorStateVM.selectedLayerProperty.greaterThanOrEqualTo(0))
+            enableWhen(editorStateVM.selectedLayerIndexProperty.greaterThanOrEqualTo(0))
             action {
-               var index = editorStateVM.selectedLayer
+               var index = editorStateVM.selectedLayerIndex
                val command = RemoveLayerCommand(mapVM.item, index)
                command.execute()
 
@@ -138,6 +162,8 @@ class MapLayersView : View() {
 
          graphic = when (item) {
             is TileLayer -> FontIcon("fa-th")
+            is ObjectLayer -> FontIcon("fa-cube")
+            is ImageLayer -> FontIcon("fa-image")
             else -> throw IllegalStateException("Unknown layer type")
          }
       }
