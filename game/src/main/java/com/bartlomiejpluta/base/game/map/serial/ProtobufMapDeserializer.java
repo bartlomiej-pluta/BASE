@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.game.map.serial;
 
 import com.bartlomiejpluta.base.core.error.AppException;
+import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.game.map.model.GameMap;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import com.bartlomiejpluta.base.proto.GameMapProto;
@@ -58,6 +59,19 @@ public class ProtobufMapDeserializer extends MapDeserializer {
 
    private void deserializeObjectLayer(GameMap map, GameMapProto.Layer proto) {
       var layer = map.createObjectLayer();
+      var columns = map.getColumns();
+      var passageMap = proto.getObjectLayer().getPassageMapList();
+
+      for (var i = 0; i < passageMap.size(); ++i) {
+         map.setPassageAbility(layer, i / columns, i % columns, switch (passageMap.get(i)) {
+            case ALLOW -> PassageAbility.ALLOW;
+            case BLOCK -> PassageAbility.BLOCK;
+            case RIGHT_ONLY -> PassageAbility.RIGHT_ONLY;
+            case LEFT_ONLY -> PassageAbility.LEFT_ONLY;
+            case DOWN_ONLY -> PassageAbility.DOWN_ONLY;
+            case UP_ONLY -> PassageAbility.UP_ONLY;
+         });
+      }
    }
 
    private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {

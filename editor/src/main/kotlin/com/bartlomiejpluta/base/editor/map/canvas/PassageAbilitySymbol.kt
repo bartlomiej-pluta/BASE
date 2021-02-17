@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
 object PassageAbilitySymbol {
-   private const val SIZE = 0.6
+   private const val SIZE = 0.7
 
    fun render(gc: GraphicsContext, x: Double, y: Double, w: Double, h: Double, passageAbility: PassageAbility) {
       val fill = gc.fill

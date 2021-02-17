@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.serial
 
+import com.bartlomiejpluta.base.editor.map.model.enumeration.PassageAbility
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
@@ -31,7 +32,19 @@ class ProtobufMapSerializer : MapSerializer {
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setTileLayer(it).build() }
 
-         is ObjectLayer -> GameMapProto.ObjectLayer.newBuilder()
+         is ObjectLayer -> layer.passageMap.flatMap { it.asIterable() }
+            .fold(GameMapProto.ObjectLayer.newBuilder()) { acc, passage ->
+               acc.addPassageMap(
+                  when (passage) {
+                     PassageAbility.ALLOW -> GameMapProto.PassageAbility.ALLOW
+                     PassageAbility.BLOCK -> GameMapProto.PassageAbility.BLOCK
+                     PassageAbility.UP_ONLY -> GameMapProto.PassageAbility.UP_ONLY
+                     PassageAbility.DOWN_ONLY -> GameMapProto.PassageAbility.DOWN_ONLY
+                     PassageAbility.LEFT_ONLY -> GameMapProto.PassageAbility.LEFT_ONLY
+                     PassageAbility.RIGHT_ONLY -> GameMapProto.PassageAbility.RIGHT_ONLY
+                  }
+               )
+            }
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }
 
