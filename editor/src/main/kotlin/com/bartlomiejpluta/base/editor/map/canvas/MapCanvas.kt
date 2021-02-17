@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -48,6 +49,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private fun dispatchLayerRender(gc: GraphicsContext, layer: Layer) {
       when (layer) {
          is TileLayer -> renderTileLayer(gc, layer)
+         is ObjectLayer -> renderObjectPassageMap(gc, layer)
       }
    }
 
@@ -70,12 +72,26 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       }
    }
 
-   private fun renderGrid(gc: GraphicsContext) {
-      if(!editorStateVM.showGrid) {
+   private fun renderObjectPassageMap(gc: GraphicsContext, objectLayer: ObjectLayer) {
+      if (editorStateVM.selectedLayer !is ObjectLayer) {
          return
       }
 
+      for ((row, columns) in objectLayer.passageMap.withIndex()) {
+         for ((column, passage) in columns.withIndex()) {
+            PassageAbilitySymbol.render(gc, column * tileWidth, row * tileHeight, tileWidth, tileHeight, passage)
+         }
+      }
+   }
+
+   private fun renderGrid(gc: GraphicsContext) {
+      if (!editorStateVM.showGrid) {
+         return
+      }
+
+      val lineWidth = gc.lineWidth
       gc.lineWidth = 1.5
+      gc.setLineDashes(0.7)
 
       gc.strokeLine(0.0, 0.0, map.width, 0.0)
       gc.strokeLine(0.0, 0.0, 0.0, map.height)
@@ -89,6 +105,8 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       for (column in 0 until map.columns) {
          gc.strokeLine(column * tileWidth, 0.0, column * tileWidth, map.height)
       }
+
+      gc.lineWidth = lineWidth
    }
 
    companion object {

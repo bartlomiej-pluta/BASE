@@ -37,7 +37,7 @@ class ProtobufMapDeserializer : MapDeserializer {
    private fun deserializeLayer(rows: Int, columns: Int, tileSet: TileSet, proto: GameMapProto.Layer): Layer {
       return when {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, tileSet, proto)
-         proto.hasObjectLayer() -> deserializeObjectLayer(proto)
+         proto.hasObjectLayer() -> deserializeObjectLayer(rows, columns, proto)
          proto.hasImageLayer() -> deserializeImageLayer(proto)
 
          else -> throw IllegalStateException("Not supported layer type")
@@ -57,8 +57,8 @@ class ProtobufMapDeserializer : MapDeserializer {
       return TileLayer(proto.name, rows, columns, layer)
    }
 
-   private fun deserializeObjectLayer(proto: GameMapProto.Layer): Layer {
-      return ObjectLayer(proto.name)
+   private fun deserializeObjectLayer(rows: Int, columns: Int, proto: GameMapProto.Layer): Layer {
+      return ObjectLayer(proto.name, rows, columns)
    }
 
    private fun deserializeImageLayer(proto: GameMapProto.Layer): Layer {

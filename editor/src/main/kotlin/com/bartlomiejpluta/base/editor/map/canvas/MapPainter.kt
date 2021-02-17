@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
@@ -27,6 +28,7 @@ class MapPainter(
       editorStateVM.selectedLayerProperty.addListener { _, _, layer ->
          cursor = when (layer) {
             is TileLayer -> TilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
+            is ObjectLayer -> ObjectPaintingCursor(tileWidth, tileHeight, editorStateVM)
             else -> null
          }
       }
@@ -56,6 +58,7 @@ class MapPainter(
       if (event.button == MouseButton.PRIMARY && editorStateVM.selectedLayerIndex >= 0) {
          currentTrace = when (editorStateVM.selectedLayer) {
             is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
+            is ObjectLayer -> ObjectPaintingTrace(mapVM, "Toggle passage")
             else -> null
          }?.apply { beginTrace(editorStateVM, brushVM) }
       }

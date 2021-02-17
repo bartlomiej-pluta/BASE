@@ -5,9 +5,12 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.map.controller.MapController
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import javafx.beans.binding.Bindings
 import javafx.scene.control.ToggleGroup
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
@@ -27,6 +30,16 @@ class MapToolbarView : View() {
          selectedValueProperty<BrushMode>().value = brush.mode
       }
    }
+
+   private val isTileLayerSelected = Bindings.createBooleanBinding(
+      { editorStateVM.selectedLayer is TileLayer },
+      editorStateVM.selectedLayerProperty
+   )
+
+   private val isObjectLayerSelected = Bindings.createBooleanBinding(
+      { editorStateVM.selectedLayer is ObjectLayer },
+      editorStateVM.selectedLayerProperty
+   )
 
    override val root = toolbar {
       button(graphic = FontIcon("fa-floppy-o")) {
@@ -71,6 +84,8 @@ class MapToolbarView : View() {
       togglebutton(value = BrushMode.PAINTING_MODE, group = brushMode) {
          graphic = FontIcon("fa-paint-brush")
 
+         enableWhen(isTileLayerSelected.or(isObjectLayerSelected))
+
          action {
             brushVM.item = brushVM.withMode(BrushMode.PAINTING_MODE)
             brushVM.commit()
@@ -79,6 +94,8 @@ class MapToolbarView : View() {
 
       togglebutton(value = BrushMode.ERASING_MODE, group = brushMode) {
          graphic = FontIcon("fa-eraser")
+
+         enableWhen(isTileLayerSelected.or(isObjectLayerSelected))
 
          action {
             brushVM.item = brushVM.withMode(BrushMode.ERASING_MODE)
@@ -92,6 +109,8 @@ class MapToolbarView : View() {
          majorTickUnit = 1.0
          isSnapToTicks = true
          minorTickCount = 0
+
+         enableWhen(isTileLayerSelected)
 
          valueProperty().addListener { _, _, newValue ->
             brushVM.item = brushVM.withRange(newValue.toInt())

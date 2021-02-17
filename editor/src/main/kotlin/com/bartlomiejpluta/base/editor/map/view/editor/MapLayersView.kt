@@ -62,7 +62,7 @@ class MapLayersView : View() {
 
             item("Object Layer", graphic = FontIcon("fa-cube")) {
                action {
-                  val layer = ObjectLayer("Layer ${mapVM.layers.size + 1}")
+                  val layer = ObjectLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
                   val command = CreateLayerCommand(mapVM.item, layer)
                   command.execute()
                   layersPane.selectionModel.select(mapVM.layers.size - 1)
