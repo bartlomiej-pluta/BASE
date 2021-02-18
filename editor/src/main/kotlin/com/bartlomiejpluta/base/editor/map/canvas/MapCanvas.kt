@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
@@ -50,6 +51,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       when (layer) {
          is TileLayer -> renderTileLayer(gc, layer)
          is ObjectLayer -> renderObjectPassageMap(gc, layer)
+         is ImageLayer -> renderImageLayer(gc, layer)
       }
    }
 
@@ -82,6 +84,18 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
             PassageAbilitySymbol.render(gc, column * tileWidth, row * tileHeight, tileWidth, tileHeight, passage)
          }
       }
+   }
+
+   private fun renderImageLayer(gc: GraphicsContext, imageLayer: ImageLayer) {
+      val alpha = gc.globalAlpha
+      val color = gc.fill
+
+      gc.globalAlpha = imageLayer.alpha / 100.0
+      gc.fill = Color.color(imageLayer.red / 100.0, imageLayer.green / 100.0, imageLayer.blue / 100.0)
+      gc.fillRect(0.0, 0.0, map.width, map.height)
+
+      gc.globalAlpha = alpha
+      gc.fill = color
    }
 
    private fun renderGrid(gc: GraphicsContext) {

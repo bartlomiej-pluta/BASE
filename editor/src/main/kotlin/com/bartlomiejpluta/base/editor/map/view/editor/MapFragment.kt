@@ -18,6 +18,7 @@ class MapFragment : Fragment() {
    private val tileSetView = find<TileSetView>()
    private val toolbarView = find<MapToolbarView>()
    private val statusBarView = find<MapStatusBarView>()
+   private val layerParameters = find<MapLayerParameters>()
 
    private val isTileLayerSelected = Bindings.createBooleanBinding(
       { editorStateVM.selectedLayer is TileLayer },
@@ -40,6 +41,10 @@ class MapFragment : Fragment() {
             this += tileSetView.root.apply {
                maxHeightProperty().bind(this@item.heightProperty())
             }
+         }
+
+         item("Layer Parameters", expanded = false) {
+            this += layerParameters
          }
       }
 
