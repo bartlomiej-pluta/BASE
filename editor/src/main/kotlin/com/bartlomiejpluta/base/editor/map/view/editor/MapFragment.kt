@@ -31,6 +31,8 @@ class MapFragment : Fragment() {
       center = mapView.root
 
       right = drawer(multiselect = true) {
+         maxWidth = 256.0
+
          item("Layers", expanded = true) {
             this += layersView.root
          }
