@@ -2,6 +2,8 @@ package com.bartlomiejpluta.base.editor.common.parameter.component
 
 import com.bartlomiejpluta.base.editor.common.parameter.model.Parameter
 import javafx.scene.control.TableCell
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 
 class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
 
@@ -26,6 +28,11 @@ class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
       }
    }
 
+   override fun commitEdit(newValue: Any?) {
+      super.commitEdit(newValue)
+      tableView.items[index]?.commit()
+   }
+
    override fun startEdit() {
       if (index < 0 || index >= tableView.items.size) {
          return
@@ -37,7 +44,15 @@ class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
 
       super.startEdit()
       text = null
-      graphic = tableView.items[index].editor
+      val parameter = tableView.items[index]
+      graphic = parameter.editor.apply {
+         addEventHandler(KeyEvent.KEY_PRESSED) {
+            if (it.code == KeyCode.ENTER) {
+               commitEdit(parameter.value)
+               it.consume()
+            }
+         }
+      }
    }
 
    override fun cancelEdit() {

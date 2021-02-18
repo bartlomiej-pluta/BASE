@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.common.parameter.model
 
+import javafx.beans.property.Property
 import javafx.scene.control.Spinner
 
 class IntegerParameter(
@@ -8,9 +9,13 @@ class IntegerParameter(
    minValue: Int,
    maxValue: Int,
    editable: Boolean = true,
-) : Parameter<Int>(key, initialValue, editable) {
-   override val editor = Spinner<Int>(minValue, maxValue, initialValue).apply {
-      isEditable = true
-      valueFactory.valueProperty().bindBidirectional(valueProperty)
+   autocommit: Boolean = false
+) : Parameter<Int>(key, initialValue, editable, autocommit) {
+   override val editor = Spinner<Int>(minValue, maxValue, initialValue).apply { isEditable = true }
+   override val editorValueProperty: Property<Int>
+      get() = editor.valueFactory.valueProperty()
+
+   init {
+      super.init()
    }
 }
