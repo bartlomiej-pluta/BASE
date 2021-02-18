@@ -72,7 +72,7 @@ class MapLayersView : View() {
 
             item("Color Layer", graphic = FontIcon("fa-paint-brush")) {
                action {
-                  val layer = ColorLayer("Layer ${mapVM.layers.size + 1}")
+                  val layer = ColorLayer("Layer ${mapVM.layers.size + 1}", 100, 100, 100, 100)
                   val command = CreateLayerCommand(mapVM.item, layer)
                   command.execute()
                   layersPane.selectionModel.select(mapVM.layers.size - 1)

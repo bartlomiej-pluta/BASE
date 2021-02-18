@@ -49,6 +49,10 @@ class ProtobufMapSerializer : MapSerializer {
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }
 
          is ColorLayer -> GameMapProto.ColorLayer.newBuilder()
+            .setRed(layer.red)
+            .setGreen(layer.green)
+            .setBlue(layer.blue)
+            .setAlpha(layer.alpha)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setColorLayer(it).build() }
 

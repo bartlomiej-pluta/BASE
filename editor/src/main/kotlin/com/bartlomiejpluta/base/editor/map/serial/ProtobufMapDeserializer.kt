@@ -77,6 +77,12 @@ class ProtobufMapDeserializer : MapDeserializer {
    }
 
    private fun deserializeColorLayer(proto: GameMapProto.Layer): Layer {
-      return ColorLayer(proto.name)
+      return ColorLayer(
+         name = proto.name,
+         red = proto.colorLayer.red,
+         green = proto.colorLayer.green,
+         blue = proto.colorLayer.blue,
+         alpha = proto.colorLayer.alpha
+      )
    }
 }

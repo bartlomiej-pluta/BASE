@@ -39,11 +39,14 @@ enum PassageAbility {
   RIGHT_ONLY = 5;
 }
 
-message ImageLayer {
-  // TODO r, g, b, alpha
+message ColorLayer {
+  required uint32 red = 1;
+  required uint32 green = 2;
+  required uint32 blue = 3;
+  required uint32 alpha = 4;
 }
 
-message ColorLayer {
+message ImageLayer {
   // TODO imageUID
   // TODO imageMode
 }
