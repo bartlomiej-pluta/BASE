@@ -1,11 +1,21 @@
 package com.bartlomiejpluta.base.editor.common.parameter.component
 
 import com.bartlomiejpluta.base.editor.common.parameter.model.Parameter
+import javafx.event.EventHandler
 import javafx.scene.control.TableCell
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 
 class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
+   private val parameter: Parameter<*>?
+      get() = tableView.items.getOrNull(index)
+
+   private val commitKeyHandler = EventHandler<KeyEvent> {
+      if (it.code == KeyCode.ENTER) {
+         commitEdit(null)
+         it.consume()
+      }
+   }
 
    override fun updateItem(item: Any?, empty: Boolean) {
       super.updateItem(item, empty)
@@ -18,19 +28,14 @@ class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
 
          isEditing -> {
             text = null
-            graphic = tableView.items[index].editor
+            graphic = parameter?.editor
          }
 
          else -> {
-            text = tableView.items[index].valueString
+            text = parameter?.valueString
             graphic = null
          }
       }
-   }
-
-   override fun commitEdit(newValue: Any?) {
-      super.commitEdit(newValue)
-      tableView.items[index]?.commit()
    }
 
    override fun startEdit() {
@@ -38,26 +43,26 @@ class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
          return
       }
 
-      if (!tableView.items[index].editable) {
+      if (parameter?.editable?.let { !it } == true) {
          return
       }
 
       super.startEdit()
       text = null
-      val parameter = tableView.items[index]
-      graphic = parameter.editor.apply {
-         addEventHandler(KeyEvent.KEY_PRESSED) {
-            if (it.code == KeyCode.ENTER) {
-               commitEdit(parameter.value)
-               it.consume()
-            }
-         }
-      }
+      graphic = parameter?.editor
+      parameter?.editor?.addEventHandler(KeyEvent.KEY_PRESSED, commitKeyHandler)
+   }
+
+   override fun commitEdit(newValue: Any?) {
+      parameter?.commit()
+      super.commitEdit(parameter?.value)
+      parameter?.editor?.removeEventFilter(KeyEvent.KEY_PRESSED, commitKeyHandler)
    }
 
    override fun cancelEdit() {
       super.cancelEdit()
-      text = tableView.items[index]?.valueString
+      text = parameter?.valueString
       graphic = null
+      parameter?.editor?.removeEventFilter(KeyEvent.KEY_PRESSED, commitKeyHandler)
    }
 }

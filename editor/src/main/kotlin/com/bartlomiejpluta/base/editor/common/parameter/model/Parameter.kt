@@ -9,7 +9,8 @@ abstract class Parameter<T>(
    key: String,
    initialValue: T? = null,
    editable: Boolean = true,
-   private val autocommit: Boolean = false
+   private val autocommit: Boolean = false,
+   private val onCommit: (oldValue: T, newValue: T, submit: () -> Unit) -> Unit = { _, _, submit -> submit() }
 ) {
    val keyProperty = ReadOnlyStringWrapper(key)
    val key by keyProperty
@@ -22,13 +23,18 @@ abstract class Parameter<T>(
 
    fun commit() {
       if (!autocommit) {
-         value = editorValueProperty.value
+         onCommit(value, editorValueProperty.value, this::submit)
       }
+   }
+
+   private fun submit() {
+      value = editorValueProperty.value
    }
 
    protected fun init() {
       if (autocommit) {
          editorValueProperty.bindBidirectional(valueProperty)
+         valueProperty.addListener { _, oldValue, newValue -> onCommit(oldValue, newValue, NOOP) }
       } else {
          editorValueProperty.value = value
          valueProperty.addListener { _, _, v -> editorValueProperty.value = v }
@@ -41,4 +47,8 @@ abstract class Parameter<T>(
 
    open val valueString: String
       get() = value.toString()
+
+   companion object {
+      private val NOOP = {}
+   }
 }
