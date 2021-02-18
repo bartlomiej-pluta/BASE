@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.game.map.serial;
 
 import com.bartlomiejpluta.base.core.error.AppException;
+import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.game.map.model.GameMap;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProtobufMapDeserializer extends MapDeserializer {
+   private final MeshManager meshManager;
    private final TileSetManager tileSetManager;
 
    @Override
@@ -77,7 +79,14 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    }
 
    private void deserializeColorLayer(GameMap map, GameMapProto.Layer proto) {
-      // TODO(return new ColorLayer(...))
+      var protoColorLayer = proto.getColorLayer();
+      map.createColorLayer(
+            meshManager,
+            protoColorLayer.getRed() / 100.0f,
+            protoColorLayer.getGreen() / 100.0f,
+            protoColorLayer.getBlue() / 100.0f,
+            protoColorLayer.getAlpha() / 100.0f
+      );
    }
 
    private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {

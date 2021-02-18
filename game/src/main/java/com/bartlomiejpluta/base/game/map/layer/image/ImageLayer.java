@@ -9,25 +9,17 @@ import com.bartlomiejpluta.base.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.game.map.model.GameMap;
 
 public class ImageLayer implements Layer {
-
-   public enum Mode {
-      NORMAL,
-      FIT_SCREEN,
-      FIT_MAP
-   }
-
    private final float mapWidth;
    private final float mapHeight;
 
    private Image image;
    private float imageInitialWidth;
    private float imageInitialHeight;
-   private final Mode mode;
+   private final ImageLayerMode mode;
 
-   public ImageLayer(GameMap map, Image image, Mode mode) {
-      var stepSize = map.getStepSize();
-      this.mapWidth = map.getColumns() * stepSize.x;
-      this.mapHeight = map.getRows() * stepSize.y;
+   public ImageLayer(GameMap map, Image image, ImageLayerMode mode) {
+      this.mapWidth = map.getWidth();
+      this.mapHeight = map.getHeight();
       this.mode = mode;
       setImage(image);
    }
