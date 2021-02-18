@@ -34,6 +34,8 @@ public class ProtobufMapDeserializer extends MapDeserializer {
          deserializeTileLayer(map, proto);
       } else if (proto.hasObjectLayer()) {
          deserializeObjectLayer(map, proto);
+      } else if (proto.hasColorLayer()) {
+         deserializeColorLayer(map, proto);
       } else if (proto.hasImageLayer()) {
          deserializeImageLayer(map, proto);
       } else {
@@ -72,6 +74,10 @@ public class ProtobufMapDeserializer extends MapDeserializer {
             case UP_ONLY -> PassageAbility.UP_ONLY;
          });
       }
+   }
+
+   private void deserializeColorLayer(GameMap map, GameMapProto.Layer proto) {
+      // TODO(return new ColorLayer(...))
    }
 
    private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {

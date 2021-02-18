@@ -7,7 +7,7 @@ import com.bartlomiejpluta.base.editor.command.model.map.RemoveLayerCommand
 import com.bartlomiejpluta.base.editor.command.model.map.RenameLayerCommand
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
-import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
@@ -50,7 +50,7 @@ class MapLayersView : View() {
 
       bottom = toolbar {
          menubutton(graphic = FontIcon("fa-plus")) {
-            item("Tile Layer", graphic = FontIcon("fa-th")) {
+            item("Tile Layer", graphic = FontIcon("fa-th-large")) {
                action {
                   val layer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
                   val command = CreateLayerCommand(mapVM.item, layer)
@@ -70,9 +70,9 @@ class MapLayersView : View() {
                }
             }
 
-            item("Image Layer", graphic = FontIcon("fa-image")) {
+            item("Color Layer", graphic = FontIcon("fa-paint-brush")) {
                action {
-                  val layer = ImageLayer("Layer ${mapVM.layers.size + 1}")
+                  val layer = ColorLayer("Layer ${mapVM.layers.size + 1}")
                   val command = CreateLayerCommand(mapVM.item, layer)
                   command.execute()
                   layersPane.selectionModel.select(mapVM.layers.size - 1)
@@ -161,9 +161,9 @@ class MapLayersView : View() {
          text = item.name
 
          graphic = when (item) {
-            is TileLayer -> FontIcon("fa-th")
+            is TileLayer -> FontIcon("fa-th-large")
             is ObjectLayer -> FontIcon("fa-cube")
-            is ImageLayer -> FontIcon("fa-image")
+            is ColorLayer -> FontIcon("fa-paint-brush")
             else -> throw IllegalStateException("Unknown layer type")
          }
       }

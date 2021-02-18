@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
 import tornadofx.setValue
 
-class ImageLayer(name: String) : Layer {
+class ColorLayer(name: String) : Layer {
    override val nameProperty = SimpleStringProperty(name)
 
    override var name by nameProperty

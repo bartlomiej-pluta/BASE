@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.serial
 
 import com.bartlomiejpluta.base.editor.map.model.enumeration.PassageAbility
-import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
@@ -39,7 +39,7 @@ class ProtobufMapDeserializer : MapDeserializer {
       return when {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, tileSet, proto)
          proto.hasObjectLayer() -> deserializeObjectLayer(rows, columns, proto)
-         proto.hasImageLayer() -> deserializeImageLayer(proto)
+         proto.hasColorLayer() -> deserializeColorLayer(proto)
 
          else -> throw IllegalStateException("Not supported layer type")
       }
@@ -76,7 +76,7 @@ class ProtobufMapDeserializer : MapDeserializer {
       return ObjectLayer(proto.name, rows, columns, passageMap)
    }
 
-   private fun deserializeImageLayer(proto: GameMapProto.Layer): Layer {
-      return ImageLayer(proto.name)
+   private fun deserializeColorLayer(proto: GameMapProto.Layer): Layer {
+      return ColorLayer(proto.name)
    }
 }

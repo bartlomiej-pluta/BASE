@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
-import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
@@ -51,7 +51,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       when (layer) {
          is TileLayer -> renderTileLayer(gc, layer)
          is ObjectLayer -> renderObjectPassageMap(gc, layer)
-         is ImageLayer -> renderImageLayer(gc, layer)
+         is ColorLayer -> renderColorLayer(gc, layer)
       }
    }
 
@@ -86,12 +86,12 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       }
    }
 
-   private fun renderImageLayer(gc: GraphicsContext, imageLayer: ImageLayer) {
+   private fun renderColorLayer(gc: GraphicsContext, colorLayer: ColorLayer) {
       val alpha = gc.globalAlpha
       val color = gc.fill
 
-      gc.globalAlpha = imageLayer.alpha / 100.0
-      gc.fill = Color.color(imageLayer.red / 100.0, imageLayer.green / 100.0, imageLayer.blue / 100.0)
+      gc.globalAlpha = colorLayer.alpha / 100.0
+      gc.fill = Color.color(colorLayer.red / 100.0, colorLayer.green / 100.0, colorLayer.blue / 100.0)
       gc.fillRect(0.0, 0.0, map.width, map.height)
 
       gc.globalAlpha = alpha

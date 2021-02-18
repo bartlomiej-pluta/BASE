@@ -17,7 +17,8 @@ message Layer {
   oneof layer {
     TileLayer tileLayer = 2;
     ObjectLayer objectLayer = 3;
-    ImageLayer imageLayer = 4;
+    ColorLayer colorLayer = 4;
+    ImageLayer imageLayer = 5;
   }
 }
 
@@ -39,6 +40,10 @@ enum PassageAbility {
 }
 
 message ImageLayer {
-  // TODO optional imageUID
   // TODO r, g, b, alpha
+}
+
+message ColorLayer {
+  // TODO imageUID
+  // TODO imageMode
 }
