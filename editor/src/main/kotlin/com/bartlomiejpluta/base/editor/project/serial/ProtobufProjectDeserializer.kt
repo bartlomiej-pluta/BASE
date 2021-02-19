@@ -14,15 +14,20 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       val proto = ProjectProto.Project.parseFrom(input)
       val project = Project()
       project.name = proto.name
-      project.maps.addAll(proto.mapsList.map(this::deserializeMap))
-      project.tileSets.addAll(proto.tileSetsList.map(this::deserializeTileSet))
+      project.maps.addAll(proto.mapsList.map { deserializeMap(project, it) })
+      project.tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(project, it) })
 
       return project
    }
 
-   private fun deserializeMap(map: ProjectProto.GameMapAsset) = GameMapAsset(uid = map.uid, name = map.name)
+   private fun deserializeMap(project: Project, map: ProjectProto.GameMapAsset) = GameMapAsset(
+      project = project,
+      uid = map.uid,
+      name = map.name
+   )
 
-   private fun deserializeTileSet(tileSet: ProjectProto.TileSetAsset) = TileSetAsset(
+   private fun deserializeTileSet(project: Project, tileSet: ProjectProto.TileSetAsset) = TileSetAsset(
+      project = project,
       uid = tileSet.uid,
       source = tileSet.source,
       name = tileSet.name,

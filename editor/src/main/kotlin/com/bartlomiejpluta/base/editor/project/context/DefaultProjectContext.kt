@@ -69,7 +69,7 @@ class DefaultProjectContext : ProjectContext {
    override fun importMap(name: String, map: GameMap) {
       project?.let {
          UID.next(it.maps.map(Asset::uid)).let { uid ->
-            val asset = GameMapAsset(uid, name)
+            val asset = GameMapAsset(it, uid, name)
             map.uid = uid
             it.maps += asset
 
@@ -101,7 +101,7 @@ class DefaultProjectContext : ProjectContext {
             val source = "$uid.${builder.file.extension}"
             val targetFile = File(it.tileSetsDirectory, source)
             builder.file.copyTo(targetFile)
-            it.tileSets += TileSetAsset(uid, source, builder.name, builder.rows, builder.columns)
+            it.tileSets += TileSetAsset(it, uid, source, builder.name, builder.rows, builder.columns)
 
             save()
          }

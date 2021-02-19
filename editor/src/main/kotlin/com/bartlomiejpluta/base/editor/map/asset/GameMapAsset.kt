@@ -1,13 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.asset
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
-import javafx.beans.property.SimpleStringProperty
-import tornadofx.getValue
-import tornadofx.setValue
+import com.bartlomiejpluta.base.editor.project.model.Project
 
-class GameMapAsset(override val uid: String, name: String) : Asset {
-   override val source = "$uid.dat"
-
-   val nameProperty = SimpleStringProperty(name)
-   override var name by nameProperty
-}
+class GameMapAsset(project: Project, uid: String, name: String) :
+   Asset(project.mapsDirectoryProperty, uid, "$uid.dat", name)
