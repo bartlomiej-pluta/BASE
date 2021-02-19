@@ -8,6 +8,7 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
 
 
@@ -16,6 +17,44 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private var tileWidth = map.tileWidth
    private var tileHeight = map.tileHeight
 
+   private val grid = WritableImage(map.width.toInt(), map.height.toInt())
+   private val background = WritableImage(map.width.toInt(), map.height.toInt())
+
+   init {
+      createGridImage()
+      createBackgroundImage()
+   }
+
+   private fun createGridImage() {
+      val writer = grid.pixelWriter
+      val color = Color.BLACK
+      for (x in 0 until map.width.toInt()) {
+         for (y in 0 until map.height.toInt()) {
+            if (x % tileWidth.toInt() == 0) {
+               writer.setColor(x, y, color)
+            }
+
+            if (y % tileHeight.toInt() == 0) {
+               writer.setColor(x, y, color)
+            }
+         }
+      }
+   }
+
+   private fun createBackgroundImage() {
+      val writer = background.pixelWriter
+
+      for (x in 0 until map.width.toInt()) {
+         for (y in 0 until map.height.toInt()) {
+            val color = when (((x / tileWidth.toInt()) + (y / tileHeight.toInt())) % 2) {
+               0 -> BACKGROUND_COLOR1
+               else -> BACKGROUND_COLOR2
+            }
+
+            writer.setColor(x, y, color)
+         }
+      }
+   }
 
    override fun render(gc: GraphicsContext) {
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
@@ -56,12 +95,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderBackground(gc: GraphicsContext) {
-      for (row in 0 until map.rows) {
-         for (column in 0 until map.columns) {
-            gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
-            gc.fillRect(column * tileWidth, row * tileHeight, tileWidth, tileHeight)
-         }
-      }
+      gc.drawImage(background, 0.0, 0.0)
    }
 
    private fun renderTileLayer(gc: GraphicsContext, tileLayer: TileLayer) {
@@ -99,28 +133,9 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderGrid(gc: GraphicsContext) {
-      if (!editorStateVM.showGrid) {
-         return
+      if (editorStateVM.showGrid) {
+         gc.drawImage(grid, 0.0, 0.0)
       }
-
-      val lineWidth = gc.lineWidth
-      gc.lineWidth = 1.5
-      gc.setLineDashes(0.7)
-
-      gc.strokeLine(0.0, 0.0, map.width, 0.0)
-      gc.strokeLine(0.0, 0.0, 0.0, map.height)
-      gc.strokeLine(map.width, 0.0, map.width, map.height)
-      gc.strokeLine(0.0, map.height, map.width, map.height)
-
-      for (row in 0 until map.rows) {
-         gc.strokeLine(0.0, row * tileHeight, map.width, row * tileHeight)
-      }
-
-      for (column in 0 until map.columns) {
-         gc.strokeLine(column * tileWidth, 0.0, column * tileWidth, map.height)
-      }
-
-      gc.lineWidth = lineWidth
    }
 
    companion object {
