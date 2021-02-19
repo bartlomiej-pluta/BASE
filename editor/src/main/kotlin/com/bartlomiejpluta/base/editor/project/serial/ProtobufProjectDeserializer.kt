@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
+import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
@@ -16,6 +17,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       project.name = proto.name
       project.maps.addAll(proto.mapsList.map { deserializeMap(project, it) })
       project.tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(project, it) })
+      project.images.addAll(proto.imagesList.map { deserializeImage(project, it) })
 
       return project
    }
@@ -33,5 +35,12 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = tileSet.name,
       rows = tileSet.rows,
       columns = tileSet.columns
+   )
+
+   private fun deserializeImage(project: Project, image: ProjectProto.ImageAsset) = ImageAsset(
+      project = project,
+      uid = image.uid,
+      source = image.source,
+      name = image.name
    )
 }

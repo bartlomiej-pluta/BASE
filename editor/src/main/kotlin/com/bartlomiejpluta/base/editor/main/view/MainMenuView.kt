@@ -42,6 +42,14 @@ class MainMenuView : View() {
                mainController.importTileSet()
             }
          }
+
+         item("Import Image...") {
+            enableWhen(projectContext.projectProperty.isNotNull)
+
+            action {
+               mainController.importImage()
+            }
+         }
       }
 
       menu("Edit") {

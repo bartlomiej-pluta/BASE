@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.main.controller
 
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
+import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.wizard.MapCreationWizard
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
@@ -10,7 +12,7 @@ import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.view.ProjectSettingsFragment
 import com.bartlomiejpluta.base.editor.project.viewmodel.ProjectVM
 import com.bartlomiejpluta.base.editor.tileset.view.importing.ImportTileSetFragment
-import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetBuilderVM
+import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
 import javafx.stage.FileChooser
 import org.springframework.stereotype.Component
 import tornadofx.*
@@ -76,13 +78,27 @@ class MainController : Controller() {
    }
 
    fun importTileSet() {
-      val vm = TileSetAssetBuilderVM()
+      val vm = TileSetAssetDataVM()
       val scope = Scope()
       setInScope(vm, scope)
 
       find<ImportTileSetFragment>(scope).apply {
          onComplete {
             projectContext.importTileSet(it)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
+   fun importImage() {
+      val vm = ImageAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportImageFragment>(scope).apply {
+         onComplete {
+            projectContext.importImage(it)
          }
 
          openModal(block = true, resizable = false)

@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.project.context
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
+import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.serial.MapDeserializer
@@ -9,7 +11,7 @@ import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.project.serial.ProjectDeserializer
 import com.bartlomiejpluta.base.editor.project.serial.ProjectSerializer
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
-import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetBuilder
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import com.bartlomiejpluta.base.editor.util.uid.UID
 import javafx.beans.property.ObjectProperty
@@ -95,13 +97,13 @@ class DefaultProjectContext : ProjectContext {
       }
    }
 
-   override fun importTileSet(builder: TileSetAssetBuilder) {
+   override fun importTileSet(data: TileSetAssetData) {
       project?.let {
          UID.next(it.tileSets.map(Asset::uid)).let { uid ->
-            val source = "$uid.${builder.file.extension}"
+            val source = "$uid.${data.file.extension}"
             val targetFile = File(it.tileSetsDirectory, source)
-            builder.file.copyTo(targetFile)
-            it.tileSets += TileSetAsset(it, uid, source, builder.name, builder.rows, builder.columns)
+            data.file.copyTo(targetFile)
+            it.tileSets += TileSetAsset(it, uid, source, data.name, data.rows, data.columns)
 
             save()
          }
@@ -118,4 +120,25 @@ class DefaultProjectContext : ProjectContext {
          TileSet(uid, asset.name, image, asset.rows, asset.columns)
       } ?: throw IllegalStateException("There is no open project in the context")
    }
+
+   override fun importImage(data: ImageAssetData) {
+      project?.let {
+         UID.next(it.images.map(Asset::uid)).let { uid ->
+            val source = "$uid.${data.file.extension}"
+            val targetFile = File(it.imagesDirectory, source)
+            data.file.copyTo(targetFile)
+            it.images += ImageAsset(it, uid, source, data.name)
+
+            save()
+         }
+      }
+   }
+
+   override fun loadImage(uid: String) = project?.let {
+      val asset = it.images.firstOrNull { image -> image.uid == uid }
+         ?: throw IllegalStateException("The Image with uid [$uid] does not exist ")
+
+      File(it.imagesDirectory, asset.source).inputStream().use { fis -> Image(fis) }
+   } ?: throw IllegalStateException("There is no open project in the context")
+
 }

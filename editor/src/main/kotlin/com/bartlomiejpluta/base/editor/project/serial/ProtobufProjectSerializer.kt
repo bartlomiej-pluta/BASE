@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
+import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
@@ -15,6 +16,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.name = item.name
       proto.addAllMaps(item.maps.map(this::serializeMap))
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
+      proto.addAllImages(item.images.map(this::serializeImage))
       proto.build().writeTo(output)
    }
 
@@ -30,5 +32,11 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(tileSet.name)
       .setRows(tileSet.rows)
       .setColumns(tileSet.columns)
+      .build()
+
+   private fun serializeImage(image: ImageAsset) = ProjectProto.ImageAsset.newBuilder()
+      .setUid(image.uid)
+      .setSource(image.source)
+      .setName(image.name)
       .build()
 }

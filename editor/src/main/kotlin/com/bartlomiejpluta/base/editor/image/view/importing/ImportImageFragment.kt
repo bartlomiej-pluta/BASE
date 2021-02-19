@@ -1,18 +1,18 @@
-package com.bartlomiejpluta.base.editor.tileset.view.importing
+package com.bartlomiejpluta.base.editor.image.view.importing
 
-import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
-import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
+import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
+import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Cursor
 import javafx.scene.image.Image
 import javafx.stage.FileChooser
 import tornadofx.*
 
-class ImportTileSetFragment : Fragment("Import Tile Set") {
-   private val dataVM = find<TileSetAssetDataVM>()
+class ImportImageFragment : Fragment("Import Image") {
+   private val dataVM = find<ImageAssetDataVM>()
    private val imagePreview = SimpleObjectProperty<Image?>()
 
-   private var onCompleteConsumer: ((TileSetAssetData) -> Unit)? = null
+   private var onCompleteConsumer: ((ImageAssetData) -> Unit)? = null
 
    init {
       dataVM.fileProperty.addListener { _, _, file ->
@@ -23,26 +23,26 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
       }
    }
 
-   fun onComplete(consumer: (TileSetAssetData) -> Unit) {
+   fun onComplete(consumer: (ImageAssetData) -> Unit) {
       this.onCompleteConsumer = consumer
    }
 
    override val root = form {
       prefHeight = 480.0
 
-      fieldset("Import Tile Set") {
+      fieldset("Import Image") {
          hbox {
             vbox {
                scrollpane {
                   prefWidth = 300.0
                   prefHeightProperty().bind(this@form.heightProperty())
                   imageview(imagePreview)
-                  tooltip = tooltip("Click to choose sprite file")
+                  tooltip = tooltip("Click to choose image file")
                   cursor = Cursor.HAND
 
                   setOnMouseClicked {
                      dataVM.file = chooseFile(
-                        title = "Select Sprite",
+                        title = "Select Image",
                         filters = arrayOf(FileChooser.ExtensionFilter("PNG Images (*.png)", "*.png"))
                      ).getOrNull(0)
                   }
@@ -60,44 +60,10 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
             vbox {
                paddingLeft = 20.0
 
-               field("Tile Set Name") {
+               field("Image Name") {
                   textfield(dataVM.nameProperty) {
                      required()
                      trimWhitespace()
-                  }
-               }
-
-               field("Tile Set Rows") {
-                  textfield(dataVM.rowsProperty) {
-                     stripNonInteger()
-                     required()
-                     trimWhitespace()
-
-                     validator {
-                        val value = it?.toIntOrNull()
-                        when {
-                           value == null -> error("This field is required")
-                           value < 1 -> error("The value must not be lower than 1")
-                           else -> null
-                        }
-                     }
-                  }
-               }
-
-               field("Tile Set Columns") {
-                  textfield(dataVM.columnsProperty) {
-                     stripNonInteger()
-                     required()
-                     trimWhitespace()
-
-                     validator {
-                        val value = it?.toIntOrNull()
-                        when {
-                           value == null -> error("This field is required")
-                           value < 1 -> error("The value must not be lower than 1")
-                           else -> null
-                        }
-                     }
                   }
                }
             }

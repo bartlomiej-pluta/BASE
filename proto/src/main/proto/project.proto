@@ -7,6 +7,7 @@ message Project {
   required string name = 1;
   repeated GameMapAsset maps = 2;
   repeated TileSetAsset tileSets = 3;
+  repeated ImageAsset images = 4;
 }
 
 message GameMapAsset {
@@ -21,4 +22,10 @@ message TileSetAsset {
   required string name = 3;
   required uint32 rows = 4;
   required uint32 columns = 5;
+}
+
+message ImageAsset {
+  required string uid = 1;
+  required string source = 2;
+  required string name = 3;
 }

@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -19,10 +20,12 @@ class ProjectStructureView : View() {
 
    private val structureMaps = StructureCategory("Maps")
    private val structureTileSets = StructureCategory("Tile Sets")
+   private val structureImages = StructureCategory("Images")
 
    private val structureRoot = StructureCategory(name = "Project", items = observableListOf(
       structureMaps,
-      structureTileSets
+      structureTileSets,
+      structureImages
    ))
 
    init {
@@ -31,6 +34,7 @@ class ProjectStructureView : View() {
             structureRoot.nameProperty.bind(it.nameProperty)
             Bindings.bindContent(structureMaps.items, it.maps)
             Bindings.bindContent(structureTileSets.items, it.tileSets)
+            Bindings.bindContent(structureImages.items, it.images)
             root.root.expandAll()
             root.refresh()
          }
@@ -46,6 +50,7 @@ class ProjectStructureView : View() {
             is StructureCategory -> FontIcon("fa-folder")
             is GameMapAsset -> FontIcon("fa-map")
             is TileSetAsset -> FontIcon("fa-th")
+            is ImageAsset -> FontIcon("fa-image")
             else -> null
          }
 
