@@ -1,14 +1,15 @@
 package com.bartlomiejpluta.base.editor.map.model.map
 
-import com.bartlomiejpluta.base.editor.tileset.model.TileSet
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.*
+import tornadofx.getValue
+import tornadofx.setValue
 
 class GameMapBuilder {
-   val tileSetProperty = SimpleObjectProperty<TileSet>()
-   var tileSet by tileSetProperty
+   val tileSetAssetProperty = SimpleObjectProperty<TileSetAsset>()
+   var tileSetAsset by tileSetAssetProperty
 
    val nameProperty = SimpleStringProperty("")
    var name by nameProperty
@@ -18,9 +19,4 @@ class GameMapBuilder {
 
    val columnsProperty = SimpleIntegerProperty(20)
    var columns by columnsProperty
-
-   fun build() = GameMap(tileSet).apply {
-      this.rows = this@GameMapBuilder.rows
-      this.columns = this@GameMapBuilder.columns
-   }
 }

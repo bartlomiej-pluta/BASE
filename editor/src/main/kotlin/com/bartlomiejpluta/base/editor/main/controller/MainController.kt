@@ -44,10 +44,10 @@ class MainController : Controller() {
 
       find<MapCreationWizard>(scope).apply {
          onComplete {
-            vm.item.build().let { map ->
-               projectContext.importMap(vm.name, map)
-               openMaps[scope] = map
-            }
+            val tileSet = projectContext.loadTileSet(vm.tileSetAsset.uid)
+            val map = GameMap(tileSet)
+            projectContext.importMap(vm.name, map)
+            openMaps[scope] = map
          }
 
          openModal(block = true, resizable = false)
