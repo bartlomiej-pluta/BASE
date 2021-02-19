@@ -105,7 +105,7 @@ class MapToolbarView : View() {
 
       this += FontIcon("fa-paint-brush").apply { iconSize = 10 }
 
-      slider(1..5) {
+      slider(1..15) {
          majorTickUnit = 1.0
          isSnapToTicks = true
          minorTickCount = 0
