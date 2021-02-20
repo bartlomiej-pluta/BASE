@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.editor.command.model.map.RenameLayerCommand
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
+import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -87,7 +88,8 @@ class MapLayersView : View() {
                   val scope = UndoableScope()
                   find<SelectGraphicAssetFragment>(scope, SelectGraphicAssetFragment::assets to projectContext.project?.images!!).apply {
                      onComplete {
-                        val layer = ImageLayer("Layer ${mapVM.layers.size + 1}", it as ImageAsset,100)
+                        val layer =
+                           ImageLayer("Layer ${mapVM.layers.size + 1}", it as ImageAsset, ImageLayerMode.NORMAL, 100)
                         val command = CreateLayerCommand(mapVM.item, layer)
                         command.execute()
                         layersPane.selectionModel.select(mapVM.layers.size - 1)

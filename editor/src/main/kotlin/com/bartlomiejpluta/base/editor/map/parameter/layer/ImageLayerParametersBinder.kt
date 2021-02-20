@@ -1,8 +1,10 @@
 package com.bartlomiejpluta.base.editor.map.parameter.layer
 
+import com.bartlomiejpluta.base.editor.common.parameter.model.EnumParameter
 import com.bartlomiejpluta.base.editor.common.parameter.model.GraphicAssetParameter
 import com.bartlomiejpluta.base.editor.common.parameter.model.IntegerParameter
 import com.bartlomiejpluta.base.editor.common.parameter.model.Parameter
+import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.project.model.Project
 import javafx.collections.ObservableList
@@ -26,9 +28,14 @@ class ImageLayerParametersBinder : LayerParametersBinder<ImageLayer> {
          onCommit()
       }
 
+      val mode = EnumParameter("mode", ImageLayerMode.NORMAL, autocommit = true) { _, _, _ ->
+         onCommit()
+      }
+
       image.bindBidirectional(layer.imageAssetProperty)
       opacity.bindBidirectional(layer.opacityProperty)
+      mode.bindBidirectional(layer.modeProperty)
 
-      parameters.addAll(image, opacity)
+      parameters.addAll(image, opacity, mode)
    }
 }

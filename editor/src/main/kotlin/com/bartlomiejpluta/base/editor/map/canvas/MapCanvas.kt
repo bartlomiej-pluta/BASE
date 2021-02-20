@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -131,14 +132,18 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderImageLayer(gc: GraphicsContext, imageLayer: ImageLayer) {
-      imageLayer.image?.let {
-         val alpha = gc.globalAlpha
-         gc.globalAlpha = imageLayer.opacity / 100.0
+      val alpha = gc.globalAlpha
+      gc.globalAlpha = imageLayer.opacity / 100.0
 
-         gc.drawImage(it, 0.0, 0.0)
-
-         gc.globalAlpha = alpha
+      when (imageLayer.mode) {
+         ImageLayerMode.NORMAL -> gc.drawImage(imageLayer.image, 0.0, 0.0)
+         ImageLayerMode.FIT_SCREEN -> gc.drawImage(imageLayer.image, 0.0, 0.0)
+         ImageLayerMode.FIT_MAP -> gc.drawImage(imageLayer.image, 0.0, 0.0, map.width, map.height)
+         else -> {
+         }
       }
+
+      gc.globalAlpha = alpha
    }
 
    private fun renderGrid(gc: GraphicsContext) {
