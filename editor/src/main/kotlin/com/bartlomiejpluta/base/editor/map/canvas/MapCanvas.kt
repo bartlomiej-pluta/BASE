@@ -133,7 +133,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private fun renderImageLayer(gc: GraphicsContext, imageLayer: ImageLayer) {
       imageLayer.image?.let {
          val alpha = gc.globalAlpha
-         gc.globalAlpha = imageLayer.alpha / 100.0
+         gc.globalAlpha = imageLayer.opacity / 100.0
 
          gc.drawImage(it, 0.0, 0.0)
 
