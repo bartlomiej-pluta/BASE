@@ -24,17 +24,21 @@ class MapLayerParameters : View() {
    private val parameters = observableListOf<Parameter<*>>()
 
    init {
-      editorStateVM.selectedLayerProperty.addListener { _, previousLayer, layer ->
-         when (previousLayer) {
-            is ColorLayer -> colorLayerParametersBinder.unbind(previousLayer, parameters)
-            is ImageLayer -> imageLayerParametersBinder.unbind(previousLayer, parameters)
-         }
-
+      editorStateVM.selectedLayerProperty.addListener { _, _, layer ->
+         parameters.forEach(Parameter<*>::unbindBidirectional)
          parameters.clear()
 
          when (layer) {
-            is ColorLayer -> colorLayerParametersBinder.bind(layer, parameters, projectContext.project!!) { fire(RedrawMapRequestEvent) }
-            is ImageLayer -> imageLayerParametersBinder.bind(layer, parameters, projectContext.project!!) { fire(RedrawMapRequestEvent) }
+            is ColorLayer -> colorLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
+               fire(
+                  RedrawMapRequestEvent
+               )
+            }
+            is ImageLayer -> imageLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
+               fire(
+                  RedrawMapRequestEvent
+               )
+            }
          }
       }
    }

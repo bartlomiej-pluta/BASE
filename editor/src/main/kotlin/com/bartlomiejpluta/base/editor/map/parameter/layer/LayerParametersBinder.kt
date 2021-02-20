@@ -7,5 +7,4 @@ import javafx.collections.ObservableList
 
 interface LayerParametersBinder<T : Layer> {
    fun bind(layer: T, parameters: ObservableList<Parameter<*>>, project: Project, onCommit: () -> Unit)
-   fun unbind(layer: T, parameters: ObservableList<Parameter<*>>)
 }
