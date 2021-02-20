@@ -2,6 +2,8 @@ package com.bartlomiejpluta.base.game.map.serial;
 
 import com.bartlomiejpluta.base.core.error.AppException;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
+import com.bartlomiejpluta.base.game.image.manager.ImageManager;
+import com.bartlomiejpluta.base.game.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.game.map.model.GameMap;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
@@ -19,6 +21,7 @@ import java.io.InputStream;
 public class ProtobufMapDeserializer extends MapDeserializer {
    private final MeshManager meshManager;
    private final TileSetManager tileSetManager;
+   private final ImageManager imageManager;
 
    @Override
    protected GameMap parse(InputStream input) throws Exception {
@@ -90,6 +93,14 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    }
 
    private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {
-      // TODO(return new ImageLayer(...))
+      var protoImageLayer = proto.getImageLayer();
+      var image = imageManager.loadImage(proto.getImageLayer().getImageUID());
+      var mode = switch (proto.getImageLayer().getMode()) {
+         case NORMAL -> ImageLayerMode.NORMAL;
+         case FIT_MAP -> ImageLayerMode.FIT_MAP;
+         case FIT_SCREEN -> ImageLayerMode.FIT_SCREEN;
+      };
+
+      map.createImageLayer(image, mode, protoImageLayer.getOpacity() / 100.0f, protoImageLayer.getX(), protoImageLayer.getY());
    }
 }

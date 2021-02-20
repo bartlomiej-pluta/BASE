@@ -97,8 +97,8 @@ public class GameMap implements Renderable, Updatable {
       return layers.size() - 1;
    }
 
-   public int createImageLayer(Image image, ImageLayerMode imageDisplayMode) {
-      layers.add(new ImageLayer(this, image, imageDisplayMode));
+   public int createImageLayer(Image image, ImageLayerMode imageDisplayMode, float opacity, float x, float y) {
+      layers.add(new ImageLayer(this, image, imageDisplayMode, opacity, x, y));
 
       return layers.size() - 1;
    }

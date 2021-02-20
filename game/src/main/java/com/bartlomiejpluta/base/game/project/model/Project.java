@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.game.project.model;
 
+import com.bartlomiejpluta.base.game.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.game.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.game.tileset.asset.TileSetAsset;
 import lombok.Getter;
@@ -20,4 +21,7 @@ public class Project {
 
    @NonNull
    private final List<GameMapAsset> mapAssets;
+
+   @NonNull
+   private final List<ImageAsset> imageAssets;
 }

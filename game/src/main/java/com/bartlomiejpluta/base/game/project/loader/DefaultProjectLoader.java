@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.game.project.loader;
 
+import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.map.manager.MapManager;
 import com.bartlomiejpluta.base.game.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.game.project.serial.ProjectDeserializer;
@@ -11,10 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultProjectLoader implements ProjectLoader {
+   private final ProjectConfiguration configuration;
    private final ProjectDeserializer projectDeserializer;
    private final TileSetManager tileSetManager;
    private final MapManager mapManager;
-   private final ProjectConfiguration configuration;
+   private final ImageManager imageManager;
 
    @Override
    public void loadProject() {
@@ -22,5 +24,6 @@ public class DefaultProjectLoader implements ProjectLoader {
       var project = projectDeserializer.deserialize(resource);
       project.getTileSetAssets().forEach(tileSetManager::registerAsset);
       project.getMapAssets().forEach(mapManager::registerAsset);
+      project.getImageAssets().forEach(imageManager::registerAsset);
    }
 }

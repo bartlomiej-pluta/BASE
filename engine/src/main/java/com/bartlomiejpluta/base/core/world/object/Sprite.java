@@ -7,10 +7,7 @@ import com.bartlomiejpluta.base.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -21,6 +18,7 @@ public abstract class Sprite extends Model implements Renderable {
 
    @NonNull
    @Setter
+   @Getter
    protected Material material;
 
    @Override

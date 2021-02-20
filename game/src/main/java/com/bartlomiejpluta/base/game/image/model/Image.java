@@ -9,10 +9,12 @@ import lombok.Getter;
 public class Image extends Sprite {
    private final int initialWidth;
    private final int initialHeight;
+   private final int gcd;
 
-   public Image(Mesh mesh, Material texture, int initialWidth, int initialHeight) {
+   public Image(Mesh mesh, Material texture, int initialWidth, int initialHeight, int gcd) {
       super(mesh, texture);
       this.initialWidth = initialWidth;
       this.initialHeight = initialHeight;
+      this.gcd = gcd;
    }
 }
