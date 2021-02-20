@@ -1,24 +1,23 @@
 package com.bartlomiejpluta.base.editor.asset.view.select
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
-import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import tornadofx.*
 
-class SelectGraphicAssetFragment : Fragment("Select Asset") {
-   val assets: ObservableList<Asset> by param()
+class SelectGraphicAssetFragment<T : Asset> : Fragment("Select Asset") {
+   val assets: ObservableList<T> by param()
 
-   private val asset = SimpleObjectProperty<Asset>()
+   private val asset = SimpleObjectProperty<T>()
 
-   private val selectGraphicAssetView = find<SelectGraphicAssetView>(
-      SelectGraphicAssetView::assets to assets,
-      SelectGraphicAssetView::asset to asset
+   private val selectGraphicAssetView = find<SelectGraphicAssetView<T>>(
+      SelectGraphicAssetView<T>::assets to assets,
+      SelectGraphicAssetView<T>::asset to asset
    )
 
-   private var onCompleteConsumer: ((Asset) -> Unit)? = null
+   private var onCompleteConsumer: ((T) -> Unit)? = null
 
-   fun onComplete(onCompleteConsumer: ((Asset) -> Unit)) {
+   fun onComplete(onCompleteConsumer: ((T) -> Unit)) {
       this.onCompleteConsumer = onCompleteConsumer
    }
 

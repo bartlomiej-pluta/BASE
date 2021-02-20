@@ -9,11 +9,11 @@ import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
 import tornadofx.*
 
-class SelectGraphicAssetView : View() {
-   val assets: ObservableList<Asset> by param()
-   val asset: ObjectProperty<Asset> by param()
+class SelectGraphicAssetView<T : Asset> : View() {
+   val assets: ObservableList<T> by param()
+   val asset: ObjectProperty<T> by param()
 
-   private var assetsListView: ListView<Asset> by singleAssign()
+   private var assetsListView: ListView<T> by singleAssign()
 
    private val image = createObjectBinding({
       asset.value?.file?.inputStream()?.use { Image(it) } ?: PLACEHOLDER_IMAGE

@@ -86,17 +86,12 @@ class MapLayersView : View() {
             item("Image Layer", graphic = FontIcon("fa-image")) {
                action {
                   val scope = UndoableScope()
-                  find<SelectGraphicAssetFragment>(scope, SelectGraphicAssetFragment::assets to projectContext.project?.images!!).apply {
+                  find<SelectGraphicAssetFragment<ImageAsset>>(
+                     scope,
+                     SelectGraphicAssetFragment<ImageAsset>::assets to projectContext.project?.images!!
+                  ).apply {
                      onComplete {
-                        val layer =
-                           ImageLayer(
-                              "Layer ${mapVM.layers.size + 1}",
-                              it as ImageAsset,
-                              0,
-                              0,
-                              ImageLayerMode.NORMAL,
-                              100
-                           )
+                        val layer = ImageLayer("Layer ${mapVM.layers.size + 1}", it, 0, 0, ImageLayerMode.NORMAL, 100)
                         val command = CreateLayerCommand(mapVM.item, layer)
                         command.execute()
                         layersPane.selectionModel.select(mapVM.layers.size - 1)

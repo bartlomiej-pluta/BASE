@@ -25,9 +25,9 @@ class GraphicAssetParameter<T : Asset>(
 
       addEventHandler(MouseEvent.MOUSE_CLICKED) {
          if (it.button == MouseButton.PRIMARY) {
-            find<SelectGraphicAssetFragment>(Scope(), SelectGraphicAssetFragment::assets to assets).apply {
+            find<SelectGraphicAssetFragment<T>>(Scope(), SelectGraphicAssetFragment<T>::assets to assets).apply {
                onComplete { asset ->
-                  editorValueProperty.value = asset as T
+                  editorValueProperty.value = asset
                   commit()
                }
 

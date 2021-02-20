@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.map.view.wizard
 import com.bartlomiejpluta.base.editor.asset.view.select.SelectGraphicAssetView
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import tornadofx.View
 
 class MapTileSetSelectionView : View("Tile Set") {
@@ -10,9 +11,9 @@ class MapTileSetSelectionView : View("Tile Set") {
 
    private val projectContext: ProjectContext by di()
 
-   private val selectGraphicAssetView = find<SelectGraphicAssetView>(
-      SelectGraphicAssetView::assets to projectContext.project!!.tileSets,
-      SelectGraphicAssetView::asset to mapBuilderVM.tileSetAssetProperty
+   private val selectGraphicAssetView = find<SelectGraphicAssetView<TileSetAsset>>(
+      SelectGraphicAssetView<TileSetAsset>::assets to projectContext.project!!.tileSets,
+      SelectGraphicAssetView<TileSetAsset>::asset to mapBuilderVM.tileSetAssetProperty
    )
 
    // FIXME
