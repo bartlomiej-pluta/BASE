@@ -21,7 +21,7 @@ abstract class Parameter<T>(
    val valueProperty: ObjectProperty<T> = SimpleObjectProperty(initialValue)
    var value by valueProperty
 
-   fun commit() = onCommit(value, editorValueProperty.value, if (autocommit) this::submit else NOOP)
+   fun commit() = onCommit(value, editorValueProperty.value, if (autocommit) NOOP else this::submit)
 
    private fun submit() {
       value = editorValueProperty.value

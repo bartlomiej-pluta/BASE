@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.view.editor
 
+import com.bartlomiejpluta.base.editor.asset.view.select.SelectGraphicAssetFragment
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.model.map.CreateLayerCommand
 import com.bartlomiejpluta.base.editor.command.model.map.MoveLayerCommand
@@ -7,12 +8,11 @@ import com.bartlomiejpluta.base.editor.command.model.map.RemoveLayerCommand
 import com.bartlomiejpluta.base.editor.command.model.map.RenameLayerCommand
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
-import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
-import com.bartlomiejpluta.base.editor.map.model.layer.Layer
-import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
-import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
+import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
+import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
 import javafx.scene.control.cell.TextFieldListCell
@@ -22,6 +22,8 @@ import tornadofx.*
 
 class MapLayersView : View() {
    private val undoRedoService: UndoRedoService by di()
+
+   private val projectContext: ProjectContext by di()
 
    override val scope = super.scope as UndoableScope
 
@@ -77,6 +79,23 @@ class MapLayersView : View() {
                   command.execute()
                   layersPane.selectionModel.select(mapVM.layers.size - 1)
                   undoRedoService.push(command, scope)
+               }
+            }
+
+            item("Image Layer", graphic = FontIcon("fa-image")) {
+               action {
+                  val scope = UndoableScope()
+                  find<SelectGraphicAssetFragment>(scope, SelectGraphicAssetFragment::assets to projectContext.project?.images!!).apply {
+                     onComplete {
+                        val layer = ImageLayer("Layer ${mapVM.layers.size + 1}", it as ImageAsset,100)
+                        val command = CreateLayerCommand(mapVM.item, layer)
+                        command.execute()
+                        layersPane.selectionModel.select(mapVM.layers.size - 1)
+                        undoRedoService.push(command, scope)
+                     }
+
+                     openModal(block = true, resizable = false)
+                  }
                }
             }
          }
@@ -164,6 +183,7 @@ class MapLayersView : View() {
             is TileLayer -> FontIcon("fa-th-large")
             is ObjectLayer -> FontIcon("fa-cube")
             is ColorLayer -> FontIcon("fa-paint-brush")
+            is ImageLayer -> FontIcon("fa-image")
             else -> throw IllegalStateException("Unknown layer type")
          }
       }

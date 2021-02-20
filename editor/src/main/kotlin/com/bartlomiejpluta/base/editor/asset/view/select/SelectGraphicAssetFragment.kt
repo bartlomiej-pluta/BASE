@@ -2,12 +2,14 @@ package com.bartlomiejpluta.base.editor.asset.view.select
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import javafx.beans.property.ObjectProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import tornadofx.*
 
 class SelectGraphicAssetFragment : Fragment("Select Asset") {
    val assets: ObservableList<Asset> by param()
-   val asset: ObjectProperty<Asset> by param()
+
+   private val asset = SimpleObjectProperty<Asset>()
 
    private val selectGraphicAssetView = find<SelectGraphicAssetView>(
       SelectGraphicAssetView::assets to assets,

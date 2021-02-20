@@ -13,4 +13,6 @@ abstract class Asset(directory: ObjectProperty<File>, val uid: String, val sourc
 
    val fileProperty = createObjectBinding({ File(directory.value, source) }, directory)
    val file by fileProperty
+
+   override fun toString() = "${this.javaClass.simpleName}[name=$name, uid=$uid]"
 }
