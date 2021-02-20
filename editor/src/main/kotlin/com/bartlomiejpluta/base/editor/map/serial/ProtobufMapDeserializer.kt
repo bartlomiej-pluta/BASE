@@ -1,10 +1,8 @@
 package com.bartlomiejpluta.base.editor.map.serial
 
+import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.enumeration.PassageAbility
-import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
-import com.bartlomiejpluta.base.editor.map.model.layer.Layer
-import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
-import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
@@ -40,6 +38,7 @@ class ProtobufMapDeserializer : MapDeserializer {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, tileSet, proto)
          proto.hasObjectLayer() -> deserializeObjectLayer(rows, columns, proto)
          proto.hasColorLayer() -> deserializeColorLayer(proto)
+         proto.hasImageLayer() -> deserializeImageLayer(proto)
 
          else -> throw IllegalStateException("Not supported layer type")
       }
@@ -62,14 +61,13 @@ class ProtobufMapDeserializer : MapDeserializer {
       val passageMap: Array<Array<PassageAbility>> = Array(rows) { Array(columns) { PassageAbility.ALLOW } }
 
       proto.objectLayer.passageMapList.forEachIndexed { index, passage ->
-         passageMap[index / columns][index % columns] = when (passage) {
+         passageMap[index / columns][index % columns] = when (passage!!) {
             GameMapProto.PassageAbility.ALLOW -> PassageAbility.ALLOW
             GameMapProto.PassageAbility.BLOCK -> PassageAbility.BLOCK
             GameMapProto.PassageAbility.UP_ONLY -> PassageAbility.UP_ONLY
             GameMapProto.PassageAbility.DOWN_ONLY -> PassageAbility.DOWN_ONLY
             GameMapProto.PassageAbility.LEFT_ONLY -> PassageAbility.LEFT_ONLY
             GameMapProto.PassageAbility.RIGHT_ONLY -> PassageAbility.RIGHT_ONLY
-            else -> throw IllegalStateException("Unknown passage ability type")
          }
       }
 
@@ -83,6 +81,21 @@ class ProtobufMapDeserializer : MapDeserializer {
          green = proto.colorLayer.green,
          blue = proto.colorLayer.blue,
          alpha = proto.colorLayer.alpha
+      )
+   }
+
+   private fun deserializeImageLayer(proto: GameMapProto.Layer): Layer {
+      return ImageLayer(
+         name = proto.name,
+         imageAsset = projectContext.findImageAsset(proto.imageLayer.imageUID),
+         x = proto.imageLayer.x,
+         y = proto.imageLayer.y,
+         opacity = proto.imageLayer.opacity,
+         mode = when (proto.imageLayer.mode!!) {
+            GameMapProto.ImageLayerMode.NORMAL -> ImageLayerMode.NORMAL
+            GameMapProto.ImageLayerMode.FIT_SCREEN -> ImageLayerMode.FIT_SCREEN
+            GameMapProto.ImageLayerMode.FIT_MAP -> ImageLayerMode.FIT_MAP
+         }
       )
    }
 }

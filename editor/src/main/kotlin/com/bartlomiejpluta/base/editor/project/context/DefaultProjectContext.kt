@@ -134,6 +134,11 @@ class DefaultProjectContext : ProjectContext {
       }
    }
 
+   override fun findImageAsset(uid: String) = project?.let {
+      it.images.firstOrNull { image -> image.uid == uid }
+         ?: throw IllegalStateException("The Image with uid [$uid] does not exist ")
+   } ?: throw IllegalStateException("There is no open project in the context")
+
    override fun loadImage(uid: String) = project?.let {
       val asset = it.images.firstOrNull { image -> image.uid == uid }
          ?: throw IllegalStateException("The Image with uid [$uid] does not exist ")

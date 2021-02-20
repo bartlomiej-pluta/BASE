@@ -38,10 +38,9 @@ class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) 
 
       formerPassageAbility = layer.passageMap[row][column]
 
-      passageAbility = when (brushVM.mode) {
+      passageAbility = when (brushVM.mode!!) {
          BrushMode.PAINTING_MODE -> PassageAbility.values()[(formerPassageAbility.ordinal + 1) % PassageAbility.values().size]
          BrushMode.ERASING_MODE -> PassageAbility.ALLOW
-         else -> throw IllegalStateException("Unknown brush mode")
       }
 
       layer.passageMap[row][column] = passageAbility

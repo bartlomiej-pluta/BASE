@@ -1,10 +1,8 @@
 package com.bartlomiejpluta.base.editor.map.serial
 
+import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.enumeration.PassageAbility
-import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
-import com.bartlomiejpluta.base.editor.map.model.layer.Layer
-import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
-import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.proto.GameMapProto
 import org.springframework.stereotype.Component
@@ -55,6 +53,22 @@ class ProtobufMapSerializer : MapSerializer {
             .setAlpha(layer.alpha)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setColorLayer(it).build() }
+
+         is ImageLayer -> GameMapProto.ImageLayer.newBuilder()
+            .setImageUID(layer.imageAsset.uid)
+            .setOpacity(layer.opacity)
+            .setMode(
+               when (layer.mode!!) {
+                  ImageLayerMode.NORMAL -> GameMapProto.ImageLayerMode.NORMAL
+                  ImageLayerMode.FIT_SCREEN -> GameMapProto.ImageLayerMode.FIT_SCREEN
+                  ImageLayerMode.FIT_MAP -> GameMapProto.ImageLayerMode.FIT_MAP
+               }
+            )
+            .setX(layer.x)
+            .setY(layer.y)
+            .build()
+            .let { GameMapProto.Layer.newBuilder().setName(layer.name).setImageLayer(it).build() }
+
 
          else -> throw IllegalStateException("Not supported layer type")
       }

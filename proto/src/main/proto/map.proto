@@ -47,6 +47,15 @@ message ColorLayer {
 }
 
 message ImageLayer {
-  // TODO imageUID
-  // TODO imageMode
+  required string imageUID = 1;
+  required uint32 opacity = 2;
+  required ImageLayerMode mode = 3;
+  required int32 x = 4;
+  required int32 y = 5;
+}
+
+enum ImageLayerMode {
+  NORMAL = 0;
+  FIT_SCREEN = 1;
+  FIT_MAP = 2;
 }
