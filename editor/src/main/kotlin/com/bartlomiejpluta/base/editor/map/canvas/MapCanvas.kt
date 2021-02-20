@@ -135,10 +135,12 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       val alpha = gc.globalAlpha
       gc.globalAlpha = imageLayer.opacity / 100.0
 
+      val x = imageLayer.x.toDouble()
+      val y = imageLayer.y.toDouble()
       when (imageLayer.mode) {
-         ImageLayerMode.NORMAL -> gc.drawImage(imageLayer.image, 0.0, 0.0)
-         ImageLayerMode.FIT_SCREEN -> gc.drawImage(imageLayer.image, 0.0, 0.0)
-         ImageLayerMode.FIT_MAP -> gc.drawImage(imageLayer.image, 0.0, 0.0, map.width, map.height)
+         ImageLayerMode.NORMAL -> gc.drawImage(imageLayer.image, x, y)
+         ImageLayerMode.FIT_SCREEN -> gc.drawImage(imageLayer.image, x, y)
+         ImageLayerMode.FIT_MAP -> gc.drawImage(imageLayer.image, x, y, map.width, map.height)
          else -> {
          }
       }

@@ -9,7 +9,7 @@ import javafx.scene.image.Image
 import tornadofx.getValue
 import tornadofx.setValue
 
-class ImageLayer(name: String, imageAsset: ImageAsset, mode: ImageLayerMode, opacity: Int) : Layer {
+class ImageLayer(name: String, imageAsset: ImageAsset, x: Int, y: Int, mode: ImageLayerMode, opacity: Int) : Layer {
    override val nameProperty = SimpleStringProperty(name)
 
    override var name by nameProperty
@@ -28,6 +28,13 @@ class ImageLayer(name: String, imageAsset: ImageAsset, mode: ImageLayerMode, opa
 
    val modeProperty = SimpleObjectProperty(mode)
    var mode by modeProperty
+
+   val xProperty = SimpleObjectProperty(x)
+   var x by xProperty
+
+   val yProperty = SimpleObjectProperty(y)
+   var y by yProperty
+
 
    override fun resize(rows: Int, columns: Int) {
       // We essentially need to do nothing

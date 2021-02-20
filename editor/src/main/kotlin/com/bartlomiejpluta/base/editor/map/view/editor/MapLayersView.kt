@@ -89,7 +89,14 @@ class MapLayersView : View() {
                   find<SelectGraphicAssetFragment>(scope, SelectGraphicAssetFragment::assets to projectContext.project?.images!!).apply {
                      onComplete {
                         val layer =
-                           ImageLayer("Layer ${mapVM.layers.size + 1}", it as ImageAsset, ImageLayerMode.NORMAL, 100)
+                           ImageLayer(
+                              "Layer ${mapVM.layers.size + 1}",
+                              it as ImageAsset,
+                              0,
+                              0,
+                              ImageLayerMode.NORMAL,
+                              100
+                           )
                         val command = CreateLayerCommand(mapVM.item, layer)
                         command.execute()
                         layersPane.selectionModel.select(mapVM.layers.size - 1)

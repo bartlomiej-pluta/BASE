@@ -18,6 +18,14 @@ class IntegerParameter(
       editor.textFormatter = TextFieldUtil.integerFormatter(initialValue)
    }
 
+   constructor(
+      key: String,
+      initialValue: Int,
+      editable: Boolean = true,
+      autocommit: Boolean = false,
+      onCommit: (oldValue: Int, newValue: Int, submit: () -> Unit) -> Unit = { _, _, submit -> submit() }
+   ) : this(key, initialValue, Integer.MIN_VALUE, Integer.MAX_VALUE, editable, autocommit, onCommit)
+
    override val editorValueProperty: Property<Int>
       get() = editor.valueFactory.valueProperty()
 

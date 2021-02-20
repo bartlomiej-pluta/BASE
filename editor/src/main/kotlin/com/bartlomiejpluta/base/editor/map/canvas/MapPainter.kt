@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
@@ -59,21 +60,22 @@ class MapPainter(
          currentTrace = when (editorStateVM.selectedLayer) {
             is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
             is ObjectLayer -> ObjectPaintingTrace(mapVM, "Toggle passage")
+            is ImageLayer -> ImagePositionPaintingTrace(mapVM, "Move Image Layer")
             else -> null
-         }?.apply { beginTrace(editorStateVM, brushVM) }
+         }?.apply { beginTrace(editorStateVM, brushVM, event) }
       }
    }
 
    private fun proceedTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY) {
-         currentTrace?.proceedTrace(editorStateVM, brushVM)
+         currentTrace?.proceedTrace(editorStateVM, brushVM, event)
       }
    }
 
    private fun commitTrace(event: MapMouseEvent) {
       if (event.button == MouseButton.PRIMARY) {
          currentTrace?.let {
-            it.commitTrace(editorStateVM, brushVM)
+            it.commitTrace(editorStateVM, brushVM, event)
             paintingCallback(it)
             currentTrace = null
          }

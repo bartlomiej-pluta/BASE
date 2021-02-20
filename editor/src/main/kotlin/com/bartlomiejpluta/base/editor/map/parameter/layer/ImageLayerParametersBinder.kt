@@ -32,10 +32,20 @@ class ImageLayerParametersBinder : LayerParametersBinder<ImageLayer> {
          onCommit()
       }
 
+      val x = IntegerParameter("x", 0, autocommit = true) { _, _, _ ->
+         onCommit()
+      }
+
+      val y = IntegerParameter("y", 0, autocommit = true) { _, _, _ ->
+         onCommit()
+      }
+
       image.bindBidirectional(layer.imageAssetProperty)
       opacity.bindBidirectional(layer.opacityProperty)
       mode.bindBidirectional(layer.modeProperty)
+      x.bindBidirectional(layer.xProperty)
+      y.bindBidirectional(layer.yProperty)
 
-      parameters.addAll(image, opacity, mode)
+      parameters.addAll(image, opacity, mode, x, y)
    }
 }

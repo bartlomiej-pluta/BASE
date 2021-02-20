@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
 
 
@@ -33,7 +34,7 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
       }
    }
 
-   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
       brushVM.forEach { row, column, centerRow, centerColumn, tile ->
          paint(
             editorStateVM.selectedLayerIndex,
@@ -44,7 +45,7 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
       }
    }
 
-   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
       brushVM.forEach { row, column, centerRow, centerColumn, tile ->
          paint(
             editorStateVM.selectedLayerIndex,
@@ -55,7 +56,7 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
       }
    }
 
-   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
 
    }
 

@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 
 class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
    private var layerIndex = 0
@@ -16,15 +17,15 @@ class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) 
    private lateinit var passageAbility: PassageAbility
 
 
-   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
       // Do nothing
    }
 
-   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
       // Do nothing
    }
 
-   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM) {
+   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
       this.layerIndex = editorStateVM.selectedLayerIndex
       this.row = editorStateVM.cursorRow
       this.column = editorStateVM.cursorColumn
