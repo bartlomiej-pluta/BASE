@@ -10,51 +10,44 @@ class MainMenuView : View() {
 
    override val root = menubar {
       menu("File") {
-         menu("New") {
-            item("Project...") {
-               action {
-                  mainController.createEmptyProject()
-               }
+         item("New project...") {
+            action {
+               mainController.createEmptyProject()
             }
+         }
 
+
+         item("Open project...") {
+            action {
+               mainController.openProject()
+            }
+         }
+      }
+
+      menu("Project") {
+         enableWhen(projectContext.projectProperty.isNotNull)
+
+         menu("Create") {
             item("Map...") {
-               enableWhen(projectContext.projectProperty.isNotNull)
                action {
                   mainController.createEmptyMap()
                }
             }
          }
 
-         menu("Open") {
-            item("Project...") {
+         menu("Import") {
+            item("Tile Set...") {
                action {
-                  mainController.openProject()
+                  mainController.importTileSet()
+               }
+            }
+
+            item("Image...") {
+               action {
+                  mainController.importImage()
                }
             }
          }
-      }
-
-      menu("Project") {
-         item("Import Tile Set...") {
-            enableWhen(projectContext.projectProperty.isNotNull)
-
-            action {
-               mainController.importTileSet()
-            }
-         }
-
-         item("Import Image...") {
-            enableWhen(projectContext.projectProperty.isNotNull)
-
-            action {
-               mainController.importImage()
-            }
-         }
-      }
-
-      menu("Edit") {
-         item("Undo")
-         item("Redo")
       }
    }
 }
