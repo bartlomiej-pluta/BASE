@@ -146,4 +146,12 @@ class DefaultProjectContext : ProjectContext {
       File(it.imagesDirectory, asset.source).inputStream().use { fis -> Image(fis) }
    } ?: throw IllegalStateException("There is no open project in the context")
 
+   override fun deleteAsset(asset: Asset) {
+      project?.let {
+         it.assetLists.firstOrNull { assets -> assets.remove(asset) }
+            ?: throw IllegalStateException("The asset does not belong to any of the assets lists")
+
+         asset.file.delete()
+      } ?: throw IllegalStateException("There is no open project in the context")
+   }
 }

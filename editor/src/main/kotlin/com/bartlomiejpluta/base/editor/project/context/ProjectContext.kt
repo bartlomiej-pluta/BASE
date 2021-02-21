@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.context
 
+import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -27,4 +28,6 @@ interface ProjectContext {
    fun importImage(data: ImageAssetData)
    fun findImageAsset(uid: String): ImageAsset
    fun loadImage(uid: String): Image
+
+   fun deleteAsset(asset: Asset)
 }

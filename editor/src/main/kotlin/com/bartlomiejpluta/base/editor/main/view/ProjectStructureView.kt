@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
+import javafx.scene.Node
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.control.TreeCell
@@ -23,9 +24,17 @@ class ProjectStructureView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
 
-   private val structureMaps = StructureCategory("Maps")
-   private val structureTileSets = StructureCategory("Tile Sets")
-   private val structureImages = StructureCategory("Images")
+   private val structureMaps = StructureCategory("Maps").apply {
+      menuitem("New Map...") { mainController.createEmptyMap() }
+   }
+
+   private val structureTileSets = StructureCategory("Tile Sets").apply {
+      menuitem("Import Tile Set...") { mainController.importTileSet() }
+   }
+
+   private val structureImages = StructureCategory("Images").apply {
+      menuitem("Import Image...") { mainController.importImage() }
+   }
 
    private val structureRoot = StructureCategory(
       name = "Project", items = observableListOf(
@@ -59,14 +68,7 @@ class ProjectStructureView : View() {
       }
 
       setCellFactory {
-         StructureItemTreeCell { item, name ->
-            item.apply {
-               if (this is Asset) {
-                  this.name = name
-                  projectContext.save()
-               }
-            }
-         }
+         StructureItemTreeCell(this@ProjectStructureView::renameAsset, this@ProjectStructureView::deleteAsset)
       }
 
       setOnMouseClicked { event ->
@@ -80,14 +82,32 @@ class ProjectStructureView : View() {
       }
    }
 
+   private fun renameAsset(asset: Asset, name: String) = asset.apply {
+      this.name = name
+      projectContext.save()
+   }
+
+   private fun deleteAsset(asset: Asset) {
+      projectContext.deleteAsset(asset)
+      projectContext.save()
+   }
+
    private class StructureCategory(name: String = "", var items: ObservableList<out Any> = observableListOf()) {
       val nameProperty = SimpleStringProperty(name)
       val name by nameProperty
+      val menu = ContextMenu()
+
+      fun menuitem(text: String, graphic: Node? = null, action: () -> Unit) {
+         MenuItem(text, graphic).apply {
+            action { action() }
+            menu.items.add(this)
+         }
+      }
    }
 
    private class StructureItemConverter(
       private val cell: TreeCell<Any>,
-      private val onUpdate: (item: Any, name: String) -> Any
+      private val onUpdate: (item: Asset, name: String) -> Asset
    ) : StringConverter<Any>() {
       override fun toString(item: Any?): String = when (item) {
          is StructureCategory -> item.name
@@ -100,19 +120,34 @@ class ProjectStructureView : View() {
       // the actual update must be done from the execute() method of the Command object
       // so that the Command object has access to the actual as well as the new value of layer name.
       // That's why we are running the submission logic in the converter.
-      override fun fromString(string: String?): Any = string?.let { onUpdate(cell.item, it) } ?: ""
+      override fun fromString(string: String?): Any = when (val item = cell.item) {
+         is Asset -> string?.let { onUpdate(item, it) } ?: ""
+         is StructureCategory -> item.name
+         else -> ""
+      }
    }
 
-   private class StructureItemTreeCell(onUpdate: (item: Any, name: String) -> Any) : TextFieldTreeCell<Any>() {
+   private class StructureItemTreeCell(
+      renameAsset: (asset: Asset, name: String) -> Asset,
+      deleteAsset: (asset: Asset) -> Unit
+   ) : TextFieldTreeCell<Any>() {
       private val assetMenu = ContextMenu()
 
       init {
-         converter = StructureItemConverter(this, onUpdate)
+         converter = StructureItemConverter(this, renameAsset)
          MenuItem("Rename").apply {
             action {
                treeView.isEditable = true
                startEdit()
                treeView.isEditable = false
+            }
+
+            assetMenu.items.add(this)
+         }
+
+         MenuItem("Delete").apply {
+            action {
+               deleteAsset(item as Asset)
             }
 
             assetMenu.items.add(this)
@@ -128,8 +163,10 @@ class ProjectStructureView : View() {
             return
          }
 
-         if (!isEditing && item is Asset) {
-            contextMenu = assetMenu
+         contextMenu = when (item) {
+            is Asset -> if (isEditing) null else assetMenu
+            is StructureCategory -> item.menu
+            else -> null
          }
 
          text = when (item) {

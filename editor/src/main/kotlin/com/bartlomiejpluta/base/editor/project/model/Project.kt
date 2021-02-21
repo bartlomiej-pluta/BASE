@@ -21,6 +21,8 @@ class Project {
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
 
+   val assetLists = listOf(maps, tileSets, images)
+
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
       private set
