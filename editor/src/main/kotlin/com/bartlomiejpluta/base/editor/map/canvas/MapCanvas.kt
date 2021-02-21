@@ -15,15 +15,27 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private var tileWidth = map.tileWidth
    private var tileHeight = map.tileHeight
 
-   private val grid = WritableImage(map.width.toInt(), map.height.toInt())
-   private val background = WritableImage(map.width.toInt(), map.height.toInt())
+   private lateinit var grid: WritableImage
+   private lateinit var background: WritableImage
 
    init {
+      map.widthProperty.addListener { _, _, _ ->
+         createGridImage()
+         createBackgroundImage()
+      }
+
+      map.heightProperty.addListener { _, _, _ ->
+         createGridImage()
+         createBackgroundImage()
+      }
+
       createGridImage()
       createBackgroundImage()
    }
 
    private fun createGridImage() {
+      grid = WritableImage(map.width.toInt(), map.height.toInt())
+
       val writer = grid.pixelWriter
       val color = Color.BLACK
       for (x in 0 until map.width.toInt()) {
@@ -40,8 +52,9 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun createBackgroundImage() {
-      val writer = background.pixelWriter
+      background = WritableImage(map.width.toInt(), map.height.toInt())
 
+      val writer = background.pixelWriter
       for (x in 0 until map.width.toInt()) {
          for (y in 0 until map.height.toInt()) {
             val color = when (((x / tileWidth.toInt()) + (y / tileHeight.toInt())) % 2) {
