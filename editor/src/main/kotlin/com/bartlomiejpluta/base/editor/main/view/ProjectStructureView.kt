@@ -1,20 +1,22 @@
 package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.asset.model.GraphicAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import javafx.beans.binding.Bindings
+import javafx.beans.binding.Bindings.createObjectBinding
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import javafx.scene.Node
-import javafx.scene.control.ContextMenu
-import javafx.scene.control.MenuItem
-import javafx.scene.control.TreeCell
-import javafx.scene.control.TreeItem
+import javafx.scene.control.*
 import javafx.scene.control.cell.TextFieldTreeCell
+import javafx.scene.image.Image
+import javafx.scene.layout.Priority
 import javafx.util.StringConverter
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
@@ -44,6 +46,17 @@ class ProjectStructureView : View() {
       )
    )
 
+   private var projectStructure: TreeView<Any> by singleAssign()
+
+   private val selectedItem = SimpleObjectProperty<Any>()
+
+   private val graphicAssetPreview = createObjectBinding({
+      when (val item = selectedItem.value) {
+         is GraphicAsset -> item.graphicFile.inputStream().use { Image(it) }
+         else -> null
+      }
+   }, selectedItem).apply { addListener { _, _, v -> println(v) } }
+
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
@@ -51,34 +64,48 @@ class ProjectStructureView : View() {
             Bindings.bindContent(structureMaps.items, it.maps)
             Bindings.bindContent(structureTileSets.items, it.tileSets)
             Bindings.bindContent(structureImages.items, it.images)
-            root.root.expandAll()
-            root.refresh()
+            projectStructure.root.expandAll()
+            projectStructure.refresh()
          }
       }
    }
 
-   override val root = treeview<Any> {
-      root = TreeItem(structureRoot)
+   override val root = vbox {
+      projectStructure = treeview {
+         vgrow = Priority.ALWAYS
 
-      populate {
-         when (val value = it.value) {
-            is StructureCategory -> value.items
-            else -> null
-         }
-      }
+         root = TreeItem(structureRoot)
 
-      setCellFactory {
-         StructureItemTreeCell(this@ProjectStructureView::renameAsset, this@ProjectStructureView::deleteAsset)
-      }
-
-      setOnMouseClicked { event ->
-         if (event.clickCount == 2) {
-            when (val item = selectionModel?.selectedItem?.value) {
-               is GameMapAsset -> mainController.openMap(item.uid)
+         populate {
+            when (val value = it.value) {
+               is StructureCategory -> value.items
+               else -> null
             }
          }
 
-         event.consume()
+         setCellFactory {
+            StructureItemTreeCell(this@ProjectStructureView::renameAsset, this@ProjectStructureView::deleteAsset)
+         }
+
+         setOnMouseClicked { event ->
+            if (event.clickCount == 2) {
+               when (val item = selectionModel?.selectedItem?.value) {
+                  is GameMapAsset -> mainController.openMap(item.uid)
+               }
+            }
+
+            event.consume()
+         }
+
+         bindSelected(selectedItem)
+      }
+
+      scrollpane {
+         vgrow = Priority.SOMETIMES
+         prefWidth = 200.0
+         prefHeight = 200.0
+         removeWhen(graphicAssetPreview.isNull)
+         imageview(graphicAssetPreview)
       }
    }
 
