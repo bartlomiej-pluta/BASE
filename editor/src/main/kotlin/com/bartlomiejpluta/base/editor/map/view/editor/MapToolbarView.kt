@@ -19,6 +19,8 @@ class MapToolbarView : View() {
    private val undoRedoService: UndoRedoService by di()
    private val mapController: MapController by di()
 
+   val onSaveMap: () -> Unit by param()
+
    override val scope = super.scope as UndoableScope
 
    private val mapVM = find<GameMapVM>()
@@ -45,7 +47,7 @@ class MapToolbarView : View() {
       button(graphic = FontIcon("fa-floppy-o")) {
          shortcut("Ctrl+S")
          action {
-            mapController.saveMap(mapVM.item)
+            onSaveMap()
          }
       }
 

@@ -30,4 +30,7 @@ class EditorStateVM : ViewModel() {
 
    val cursorColumnProperty = SimpleIntegerProperty(-1)
    val cursorColumn by cursorColumnProperty
+
+   val takingSnapshotProperty = SimpleBooleanProperty(false)
+   var takingSnapshot by takingSnapshotProperty
 }

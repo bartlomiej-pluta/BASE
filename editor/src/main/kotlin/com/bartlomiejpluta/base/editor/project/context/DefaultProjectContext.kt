@@ -13,6 +13,7 @@ import com.bartlomiejpluta.base.editor.project.serial.ProjectSerializer
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
+import com.bartlomiejpluta.base.editor.util.fx.ImageUtil
 import com.bartlomiejpluta.base.editor.util.uid.UID
 import javafx.beans.property.ObjectProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -24,6 +25,7 @@ import tornadofx.setValue
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import kotlin.math.min
 
 @Component
 class DefaultProjectContext : ProjectContext {
@@ -88,11 +90,14 @@ class DefaultProjectContext : ProjectContext {
       File(it.mapsDirectory, asset.source).inputStream().use { fis -> mapDeserializer.deserialize(fis) }
    } ?: throw IllegalStateException("There is no open project in the context")
 
-   override fun saveMap(map: GameMap) {
+   override fun saveMap(map: GameMap, image: Image) {
       project?.let {
          val asset = it.maps.firstOrNull { asset -> asset.uid == map.uid }
             ?: throw IllegalStateException("The map with uid [${map.uid}] does not exist ")
 
+         val thumbnail = ImageUtil.scale(image, min(200, map.width.toInt()), min(200, map.height.toInt()), true)
+
+         ImageUtil.save(thumbnail, asset.graphicFile)
          File(it.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
       }
    }
@@ -151,7 +156,7 @@ class DefaultProjectContext : ProjectContext {
          it.assetLists.firstOrNull { assets -> assets.remove(asset) }
             ?: throw IllegalStateException("The asset does not belong to any of the assets lists")
 
-         asset.file.delete()
+         asset.delete()
       } ?: throw IllegalStateException("There is no open project in the context")
    }
 }

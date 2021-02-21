@@ -20,7 +20,7 @@ interface ProjectContext {
 
    fun importMap(name: String, map: GameMap)
    fun loadMap(uid: String): GameMap
-   fun saveMap(map: GameMap)
+   fun saveMap(map: GameMap, image: Image)
 
    fun importTileSet(data: TileSetAssetData)
    fun loadTileSet(uid: String): TileSet

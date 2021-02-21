@@ -70,6 +70,11 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    override fun render(gc: GraphicsContext) {
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
+      if (editorStateVM.takingSnapshot) {
+         renderForPhoto(gc)
+         return
+      }
+
       renderBackground(gc)
       renderUnderlyingLayers(gc)
       renderCover(gc)
@@ -78,12 +83,16 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       painter.render(gc)
    }
 
+   private fun renderForPhoto(gc: GraphicsContext) {
+      map.layers.forEach { dispatchLayerRender(gc, it) }
+   }
+
    private fun renderSelectedLayer(gc: GraphicsContext) {
       map.layers.getOrNull(editorStateVM.selectedLayerIndex)?.let { dispatchLayerRender(gc, it) }
    }
 
    private fun renderCover(gc: GraphicsContext) {
-      if(!editorStateVM.coverUnderlyingLayers) {
+      if (!editorStateVM.coverUnderlyingLayers) {
          return
       }
 

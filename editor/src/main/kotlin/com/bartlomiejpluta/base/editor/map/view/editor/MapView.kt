@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.map.component.MapPane
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import javafx.scene.image.Image
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Scale
@@ -39,6 +40,16 @@ class MapView : View() {
       brushVM.commit()
 
       subscribe<RedrawMapRequestEvent> { mapPane.render() }
+   }
+
+   fun snapshot(): Image {
+      editorStateVM.takingSnapshot = true
+      mapPane.render()
+
+      return mapPane.snapshot(null, null).also {
+         editorStateVM.takingSnapshot = false
+         mapPane.render()
+      }
    }
 
    override val root = scrollpane {

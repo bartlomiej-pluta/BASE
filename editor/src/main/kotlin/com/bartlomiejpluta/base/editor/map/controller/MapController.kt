@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.map.controller
 
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import javafx.scene.image.Image
 import org.springframework.stereotype.Component
 import tornadofx.Controller
 
@@ -9,7 +10,7 @@ import tornadofx.Controller
 class MapController : Controller() {
    private val projectContext: ProjectContext by di()
 
-   fun saveMap(map: GameMap) {
-      projectContext.saveMap(map)
+   fun saveMap(map: GameMap, image: Image) {
+      projectContext.saveMap(map, image)
    }
 }

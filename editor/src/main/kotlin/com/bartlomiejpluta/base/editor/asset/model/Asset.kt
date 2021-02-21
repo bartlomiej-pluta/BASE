@@ -15,4 +15,8 @@ abstract class Asset(directory: ObjectProperty<File>, val uid: String, val sourc
    val file by fileProperty
 
    override fun toString() = "${this.javaClass.simpleName}[name=$name, uid=$uid]"
+
+   open fun delete() {
+      file.delete()
+   }
 }
