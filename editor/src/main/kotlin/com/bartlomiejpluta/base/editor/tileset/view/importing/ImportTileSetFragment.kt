@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.tileset.view.importing
 
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
+import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Cursor
 import javafx.scene.image.Image
@@ -68,36 +69,16 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
                }
 
                field("Tile Set Rows") {
-                  textfield(dataVM.rowsProperty) {
-                     stripNonInteger()
+                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.rowsProperty, editable = true) {
                      required()
-                     trimWhitespace()
-
-                     validator {
-                        val value = it?.toIntOrNull()
-                        when {
-                           value == null -> error("This field is required")
-                           value < 1 -> error("The value must not be lower than 1")
-                           else -> null
-                        }
-                     }
+                     editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
                   }
                }
 
                field("Tile Set Columns") {
-                  textfield(dataVM.columnsProperty) {
-                     stripNonInteger()
+                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.columnsProperty, editable = true) {
                      required()
-                     trimWhitespace()
-
-                     validator {
-                        val value = it?.toIntOrNull()
-                        when {
-                           value == null -> error("This field is required")
-                           value < 1 -> error("The value must not be lower than 1")
-                           else -> null
-                        }
-                     }
+                     editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)
                   }
                }
             }

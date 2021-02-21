@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.map.view.editor
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
 import tornadofx.*
 
 class MapSettingsFragment : Fragment("Map Settings") {
@@ -18,11 +19,12 @@ class MapSettingsFragment : Fragment("Map Settings") {
       fieldset("Map Settings") {
          field("Rows") {
 
-            textfield(mapVM.rowsProperty) {
-               stripNonInteger()
+            spinner(min = 1, max = 100, property = mapVM.rowsProperty, editable = true) {
                required()
+               editor.textFormatter = TextFieldUtil.integerFormatter(mapVM.rows)
+
                validator {
-                  when (it?.toIntOrNull()) {
+                  when (it?.toInt()) {
                      in 1..50 -> null
                      in 50..100 -> warning("The map sizes over 50 can impact game performance")
                      else -> error("The map size must be between 1 and 100")
@@ -32,11 +34,12 @@ class MapSettingsFragment : Fragment("Map Settings") {
          }
 
          field("Columns") {
-            textfield(mapVM.columnsProperty) {
-               stripNonInteger()
+            spinner(min = 1, max = 100, property = mapVM.columnsProperty, editable = true) {
                required()
+               editor.textFormatter = TextFieldUtil.integerFormatter(mapVM.columns)
+
                validator {
-                  when (it?.toIntOrNull()) {
+                  when (it?.toInt()) {
                      in 1..50 -> null
                      in 50..100 -> warning("The map sizes over 50 can impact game performance")
                      else -> error("The map size must be between 1 and 100")
