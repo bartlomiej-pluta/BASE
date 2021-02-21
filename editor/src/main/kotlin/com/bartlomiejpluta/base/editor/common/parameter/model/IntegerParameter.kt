@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.common.parameter.model
 
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
+import javafx.beans.property.IntegerProperty
 import javafx.beans.property.Property
 import javafx.scene.control.Spinner
 
@@ -31,5 +32,9 @@ class IntegerParameter(
 
    init {
       super.init()
+   }
+
+   fun bindBidirectional(other: IntegerProperty) {
+      super.bindBidirectional(other.asObject())
    }
 }

@@ -19,6 +19,7 @@ class MapFragment : Fragment() {
    private val toolbarView = find<MapToolbarView>()
    private val statusBarView = find<MapStatusBarView>()
    private val layerParameters = find<MapLayerParameters>()
+   private val mapParameters = find<MapParameters>()
 
    private val isTileLayerSelected = Bindings.createBooleanBinding(
       { editorStateVM.selectedLayer is TileLayer },
@@ -47,6 +48,10 @@ class MapFragment : Fragment() {
 
          item("Layer Parameters", expanded = false) {
             this += layerParameters
+         }
+
+         item("Map Parameters", expanded = false) {
+            this += mapParameters
          }
       }
 

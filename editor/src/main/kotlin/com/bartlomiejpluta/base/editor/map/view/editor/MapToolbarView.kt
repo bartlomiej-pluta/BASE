@@ -123,11 +123,5 @@ class MapToolbarView : View() {
       }
 
       this += FontIcon("fa-paint-brush").apply { iconSize = 15 }
-
-      button(graphic = FontIcon("fa-sliders")) {
-         action {
-            find<MapSettingsFragment>().openModal(block = true, resizable = false)
-         }
-      }
    }
 }
