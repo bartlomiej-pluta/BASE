@@ -49,7 +49,10 @@ class MainController : Controller() {
       find<MapCreationWizard>(scope).apply {
          onComplete {
             val tileSet = projectContext.loadTileSet(vm.tileSetAsset.uid)
-            val map = GameMap(tileSet)
+            val map = GameMap(tileSet).apply {
+               rows = vm.rows
+               columns = vm.columns
+            }
             projectContext.importMap(vm.name, map)
             openMaps[scope] = map
          }
