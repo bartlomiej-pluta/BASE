@@ -88,6 +88,7 @@ class ProjectStructureView : View() {
    }
 
    private fun deleteAsset(asset: Asset) {
+      mainController.closeAsset(asset)
       projectContext.deleteAsset(asset)
       projectContext.save()
    }

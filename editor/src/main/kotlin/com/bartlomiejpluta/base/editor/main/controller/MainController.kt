@@ -1,8 +1,10 @@
 package com.bartlomiejpluta.base.editor.main.controller
 
+import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
+import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.wizard.MapCreationWizard
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
@@ -102,6 +104,14 @@ class MainController : Controller() {
          }
 
          openModal(block = true, resizable = false)
+      }
+   }
+
+   fun closeAsset(asset: Asset) {
+      when (asset) {
+         is GameMapAsset -> openMaps.entries.firstOrNull { (_, map) -> map.uid == asset.uid }?.key?.let {
+            openMaps.remove(it)
+         }
       }
    }
 }
