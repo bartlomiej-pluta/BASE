@@ -57,15 +57,18 @@ class ProtobufMapSerializer : MapSerializer {
          is ImageLayer -> GameMapProto.ImageLayer.newBuilder()
             .setImageUID(layer.imageAsset.uid)
             .setOpacity(layer.opacity)
+            .setX(layer.x)
+            .setY(layer.y)
+            .setScaleX(layer.scaleX)
+            .setScaleY(layer.scaleY)
             .setMode(
                when (layer.mode!!) {
                   ImageLayerMode.NORMAL -> GameMapProto.ImageLayerMode.NORMAL
-                  ImageLayerMode.FIT_SCREEN -> GameMapProto.ImageLayerMode.FIT_SCREEN
                   ImageLayerMode.FIT_MAP -> GameMapProto.ImageLayerMode.FIT_MAP
+                  ImageLayerMode.FIT_SCREEN -> GameMapProto.ImageLayerMode.FIT_SCREEN
                }
             )
-            .setX(layer.x)
-            .setY(layer.y)
+            .setParallax(layer.parallax)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setImageLayer(it).build() }
 

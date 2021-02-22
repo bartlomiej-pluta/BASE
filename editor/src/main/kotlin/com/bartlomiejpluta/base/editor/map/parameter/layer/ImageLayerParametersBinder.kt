@@ -1,12 +1,10 @@
 package com.bartlomiejpluta.base.editor.map.parameter.layer
 
-import com.bartlomiejpluta.base.editor.common.parameter.model.EnumParameter
-import com.bartlomiejpluta.base.editor.common.parameter.model.GraphicAssetParameter
-import com.bartlomiejpluta.base.editor.common.parameter.model.IntegerParameter
-import com.bartlomiejpluta.base.editor.common.parameter.model.Parameter
+import com.bartlomiejpluta.base.editor.common.parameter.model.*
 import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.project.model.Project
+import javafx.beans.binding.Bindings.createBooleanBinding
 import javafx.collections.ObservableList
 import org.springframework.stereotype.Component
 
@@ -28,10 +26,6 @@ class ImageLayerParametersBinder : LayerParametersBinder<ImageLayer> {
          onCommit()
       }
 
-      val mode = EnumParameter("mode", ImageLayerMode.NORMAL, autocommit = true) { _, _, _ ->
-         onCommit()
-      }
-
       val x = IntegerParameter("x", 0, autocommit = true) { _, _, _ ->
          onCommit()
       }
@@ -40,12 +34,43 @@ class ImageLayerParametersBinder : LayerParametersBinder<ImageLayer> {
          onCommit()
       }
 
+      val scaleX = DoubleParameter("scaleX", 1.0, 0.0, Double.MAX_VALUE, 0.01, autocommit = true) { _, _, _ ->
+         onCommit()
+      }
+
+      val scaleY = DoubleParameter("scaleY", 1.0, 0.0, Double.MAX_VALUE, 0.01, autocommit = true) { _, _, _ ->
+         onCommit()
+      }
+
+      val mode = EnumParameter("mode", ImageLayerMode.NORMAL, autocommit = true) { _, _, _ ->
+         onCommit()
+      }
+
+      val parallax = BooleanParameter("parallax") { _, _, _ ->
+         onCommit()
+      }
+
       image.bindBidirectional(layer.imageAssetProperty)
       opacity.bindBidirectional(layer.opacityProperty)
-      mode.bindBidirectional(layer.modeProperty)
       x.bindBidirectional(layer.xProperty)
       y.bindBidirectional(layer.yProperty)
+      scaleX.bindBidirectional(layer.scaleXProperty)
+      scaleY.bindBidirectional(layer.scaleYProperty)
+      mode.bindBidirectional(layer.modeProperty)
+      parallax.bindBidirectional(layer.parallaxProperty)
 
-      parameters.addAll(image, opacity, mode, x, y)
+      val isNormalMode = createBooleanBinding({ mode.value == ImageLayerMode.NORMAL }, mode.valueProperty).apply {
+         addListener { _, _, value ->
+            if (!value) {
+               scaleX.value = 1.0
+               scaleY.value = 1.0
+            }
+         }
+      }
+
+      scaleX.editableProperty.bind(isNormalMode)
+      scaleY.editableProperty.bind(isNormalMode)
+
+      parameters.addAll(image, opacity, x, y, scaleX, scaleY, mode, parallax)
    }
 }

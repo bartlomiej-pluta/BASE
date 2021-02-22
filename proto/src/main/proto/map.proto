@@ -49,13 +49,16 @@ message ColorLayer {
 message ImageLayer {
   required string imageUID = 1;
   required uint32 opacity = 2;
-  required ImageLayerMode mode = 3;
-  required int32 x = 4;
-  required int32 y = 5;
+  required int32 x = 3;
+  required int32 y = 4;
+  required double scaleX = 5;
+  required double scaleY = 6;
+  required ImageLayerMode mode = 7;
+  required bool parallax = 8;
 }
 
 enum ImageLayerMode {
-  NORMAL = 0;
-  FIT_SCREEN = 1;
+  NORMAL = 1;
   FIT_MAP = 2;
+  FIT_SCREEN = 3;
 }

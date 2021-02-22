@@ -150,11 +150,13 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
 
       val x = imageLayer.x.toDouble()
       val y = imageLayer.y.toDouble()
+
       when (imageLayer.mode) {
-         ImageLayerMode.NORMAL -> gc.drawImage(imageLayer.image, x, y)
-         ImageLayerMode.FIT_SCREEN -> gc.drawImage(imageLayer.image, x, y)
          ImageLayerMode.FIT_MAP -> gc.drawImage(imageLayer.image, x, y, map.width, map.height)
          else -> {
+            val width = imageLayer.image.width * imageLayer.scaleX
+            val height = imageLayer.image.height * imageLayer.scaleY
+            gc.drawImage(imageLayer.image, x, y, width, height)
          }
       }
 

@@ -88,14 +88,17 @@ class ProtobufMapDeserializer : MapDeserializer {
       return ImageLayer(
          name = proto.name,
          imageAsset = projectContext.findImageAsset(proto.imageLayer.imageUID),
+         opacity = proto.imageLayer.opacity,
          x = proto.imageLayer.x,
          y = proto.imageLayer.y,
-         opacity = proto.imageLayer.opacity,
+         scaleX = proto.imageLayer.scaleX,
+         scaleY = proto.imageLayer.scaleY,
          mode = when (proto.imageLayer.mode!!) {
             GameMapProto.ImageLayerMode.NORMAL -> ImageLayerMode.NORMAL
-            GameMapProto.ImageLayerMode.FIT_SCREEN -> ImageLayerMode.FIT_SCREEN
             GameMapProto.ImageLayerMode.FIT_MAP -> ImageLayerMode.FIT_MAP
-         }
+            GameMapProto.ImageLayerMode.FIT_SCREEN -> ImageLayerMode.FIT_SCREEN
+         },
+         parallax = proto.imageLayer.parallax
       )
    }
 }
