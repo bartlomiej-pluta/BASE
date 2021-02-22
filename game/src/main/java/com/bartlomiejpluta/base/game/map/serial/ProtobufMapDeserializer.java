@@ -94,13 +94,23 @@ public class ProtobufMapDeserializer extends MapDeserializer {
 
    private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {
       var protoImageLayer = proto.getImageLayer();
-      var image = imageManager.loadImage(proto.getImageLayer().getImageUID());
+      var image = imageManager.loadImage(protoImageLayer.getImageUID());
+
       var mode = switch (proto.getImageLayer().getMode()) {
          case NORMAL -> ImageLayerMode.NORMAL;
          case FIT_MAP -> ImageLayerMode.FIT_MAP;
          case FIT_SCREEN -> ImageLayerMode.FIT_SCREEN;
       };
 
-      map.createImageLayer(image, mode, protoImageLayer.getOpacity() / 100.0f, protoImageLayer.getX(), protoImageLayer.getY());
+      map.createImageLayer(
+            image,
+            protoImageLayer.getOpacity() / 100.0f,
+            protoImageLayer.getX(),
+            protoImageLayer.getY(),
+            (float) protoImageLayer.getScaleX(),
+            (float) protoImageLayer.getScaleY(),
+            mode,
+            protoImageLayer.getParallax()
+      );
    }
 }

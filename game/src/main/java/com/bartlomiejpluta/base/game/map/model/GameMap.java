@@ -97,8 +97,8 @@ public class GameMap implements Renderable, Updatable {
       return layers.size() - 1;
    }
 
-   public int createImageLayer(Image image, ImageLayerMode imageDisplayMode, float opacity, float x, float y) {
-      layers.add(new ImageLayer(this, image, imageDisplayMode, opacity, x, y));
+   public int createImageLayer(Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
+      layers.add(new ImageLayer(this, image, opacity, x, y, scaleX, scaleY, mode, parallax));
 
       return layers.size() - 1;
    }
@@ -141,12 +141,6 @@ public class GameMap implements Renderable, Updatable {
 
    public GameMap setColor(int layerIndex, float r, float g, float b, float alpha) {
       ((ColorLayer) layers.get(layerIndex)).setColor(r, g, b, alpha);
-
-      return this;
-   }
-
-   public GameMap setImage(int layerIndex, Image image) {
-      ((ImageLayer) layers.get(layerIndex)).setImage(image);
 
       return this;
    }
