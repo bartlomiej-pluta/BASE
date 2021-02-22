@@ -24,7 +24,7 @@ import kotlin.collections.set
 class MainController : Controller() {
    private val projectContext: ProjectContext by di()
 
-   val openMaps = observableMapOf<Scope, GameMap>()
+   val openItems = observableMapOf<Scope, Any>()
 
    fun createEmptyProject() {
       val vm = ProjectVM(Project())
@@ -32,7 +32,7 @@ class MainController : Controller() {
       setInScope(vm)
       find<ProjectSettingsFragment>().apply {
          onComplete {
-            openMaps.clear()
+            openItems.clear()
             projectContext.project = it
             projectContext.save()
          }
@@ -54,7 +54,7 @@ class MainController : Controller() {
                columns = vm.columns
             }
             projectContext.importMap(vm.name, map)
-            openMaps[scope] = map
+            openItems[scope] = map
          }
 
          openModal(block = true, resizable = false)
@@ -66,19 +66,19 @@ class MainController : Controller() {
          title = "Load Project",
          filters = arrayOf(FileChooser.ExtensionFilter("BASE Editor Project (*.bep)", "*.bep")),
       ).getOrNull(0)?.let {
-         openMaps.clear()
+         openItems.clear()
          projectContext.open(it)
       }
    }
 
    fun openMap(uid: String) {
-      if (openMaps.count { (_, map) -> map.uid == uid } == 0) {
+      if (openItems.count { (_, item) -> item is GameMap && item.uid == uid } == 0) {
          val map = projectContext.loadMap(uid)
          val vm = GameMapVM(map)
          val scope = UndoableScope()
          setInScope(vm, scope)
 
-         openMaps[scope] = map
+         openItems[scope] = map
       }
    }
 
@@ -112,8 +112,8 @@ class MainController : Controller() {
 
    fun closeAsset(asset: Asset) {
       when (asset) {
-         is GameMapAsset -> openMaps.entries.firstOrNull { (_, map) -> map.uid == asset.uid }?.key?.let {
-            openMaps.remove(it)
+         is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMap && item.uid == asset.uid }?.key?.let {
+            openItems.remove(it)
          }
       }
    }
