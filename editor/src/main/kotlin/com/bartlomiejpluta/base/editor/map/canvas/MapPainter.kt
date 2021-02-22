@@ -10,7 +10,6 @@ import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
-import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 
 class MapPainter(
@@ -56,29 +55,27 @@ class MapPainter(
    }
 
    private fun beginTrace(event: MapMouseEvent) {
-      if (event.button == MouseButton.PRIMARY && editorStateVM.selectedLayerIndex >= 0) {
+      if (currentTrace == null && editorStateVM.selectedLayerIndex >= 0) {
          currentTrace = when (editorStateVM.selectedLayer) {
             is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
             is ObjectLayer -> ObjectPaintingTrace(mapVM, "Toggle passage")
             is ImageLayer -> ImagePositionPaintingTrace(mapVM, "Move Image Layer")
             else -> null
-         }?.apply { beginTrace(editorStateVM, brushVM, event) }
-      }
-   }
-
-   private fun proceedTrace(event: MapMouseEvent) {
-      if (event.button == MouseButton.PRIMARY) {
-         currentTrace?.proceedTrace(editorStateVM, brushVM, event)
-      }
-   }
-
-   private fun commitTrace(event: MapMouseEvent) {
-      if (event.button == MouseButton.PRIMARY) {
-         currentTrace?.let {
-            it.commitTrace(editorStateVM, brushVM, event)
-            paintingCallback(it)
-            currentTrace = null
          }
+            ?.takeIf { event.button in it.supportedButtons }
+            ?.apply { beginTrace(editorStateVM, brushVM, event) }
       }
    }
+
+   private fun proceedTrace(event: MapMouseEvent) = currentTrace
+      ?.takeIf { event.button in it.supportedButtons }
+      ?.proceedTrace(editorStateVM, brushVM, event)
+
+   private fun commitTrace(event: MapMouseEvent) = currentTrace
+      ?.takeIf { event.button in it.supportedButtons }
+      ?.let {
+         it.commitTrace(editorStateVM, brushVM, event)
+         paintingCallback(it)
+         currentTrace = null
+      }
 }

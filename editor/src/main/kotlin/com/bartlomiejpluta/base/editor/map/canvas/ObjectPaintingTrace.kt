@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
+import javafx.scene.input.MouseButton
 
 class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
    private var layerIndex = 0
@@ -38,9 +39,15 @@ class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) 
 
       formerPassageAbility = layer.passageMap[row][column]
 
-      passageAbility = when (brushVM.mode!!) {
-         BrushMode.PAINTING_MODE -> PassageAbility.values()[(formerPassageAbility.ordinal + 1) % PassageAbility.values().size]
-         BrushMode.ERASING_MODE -> PassageAbility.ALLOW
+      passageAbility = when (mouseEvent.button) {
+         MouseButton.PRIMARY -> when (brushVM.mode!!) {
+            BrushMode.PAINTING_MODE -> PassageAbility.values()[(formerPassageAbility.ordinal + 1) % PassageAbility.values().size]
+            BrushMode.ERASING_MODE -> PassageAbility.ALLOW
+         }
+
+         MouseButton.SECONDARY -> PassageAbility.ALLOW
+
+         else -> throw IllegalStateException("Unsupported mouse button")
       }
 
       layer.passageMap[row][column] = passageAbility
@@ -53,4 +60,6 @@ class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) 
    override fun redo() {
       layer.passageMap[row][column] = passageAbility
    }
+
+   override val supportedButtons = arrayOf(MouseButton.PRIMARY, MouseButton.SECONDARY)
 }

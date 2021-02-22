@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
+import javafx.scene.input.MouseButton
 
 class ImagePositionPaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
    private var layerIndex = 0
@@ -65,4 +66,6 @@ class ImagePositionPaintingTrace(val map: GameMapVM, override val commandName: S
       layer.x = newX.toInt()
       layer.y = newY.toInt()
    }
+
+   override val supportedButtons = arrayOf(MouseButton.PRIMARY)
 }

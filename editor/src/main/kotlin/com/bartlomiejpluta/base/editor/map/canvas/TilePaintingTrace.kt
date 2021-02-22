@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
+import javafx.scene.input.MouseButton
 
 
 data class TilePaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
@@ -40,7 +41,10 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,
             editorStateVM.cursorColumn - centerColumn + column,
-            tile
+            when (mouseEvent.button) {
+               MouseButton.PRIMARY -> tile
+               else -> null
+            }
          )
       }
    }
@@ -51,7 +55,10 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,
             editorStateVM.cursorColumn - centerColumn + column,
-            tile
+            when (mouseEvent.button) {
+               MouseButton.PRIMARY -> tile
+               else -> null
+            }
          )
       }
    }
@@ -81,4 +88,6 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
          val tile: Tile?
       )
    }
+
+   override val supportedButtons = arrayOf(MouseButton.PRIMARY, MouseButton.SECONDARY)
 }
