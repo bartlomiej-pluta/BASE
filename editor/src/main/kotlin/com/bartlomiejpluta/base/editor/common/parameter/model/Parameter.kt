@@ -4,24 +4,25 @@ import javafx.beans.property.*
 import javafx.scene.Node
 import tornadofx.getValue
 import tornadofx.setValue
+import tornadofx.toProperty
 
 abstract class Parameter<T>(
    key: String,
-   initialValue: T? = null,
+   initialValue: T,
    editable: Boolean = true,
    private val autocommit: Boolean = false,
-   private val onCommit: (oldValue: T, newValue: T, submit: () -> Unit) -> Unit = { _, _, submit -> submit() }
+   private val onCommit: (oldValue: T, newValue: T, submit: () -> Unit) -> Unit = { _, _, submit -> submit() },
+   val alwaysInEditMode: Boolean = false
 ) {
    private var other: Property<T>? = null
 
    val keyProperty = ReadOnlyStringWrapper(key)
-
    val key by keyProperty
-   val editableProperty: BooleanProperty = SimpleBooleanProperty(editable)
 
+   val editableProperty: BooleanProperty = editable.toProperty()
    var editable by editableProperty
-   val valueProperty: ObjectProperty<T> = SimpleObjectProperty(initialValue)
 
+   val valueProperty: ObjectProperty<T> = SimpleObjectProperty(initialValue)
    var value by valueProperty
 
    fun commit() = onCommit(value, editorValueProperty.value, if (autocommit) NOOP else this::submit)

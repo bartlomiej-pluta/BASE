@@ -26,7 +26,7 @@ class ParameterValueEditingCell : TableCell<Parameter<*>, Any>() {
             graphic = null
          }
 
-         isEditing -> {
+         isEditing || (parameter?.alwaysInEditMode ?: false) -> {
             text = null
             graphic = parameter?.editor
          }
