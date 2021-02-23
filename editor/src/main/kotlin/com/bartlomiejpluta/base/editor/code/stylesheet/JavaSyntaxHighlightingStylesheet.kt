@@ -11,6 +11,10 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
       val bracket by cssclass()
       val brace by cssclass()
       val string by cssclass()
+      val number by cssclass()
+      val annotation by cssclass()
+      val operator by cssclass()
+      val field by cssclass()
       val comment by cssclass()
       val paragraphBox by cssclass()
       val paragraphText by cssclass()
@@ -22,7 +26,7 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
 
    init {
       keyword {
-         fill = c("purple")
+         fill = c("#000080")
          fontWeight = FontWeight.BOLD
       }
 
@@ -31,7 +35,7 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
       }
 
       paren {
-         fill = c("firebrick")
+         fill = c("cadetblue")
          fontWeight = FontWeight.BOLD
       }
 
@@ -46,11 +50,24 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
       }
 
       string {
-         fill = c("blue")
+         fill = c("#008000")
+      }
+
+      number {
+         fill = c("#0000FF")
+      }
+
+      operator {
+         fill = c("#CC7832")
+      }
+
+      annotation {
+         fill = c("#BBB529")
+         fontWeight = FontWeight.BOLD
       }
 
       comment {
-         fill = c("cadetblue")
+         fill = c("#808080")
       }
 
       paragraphBox and hasCaret {

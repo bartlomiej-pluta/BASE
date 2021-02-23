@@ -16,6 +16,9 @@ class JavaSyntaxHighlighter : SyntaxHighlighter {
             result.groups["BRACKET"] != null -> "bracket"
             result.groups["SEMICOLON"] != null -> "semicolon"
             result.groups["STRING"] != null -> "string"
+            result.groups["NUMBER"] != null -> "number"
+            result.groups["ANNOTATION"] != null -> "annotation"
+            result.groups["OPERATOR"] != null -> "operator"
             result.groups["COMMENT"] != null -> "comment"
             else -> throw IllegalStateException("Unsupported regex group")
          }
@@ -44,28 +47,34 @@ class JavaSyntaxHighlighter : SyntaxHighlighter {
          "new", "package", "private", "protected", "public",
          "return", "short", "static", "strictfp", "super",
          "switch", "synchronized", "this", "throw", "throws",
-         "transient", "try", "void", "volatile", "while"
+         "transient", "try", "void", "volatile", "while", "null"
       )
 
       private val KEYWORD_PATTERN = "\\b(" + KEYWORDS.joinToString("|") + ")\\b"
+      private val ANNOTATION_PATTERN = "@\\w+"
       private val PAREN_PATTERN = "\\(|\\)"
       private val BRACE_PATTERN = "\\{|\\}"
       private val BRACKET_PATTERN = "\\[|\\]"
       private val SEMICOLON_PATTERN = "\\;"
       private val STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\""
+      private val NUMBER_PATTERN = "\\b-?([0-9]*\\.[0-9]+|[0-9]+)\\w?\\b"
+      private val OPERATOR_PATTERN = "[+-/*:|&?<>=!]"
       private val COMMENT_PATTERN = """
       //[^
       ]*|/\*(.|\R)*?\*/
       """.trimIndent()
 
       private val PATTERN = (
-            "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-                  + "|(?<PAREN>" + PAREN_PATTERN + ")"
-                  + "|(?<BRACE>" + BRACE_PATTERN + ")"
-                  + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-                  + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-                  + "|(?<STRING>" + STRING_PATTERN + ")"
-                  + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+            "(?<KEYWORD>$KEYWORD_PATTERN)"
+                  + "|(?<ANNOTATION>$ANNOTATION_PATTERN)"
+                  + "|(?<PAREN>$PAREN_PATTERN)"
+                  + "|(?<BRACE>$BRACE_PATTERN)"
+                  + "|(?<BRACKET>$BRACKET_PATTERN)"
+                  + "|(?<SEMICOLON>$SEMICOLON_PATTERN)"
+                  + "|(?<STRING>$STRING_PATTERN)"
+                  + "|(?<NUMBER>$NUMBER_PATTERN)"
+                  + "|(?<OPERATOR>$OPERATOR_PATTERN)"
+                  + "|(?<COMMENT>$COMMENT_PATTERN)"
             ).toRegex()
    }
 }
