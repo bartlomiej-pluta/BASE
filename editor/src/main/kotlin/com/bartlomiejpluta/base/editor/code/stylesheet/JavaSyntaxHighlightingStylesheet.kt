@@ -13,7 +13,11 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
       val string by cssclass()
       val comment by cssclass()
       val paragraphBox by cssclass()
+      val paragraphText by cssclass()
+
       val hasCaret by csspseudoclass()
+
+      val tabSize by cssproperty<Int>("-fx-tab-size")
    }
 
    init {
@@ -51,6 +55,10 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
 
       paragraphBox and hasCaret {
          backgroundColor = multi(c("#f2f9fc"))
+      }
+
+      paragraphText {
+         tabSize.value = 3
       }
    }
 }

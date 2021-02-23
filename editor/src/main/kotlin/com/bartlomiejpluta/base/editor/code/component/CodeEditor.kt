@@ -4,6 +4,8 @@ import com.bartlomiejpluta.base.editor.code.highlighting.SyntaxHighlighter
 import javafx.beans.property.Property
 import javafx.beans.value.ObservableValue
 import javafx.concurrent.Task
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.StackPane
 import org.fxmisc.flowless.VirtualizedScrollPane
 import org.fxmisc.richtext.CodeArea
@@ -39,7 +41,20 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
          .subscribe(this::applyHighlighting)
 
 
+
+      initAutoIndents()
+
       children += VirtualizedScrollPane(editor)
+   }
+
+   private fun initAutoIndents() {
+      editor.addEventHandler(KeyEvent.KEY_PRESSED) { event ->
+         if (event.code === KeyCode.ENTER) {
+            WHITESPACE.find(editor.getParagraph(editor.currentParagraph - 1).segments[0])?.apply {
+               editor.insertText(editor.caretPosition, value)
+            }
+         }
+      }
    }
 
    private fun computeHighlightingAsync(): Task<StyleSpans<Collection<String>>> {
@@ -58,4 +73,8 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
    }
 
    override fun getUserAgentStylesheet(): String = highlighter.value.stylesheet.base64URL.toExternalForm()
+
+   companion object {
+      private val WHITESPACE = "^\\s+".toRegex()
+   }
 }
