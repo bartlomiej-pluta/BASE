@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.editor.code.component
 
-import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter
-import com.bartlomiejpluta.base.editor.code.stylesheet.HighlightingStylesheet
+import com.bartlomiejpluta.base.editor.code.highlighting.SyntaxHighlighter
 import javafx.beans.property.Property
+import javafx.beans.value.ObservableValue
 import javafx.concurrent.Task
 import javafx.scene.layout.StackPane
 import org.fxmisc.flowless.VirtualizedScrollPane
@@ -14,17 +14,17 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-class CodeEditor(val codeProperty: Property<String>) : StackPane() {
+class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>, codeProperty: Property<String>) :
+   StackPane() {
    private val editor = CodeArea()
    private val executor = Executors.newSingleThreadExecutor()
    private val cleanupWhenDone = editor.multiPlainChanges()
 
-   private val highlighting = JavaSyntaxHighlighter()
-
    init {
-      editor.paragraphGraphicFactory = LineNumberFactory.get(editor)
       editor.replaceText(0, 0, codeProperty.value)
-      applyHighlighting(highlighting.highlight(editor.text))
+      codeProperty.bind(editor.textProperty())
+      editor.paragraphGraphicFactory = LineNumberFactory.get(editor)
+      applyHighlighting(highlighter.value.highlight(editor.text))
 
       cleanupWhenDone
          .successionEnds(Duration.ofMillis(500))
@@ -46,7 +46,7 @@ class CodeEditor(val codeProperty: Property<String>) : StackPane() {
       val code = editor.text
 
       val task = object : Task<StyleSpans<Collection<String>>>() {
-         override fun call() = highlighting.highlight(code)
+         override fun call() = highlighter.value.highlight(code)
       }
 
       executor.execute(task)
@@ -57,5 +57,5 @@ class CodeEditor(val codeProperty: Property<String>) : StackPane() {
       editor.setStyleSpans(0, highlighting)
    }
 
-   override fun getUserAgentStylesheet() = HighlightingStylesheet().base64URL.toExternalForm()
+   override fun getUserAgentStylesheet(): String = highlighter.value.stylesheet.base64URL.toExternalForm()
 }

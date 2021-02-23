@@ -4,7 +4,10 @@ import tornadofx.getValue
 import tornadofx.setValue
 import tornadofx.toProperty
 
-class Code(code: String) {
+class Code(codeType: CodeType, code: String) {
+   val typeProperty = codeType.toProperty()
+   var type by typeProperty
+
    val codeProperty = code.toProperty()
    var code by codeProperty
 }

@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.editor.code.stylesheet
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
-class HighlightingStylesheet : Stylesheet() {
+class JavaSyntaxHighlightingStylesheet : Stylesheet() {
    companion object {
       val keyword by cssclass()
       val semicolon by cssclass()

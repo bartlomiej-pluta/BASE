@@ -1,8 +1,11 @@
 package com.bartlomiejpluta.base.editor.code.highlighting
 
+import com.bartlomiejpluta.base.editor.code.stylesheet.JavaSyntaxHighlightingStylesheet
 import org.fxmisc.richtext.model.StyleSpans
 import org.fxmisc.richtext.model.StyleSpansBuilder
+import org.springframework.stereotype.Component
 
+@Component
 class JavaSyntaxHighlighter : SyntaxHighlighter {
    override fun highlight(code: String): StyleSpans<Collection<String>> = StyleSpansBuilder<Collection<String>>().let {
       val lastKeywordEnd = PATTERN.findAll(code).fold(0) { lastKeywordEnd, result ->
@@ -27,6 +30,8 @@ class JavaSyntaxHighlighter : SyntaxHighlighter {
 
       it.create()
    }
+
+   override val stylesheet = JavaSyntaxHighlightingStylesheet()
 
    companion object {
       private val KEYWORDS = arrayOf(
