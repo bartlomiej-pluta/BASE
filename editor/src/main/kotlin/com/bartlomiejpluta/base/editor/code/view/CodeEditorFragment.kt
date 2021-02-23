@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.editor.code.view
 
 import tornadofx.Fragment
-import tornadofx.hbox
 
 class CodeEditorFragment : Fragment() {
+   private val editorView = find<CodeEditorView>()
 
-   override val root = hbox {}
+   override val root = editorView.root
 }
