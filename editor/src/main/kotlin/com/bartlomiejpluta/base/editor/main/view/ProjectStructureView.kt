@@ -8,7 +8,9 @@ import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.beans.binding.Bindings
 import javafx.scene.control.TreeItem
+import javafx.scene.control.TreeView
 import tornadofx.*
+import java.io.File
 
 
 class ProjectStructureView : View() {
@@ -27,11 +29,16 @@ class ProjectStructureView : View() {
       menuitem("Import Image...") { mainController.importImage() }
    }
 
+   private val structureCode = StructureCategory("Code").apply {
+      menuitem("Refresh") { this@ProjectStructureView.treeView.refresh() }
+   }
+
    private val structureRoot = StructureCategory(
       name = "Project", items = observableListOf(
          structureMaps,
          structureTileSets,
-         structureImages
+         structureImages,
+         structureCode
       )
    )
 
@@ -42,18 +49,23 @@ class ProjectStructureView : View() {
             Bindings.bindContent(structureMaps.items, it.maps)
             Bindings.bindContent(structureTileSets.items, it.tileSets)
             Bindings.bindContent(structureImages.items, it.images)
+
+            structureCode.items.clear()
+            structureCode.items.add(it.codeDirectory)
+
             root.root.expandAll()
             root.refresh()
          }
       }
    }
 
-   override val root = treeview<Any> {
+   private val treeView: TreeView<Any> = treeview<Any> {
       root = TreeItem(structureRoot)
 
       populate {
          when (val value = it.value) {
             is StructureCategory -> value.items
+            is File -> value.listFiles()?.toList() ?: observableListOf()
             else -> null
          }
       }
@@ -66,12 +78,15 @@ class ProjectStructureView : View() {
          if (event.clickCount == 2) {
             when (val item = selectionModel?.selectedItem?.value) {
                is GameMapAsset -> mainController.openMap(item.uid)
+               is File -> item.takeIf { it.isFile }?.let { mainController.openScript(item) }
             }
          }
 
          event.consume()
       }
    }
+
+   override val root = treeView
 
    private fun renameAsset(asset: Asset, name: String) = asset.apply {
       this.name = name

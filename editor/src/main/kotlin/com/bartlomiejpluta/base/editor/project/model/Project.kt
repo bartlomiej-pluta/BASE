@@ -35,12 +35,17 @@ class Project {
    var imagesDirectory by imagesDirectoryProperty
       private set
 
+   val codeDirectoryProperty = SimpleObjectProperty<File>()
+   var codeDirectory by codeDirectoryProperty
+      private set
+
    init {
       sourceDirectoryProperty.addListener { _, _, dir ->
          dir?.let {
             mapsDirectory = File(it, MAPS_DIR)
             tileSetsDirectory = File(it, TILESETS_DIR)
             imagesDirectory = File(it, IMAGES_DIR)
+            codeDirectory = File(it, CODE_DIR)
          }
       }
    }
@@ -50,11 +55,13 @@ class Project {
       mapsDirectory?.mkdirs()
       tileSetsDirectory?.mkdirs()
       imagesDirectory?.mkdirs()
+      codeDirectory?.mkdirs()
    }
 
    companion object {
       const val MAPS_DIR = "maps"
       const val TILESETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"
+      const val CODE_DIR = "code"
    }
 }

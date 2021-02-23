@@ -10,6 +10,7 @@ import javafx.scene.control.MenuItem
 import javafx.scene.control.cell.TextFieldTreeCell
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.action
+import java.io.File
 
 class StructureItemTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAsset: (asset: Asset) -> Unit) :
    TextFieldTreeCell<Any>() {
@@ -54,6 +55,7 @@ class StructureItemTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, 
       text = when (item) {
          is StructureCategory -> item.name
          is Asset -> item.name
+         is File -> item.name
          else -> null
       }
 
@@ -62,7 +64,21 @@ class StructureItemTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, 
          is GameMapAsset -> FontIcon("fa-map")
          is TileSetAsset -> FontIcon("fa-th")
          is ImageAsset -> FontIcon("fa-image")
+         is File -> FontIcon(getFileIcon(item))
          else -> null
+      }
+   }
+
+   companion object {
+      private fun getFileIcon(file: File): String {
+         if (file.isDirectory) {
+            return "fa-folder"
+         }
+
+         return when (file.extension.toLowerCase()) {
+            "java" -> "fa-code"
+            else -> "fa-file"
+         }
       }
    }
 }

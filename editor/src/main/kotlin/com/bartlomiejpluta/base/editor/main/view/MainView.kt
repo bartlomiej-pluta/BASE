@@ -48,7 +48,7 @@ class MainView : View("BASE Game Editor") {
                   val vm = CodeVM(item)
                   setInScope(vm, scope)
                   content = find<CodeEditorFragment>(scope).root
-                  text = "Test.java"
+                  textProperty().bindBidirectional(item.fileProperty.select { it.name.toProperty() })
                   graphic = FontIcon("fa-code")
                   setOnClosed { mainController.openItems.remove(scope) }
                }

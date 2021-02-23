@@ -4,9 +4,12 @@ import javafx.collections.ObservableList
 import javafx.scene.Node
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
-import tornadofx.*
+import tornadofx.action
+import tornadofx.getValue
+import tornadofx.observableListOf
+import tornadofx.toProperty
 
-class StructureCategory(name: String = "", var items: ObservableList<out Any> = observableListOf()) {
+class StructureCategory(name: String = "", var items: ObservableList<in Any> = observableListOf()) {
    val nameProperty = name.toProperty()
    val name by nameProperty
    val menu = ContextMenu()
