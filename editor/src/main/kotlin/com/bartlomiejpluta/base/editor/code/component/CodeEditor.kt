@@ -47,6 +47,14 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
       children += VirtualizedScrollPane(editor)
    }
 
+   fun undo() {
+      editor.undo()
+   }
+
+   fun redo() {
+      editor.redo()
+   }
+
    private fun initAutoIndents() {
       editor.addEventHandler(KeyEvent.KEY_PRESSED) { event ->
          if (event.code === KeyCode.ENTER) {
