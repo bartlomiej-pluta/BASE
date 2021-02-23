@@ -73,8 +73,8 @@ class JavaSyntaxHighlighter : SyntaxHighlighter {
                   + "|(?<SEMICOLON>$SEMICOLON_PATTERN)"
                   + "|(?<STRING>$STRING_PATTERN)"
                   + "|(?<NUMBER>$NUMBER_PATTERN)"
-                  + "|(?<OPERATOR>$OPERATOR_PATTERN)"
                   + "|(?<COMMENT>$COMMENT_PATTERN)"
+                  + "|(?<OPERATOR>$OPERATOR_PATTERN)"
             ).toRegex()
    }
 }
