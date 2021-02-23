@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.project.context
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.code.model.Code
+import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -153,5 +155,20 @@ class DefaultProjectContext : ProjectContext {
 
          asset.file.delete()
       } ?: throw IllegalStateException("There is no open project in the context")
+   }
+
+   override fun loadScript(file: File): Code {
+      val type = when (file.extension.toLowerCase()) {
+         "java" -> CodeType.JAVA
+         else -> throw IllegalStateException("Unsupported script type")
+      }
+
+      val code = file.readText()
+
+      return Code(file, type, code)
+   }
+
+   override fun saveScript(code: Code) {
+      code.file.writeText(code.code)
    }
 }

@@ -87,7 +87,7 @@ class MainController : Controller() {
 
    fun openScript(file: File) {
       if (openItems.count { (_, item) -> item is Code && item.file.absolutePath == file.absolutePath } == 0) {
-         val code = Code(file)
+         val code = projectContext.loadScript(file)
          val vm = CodeVM(code)
          val scope = UndoableScope()
          setInScope(vm, scope)

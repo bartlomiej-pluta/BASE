@@ -5,22 +5,13 @@ import tornadofx.setValue
 import tornadofx.toProperty
 import java.io.File
 
-class Code(file: File) {
+class Code(file: File, type: CodeType, code: String) {
    val fileProperty = file.toProperty()
    val file by fileProperty
 
-   val typeProperty = deduceCodeType(file).toProperty()
+   val typeProperty = type.toProperty()
    val type by typeProperty
 
-   val codeProperty = file.readText().toProperty()
+   val codeProperty = code.toProperty()
    var code by codeProperty
-
-   companion object {
-      private fun deduceCodeType(file: File): CodeType {
-         return when (file.extension.toLowerCase()) {
-            "java" -> CodeType.JAVA
-            else -> throw IllegalStateException("Unsupported script type")
-         }
-      }
-   }
 }

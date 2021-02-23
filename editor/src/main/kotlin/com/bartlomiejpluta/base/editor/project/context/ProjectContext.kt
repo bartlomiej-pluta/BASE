@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.context
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -30,4 +31,7 @@ interface ProjectContext {
    fun loadImage(uid: String): Image
 
    fun deleteAsset(asset: Asset)
+
+   fun loadScript(file: File): Code
+   fun saveScript(code: Code)
 }

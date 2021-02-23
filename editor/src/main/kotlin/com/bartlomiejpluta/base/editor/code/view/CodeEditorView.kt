@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.beans.binding.Bindings
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
@@ -12,9 +13,11 @@ import tornadofx.*
 class CodeEditorView : View() {
    override val scope = super.scope as UndoableScope
 
-   private val javaSyntaxHighlighter: JavaSyntaxHighlighter by di()
-   private val codeVM = find<CodeVM>()
+   private val projectContext: ProjectContext by di()
 
+   private val javaSyntaxHighlighter: JavaSyntaxHighlighter by di()
+
+   private val codeVM = find<CodeVM>()
 
    private val highlighter = Bindings.createObjectBinding({
       when (codeVM.type!!) {
@@ -28,6 +31,14 @@ class CodeEditorView : View() {
       top = toolbar {
          button(graphic = FontIcon("fa-floppy-o")) {
             shortcut("Ctrl+S")
+            enableWhen(codeVM.dirty)
+
+            action {
+               codeVM.item?.let {
+                  codeVM.commit()
+                  projectContext.saveScript(it)
+               }
+            }
          }
 
          button(graphic = FontIcon("fa-undo")) {
