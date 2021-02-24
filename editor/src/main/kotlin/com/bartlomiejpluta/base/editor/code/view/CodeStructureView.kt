@@ -1,12 +1,16 @@
 package com.bartlomiejpluta.base.editor.code.view
 
 import com.bartlomiejpluta.base.editor.code.component.CodeStructureItemTreeCell
+import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
-import tornadofx.*
-import java.io.File
+import javafx.scene.input.MouseButton
+import tornadofx.View
+import tornadofx.expandAll
+import tornadofx.populate
+import tornadofx.treeview
 
 class CodeStructureView : View() {
    private val projectContext: ProjectContext by di()
@@ -15,36 +19,26 @@ class CodeStructureView : View() {
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
-            treeView.root = TreeItem(it.codeDirectory)
-            treeView.populate { item -> item.value?.listFiles()?.toList() }
+            treeView.root = TreeItem(FileSystemNode(it.codeDirectory))
+            treeView.populate { item -> item.value?.children }
             root.root.expandAll()
          }
       }
    }
 
-   private val treeView: TreeView<File> = treeview {
-      setCellFactory {
-         CodeStructureItemTreeCell(this@CodeStructureView::renameFile, this@CodeStructureView::deleteFile)
-      }
+   private val treeView: TreeView<FileSystemNode> = treeview {
+      setCellFactory { CodeStructureItemTreeCell() }
 
       setOnMouseClicked { event ->
-         if (event.clickCount == 2) {
+         if (event.button == MouseButton.PRIMARY && event.clickCount == 2) {
             selectionModel?.selectedItem?.value
                .takeIf { it?.isFile ?: false }
-               ?.let { mainController.openScript(it) }
-         }
+               ?.let { mainController.openScript(it.file) }
 
-         event.consume()
+            event.consume()
+         }
       }
    }
 
    override val root = treeView
-
-   private fun renameFile(file: File, name: String) = file.apply {
-      // TODO
-   }
-
-   private fun deleteFile(file: File) {
-      // TODO
-   }
 }

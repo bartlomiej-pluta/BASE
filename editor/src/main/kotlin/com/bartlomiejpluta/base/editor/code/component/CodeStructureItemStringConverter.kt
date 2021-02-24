@@ -1,15 +1,15 @@
 package com.bartlomiejpluta.base.editor.code.component
 
+import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import javafx.scene.control.TreeCell
 import javafx.util.StringConverter
-import java.io.File
 
 class CodeStructureItemStringConverter(
-   private val cell: TreeCell<File>,
-   private val onUpdate: (item: File, name: String) -> File
-) : StringConverter<File>() {
-   override fun toString(item: File?): String = when (item) {
-      is File -> item.name
+   private val cell: TreeCell<FileSystemNode>,
+   private val onUpdate: (item: FileSystemNode, name: String) -> FileSystemNode
+) : StringConverter<FileSystemNode>() {
+   override fun toString(item: FileSystemNode?): String = when (item) {
+      is FileSystemNode -> item.file.name
       else -> ""
    }
 
