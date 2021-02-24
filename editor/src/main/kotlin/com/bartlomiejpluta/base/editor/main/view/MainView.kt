@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
+import com.bartlomiejpluta.base.editor.code.view.CodeStructureView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -20,6 +21,7 @@ class MainView : View("BASE Game Editor") {
 
    private val mainMenuView = find<MainMenuView>()
    private val projectStructureView = find<ProjectStructureView>()
+   private val codeStructure = find<CodeStructureView>()
 
    init {
       projectContext.projectProperty.addListener { _, _, project ->
@@ -68,6 +70,10 @@ class MainView : View("BASE Game Editor") {
       }
 
       left = drawer(multiselect = true) {
+         item("Code Structure", expanded = true) {
+            this += codeStructure
+         }
+
          item("Project Structure", expanded = true) {
             this += projectStructureView
          }
