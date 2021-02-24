@@ -20,27 +20,24 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
    StackPane() {
    private val editor = CodeArea()
    private val executor = Executors.newSingleThreadExecutor()
-   private val cleanupWhenDone = editor.multiPlainChanges()
+
+   private val highlightingSubscription = editor.multiPlainChanges()
+      .successionEnds(Duration.ofMillis(500))
+      .supplyTask(this::computeHighlightingAsync)
+      .awaitLatest(editor.multiPlainChanges())
+      .filterMap {
+         when {
+            it.isSuccess -> Optional.of(it.get())
+            else -> Optional.empty()
+         }
+      }
+      .subscribe(this::applyHighlighting)
 
    init {
       editor.replaceText(0, 0, codeProperty.value)
       codeProperty.bind(editor.textProperty())
       editor.paragraphGraphicFactory = LineNumberFactory.get(editor)
       applyHighlighting(highlighter.value.highlight(editor.text))
-
-      cleanupWhenDone
-         .successionEnds(Duration.ofMillis(500))
-         .supplyTask(this::computeHighlightingAsync)
-         .awaitLatest(editor.multiPlainChanges())
-         .filterMap {
-            when {
-               it.isSuccess -> Optional.of(it.get())
-               else -> Optional.empty()
-            }
-         }
-         .subscribe(this::applyHighlighting)
-
-
 
       initAutoIndents()
 
@@ -53,6 +50,11 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
 
    fun redo() {
       editor.redo()
+   }
+
+   fun shutdownHighlighterThread() {
+      highlightingSubscription.unsubscribe()
+      executor.shutdownNow()
    }
 
    private fun initAutoIndents() {

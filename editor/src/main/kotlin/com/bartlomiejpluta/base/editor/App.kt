@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor
 
+import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.main.view.MainView
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ConfigurableApplicationContext
@@ -13,6 +15,9 @@ import kotlin.reflect.KClass
 @SpringBootApplication
 open class EditorApp : App(MainView::class) {
    private lateinit var context: ConfigurableApplicationContext
+
+   @Autowired
+   private lateinit var mainController: MainController
 
    override fun init() {
       this.context = SpringApplication.run(this.javaClass)
@@ -27,6 +32,7 @@ open class EditorApp : App(MainView::class) {
    override fun stop() {
       super.stop()
       context.close()
+      mainController.clearResources()
    }
 }
 

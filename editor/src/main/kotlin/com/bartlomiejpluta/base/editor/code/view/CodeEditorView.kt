@@ -27,6 +27,10 @@ class CodeEditorView : View() {
 
    private val editor = CodeEditor(highlighter, codeVM.codeProperty)
 
+   fun shutdown() {
+      editor.shutdownHighlighterThread()
+   }
+
    override val root = borderpane {
       top = toolbar {
          button(graphic = FontIcon("fa-floppy-o")) {

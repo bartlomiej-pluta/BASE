@@ -69,7 +69,7 @@ class MainController : Controller() {
          title = "Load Project",
          filters = arrayOf(FileChooser.ExtensionFilter("BASE Editor Project (*.bep)", "*.bep")),
       ).getOrNull(0)?.let {
-         openItems.clear()
+         clearResources()
          projectContext.open(it)
       }
    }
@@ -142,5 +142,9 @@ class MainController : Controller() {
             openItems.remove(it)
          }
       }
+   }
+
+   fun clearResources() {
+      openItems.clear()
    }
 }

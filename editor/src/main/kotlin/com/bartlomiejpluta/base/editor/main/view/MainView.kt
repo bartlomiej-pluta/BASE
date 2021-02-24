@@ -11,6 +11,7 @@ import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.collections.MapChangeListener
+import javafx.event.Event
 import javafx.scene.control.Tab
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
@@ -50,8 +51,26 @@ class MainView : View("BASE Game Editor") {
 
                it.wasRemoved() -> {
                   val tab = openTabs[it.key]
-                  tabs -= tab
                   openTabs.remove(it.key)
+
+                  // FIXME
+                  // This ugly hack prevents from double-firing the CLOSED EVENT
+                  // when user tries to close tab from the UI (cross sign).
+                  // When user clicks the close button, the event is fired automatically,
+                  // which removes the item from mainController.openItems.
+                  // Right here, this listener would fire the event once again,
+                  // so essentially we need to check if the tab exists in TabPane.tabs
+                  // (which means the tab wasn't be closed from UI). If so, we need to fire
+                  // the event manually since it won't be fired by TabPane.
+                  // Otherwise, if the tab does not exist in tabs anymore, the tab
+                  // was closed from UI and likely the event has been fired automatically.
+                  // The same goes for the TAB_CLOSE_REQUEST event.
+                  if (tab in tabs) {
+                     Event.fireEvent(tab, Event(Tab.CLOSED_EVENT))
+                     Event.fireEvent(tab, Event(Tab.TAB_CLOSE_REQUEST_EVENT))
+                  }
+
+                  tabs -= tab
                }
             }
          })
@@ -82,10 +101,15 @@ class MainView : View("BASE Game Editor") {
       is Code -> Tab().apply {
          val vm = CodeVM(item)
          setInScope(vm, scope)
-         content = find<CodeEditorFragment>(scope).root
-         textProperty().bindBidirectional(item.fileProperty.select { it.name.toProperty() })
+         val editor = find<CodeEditorFragment>(scope)
+         content = editor.root
          graphic = FontIcon("fa-code")
-         setOnClosed { mainController.openItems.remove(scope) }
+         textProperty().bindBidirectional(item.fileProperty.select { it.name.toProperty() })
+
+         setOnClosed {
+            editor.shutdown()
+            mainController.openItems.remove(scope)
+         }
       }
 
       else -> throw IllegalStateException("Unsupported tab item")
