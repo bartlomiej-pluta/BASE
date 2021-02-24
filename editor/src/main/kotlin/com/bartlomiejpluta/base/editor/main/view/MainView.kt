@@ -23,6 +23,8 @@ class MainView : View("BASE Game Editor") {
    private val projectStructureView = find<ProjectStructureView>()
    private val codeStructure = find<CodeStructureView>()
 
+   private val openTabs = mutableMapOf<Scope, Tab>()
+
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          val projectName = project?.let { " :: ${it.name} (${it.sourceDirectory.absolutePath})" } ?: ""
@@ -34,37 +36,22 @@ class MainView : View("BASE Game Editor") {
       top = mainMenuView.root
 
       center = tabpane {
-         tabs.bind(mainController.openItems) { scope, item ->
-            when (item) {
-               is GameMap -> Tab().apply {
-                  val vm = GameMapVM(item)
-                  setInScope(vm, scope)
-                  projectContext.project?.maps?.first { it.uid == item.uid }
-                     ?.let { textProperty().bindBidirectional(it.nameProperty) }
-                  content = find<MapFragment>(scope).root
-                  graphic = FontIcon("fa-map")
-                  setOnClosed { mainController.openItems.remove(scope) }
-               }
-
-               is Code -> Tab().apply {
-                  val vm = CodeVM(item)
-                  setInScope(vm, scope)
-                  content = find<CodeEditorFragment>(scope).root
-                  textProperty().bindBidirectional(item.fileProperty.select { it.name.toProperty() })
-                  graphic = FontIcon("fa-code")
-                  setOnClosed { mainController.openItems.remove(scope) }
-               }
-
-               else -> throw IllegalStateException("Unsupported tab item")
-            }
-         }
 
          // FIXME
-         // For some reason cleaning mainController.openMaps just takes off the tabs content keeping open themselves.
-         // The workaround is to detect if map is cleaned and the clean the tabs by hand.
+         // For some reason the plain object binding does not work between tabs and mainController.openItems.
+         // Because of that, the cache openTabs map has been created and the binding is done by following listener:
          mainController.openItems.addListener(MapChangeListener {
-            if (it.map.isEmpty()) {
-               tabs.clear()
+            when {
+               it.wasAdded() -> createTab(it.key, it.valueAdded).let { tab ->
+                  openTabs[it.key] = tab
+                  tabs += tab
+               }
+
+               it.wasRemoved() -> {
+                  val tab = openTabs[it.key]
+                  tabs -= tab
+                  openTabs.remove(it.key)
+               }
             }
          })
       }
@@ -78,5 +65,28 @@ class MainView : View("BASE Game Editor") {
             this += projectStructureView
          }
       }
+   }
+
+   private fun createTab(scope: Scope, item: Any) = when (item) {
+      is GameMap -> Tab().apply {
+         val vm = GameMapVM(item)
+         setInScope(vm, scope)
+         projectContext.project?.maps?.first { it.uid == item.uid }
+            ?.let { textProperty().bindBidirectional(it.nameProperty) }
+         content = find<MapFragment>(scope).root
+         graphic = FontIcon("fa-map")
+         setOnClosed { mainController.openItems.remove(scope) }
+      }
+
+      is Code -> Tab().apply {
+         val vm = CodeVM(item)
+         setInScope(vm, scope)
+         content = find<CodeEditorFragment>(scope).root
+         textProperty().bindBidirectional(item.fileProperty.select { it.name.toProperty() })
+         graphic = FontIcon("fa-code")
+         setOnClosed { mainController.openItems.remove(scope) }
+      }
+
+      else -> throw IllegalStateException("Unsupported tab item")
    }
 }
