@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.main.model
+package com.bartlomiejpluta.base.editor.asset.model
 
 import javafx.collections.ObservableList
 import javafx.scene.Node
@@ -9,7 +9,7 @@ import tornadofx.getValue
 import tornadofx.observableListOf
 import tornadofx.toProperty
 
-class StructureCategory(name: String = "", var items: ObservableList<in Any> = observableListOf()) {
+class AssetCategory(name: String = "", var items: ObservableList<in Any> = observableListOf()) {
    val nameProperty = name.toProperty()
    val name by nameProperty
    val menu = ContextMenu()

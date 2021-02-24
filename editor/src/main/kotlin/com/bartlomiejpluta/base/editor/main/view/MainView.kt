@@ -1,8 +1,9 @@
 package com.bartlomiejpluta.base.editor.main.view
 
+import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
-import com.bartlomiejpluta.base.editor.code.view.CodeStructureView
+import com.bartlomiejpluta.base.editor.code.view.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -20,8 +21,8 @@ class MainView : View("BASE Game Editor") {
    private val projectContext: ProjectContext by di()
 
    private val mainMenuView = find<MainMenuView>()
-   private val projectStructureView = find<ProjectStructureView>()
-   private val codeStructure = find<CodeStructureView>()
+   private val assetsView = find<AssetsListView>()
+   private val scriptFilesView = find<ScriptFilesView>()
 
    private val openTabs = mutableMapOf<Scope, Tab>()
 
@@ -57,12 +58,12 @@ class MainView : View("BASE Game Editor") {
       }
 
       left = drawer(multiselect = true) {
-         item("Code Structure", expanded = true) {
-            this += codeStructure
+         item("Code", expanded = true) {
+            this += scriptFilesView
          }
 
-         item("Project Structure", expanded = true) {
-            this += projectStructureView
+         item("Assets", expanded = true) {
+            this += assetsView
          }
       }
    }

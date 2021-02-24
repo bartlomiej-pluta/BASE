@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import javafx.scene.control.TreeCell
 import javafx.util.StringConverter
 
-class CodeStructureItemStringConverter(
+class ScriptFileStringConverter(
    private val cell: TreeCell<FileSystemNode>,
    private val onUpdate: (item: FileSystemNode, name: String) -> FileSystemNode
 ) : StringConverter<FileSystemNode>() {

@@ -9,7 +9,7 @@ import tornadofx.enableWhen
 import tornadofx.item
 import tornadofx.toProperty
 
-class CodeStructureItemTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSystemNode) -> Unit) :
+class ScriptFileTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSystemNode) -> Unit) :
    TextFieldTreeCell<FileSystemNode>() {
    private val isRoot = true.toProperty()
    private val isNotRoot = isRoot.not()
@@ -65,7 +65,7 @@ class CodeStructureItemTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (F
    }
 
    init {
-      converter = CodeStructureItemStringConverter(this, this::renameFile)
+      converter = ScriptFileStringConverter(this, this::renameFile)
    }
 
    private fun renameFile(file: FileSystemNode, name: String) = file.apply {

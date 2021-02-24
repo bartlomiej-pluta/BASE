@@ -1,16 +1,16 @@
-package com.bartlomiejpluta.base.editor.main.component
+package com.bartlomiejpluta.base.editor.asset.component
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
-import com.bartlomiejpluta.base.editor.main.model.StructureCategory
+import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
 import javafx.scene.control.TreeCell
 import javafx.util.StringConverter
 
-class StructureItemStringConverter(
+class AssetStringConverter(
    private val cell: TreeCell<Any>,
    private val onUpdate: (item: Asset, name: String) -> Asset
 ) : StringConverter<Any>() {
    override fun toString(item: Any?): String = when (item) {
-      is StructureCategory -> item.name
+      is AssetCategory -> item.name
       is Asset -> item.name
       else -> ""
    }
@@ -22,7 +22,7 @@ class StructureItemStringConverter(
    // That's why we are running the submission logic in the converter.
    override fun fromString(string: String?): Any = when (val item = cell.item) {
       is Asset -> string?.let { onUpdate(item, it) } ?: ""
-      is StructureCategory -> item.name
+      is AssetCategory -> item.name
       else -> ""
    }
 }

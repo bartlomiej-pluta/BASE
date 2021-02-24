@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.code.view
 
-import com.bartlomiejpluta.base.editor.code.component.CodeStructureItemTreeCell
+import com.bartlomiejpluta.base.editor.code.component.ScriptFileTreeCell
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -14,7 +14,7 @@ import tornadofx.populate
 import tornadofx.treeview
 import java.io.File
 
-class CodeStructureView : View() {
+class ScriptFilesView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
 
@@ -30,7 +30,7 @@ class CodeStructureView : View() {
 
    private val treeView: TreeView<FileSystemNode> = treeview {
       setCellFactory {
-         CodeStructureItemTreeCell(this@CodeStructureView::onCreate, mainController::closeScript)
+         ScriptFileTreeCell(this@ScriptFilesView::onCreate, mainController::closeScript)
       }
 
       setOnMouseClicked { event ->
@@ -56,9 +56,5 @@ class CodeStructureView : View() {
          .map { it.replace(".", File.separator) + ".java" }
          .map { fsNode.createNode(it) }
          .ifPresent { mainController.openScript(it) }
-   }
-
-   private fun onDelete(fsNode: FileSystemNode) {
-      mainController.closeScript(fsNode)
    }
 }
