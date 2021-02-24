@@ -9,7 +9,8 @@ import tornadofx.enableWhen
 import tornadofx.item
 import tornadofx.toProperty
 
-class CodeStructureItemTreeCell : TextFieldTreeCell<FileSystemNode>() {
+class CodeStructureItemTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSystemNode) -> Unit) :
+   TextFieldTreeCell<FileSystemNode>() {
    private val isRoot = true.toProperty()
    private val isNotRoot = isRoot.not()
 
@@ -26,11 +27,19 @@ class CodeStructureItemTreeCell : TextFieldTreeCell<FileSystemNode>() {
 
       item("Delete") {
          enableWhen(isNotRoot)
-         action { item.delete() }
+
+         action {
+            item.delete()
+            onDelete(item)
+         }
       }
    }
 
    private val directoryMenu = ContextMenu().apply {
+      item("New Class...") {
+         action { onCreate(item) }
+      }
+
       item("Refresh") {
          action { item.refresh() }
       }
@@ -47,7 +56,11 @@ class CodeStructureItemTreeCell : TextFieldTreeCell<FileSystemNode>() {
 
       item("Delete") {
          enableWhen(isNotRoot)
-         action { item.delete() }
+
+         action {
+            item.delete()
+            onDelete(item)
+         }
       }
    }
 

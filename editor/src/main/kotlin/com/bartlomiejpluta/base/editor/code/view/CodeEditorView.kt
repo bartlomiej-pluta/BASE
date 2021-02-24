@@ -35,7 +35,7 @@ class CodeEditorView : View() {
 
             action {
                codeVM.item?.let {
-                  codeVM.commit()
+                  codeVM.commit(codeVM.codeProperty)
                   projectContext.saveScript(it)
                }
             }

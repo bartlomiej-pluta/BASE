@@ -5,6 +5,7 @@ import tornadofx.observableListOf
 import tornadofx.setValue
 import tornadofx.toProperty
 import java.io.File
+import java.nio.file.Path
 
 class FileSystemNode(file: File, val parent: FileSystemNode? = null) {
    val fileProperty = file.toProperty()
@@ -15,6 +16,8 @@ class FileSystemNode(file: File, val parent: FileSystemNode? = null) {
    val isDirectory = file.isDirectory
 
    val children = observableListOf<FileSystemNode>()
+   val allChildren: List<FileSystemNode>
+      get() = children + children.flatMap { it.allChildren }
 
    init {
       refreshChildren()
@@ -47,5 +50,27 @@ class FileSystemNode(file: File, val parent: FileSystemNode? = null) {
 
    fun refresh() {
       refreshChildren()
+   }
+
+   fun createNode(path: String): FileSystemNode {
+      val segments = Path.of(path.replace("..", "."))
+
+      return segments.foldIndexed(this) { index, parent, segment ->
+         val file = File(parent.file, segment.toString())
+
+         when {
+            index < segments.count() - 1 -> file.mkdirs()
+            else -> file.createNewFile()
+         }
+
+         when (val child = findChild(file)) {
+            null -> FileSystemNode(file, parent).also { parent.children += it }
+            else -> child
+         }
+      }
+   }
+
+   private fun findChild(file: File): FileSystemNode? {
+      return children.firstOrNull { it.file.name == file.name }
    }
 }

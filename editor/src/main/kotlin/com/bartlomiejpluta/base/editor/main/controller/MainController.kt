@@ -124,6 +124,18 @@ class MainController : Controller() {
       }
    }
 
+   fun closeScript(fsNode: FileSystemNode) {
+      openItems.entries.firstOrNull { (_, item) -> item is Code && item.file.absolutePath == fsNode.file.absolutePath }?.key?.let {
+         openItems.remove(it)
+      }
+
+      fsNode.allChildren.forEach { child ->
+         openItems.entries.firstOrNull { (_, item) -> item is Code && item.file.absolutePath == child.file.absolutePath }?.key?.let {
+            openItems.remove(it)
+         }
+      }
+   }
+
    fun closeAsset(asset: Asset) {
       when (asset) {
          is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMap && item.uid == asset.uid }?.key?.let {
