@@ -3,8 +3,10 @@ package com.bartlomiejpluta.base.editor.main.view
 import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
+import com.bartlomiejpluta.base.editor.code.view.CompilerLogsView
 import com.bartlomiejpluta.base.editor.code.view.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
+import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
@@ -24,13 +26,20 @@ class MainView : View("BASE Game Editor") {
    private val mainMenuView = find<MainMenuView>()
    private val assetsView = find<AssetsListView>()
    private val scriptFilesView = find<ScriptFilesView>()
+   private val compilerLogsView = find<CompilerLogsView>()
 
    private val openTabs = mutableMapOf<Scope, Tab>()
+
+   private var compilationLogItem: DrawerItem by singleAssign()
 
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          val projectName = project?.let { " :: ${it.name} (${it.sourceDirectory.absolutePath})" } ?: ""
          title = "BASE Game Editor$projectName"
+      }
+
+      subscribe<UpdateCompilationLogEvent> {
+         compilationLogItem.expanded = true
       }
    }
 
@@ -77,12 +86,18 @@ class MainView : View("BASE Game Editor") {
       }
 
       left = drawer(multiselect = true) {
-         item("Code", expanded = true) {
+         item("Code", expanded = false) {
             this += scriptFilesView
          }
 
-         item("Assets", expanded = true) {
+         item("Assets", expanded = false) {
             this += assetsView
+         }
+      }
+
+      bottom = drawer(multiselect = true) {
+         compilationLogItem = item("Compilation Log") {
+            this += compilerLogsView
          }
       }
    }
