@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.main.controller
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
+import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
@@ -20,7 +21,6 @@ import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
 import javafx.stage.FileChooser
 import org.springframework.stereotype.Component
 import tornadofx.*
-import java.io.File
 import kotlin.collections.set
 
 @Component
@@ -85,9 +85,9 @@ class MainController : Controller() {
       }
    }
 
-   fun openScript(file: File) {
-      if (openItems.count { (_, item) -> item is Code && item.file.absolutePath == file.absolutePath } == 0) {
-         val code = projectContext.loadScript(file)
+   fun openScript(fsNode: FileSystemNode) {
+      if (openItems.count { (_, item) -> item is Code && item.file.absolutePath == fsNode.file.absolutePath } == 0) {
+         val code = projectContext.loadScript(fsNode.fileProperty)
          val vm = CodeVM(code)
          val scope = UndoableScope()
          setInScope(vm, scope)

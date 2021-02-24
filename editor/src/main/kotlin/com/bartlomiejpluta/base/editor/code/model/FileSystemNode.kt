@@ -1,10 +1,14 @@
 package com.bartlomiejpluta.base.editor.code.model
 
+import tornadofx.getValue
 import tornadofx.observableListOf
+import tornadofx.setValue
+import tornadofx.toProperty
 import java.io.File
 
 class FileSystemNode(file: File, val parent: FileSystemNode? = null) {
-   var file = file
+   val fileProperty = file.toProperty()
+   var file by fileProperty
       private set
 
    val isFile = file.isFile

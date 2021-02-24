@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.beans.property.ObjectProperty
+import javafx.beans.property.Property
 import javafx.scene.image.Image
 import java.io.File
 
@@ -32,6 +33,6 @@ interface ProjectContext {
 
    fun deleteAsset(asset: Asset)
 
-   fun loadScript(file: File): Code
+   fun loadScript(fileProperty: Property<File>): Code
    fun saveScript(code: Code)
 }

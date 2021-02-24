@@ -33,7 +33,7 @@ class CodeStructureView : View() {
          if (event.button == MouseButton.PRIMARY && event.clickCount == 2) {
             selectionModel?.selectedItem?.value
                .takeIf { it?.isFile ?: false }
-               ?.let { mainController.openScript(it.file) }
+               ?.let { mainController.openScript(it) }
 
             event.consume()
          }

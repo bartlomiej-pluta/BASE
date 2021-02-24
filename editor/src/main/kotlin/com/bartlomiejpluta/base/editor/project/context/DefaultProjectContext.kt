@@ -16,7 +16,9 @@ import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import com.bartlomiejpluta.base.editor.util.uid.UID
+import javafx.beans.binding.Bindings.createObjectBinding
 import javafx.beans.property.ObjectProperty
+import javafx.beans.property.Property
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.image.Image
 import org.springframework.beans.factory.annotation.Autowired
@@ -157,15 +159,20 @@ class DefaultProjectContext : ProjectContext {
       } ?: throw IllegalStateException("There is no open project in the context")
    }
 
-   override fun loadScript(file: File): Code {
-      val type = when (file.extension.toLowerCase()) {
-         "java" -> CodeType.JAVA
-         else -> throw IllegalStateException("Unsupported script type")
+   override fun loadScript(fileProperty: Property<File>): Code {
+      val typeProperty = SimpleObjectProperty<CodeType>().apply {
+         bind(createObjectBinding({
+            when (fileProperty.value.extension.toLowerCase()) {
+               "java" -> CodeType.JAVA
+               else -> throw IllegalStateException("Unsupported script type")
+            }
+         }))
       }
 
-      val code = file.readText()
 
-      return Code(file, type, code)
+      val code = fileProperty.value.readText()
+
+      return Code(fileProperty, typeProperty, code)
    }
 
    override fun saveScript(code: Code) {
