@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -76,24 +77,49 @@ class MainController : Controller() {
    }
 
    fun openMap(uid: String) {
-      if (openItems.count { (_, item) -> item is GameMap && item.uid == uid } == 0) {
+      openItem<GameMap, UndoableScope>({ it.uid == uid }) {
          val map = projectContext.loadMap(uid)
          val vm = GameMapVM(map)
          val scope = UndoableScope()
          setInScope(vm, scope)
 
-         openItems[scope] = map
+         scope to map
       }
    }
 
    fun openScript(fsNode: FileSystemNode, line: Int = 1, column: Int = 1) {
-      if (openItems.count { (_, item) -> item is Code && item.file.absolutePath == fsNode.file.absolutePath } == 0) {
+      val findScript = { script: Code -> script.file.absolutePath == fsNode.file.absolutePath }
+      val updateExistingScope = { scope: CodeScope -> scope.setCaretPosition(line, column) }
+
+      openItem(findScript, updateExistingScope) {
          val code = projectContext.loadScript(fsNode.fileProperty)
          val vm = CodeVM(code)
          val scope = CodeScope(line, column)
          setInScope(vm, scope)
 
-         openItems[scope] = code
+         scope to code
+      }
+   }
+
+   private inline fun <reified T, S : Scope> openItem(
+      findItem: (item: T) -> Boolean,
+      updateExistingScope: (S) -> Unit = {},
+      createItem: () -> Pair<Scope, T>
+   ) {
+      @Suppress("UNCHECKED_CAST")
+      val pair = openItems.entries
+         .filter { (_, item) -> item is T }
+         .map { (scope, item) -> (scope as S) to (item as T) }
+         .firstOrNull { (_, item) -> findItem(item) }
+
+      if (pair == null) {
+         val (scope, item) = createItem()
+         openItems[scope] = item
+         fire(SelectMainViewTabEvent(scope))
+      } else {
+         val scope = pair.first
+         updateExistingScope(scope)
+         fire(SelectMainViewTabEvent(scope))
       }
    }
 

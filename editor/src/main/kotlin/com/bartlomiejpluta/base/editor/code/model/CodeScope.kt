@@ -1,17 +1,18 @@
 package com.bartlomiejpluta.base.editor.code.model
 
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
-import tornadofx.toProperty
 
-class CodeScope(line: Int, column: Int) : UndoableScope() {
-   private val requestCaretPositionProperty = (line to column).toProperty()
+class CodeScope(private var line: Int, private var column: Int) : UndoableScope() {
+   var caretDisplacementRequestListener: ((line: Int, column: Int) -> Unit)? = null
+      set(value) {
+         field = value
+         field?.let { it(line, column) }
+      }
 
    fun setCaretPosition(line: Int, column: Int) {
-      requestCaretPositionProperty.value = line to column
-   }
+      this.line = line
+      this.column = column
 
-   fun addCaretDisplacementRequestListener(listener: (line: Int, column: Int) -> Unit) {
-      requestCaretPositionProperty.addListener { _, _, position -> listener(position.first, position.second) }
-      listener(requestCaretPositionProperty.value.first, requestCaretPositionProperty.value.second)
+      caretDisplacementRequestListener?.let { it(line, column) }
    }
 }

@@ -28,7 +28,7 @@ class CodeEditorView : View() {
    private val editor = CodeEditor(highlighter, codeVM.codeProperty)
 
    init {
-      scope.addCaretDisplacementRequestListener { line, column ->
+      scope.caretDisplacementRequestListener = { line, column ->
          editor.setCaretPosition(line, column)
       }
    }
