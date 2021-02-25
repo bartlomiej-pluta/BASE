@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.build.pipeline
 
 import com.bartlomiejpluta.base.editor.code.build.compiler.ScriptCompiler
+import com.bartlomiejpluta.base.editor.code.build.game.GameEngineProvider
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -18,14 +19,20 @@ class DefaultBuildPipelineService : BuildPipelineService {
    private lateinit var packager: JarPackager
 
    @Autowired
+   private lateinit var engineProvider: GameEngineProvider
+
+   @Autowired
    private lateinit var projectContext: ProjectContext
 
    override fun build() {
       projectContext.project?.let {
          prepareBuildDirectory(it)
 
+         val outputFile = File(it.buildOutDirectory, OUTPUT_JAR_NAME)
+
          compiler.compile(it.codeFSNode, it.buildClassesDirectory)
-         packager.pack(it.buildClassesDirectory, File(it.buildOutDirectory, OUTPUT_JAR_NAME))
+         engineProvider.provideBaseGameEngine(outputFile)
+         packager.pack(it.buildClassesDirectory, outputFile, "BOOT-INF/classes")
       }
    }
 
