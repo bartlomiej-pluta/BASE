@@ -16,10 +16,19 @@ class JavaCompiler : ScriptCompiler {
       val files = sourceDirectory.allChildren.map(FileSystemNode::file).filter(File::isFile)
       val compiler = compilerFactory.newCompiler()
 
+      // FIXME:
+      // For some reason the compiler's error handler does not want to catch
+      // syntax errors. The only way to catch it is just catching CompileExceptions
       try {
          compiler.compile(files.toTypedArray())
       } catch (e: CompileException) {
-         FX.eventbus.fire(UpdateCompilationLogEvent(e.message ?: "", e.location))
+
+         // Because the Janino compiler assemblies the message with the location
+         // in the LocatedException.getMessage() method, we just need to remove it
+         // to have a plain message along with the plain location as separated objects
+         FX.eventbus.fire(
+            UpdateCompilationLogEvent(e.message?.substring(e.location.toString().length) ?: "", e.location)
+         )
       }
    }
 }
