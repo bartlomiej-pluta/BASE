@@ -55,6 +55,12 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
    fun shutdownHighlighterThread() {
       highlightingSubscription.unsubscribe()
       executor.shutdownNow()
+      editor.dispose()
+   }
+
+   fun setCaretPosition(line: Int, column: Int) {
+      editor.moveTo(line - 1, column - 1)
+      editor.requestFollowCaret()
    }
 
    private fun initAutoIndents() {

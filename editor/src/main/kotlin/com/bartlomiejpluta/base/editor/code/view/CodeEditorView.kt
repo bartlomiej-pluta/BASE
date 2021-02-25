@@ -2,16 +2,16 @@ package com.bartlomiejpluta.base.editor.code.view
 
 import com.bartlomiejpluta.base.editor.code.component.CodeEditor
 import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter
+import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
-import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.beans.binding.Bindings
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 class CodeEditorView : View() {
-   override val scope = super.scope as UndoableScope
+   override val scope = super.scope as CodeScope
 
    private val projectContext: ProjectContext by di()
 
@@ -26,6 +26,12 @@ class CodeEditorView : View() {
    }, codeVM.typeProperty)
 
    private val editor = CodeEditor(highlighter, codeVM.codeProperty)
+
+   init {
+      scope.addCaretDisplacementRequestListener { line, column ->
+         editor.setCaretPosition(line, column)
+      }
+   }
 
    fun shutdown() {
       editor.shutdownHighlighterThread()

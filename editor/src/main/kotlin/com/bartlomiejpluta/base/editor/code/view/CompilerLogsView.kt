@@ -8,7 +8,8 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import org.codehaus.commons.compiler.Location
 import org.fxmisc.richtext.StyledTextArea
-import tornadofx.View
+import org.kordamp.ikonli.javafx.FontIcon
+import tornadofx.*
 import java.io.File
 
 
@@ -16,7 +17,12 @@ class CompilerLogsView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
 
-   private val editor = StyledTextArea(null, { _, _ -> }, LocationRef.NO_LINK, { text, style -> style.apply(text) })
+   private val editor = StyledTextArea(
+      null,
+      { _, _ -> },
+      LocationRef.NO_LINK,
+      { text, style -> style.apply(text) }
+   ).apply { isEditable = false }
 
    init {
       subscribe<UpdateCompilationLogEvent> { event ->
@@ -24,16 +30,24 @@ class CompilerLogsView : View() {
 
          val locationRef = LocationRef(event.location) { loc ->
             projectContext.project?.codeFSNode?.findByFile(File(loc.fileName))?.let {
-               mainController.openScript(it)
+               mainController.openScript(it, loc.lineNumber, 1)
             }
          }
 
-         editor.insert(editor.length, event.location.toString(), locationRef)
+         editor.insert(editor.length, event.location?.toString() ?: "", locationRef)
          editor.insert(editor.length, event.message, LocationRef.NO_LINK)
       }
    }
 
-   override val root = editor
+   override val root = borderpane {
+      left = hbox {
+         button(graphic = FontIcon("fa-trash")) {
+            action { editor.clear() }
+         }
+      }
+
+      center = editor
+   }
 
    class LocationRef(private val location: Location?, private val onClick: (Location) -> Unit = {}) {
       private constructor() : this(null)

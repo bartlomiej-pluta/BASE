@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.main.controller
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
+import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
@@ -85,11 +86,11 @@ class MainController : Controller() {
       }
    }
 
-   fun openScript(fsNode: FileSystemNode) {
+   fun openScript(fsNode: FileSystemNode, line: Int = 1, column: Int = 1) {
       if (openItems.count { (_, item) -> item is Code && item.file.absolutePath == fsNode.file.absolutePath } == 0) {
          val code = projectContext.loadScript(fsNode.fileProperty)
          val vm = CodeVM(code)
-         val scope = UndoableScope()
+         val scope = CodeScope(line, column)
          setInScope(vm, scope)
 
          openItems[scope] = code

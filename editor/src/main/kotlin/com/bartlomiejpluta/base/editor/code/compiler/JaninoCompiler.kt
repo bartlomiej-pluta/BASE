@@ -9,7 +9,7 @@ import tornadofx.FX
 import java.io.File
 
 @Component
-class JavaCompiler : ScriptCompiler {
+class JaninoCompiler : ScriptCompiler {
    private val compilerFactory = CompilerFactory()
 
    override fun compile(sourceDirectory: FileSystemNode) {
@@ -21,14 +21,15 @@ class JavaCompiler : ScriptCompiler {
       // syntax errors. The only way to catch it is just catching CompileExceptions
       try {
          compiler.compile(files.toTypedArray())
+         FX.eventbus.fire(UpdateCompilationLogEvent(UpdateCompilationLogEvent.Severity.INFO, "Compilation success"))
       } catch (e: CompileException) {
 
          // Because the Janino compiler assemblies the message with the location
          // in the LocatedException.getMessage() method, we just need to remove it
          // to have a plain message along with the plain location as separated objects
-         FX.eventbus.fire(
-            UpdateCompilationLogEvent(e.message?.substring(e.location.toString().length) ?: "", e.location)
-         )
+         val locationIndex = e.location?.toString()?.length ?: 0
+         val message = e.message?.substring(locationIndex) ?: ""
+         FX.eventbus.fire(UpdateCompilationLogEvent(UpdateCompilationLogEvent.Severity.ERROR, message, e.location))
       }
    }
 }
