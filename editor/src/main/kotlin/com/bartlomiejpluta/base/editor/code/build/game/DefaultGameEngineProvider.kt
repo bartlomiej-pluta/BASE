@@ -6,9 +6,9 @@ import java.io.File
 @Component
 class DefaultGameEngineProvider : GameEngineProvider {
 
-   override fun provideBaseGameEngine(target: File) {
+   override fun provideBaseGameEngine(targetJar: File) {
       javaClass.getResourceAsStream("/engine/game.jar").use { ris ->
-         target.outputStream().use { fos ->
+         targetJar.outputStream().use { fos ->
             ris.copyTo(fos)
          }
       }

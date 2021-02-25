@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
-import javafx.beans.binding.Bindings
+import javafx.beans.binding.Bindings.createObjectBinding
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
@@ -18,6 +18,9 @@ class Project {
 
    val sourceDirectoryProperty = SimpleObjectProperty<File>()
    val sourceDirectory by sourceDirectoryProperty
+
+   val projectFileProperty = createObjectBinding({ File(sourceDirectory, PROJECT_FILE) }, sourceDirectoryProperty)
+   val projectFile by projectFileProperty
 
    val maps = observableListOf<GameMapAsset>()
    val tileSets = observableListOf<TileSetAsset>()
@@ -40,7 +43,7 @@ class Project {
    val codeDirectoryProperty = SimpleObjectProperty<File>()
    var codeDirectory by codeDirectoryProperty
       private set
-   val codeFSNodeProperty = Bindings.createObjectBinding({ FileSystemNode(codeDirectory) }, codeDirectoryProperty)
+   val codeFSNodeProperty = createObjectBinding({ FileSystemNode(codeDirectory) }, codeDirectoryProperty)
    val codeFSNode by codeFSNodeProperty
 
    // Build directories
@@ -79,6 +82,7 @@ class Project {
    }
 
    companion object {
+      const val PROJECT_FILE = "project.bep"
       const val MAPS_DIR = "maps"
       const val TILESETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"

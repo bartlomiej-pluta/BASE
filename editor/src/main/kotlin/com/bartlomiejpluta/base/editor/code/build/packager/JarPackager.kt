@@ -4,4 +4,5 @@ import java.io.File
 
 interface JarPackager {
    fun pack(sourceDirectory: File, targetJar: File, root: String = ".")
+   fun copy(file: File, targetJar: File, root: String = ".")
 }

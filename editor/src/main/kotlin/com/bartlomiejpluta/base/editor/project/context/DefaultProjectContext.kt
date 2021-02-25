@@ -59,7 +59,7 @@ class DefaultProjectContext : ProjectContext {
       project?.let {
          it.sourceDirectory.mkdirs()
 
-         FileOutputStream(File(it.sourceDirectory, "project.bep")).use { fos ->
+         FileOutputStream(it.projectFile).use { fos ->
             projectSerializer.serialize(it, fos)
          }
       }
