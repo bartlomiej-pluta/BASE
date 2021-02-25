@@ -1,8 +1,10 @@
 package com.bartlomiejpluta.base.editor.project.model
 
+import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
+import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
@@ -38,6 +40,8 @@ class Project {
    val codeDirectoryProperty = SimpleObjectProperty<File>()
    var codeDirectory by codeDirectoryProperty
       private set
+   val codeFSNodeProperty = Bindings.createObjectBinding({ FileSystemNode(codeDirectory) }, codeDirectoryProperty)
+   val codeFSNode by codeFSNodeProperty
 
    init {
       sourceDirectoryProperty.addListener { _, _, dir ->

@@ -73,4 +73,6 @@ class FileSystemNode(file: File, val parent: FileSystemNode? = null) {
    private fun findChild(file: File): FileSystemNode? {
       return children.firstOrNull { it.file.name == file.name }
    }
+
+   fun findByFile(file: File) = allChildren.firstOrNull { it.file.equals(file) }
 }

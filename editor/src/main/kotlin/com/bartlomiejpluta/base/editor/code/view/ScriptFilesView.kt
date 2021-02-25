@@ -21,7 +21,7 @@ class ScriptFilesView : View() {
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
-            treeView.root = TreeItem(FileSystemNode(it.codeDirectory))
+            treeView.root = TreeItem(it.codeFSNode)
             treeView.populate { item -> item.value?.children }
             root.root.expandAll()
          }

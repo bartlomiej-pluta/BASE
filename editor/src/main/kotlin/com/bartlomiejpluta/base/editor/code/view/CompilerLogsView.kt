@@ -2,28 +2,34 @@ package com.bartlomiejpluta.base.editor.code.view
 
 import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.scene.Cursor
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import org.codehaus.commons.compiler.Location
 import org.fxmisc.richtext.StyledTextArea
 import tornadofx.View
+import java.io.File
 
 
 class CompilerLogsView : View() {
+   private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
+
    private val editor = StyledTextArea(null, { _, _ -> }, LocationRef.NO_LINK, { text, style -> style.apply(text) })
 
    init {
-      subscribe<UpdateCompilationLogEvent> {
+      subscribe<UpdateCompilationLogEvent> { event ->
          editor.clear()
 
-         val locationRef = LocationRef(it.location) { loc ->
-            // TODO(mainController.openScript(getFileSystemNodeFromSomewhere(loc)))
+         val locationRef = LocationRef(event.location) { loc ->
+            projectContext.project?.codeFSNode?.findByFile(File(loc.fileName))?.let {
+               mainController.openScript(it)
+            }
          }
 
-         editor.insert(editor.length, it.location.toString(), locationRef)
-         editor.insert(editor.length, it.message, LocationRef.NO_LINK)
+         editor.insert(editor.length, event.location.toString(), locationRef)
+         editor.insert(editor.length, event.message, LocationRef.NO_LINK)
       }
    }
 
