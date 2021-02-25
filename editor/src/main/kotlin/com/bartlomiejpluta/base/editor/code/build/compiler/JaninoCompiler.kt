@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.code.compiler
+package com.bartlomiejpluta.base.editor.code.build.compiler
 
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
@@ -38,12 +38,6 @@ class JaninoCompiler : ScriptCompiler {
    }
 
    private fun moveClassFilesToTargetDirectory(sourceDirectory: File, targetDirectory: File) {
-      if (targetDirectory.exists() && !targetDirectory.isDirectory) {
-         throw IllegalStateException("Target directory is actually a file")
-      }
-
-      targetDirectory.mkdirs()
-
       val files = Files.walk(sourceDirectory.toPath())
          .filter(Files::isRegularFile)
          .map(Path::toFile)

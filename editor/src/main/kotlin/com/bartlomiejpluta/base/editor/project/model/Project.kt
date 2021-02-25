@@ -43,8 +43,17 @@ class Project {
    val codeFSNodeProperty = Bindings.createObjectBinding({ FileSystemNode(codeDirectory) }, codeDirectoryProperty)
    val codeFSNode by codeFSNodeProperty
 
+   // Build directories
+   val buildDirectoryProperty = SimpleObjectProperty<File>()
+   var buildDirectory by buildDirectoryProperty
+      private set
+
    val buildClassesDirectoryProperty = SimpleObjectProperty<File>()
    var buildClassesDirectory by buildClassesDirectoryProperty
+      private set
+
+   val buildOutDirectoryProperty = SimpleObjectProperty<File>()
+   var buildOutDirectory by buildOutDirectoryProperty
       private set
 
    init {
@@ -54,7 +63,9 @@ class Project {
             tileSetsDirectory = File(it, TILESETS_DIR)
             imagesDirectory = File(it, IMAGES_DIR)
             codeDirectory = File(it, CODE_DIR)
+            buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
+            buildOutDirectory = File(it, BUILD_OUT_DIR)
          }
       }
    }
@@ -72,6 +83,8 @@ class Project {
       const val TILESETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"
       const val CODE_DIR = "code"
-      const val BUILD_CLASSES_DIR = "build/classes"
+      const val BUILD_DIR = "build"
+      const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"
+      const val BUILD_OUT_DIR = "$BUILD_DIR/out"
    }
 }

@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.code.compiler
+package com.bartlomiejpluta.base.editor.code.build.compiler
 
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import java.io.File
