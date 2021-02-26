@@ -15,6 +15,8 @@ import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.process.view.ProcessLogsView
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import com.bartlomiejpluta.base.editor.project.view.ProjectParametersView
+import javafx.beans.binding.Bindings.createStringBinding
 import javafx.collections.MapChangeListener
 import javafx.event.Event
 import javafx.scene.control.Tab
@@ -31,6 +33,7 @@ class MainView : View("BASE Game Editor") {
    private val scriptFilesView = find<ScriptFilesView>()
    private val buildLogsView = find<BuildLogsView>()
    private val processLogsView = find<ProcessLogsView>()
+   private val projectPropertiesView = find<ProjectParametersView>()
 
    private val openTabs = mutableMapOf<Scope, Tab>()
 
@@ -78,8 +81,13 @@ class MainView : View("BASE Game Editor") {
 
    init {
       projectContext.projectProperty.addListener { _, _, project ->
-         val projectName = project?.let { " :: ${it.name} (${it.sourceDirectory.absolutePath})" } ?: ""
-         title = "BASE Game Editor$projectName"
+         when (project) {
+            null -> "BASE Game Editor".toProperty()
+            else -> createStringBinding(
+               { "BASE Game Editor :: ${project.name} (${project.sourceDirectory.absolutePath})" },
+               project.nameProperty, project.sourceDirectoryProperty
+            )
+         }.let { titleProperty.bind(it) }
       }
 
       subscribe<AppendBuildLogsEvent> {
@@ -109,6 +117,10 @@ class MainView : View("BASE Game Editor") {
 
          item("Assets", expanded = false) {
             this += assetsView
+         }
+
+         item("Project Parameters") {
+            this += projectPropertiesView
          }
       }
 
