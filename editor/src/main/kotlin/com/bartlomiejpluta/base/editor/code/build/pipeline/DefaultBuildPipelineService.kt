@@ -10,10 +10,11 @@ import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.
 import com.bartlomiejpluta.base.editor.event.ClearCompilationLogEvent
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
+import javafx.beans.property.SimpleObjectProperty
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import tornadofx.*
 import tornadofx.FX.Companion.eventbus
-import tornadofx.runAsync
 import java.io.File
 
 @Component
@@ -34,16 +35,35 @@ class DefaultBuildPipelineService : BuildPipelineService {
    @Autowired
    private lateinit var projectContext: ProjectContext
 
-   // FIXME
-   // There is runAsync used right here, however it does not prevent from
-   // multiple pipeline running. There should be some kind of assertion
-   // that enforces the pipeline to run only once in the same time.
+   private val latchProperty = SimpleObjectProperty<Latch?>()
+   private var latch by latchProperty
+
+   override val isRunningProperty = false.toProperty()
+   private var isRunning by isRunningProperty
+
+   init {
+      latchProperty.addListener { _, _, latch ->
+         when (latch) {
+            null -> isRunning = false
+            else -> isRunningProperty.bind(latch.lockedProperty())
+         }
+      }
+   }
+
    override fun build() = runAsync {
+      latch?.locked?.takeIf { it }?.let {
+         return@runAsync
+      }
+
+      latch = Latch()
+
       try {
          projectContext.project?.let(this@DefaultBuildPipelineService::runPipeline)
       } catch (e: BuildException) {
          val event = AppendCompilationLogEvent(e.severity, e.message, e.location, e.tag)
          eventbus.fire(event)
+      } finally {
+         latch?.release()
       }
 
       Unit

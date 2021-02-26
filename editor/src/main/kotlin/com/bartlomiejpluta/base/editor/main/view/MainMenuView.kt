@@ -56,6 +56,7 @@ class MainMenuView : View() {
          enableWhen(projectContext.projectProperty.isNotNull)
 
          item("Compile") {
+            enableWhen(buildPipelineService.isRunningProperty.not())
             action {
                buildPipelineService.build()
             }
