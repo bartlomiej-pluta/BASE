@@ -6,8 +6,8 @@ import com.bartlomiejpluta.base.editor.code.build.game.GameEngineProvider
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
 import com.bartlomiejpluta.base.editor.code.build.project.ProjectAssembler
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
-import com.bartlomiejpluta.base.editor.event.ClearCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
+import com.bartlomiejpluta.base.editor.event.ClearBuildLogsEvent
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
 import javafx.beans.property.SimpleObjectProperty
@@ -59,7 +59,7 @@ class DefaultBuildPipelineService : BuildPipelineService {
       try {
          projectContext.project?.let(this@DefaultBuildPipelineService::runPipeline)
       } catch (e: BuildException) {
-         val event = AppendCompilationLogEvent(e.severity, e.message, e.location, e.tag)
+         val event = AppendBuildLogsEvent(e.severity, e.message, e.location, e.tag)
          eventbus.fire(event)
       } finally {
          latch?.release()
@@ -69,24 +69,24 @@ class DefaultBuildPipelineService : BuildPipelineService {
    }
 
    private fun runPipeline(project: Project) {
-      eventbus.fire(ClearCompilationLogEvent)
+      eventbus.fire(ClearBuildLogsEvent)
       prepareBuildDirectory(project)
 
       val outputFile = project.buildOutputJarFile
       val startTime = System.currentTimeMillis()
 
-      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Compiling sources...", tag = TAG))
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Compiling sources...", tag = TAG))
       compiler.compile(project.codeFSNode, project.buildClassesDirectory)
 
-      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
       engineProvider.provideBaseGameEngine(outputFile)
 
-      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Assembling project assets...", tag = TAG))
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling project assets...", tag = TAG))
       packager.pack(project.buildClassesDirectory, outputFile, "BOOT-INF/classes")
       projectAssembler.assembly(project, outputFile)
 
       val buildingTime = (System.currentTimeMillis() - startTime) / 1000.0
-      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Done [${buildingTime}s]", tag = TAG))
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Done [${buildingTime}s]", tag = TAG))
    }
 
    private fun prepareBuildDirectory(project: Project) {

@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.model.ClasspathResource
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import org.codehaus.commons.compiler.CompileException
 import org.codehaus.commons.compiler.util.resource.FileResource
 import org.codehaus.commons.compiler.util.resource.Resource
@@ -48,7 +48,7 @@ class JaninoCompiler : Compiler {
          setDestinationDirectory(targetDirectory, false)
 
          setWarningHandler { handle, message, location ->
-            eventbus.fire(AppendCompilationLogEvent(Severity.WARNING, "$message ($handle)", location, "Compiler"))
+            eventbus.fire(AppendBuildLogsEvent(Severity.WARNING, "$message ($handle)", location, "Compiler"))
          }
 
          compile(compilationUnits)

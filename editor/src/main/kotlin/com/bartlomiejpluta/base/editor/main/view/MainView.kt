@@ -2,11 +2,11 @@ package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
 import com.bartlomiejpluta.base.editor.code.model.Code
+import com.bartlomiejpluta.base.editor.code.view.BuildLogsView
 import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
-import com.bartlomiejpluta.base.editor.code.view.CompilerLogsView
 import com.bartlomiejpluta.base.editor.code.view.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -27,11 +27,11 @@ class MainView : View("BASE Game Editor") {
    private val mainMenuView = find<MainMenuView>()
    private val assetsView = find<AssetsListView>()
    private val scriptFilesView = find<ScriptFilesView>()
-   private val compilerLogsView = find<CompilerLogsView>()
+   private val buildLogsView = find<BuildLogsView>()
 
    private val openTabs = mutableMapOf<Scope, Tab>()
 
-   private var compilationLogItem: DrawerItem by singleAssign()
+   private var buildLogItem: DrawerItem by singleAssign()
 
    private val tabPane = tabpane {
 
@@ -78,8 +78,8 @@ class MainView : View("BASE Game Editor") {
          title = "BASE Game Editor$projectName"
       }
 
-      subscribe<AppendCompilationLogEvent> {
-         compilationLogItem.expanded = true
+      subscribe<AppendBuildLogsEvent> {
+         buildLogItem.expanded = true
       }
 
       subscribe<SelectMainViewTabEvent> { event ->
@@ -105,8 +105,8 @@ class MainView : View("BASE Game Editor") {
       }
 
       bottom = drawer(multiselect = true) {
-         compilationLogItem = item("Compilation Log") {
-            this += compilerLogsView
+         buildLogItem = item("Build Log") {
+            this += buildLogsView
          }
       }
    }

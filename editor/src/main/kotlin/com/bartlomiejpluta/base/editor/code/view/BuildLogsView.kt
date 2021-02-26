@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.editor.code.view
 
 import com.bartlomiejpluta.base.editor.common.logs.component.LogsPane
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
-import com.bartlomiejpluta.base.editor.event.ClearCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
+import com.bartlomiejpluta.base.editor.event.ClearBuildLogsEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import org.codehaus.commons.compiler.Location
@@ -11,19 +11,19 @@ import tornadofx.*
 import java.io.File
 
 
-class CompilerLogsView : View() {
+class BuildLogsView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
 
-   private val compilationLogs = LogsPane(this::locationClick)
+   private val buildLogs = LogsPane(this::locationClick)
 
    init {
-      subscribe<AppendCompilationLogEvent> { event ->
-         compilationLogs.appendEntry(event.message, event.severity, event.location, event.tag)
+      subscribe<AppendBuildLogsEvent> { event ->
+         buildLogs.appendEntry(event.message, event.severity, event.location, event.tag)
       }
 
-      subscribe<ClearCompilationLogEvent> {
-         compilationLogs.clear()
+      subscribe<ClearBuildLogsEvent> {
+         buildLogs.clear()
       }
    }
 
@@ -36,10 +36,10 @@ class CompilerLogsView : View() {
    override val root = borderpane {
       left = hbox {
          button(graphic = FontIcon("fa-trash")) {
-            action { compilationLogs.clear() }
+            action { buildLogs.clear() }
          }
       }
 
-      center = compilationLogs
+      center = buildLogs
    }
 }
