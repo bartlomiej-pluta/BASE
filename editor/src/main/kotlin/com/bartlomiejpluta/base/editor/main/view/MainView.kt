@@ -7,11 +7,13 @@ import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
 import com.bartlomiejpluta.base.editor.code.view.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
+import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.process.view.ProcessLogsView
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.collections.MapChangeListener
 import javafx.event.Event
@@ -28,10 +30,12 @@ class MainView : View("BASE Game Editor") {
    private val assetsView = find<AssetsListView>()
    private val scriptFilesView = find<ScriptFilesView>()
    private val buildLogsView = find<BuildLogsView>()
+   private val processLogsView = find<ProcessLogsView>()
 
    private val openTabs = mutableMapOf<Scope, Tab>()
 
    private var buildLogItem: DrawerItem by singleAssign()
+   private var processLogItem: DrawerItem by singleAssign()
 
    private val tabPane = tabpane {
 
@@ -82,6 +86,10 @@ class MainView : View("BASE Game Editor") {
          buildLogItem.expanded = true
       }
 
+      subscribe<AppendProcessLogsEvent> {
+         processLogItem.expanded = true
+      }
+
       subscribe<SelectMainViewTabEvent> { event ->
          openTabs[event.targetScope]?.let {
             tabPane.selectionModel.select(it)
@@ -104,9 +112,13 @@ class MainView : View("BASE Game Editor") {
          }
       }
 
-      bottom = drawer(multiselect = true) {
+      bottom = drawer {
          buildLogItem = item("Build Log") {
             this += buildLogsView
+         }
+
+         processLogItem = item("Process Log") {
+            this += processLogsView
          }
       }
    }

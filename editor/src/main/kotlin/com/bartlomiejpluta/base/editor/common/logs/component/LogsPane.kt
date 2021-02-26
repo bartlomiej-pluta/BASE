@@ -8,7 +8,7 @@ import org.codehaus.commons.compiler.Location
 import org.fxmisc.richtext.StyledTextArea
 import tornadofx.addClass
 
-class LogsPane(private val locationClick: (location: Location) -> Unit) : StackPane() {
+class LogsPane(private val locationClick: (location: Location) -> Unit = {}) : StackPane() {
    private val editor = StyledTextArea("logs-pane",
       { text, style -> text.addClass(style) },
       LogsPaneStyle.NO_STYLE,
@@ -19,7 +19,13 @@ class LogsPane(private val locationClick: (location: Location) -> Unit) : StackP
       children += editor
    }
 
-   fun appendEntry(message: String, severity: Severity, location: Location?, tag: String?) {
+   fun appendEntry(
+      message: String,
+      severity: Severity,
+      follow: Boolean,
+      location: Location? = null,
+      tag: String? = null
+   ) {
       val locationRef = LogsPaneStyle(location = location, onClick = locationClick)
       val severityStyle = LogsPaneStyle(severity = severity)
 
@@ -27,6 +33,10 @@ class LogsPane(private val locationClick: (location: Location) -> Unit) : StackP
       editor.insert(editor.length, location?.toString() ?: "", locationRef)
       editor.insert(editor.length, (location?.let { ": " } ?: "") + message, LogsPaneStyle(severity = severity))
       editor.insert(editor.length, "\n", LogsPaneStyle.NO_STYLE)
+
+      if (follow) {
+         editor.requestFollowCaret()
+      }
    }
 
    fun clear() = editor.clear()

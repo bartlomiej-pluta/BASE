@@ -15,11 +15,13 @@ class BuildLogsView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
 
+   private val followCaret = true.toProperty()
+
    private val buildLogs = LogsPane(this::locationClick)
 
    init {
       subscribe<AppendBuildLogsEvent> { event ->
-         buildLogs.appendEntry(event.message, event.severity, event.location, event.tag)
+         buildLogs.appendEntry(event.message, event.severity, followCaret.value, event.location, event.tag)
       }
 
       subscribe<ClearBuildLogsEvent> {
@@ -34,9 +36,14 @@ class BuildLogsView : View() {
    }
 
    override val root = borderpane {
-      left = hbox {
+      left = vbox {
          button(graphic = FontIcon("fa-trash")) {
             action { buildLogs.clear() }
+         }
+
+         togglebutton {
+            followCaret.bind(selectedProperty())
+            graphic = FontIcon("fa-angle-double-down")
          }
       }
 
