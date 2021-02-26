@@ -51,6 +51,7 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
    override fun build() = runAsync {
       latch?.locked?.takeIf { it }?.let {
+         cancel()
          return@runAsync
       }
 
@@ -90,10 +91,14 @@ class DefaultBuildPipelineService : BuildPipelineService {
    }
 
    private fun prepareBuildDirectory(project: Project) {
-      project.buildDirectory.delete()
+      project.buildDirectory.deleteRecursively()
 
       project.buildClassesDirectory.mkdirs()
       project.buildOutDirectory.mkdirs()
+   }
+
+   override fun clean() {
+      projectContext.project?.apply { buildDirectory.deleteRecursively() }
    }
 
    companion object {

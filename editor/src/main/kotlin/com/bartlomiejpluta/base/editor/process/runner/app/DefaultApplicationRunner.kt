@@ -7,14 +7,12 @@ import com.bartlomiejpluta.base.editor.event.ClearProcessLogsEvent
 import com.bartlomiejpluta.base.editor.process.runner.jar.JarRunner
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
+import javafx.beans.property.SimpleObjectProperty
 import javafx.event.EventHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import tornadofx.*
 import tornadofx.FX.Companion.eventbus
-import tornadofx.getValue
-import tornadofx.runAsync
-import tornadofx.setValue
-import tornadofx.toProperty
 
 @Component
 class DefaultApplicationRunner : ApplicationRunner {
@@ -31,9 +29,12 @@ class DefaultApplicationRunner : ApplicationRunner {
    override val isRunningProperty = false.toProperty()
    private var isRunning by isRunningProperty
 
+   override val processProperty = SimpleObjectProperty<Process>()
+   private var process by processProperty
+
    override fun run() {
       projectContext.project?.let { project ->
-         if (isRunning) {
+         if (process != null) {
             return@let
          }
 
@@ -47,11 +48,15 @@ class DefaultApplicationRunner : ApplicationRunner {
       }
    }
 
+   override fun terminate() {
+      process?.destroyForcibly()
+   }
+
    private fun runApplication(project: Project) {
       eventbus.fire(ClearProcessLogsEvent)
 
       val builder = jarRunner.run(project.buildOutputJarFile)
-      val process = builder.start()
+      process = builder.start()
 
       runAsync {
          process.inputStream.bufferedReader().forEachLine {
@@ -67,6 +72,7 @@ class DefaultApplicationRunner : ApplicationRunner {
 
       process.onExit().thenApply {
          eventbus.fire(AppendProcessLogsEvent(Severity.INFO, "\nProcess exited with code ${it.exitValue()}"))
+         process = null
          isRunning = false
       }
    }

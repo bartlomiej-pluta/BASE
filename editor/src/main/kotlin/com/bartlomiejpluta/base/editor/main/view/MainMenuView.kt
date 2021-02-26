@@ -2,8 +2,8 @@ package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.code.build.pipeline.BuildPipelineService
 import com.bartlomiejpluta.base.editor.main.controller.MainController
-import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.process.runner.app.ApplicationRunner
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import tornadofx.*
 
 class MainMenuView : View() {
@@ -57,7 +57,8 @@ class MainMenuView : View() {
          enableWhen(projectContext.projectProperty.isNotNull)
 
          item("Compile") {
-            enableWhen(buildPipelineService.isRunningProperty.not())
+            enableWhen(buildPipelineService.isRunningProperty.not().and(applicationRunner.isRunningProperty.not()))
+
             action {
                buildPipelineService.build()
             }
@@ -65,8 +66,23 @@ class MainMenuView : View() {
 
          item("Run") {
             enableWhen(applicationRunner.isRunningProperty.not())
+
             action {
                applicationRunner.run()
+            }
+         }
+
+         item("Terminate") {
+            enableWhen(applicationRunner.processProperty.isNotNull)
+
+            action {
+               applicationRunner.terminate()
+            }
+         }
+
+         item("Clean") {
+            action {
+               buildPipelineService.clean()
             }
          }
       }

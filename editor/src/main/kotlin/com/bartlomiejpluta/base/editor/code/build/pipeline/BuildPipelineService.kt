@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty
 import javafx.concurrent.Task
 
 interface BuildPipelineService {
-   fun build(): Task<Unit>
    val isRunningProperty: BooleanProperty
+   fun build(): Task<Unit>
+   fun clean()
 }
