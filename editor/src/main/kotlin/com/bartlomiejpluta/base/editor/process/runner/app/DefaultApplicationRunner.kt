@@ -38,7 +38,12 @@ class DefaultApplicationRunner : ApplicationRunner {
          }
 
          isRunning = true
-         pipelineService.build().onSucceeded = EventHandler { runApplication(project) }
+
+         if (project.buildOutputJarFile.exists() && project.buildOutputJarFile.isFile) {
+            runApplication(project)
+         } else {
+            pipelineService.build().onSucceeded = EventHandler { runApplication(project) }
+         }
       }
    }
 
