@@ -59,6 +59,10 @@ class Project {
    var buildOutDirectory by buildOutDirectoryProperty
       private set
 
+   val buildOutputJarFileProperty =
+      createObjectBinding({ File(buildOutDirectory, PROJECT_OUTPUT_JAR_FILE) }, buildOutDirectoryProperty)
+   val buildOutputJarFile by buildOutputJarFileProperty
+
    init {
       sourceDirectoryProperty.addListener { _, _, dir ->
          dir?.let {
@@ -83,6 +87,8 @@ class Project {
 
    companion object {
       const val PROJECT_FILE = "project.bep"
+      const val PROJECT_OUTPUT_JAR_FILE = "game.jar"
+
       const val MAPS_DIR = "maps"
       const val TILESETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"

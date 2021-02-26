@@ -98,7 +98,6 @@ class DefaultBuildPipelineService : BuildPipelineService {
    }
 
    companion object {
-      private const val OUTPUT_JAR_NAME = "game.jar"
       private const val TAG = "Build"
    }
 }
