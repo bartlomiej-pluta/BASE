@@ -1,9 +1,13 @@
 package com.bartlomiejpluta.base.editor.code.build.compiler
 
+import com.bartlomiejpluta.base.editor.code.build.model.ClasspathResource
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
 import org.codehaus.commons.compiler.CompileException
+import org.codehaus.commons.compiler.util.resource.FileResource
+import org.codehaus.commons.compiler.util.resource.Resource
 import org.codehaus.janino.CompilerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import tornadofx.FX
 import java.io.File
@@ -15,15 +19,31 @@ import java.util.stream.Collectors.toList
 class JaninoCompiler : ScriptCompiler {
    private val compilerFactory = CompilerFactory()
 
+   @Value("classpath:api/**/*.java")
+   private lateinit var apiFiles: Array<org.springframework.core.io.Resource>
+
    override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File) {
-      val files = sourceDirectory.allChildren.map(FileSystemNode::file).filter(File::isFile)
+      val sources = sourceDirectory
+         .allChildren
+         .map(FileSystemNode::file)
+         .filter(File::isFile)
+         .map(::FileResource)
+         .toTypedArray<Resource>()
+
+      val api = apiFiles
+         .map(::ClasspathResource)
+         .toTypedArray()
+
+      val resources = sources + api
+
       val compiler = compilerFactory.newCompiler()
+
 
       // FIXME:
       // For some reason the compiler's error handler does not want to catch
       // syntax errors. The only way to catch it is just catching CompileExceptions
       try {
-         compiler.compile(files.toTypedArray())
+         compiler.compile(resources)
          FX.eventbus.fire(UpdateCompilationLogEvent(UpdateCompilationLogEvent.Severity.INFO, "Compilation success"))
          moveClassFilesToTargetDirectory(sourceDirectory.file, targetDirectory)
       } catch (e: CompileException) {

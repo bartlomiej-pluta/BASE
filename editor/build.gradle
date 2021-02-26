@@ -47,15 +47,21 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
 }
 
-task copyGameEngine(type: Copy) {
+task provideGameEngine(type: Copy) {
     dependsOn(":game:build")
 
     from project(':game').file('build/libs/game.jar')
     into file("build/resources/main/engine")
 }
 
+task provideApi(type: Copy) {
+    from project(':api').file('src/main/java')
+    into file('build/resources/main/api')
+}
+
 processResources {
-    dependsOn(copyGameEngine)
+    dependsOn(provideGameEngine)
+    dependsOn(provideApi)
 }
 
 build {
