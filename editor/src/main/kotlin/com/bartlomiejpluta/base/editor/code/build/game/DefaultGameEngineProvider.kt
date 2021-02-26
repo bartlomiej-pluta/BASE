@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.build.game
 
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.ERROR
+import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import org.springframework.stereotype.Component
 import java.io.File
 
@@ -21,7 +21,7 @@ class DefaultGameEngineProvider : GameEngineProvider {
       try {
          tryToProvide(targetJar)
       } catch (e: Exception) {
-         throw BuildException(ERROR, "Engine Provider", e.message, e)
+         throw BuildException(Severity.ERROR, "Engine Provider", e.message, e)
       }
    }
 

@@ -5,8 +5,8 @@ import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.game.GameEngineProvider
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
 import com.bartlomiejpluta.base.editor.code.build.project.ProjectAssembler
+import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.INFO
 import com.bartlomiejpluta.base.editor.event.ClearCompilationLogEvent
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import tornadofx.*
 import tornadofx.FX.Companion.eventbus
-import java.io.File
 
 @Component
 class DefaultBuildPipelineService : BuildPipelineService {
@@ -73,21 +72,21 @@ class DefaultBuildPipelineService : BuildPipelineService {
       eventbus.fire(ClearCompilationLogEvent)
       prepareBuildDirectory(project)
 
-      val outputFile = File(project.buildOutDirectory, OUTPUT_JAR_NAME)
+      val outputFile = project.buildOutputJarFile
       val startTime = System.currentTimeMillis()
 
-      eventbus.fire(AppendCompilationLogEvent(INFO, "Compiling sources...", tag = TAG))
+      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Compiling sources...", tag = TAG))
       compiler.compile(project.codeFSNode, project.buildClassesDirectory)
 
-      eventbus.fire(AppendCompilationLogEvent(INFO, "Assembling game engine...", tag = TAG))
+      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
       engineProvider.provideBaseGameEngine(outputFile)
 
-      eventbus.fire(AppendCompilationLogEvent(INFO, "Assembling project assets...", tag = TAG))
+      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Assembling project assets...", tag = TAG))
       packager.pack(project.buildClassesDirectory, outputFile, "BOOT-INF/classes")
       projectAssembler.assembly(project, outputFile)
 
       val buildingTime = (System.currentTimeMillis() - startTime) / 1000.0
-      eventbus.fire(AppendCompilationLogEvent(INFO, "Done [${buildingTime}s]", tag = TAG))
+      eventbus.fire(AppendCompilationLogEvent(Severity.INFO, "Done [${buildingTime}s]", tag = TAG))
    }
 
    private fun prepareBuildDirectory(project: Project) {

@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.editor.code.build.project
 
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
+import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.project.model.Project
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -18,7 +18,7 @@ class DefaultProjectAssembler : ProjectAssembler {
       try {
          tryToAssembly(project, targetJar)
       } catch (e: Exception) {
-         throw BuildException(AppendCompilationLogEvent.Severity.ERROR, "Project Assembler", e.message, e)
+         throw BuildException(Severity.ERROR, "Project Assembler", e.message, e)
       }
    }
 

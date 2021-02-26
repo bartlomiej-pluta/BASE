@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.code.view
 
-import com.bartlomiejpluta.base.editor.code.component.CompilationLogs
+import com.bartlomiejpluta.base.editor.common.logs.component.LogsPane
 import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
 import com.bartlomiejpluta.base.editor.event.ClearCompilationLogEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
@@ -15,7 +15,7 @@ class CompilerLogsView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
 
-   private val compilationLogs = CompilationLogs(this::locationClick)
+   private val compilationLogs = LogsPane(this::locationClick)
 
    init {
       subscribe<AppendCompilationLogEvent> { event ->

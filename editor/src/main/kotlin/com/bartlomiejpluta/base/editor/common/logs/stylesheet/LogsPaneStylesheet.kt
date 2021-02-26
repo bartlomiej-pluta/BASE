@@ -1,16 +1,16 @@
-package com.bartlomiejpluta.base.editor.code.stylesheet
+package com.bartlomiejpluta.base.editor.common.logs.stylesheet
 
 import javafx.scene.text.FontWeight
 import tornadofx.Stylesheet
 import tornadofx.cssclass
 
-class CompilerLogsStylesheet : Stylesheet() {
+class LogsPaneStylesheet : Stylesheet() {
    companion object {
-      val compilerLogs by cssclass()
+      val logsPane by cssclass()
    }
 
    init {
-      compilerLogs {
+      logsPane {
          fontFamily = "monospace"
          fontWeight = FontWeight.MEDIUM
       }

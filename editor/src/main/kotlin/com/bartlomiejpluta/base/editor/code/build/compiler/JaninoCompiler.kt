@@ -3,9 +3,8 @@ package com.bartlomiejpluta.base.editor.code.build.compiler
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.model.ClasspathResource
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.ERROR
-import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.WARNING
 import org.codehaus.commons.compiler.CompileException
 import org.codehaus.commons.compiler.util.resource.FileResource
 import org.codehaus.commons.compiler.util.resource.Resource
@@ -39,7 +38,7 @@ class JaninoCompiler : Compiler {
       val locationIndex = e.location?.toString()?.length?.plus(2) ?: 0
       val message = e.message?.substring(locationIndex)
 
-      throw BuildException(ERROR, "Compiler", e.location, message, e)
+      throw BuildException(Severity.ERROR, "Compiler", e.location, message, e)
    }
 
    private fun tryToCompile(sourceDirectory: FileSystemNode, targetDirectory: File) {
@@ -49,7 +48,7 @@ class JaninoCompiler : Compiler {
          setDestinationDirectory(targetDirectory, false)
 
          setWarningHandler { handle, message, location ->
-            eventbus.fire(AppendCompilationLogEvent(WARNING, "$message ($handle)", location, "Compiler"))
+            eventbus.fire(AppendCompilationLogEvent(Severity.WARNING, "$message ($handle)", location, "Compiler"))
          }
 
          compile(compilationUnits)
