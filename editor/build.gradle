@@ -42,6 +42,8 @@ dependencies {
     implementation 'org.kordamp.ikonli:ikonli-fontawesome-pack'
     implementation "org.fxmisc.richtext:richtextfx:${richtextfxVersion}"
     implementation "org.codehaus.janino:janino:${janinoVersion}"
+    implementation "org.codehaus.janino:commons-compiler:${janinoVersion}"
+
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter'
