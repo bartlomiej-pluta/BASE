@@ -1,28 +1,62 @@
 package com.bartlomiejpluta.base.editor.code.build.compiler
 
+import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.model.ClasspathResource
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
-import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.ERROR
+import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent.Severity.WARNING
 import org.codehaus.commons.compiler.CompileException
 import org.codehaus.commons.compiler.util.resource.FileResource
 import org.codehaus.commons.compiler.util.resource.Resource
 import org.codehaus.janino.CompilerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import tornadofx.FX
+import tornadofx.FX.Companion.eventbus
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Collectors.toList
 
 @Component
-class JaninoCompiler : ScriptCompiler {
+class JaninoCompiler : Compiler {
    private val compilerFactory = CompilerFactory()
 
    @Value("classpath:api/**/*.java")
    private lateinit var apiFiles: Array<org.springframework.core.io.Resource>
 
-   override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File) {
+   override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File) = try {
+      tryToCompile(sourceDirectory, targetDirectory)
+
+      /* Because Janino parser does not provide error handler for parsers:
+      *
+      * > Notice that there is no Parser.setErrorHandler() method, but parse errors always throw a
+      * > CompileException. The reason being is that there is no reasonable way to recover from parse errors and
+      * > continue parsing, so there is no need to install a custom parse error handler.
+      * > (org.codehaus.janino.Parser.java)
+      *
+      * the try-catch statement is required here to catch all parsing exceptions and re-throw them
+      * as BuildException
+      */
+   } catch (e: CompileException) {
+      val locationIndex = e.location?.toString()?.length?.plus(2) ?: 0
+      val message = e.message?.substring(locationIndex)
+
+      throw BuildException(ERROR, "Compiler", e.location, message, e)
+   }
+
+   private fun tryToCompile(sourceDirectory: FileSystemNode, targetDirectory: File) {
+      val compilationUnits = prepareCompilationUnits(sourceDirectory)
+
+      compilerFactory.newCompiler().apply {
+         setDestinationDirectory(targetDirectory, false)
+
+         setWarningHandler { handle, message, location ->
+            eventbus.fire(AppendCompilationLogEvent(WARNING, "$message ($handle)", location, "Compiler"))
+         }
+
+         compile(compilationUnits)
+      }
+   }
+
+   private fun prepareCompilationUnits(sourceDirectory: FileSystemNode): Array<Resource> {
       val sources = sourceDirectory
          .allChildren
          .map(FileSystemNode::file)
@@ -34,40 +68,6 @@ class JaninoCompiler : ScriptCompiler {
          .map(::ClasspathResource)
          .toTypedArray()
 
-      val resources = sources + api
-
-      val compiler = compilerFactory.newCompiler()
-
-
-      // FIXME:
-      // For some reason the compiler's error handler does not want to catch
-      // syntax errors. The only way to catch it is just catching CompileExceptions
-      try {
-         compiler.compile(resources)
-         FX.eventbus.fire(UpdateCompilationLogEvent(UpdateCompilationLogEvent.Severity.INFO, "Compilation success"))
-         moveClassFilesToTargetDirectory(sourceDirectory.file, targetDirectory)
-      } catch (e: CompileException) {
-
-         // Because the Janino compiler assemblies the message with the location
-         // in the LocatedException.getMessage() method, we just need to remove it
-         // to have a plain message along with the plain location as separated objects
-         val locationIndex = e.location?.toString()?.length ?: 0
-         val message = e.message?.substring(locationIndex) ?: ""
-         FX.eventbus.fire(UpdateCompilationLogEvent(UpdateCompilationLogEvent.Severity.ERROR, message, e.location))
-      }
-   }
-
-   private fun moveClassFilesToTargetDirectory(sourceDirectory: File, targetDirectory: File) {
-      val files = Files.walk(sourceDirectory.toPath())
-         .filter(Files::isRegularFile)
-         .map(Path::toFile)
-         .collect(toList())
-
-      files.filter { it.extension == "class" }.forEach {
-         val relative = it.toRelativeString(sourceDirectory)
-         val targetFile = File(targetDirectory, relative)
-         it.copyTo(targetFile, overwrite = true)
-         it.delete()
-      }
+      return sources + api
    }
 }

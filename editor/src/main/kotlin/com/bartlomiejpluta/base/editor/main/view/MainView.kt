@@ -6,8 +6,8 @@ import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
 import com.bartlomiejpluta.base.editor.code.view.CompilerLogsView
 import com.bartlomiejpluta.base.editor.code.view.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
+import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
-import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
@@ -78,7 +78,7 @@ class MainView : View("BASE Game Editor") {
          title = "BASE Game Editor$projectName"
       }
 
-      subscribe<UpdateCompilationLogEvent> {
+      subscribe<AppendCompilationLogEvent> {
          compilationLogItem.expanded = true
       }
 

@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.component
 
 import com.bartlomiejpluta.base.editor.code.stylesheet.CompilerLogsStylesheet
-import com.bartlomiejpluta.base.editor.event.UpdateCompilationLogEvent
+import com.bartlomiejpluta.base.editor.event.AppendCompilationLogEvent
 import javafx.scene.Cursor
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
@@ -21,13 +21,14 @@ class CompilationLogs(private val locationClick: (location: Location) -> Unit) :
       children += editor
    }
 
-   fun setEntry(message: String, severity: UpdateCompilationLogEvent.Severity, location: Location?) {
-      editor.clear()
-
+   fun appendEntry(message: String, severity: AppendCompilationLogEvent.Severity, location: Location?, tag: String?) {
       val locationRef = CompilationLogStyle(location = location, onClick = locationClick)
+      val severityStyle = CompilationLogStyle(severity = severity)
 
+      tag?.let { editor.insert(editor.length, "[$it] ", severityStyle) }
       editor.insert(editor.length, location?.toString() ?: "", locationRef)
-      editor.insert(editor.length, message, CompilationLogStyle(severity = severity))
+      editor.insert(editor.length, (location?.let { ": " } ?: "") + message, CompilationLogStyle(severity = severity))
+      editor.insert(editor.length, "\n", CompilationLogStyle.NO_STYLE)
    }
 
    fun clear() = editor.clear()
@@ -36,7 +37,7 @@ class CompilationLogs(private val locationClick: (location: Location) -> Unit) :
 
    class CompilationLogStyle(
       private val location: Location? = null,
-      private val severity: UpdateCompilationLogEvent.Severity? = null,
+      private val severity: AppendCompilationLogEvent.Severity? = null,
       private val onClick: (Location) -> Unit = {}
    ) {
 
@@ -47,11 +48,11 @@ class CompilationLogs(private val locationClick: (location: Location) -> Unit) :
          }
       }
 
-      private fun message(text: Text, severity: UpdateCompilationLogEvent.Severity) {
+      private fun message(text: Text, severity: AppendCompilationLogEvent.Severity) {
          text.fill = when (severity) {
-            UpdateCompilationLogEvent.Severity.WARNING -> Color.ORANGE
-            UpdateCompilationLogEvent.Severity.ERROR -> Color.RED
-            UpdateCompilationLogEvent.Severity.INFO -> text.fill
+            AppendCompilationLogEvent.Severity.WARNING -> Color.ORANGE
+            AppendCompilationLogEvent.Severity.ERROR -> Color.RED
+            AppendCompilationLogEvent.Severity.INFO -> text.fill
          }
       }
 
