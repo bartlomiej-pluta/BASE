@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.code.view
+package com.bartlomiejpluta.base.editor.code.view.editor
 
 import tornadofx.Fragment
 

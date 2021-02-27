@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.code.view
+package com.bartlomiejpluta.base.editor.code.view.list
 
 import com.bartlomiejpluta.base.editor.code.component.ScriptFileTreeCell
 import com.bartlomiejpluta.base.editor.code.model.FileSystemNode

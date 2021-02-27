@@ -2,9 +2,9 @@ package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
 import com.bartlomiejpluta.base.editor.code.model.Code
-import com.bartlomiejpluta.base.editor.code.view.BuildLogsView
-import com.bartlomiejpluta.base.editor.code.view.CodeEditorFragment
-import com.bartlomiejpluta.base.editor.code.view.ScriptFilesView
+import com.bartlomiejpluta.base.editor.code.view.build.BuildLogsView
+import com.bartlomiejpluta.base.editor.code.view.editor.CodeEditorFragment
+import com.bartlomiejpluta.base.editor.code.view.list.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
@@ -120,6 +120,7 @@ class MainView : View("BASE Game Editor") {
          }
 
          item("Project Parameters") {
+            enableWhen(projectContext.projectProperty.isNotNull)
             this += projectPropertiesView
          }
       }

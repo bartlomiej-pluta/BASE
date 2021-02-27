@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.code.view
+package com.bartlomiejpluta.base.editor.code.view.editor
 
 import com.bartlomiejpluta.base.editor.code.component.CodeEditor
 import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter

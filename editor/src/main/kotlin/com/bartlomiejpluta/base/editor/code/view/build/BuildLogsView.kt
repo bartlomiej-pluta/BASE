@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.code.view
+package com.bartlomiejpluta.base.editor.code.view.build
 
 import com.bartlomiejpluta.base.editor.common.logs.component.LogsPane
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
@@ -9,7 +9,6 @@ import org.codehaus.commons.compiler.Location
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 import java.io.File
-
 
 class BuildLogsView : View() {
    private val projectContext: ProjectContext by di()
