@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.project.context
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
+import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -18,7 +19,6 @@ import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import com.bartlomiejpluta.base.editor.util.uid.UID
 import javafx.beans.binding.Bindings.createObjectBinding
 import javafx.beans.property.ObjectProperty
-import javafx.beans.property.Property
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.image.Image
 import org.springframework.beans.factory.annotation.Autowired
@@ -159,10 +159,10 @@ class DefaultProjectContext : ProjectContext {
       } ?: throw IllegalStateException("There is no open project in the context")
    }
 
-   override fun loadScript(fileProperty: Property<File>): Code {
+   override fun loadScript(fileNode: FileNode): Code {
       val typeProperty = SimpleObjectProperty<CodeType>().apply {
          bind(createObjectBinding({
-            when (fileProperty.value.extension.toLowerCase()) {
+            when (fileNode.extension.toLowerCase()) {
                "java" -> CodeType.JAVA
                else -> throw IllegalStateException("Unsupported script type")
             }
@@ -170,12 +170,12 @@ class DefaultProjectContext : ProjectContext {
       }
 
 
-      val code = fileProperty.value.readText()
+      val code = fileNode.readText()
 
-      return Code(fileProperty, typeProperty, code)
+      return Code(fileNode, typeProperty, code)
    }
 
    override fun saveScript(code: Code) {
-      code.file.writeText(code.code)
+      code.fileNode.writeText(code.code)
    }
 }

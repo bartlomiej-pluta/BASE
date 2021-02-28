@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.model
 
-import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset

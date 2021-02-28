@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.component
 
-import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.file.model.FileType
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.cell.TextFieldTreeCell
 import org.kordamp.ikonli.javafx.FontIcon
@@ -9,8 +10,8 @@ import tornadofx.enableWhen
 import tornadofx.item
 import tornadofx.toProperty
 
-class ScriptFileTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSystemNode) -> Unit) :
-   TextFieldTreeCell<FileSystemNode>() {
+class ScriptFileTreeCell(onCreate: (FileNode) -> Unit, onDelete: (FileNode) -> Unit) :
+   TextFieldTreeCell<FileNode>() {
    private val isRoot = true.toProperty()
    private val isNotRoot = isRoot.not()
 
@@ -68,11 +69,11 @@ class ScriptFileTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSyst
       converter = ScriptFileStringConverter(this, this::renameFile)
    }
 
-   private fun renameFile(file: FileSystemNode, name: String) = file.apply {
+   private fun renameFile(file: FileNode, name: String) = file.apply {
       file.rename(name)
    }
 
-   override fun updateItem(item: FileSystemNode?, empty: Boolean) {
+   override fun updateItem(item: FileNode?, empty: Boolean) {
       super.updateItem(item, empty)
 
       if (empty || item == null) {
@@ -83,13 +84,13 @@ class ScriptFileTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSyst
          return
       }
 
-      text = item.file.name
-      graphic = FontIcon(getFileSystemNodeIcon(item))
+      text = item.name
+      graphic = FontIcon(getFileNodeIcon(item))
 
       contextMenu = when {
          isEditing -> null
-         item.isFile -> fileMenu
-         item.isDirectory -> directoryMenu
+         item.type == FileType.FILE -> fileMenu
+         item.type == FileType.DIRECTORY -> directoryMenu
          else -> null
       }
 
@@ -97,12 +98,12 @@ class ScriptFileTreeCell(onCreate: (FileSystemNode) -> Unit, onDelete: (FileSyst
    }
 
    companion object {
-      private fun getFileSystemNodeIcon(file: FileSystemNode): String {
-         if (file.isDirectory) {
+      private fun getFileNodeIcon(file: FileNode): String {
+         if (file.type == FileType.DIRECTORY) {
             return "fa-folder"
          }
 
-         return when (file.file.extension.toLowerCase()) {
+         return when (file.extension.toLowerCase()) {
             "java" -> "fa-code"
             else -> "fa-file"
          }

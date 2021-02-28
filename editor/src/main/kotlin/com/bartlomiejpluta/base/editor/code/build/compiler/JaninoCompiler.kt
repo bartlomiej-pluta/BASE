@@ -2,9 +2,9 @@ package com.bartlomiejpluta.base.editor.code.build.compiler
 
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.model.ClasspathResource
-import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import org.codehaus.commons.compiler.CompileException
 import org.codehaus.commons.compiler.util.resource.FileResource
 import org.codehaus.commons.compiler.util.resource.Resource

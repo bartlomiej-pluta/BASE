@@ -1,7 +1,8 @@
 package com.bartlomiejpluta.base.editor.code.view.list
 
 import com.bartlomiejpluta.base.editor.code.component.ScriptFileTreeCell
-import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.file.model.FileType
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.scene.control.TextInputDialog
@@ -28,7 +29,7 @@ class ScriptFilesView : View() {
       }
    }
 
-   private val treeView: TreeView<FileSystemNode> = treeview {
+   private val treeView: TreeView<FileNode> = treeview {
       setCellFactory {
          ScriptFileTreeCell(this@ScriptFilesView::onCreate, mainController::closeScript)
       }
@@ -36,7 +37,7 @@ class ScriptFilesView : View() {
       setOnMouseClicked { event ->
          if (event.button == MouseButton.PRIMARY && event.clickCount == 2) {
             selectionModel?.selectedItem?.value
-               .takeIf { it?.isFile ?: false }
+               .takeIf { it?.type == FileType.FILE }
                ?.let { mainController.openScript(it) }
 
             event.consume()
@@ -46,7 +47,7 @@ class ScriptFilesView : View() {
 
    override val root = treeView
 
-   private fun onCreate(fsNode: FileSystemNode) {
+   private fun onCreate(fsNode: FileNode) {
       TextInputDialog().apply {
          width = 300.0
          contentText = "Class name"

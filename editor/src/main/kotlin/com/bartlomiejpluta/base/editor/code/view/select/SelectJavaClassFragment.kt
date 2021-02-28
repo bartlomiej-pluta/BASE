@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.view.select
 
-import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.file.model.FileType
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.beans.binding.Bindings.createBooleanBinding
 import javafx.beans.property.SimpleObjectProperty
@@ -17,7 +18,7 @@ class SelectJavaClassFragment : Fragment("Select Java Class") {
       SelectJavaClassView::selection to selection
    )
 
-   private val isFile = createBooleanBinding({ selection.value?.isFile ?: false }, selection)
+   private val isFile = createBooleanBinding({ selection.value?.type == FileType.FILE }, selection)
 
    private var onCompleteConsumer: ((String) -> Unit)? = null
 

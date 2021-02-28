@@ -3,10 +3,10 @@ package com.bartlomiejpluta.base.editor.main.controller
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
-import com.bartlomiejpluta.base.editor.code.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
+import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -87,12 +87,12 @@ class MainController : Controller() {
       }
    }
 
-   fun openScript(fsNode: FileSystemNode, line: Int = 1, column: Int = 1) {
-      val findScript = { script: Code -> script.file.absolutePath == fsNode.file.absolutePath }
+   fun openScript(fsNode: FileNode, line: Int = 1, column: Int = 1) {
+      val findScript = { script: Code -> script.fileNode.absolutePath == fsNode.absolutePath }
       val updateExistingScope = { scope: CodeScope -> scope.setCaretPosition(line, column) }
 
       openItem(findScript, updateExistingScope) {
-         val code = projectContext.loadScript(fsNode.fileProperty)
+         val code = projectContext.loadScript(fsNode)
          val vm = CodeVM(code)
          val scope = CodeScope(line, column)
          setInScope(vm, scope)
@@ -151,13 +151,13 @@ class MainController : Controller() {
       }
    }
 
-   fun closeScript(fsNode: FileSystemNode) {
-      openItems.entries.firstOrNull { (_, item) -> item is Code && item.file.absolutePath == fsNode.file.absolutePath }?.key?.let {
+   fun closeScript(fsNode: FileNode) {
+      openItems.entries.firstOrNull { (_, item) -> item is Code && item.fileNode.absolutePath == fsNode.absolutePath }?.key?.let {
          openItems.remove(it)
       }
 
       fsNode.allChildren.forEach { child ->
-         openItems.entries.firstOrNull { (_, item) -> item is Code && item.file.absolutePath == child.file.absolutePath }?.key?.let {
+         openItems.entries.firstOrNull { (_, item) -> item is Code && item.fileNode.absolutePath == child.absolutePath }?.key?.let {
             openItems.remove(it)
          }
       }

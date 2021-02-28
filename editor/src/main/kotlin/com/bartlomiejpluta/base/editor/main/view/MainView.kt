@@ -153,7 +153,7 @@ class MainView : View("BASE Game Editor") {
          val editor = find<CodeEditorFragment>(scope)
          content = editor.root
          graphic = FontIcon("fa-code")
-         textProperty().bindBidirectional(item.fileProperty.select { it.name.toProperty() })
+         textProperty().bind(item.fileNode.nameProperty)
 
          setOnClosed {
             editor.shutdown()
