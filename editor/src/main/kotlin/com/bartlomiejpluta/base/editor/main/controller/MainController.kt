@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.main.controller
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.characterset.view.importing.ImportCharacterSetFragment
+import com.bartlomiejpluta.base.editor.characterset.viewmodel.CharacterSetAssetDataVM
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
@@ -145,6 +147,20 @@ class MainController : Controller() {
       find<ImportImageFragment>(scope).apply {
          onComplete {
             projectContext.importImage(it)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
+   fun importCharacterSet() {
+      val vm = CharacterSetAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportCharacterSetFragment>(scope).apply {
+         onComplete {
+            projectContext.importCharacterSet(it)
          }
 
          openModal(block = true, resizable = false)

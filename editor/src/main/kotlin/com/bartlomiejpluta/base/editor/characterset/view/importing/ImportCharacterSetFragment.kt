@@ -1,7 +1,7 @@
-package com.bartlomiejpluta.base.editor.tileset.view.importing
+package com.bartlomiejpluta.base.editor.characterset.view.importing
 
-import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
-import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
+import com.bartlomiejpluta.base.editor.characterset.viewmodel.CharacterSetAssetDataVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Cursor
@@ -9,11 +9,11 @@ import javafx.scene.image.Image
 import javafx.stage.FileChooser
 import tornadofx.*
 
-class ImportTileSetFragment : Fragment("Import Tile Set") {
-   private val dataVM = find<TileSetAssetDataVM>()
+class ImportCharacterSetFragment : Fragment("Import Spite") {
+   private val dataVM = find<CharacterSetAssetDataVM>()
    private val imagePreview = SimpleObjectProperty<Image?>()
 
-   private var onCompleteConsumer: ((TileSetAssetData) -> Unit)? = null
+   private var onCompleteConsumer: ((CharacterSetAssetData) -> Unit)? = null
 
    init {
       dataVM.fileProperty.addListener { _, _, file ->
@@ -24,26 +24,26 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
       }
    }
 
-   fun onComplete(consumer: (TileSetAssetData) -> Unit) {
+   fun onComplete(consumer: (CharacterSetAssetData) -> Unit) {
       this.onCompleteConsumer = consumer
    }
 
    override val root = form {
       prefHeight = 480.0
 
-      fieldset("Import Tile Set") {
+      fieldset("Import Character Set") {
          hbox {
             vbox {
                scrollpane {
                   prefWidth = 300.0
                   prefHeightProperty().bind(this@form.heightProperty())
                   imageview(imagePreview)
-                  tooltip = tooltip("Click to choose Tile Set file")
+                  tooltip = tooltip("Click to choose Character Set file")
                   cursor = Cursor.HAND
 
                   setOnMouseClicked {
                      dataVM.file = chooseFile(
-                        title = "Select Tile Set",
+                        title = "Select Character Set",
                         filters = arrayOf(FileChooser.ExtensionFilter("PNG Images (*.png)", "*.png"))
                      ).getOrNull(0)
                   }
@@ -61,21 +61,21 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
             vbox {
                paddingLeft = 20.0
 
-               field("Tile Set Name") {
+               field("Character Set Name") {
                   textfield(dataVM.nameProperty) {
                      required()
                      trimWhitespace()
                   }
                }
 
-               field("Tile Set Rows") {
+               field("Character Set Rows") {
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.rowsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
                   }
                }
 
-               field("Tile Set Columns") {
+               field("Character Set Columns") {
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.columnsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)

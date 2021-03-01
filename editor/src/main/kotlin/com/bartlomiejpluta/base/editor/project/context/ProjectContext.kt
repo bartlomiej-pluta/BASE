@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.context
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
@@ -32,8 +33,9 @@ interface ProjectContext {
    fun findImageAsset(uid: String): ImageAsset
    fun loadImage(uid: String): Image
 
-   fun deleteAsset(asset: Asset)
+   fun importCharacterSet(data: CharacterSetAssetData)
 
+   fun deleteAsset(asset: Asset)
    fun loadScript(fileNode: FileNode): Code
    fun saveScript(code: Code)
 }

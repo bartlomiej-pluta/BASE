@@ -27,11 +27,16 @@ class AssetsListView : View() {
       menuitem("Import Image...") { mainController.importImage() }
    }
 
+   private val characterSets = AssetCategory("Character Sets").apply {
+      menuitem("Import Character Set...") { mainController.importCharacterSet() }
+   }
+
    private val rootItem = AssetCategory(
       name = "Project", items = observableListOf(
          maps,
          tileSets,
-         images
+         images,
+         characterSets
       )
    )
 
@@ -42,6 +47,7 @@ class AssetsListView : View() {
             Bindings.bindContent(maps.items, it.maps)
             Bindings.bindContent(tileSets.items, it.tileSets)
             Bindings.bindContent(images.items, it.images)
+            Bindings.bindContent(characterSets.items, it.characterSets)
             root.root.expandAll()
          }
       }

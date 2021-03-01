@@ -50,6 +50,12 @@ class MainMenuView : View() {
                   mainController.importImage()
                }
             }
+
+            item("Character Set...") {
+               action {
+                  mainController.importCharacterSet()
+               }
+            }
          }
       }
 
