@@ -15,7 +15,11 @@ class APIProvider {
 
    val apiNode: FileNode by lazy { loadNode() }
 
-   private fun loadNode() = ResourceFileNode.root("api").apply {
+   private fun loadNode() = ResourceFileNode.root(API_DIR).apply {
       apiIndex.inputStream.bufferedReader().use(BufferedReader::readLines).forEach(this::createNode)
+   }
+
+   companion object {
+      val API_DIR = "api"
    }
 }

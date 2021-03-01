@@ -26,13 +26,13 @@ interface FileNode {
    val lastModifiedProperty: ObservableLongValue
    val lastModified: Long
 
-   fun delete()
-   fun rename(name: String)
-   fun refresh()
-   fun createNode(path: String): FileNode
+   fun delete(): Unit = throw UnsupportedOperationException()
+   fun rename(name: String): Unit = throw UnsupportedOperationException()
+   fun refresh(): Unit = throw UnsupportedOperationException()
+   fun createNode(path: String): FileNode = throw UnsupportedOperationException()
 
-   fun inputStream(): InputStream
-   fun outputStream(): OutputStream
+   fun inputStream(): InputStream = throw UnsupportedOperationException()
+   fun outputStream(): OutputStream = throw UnsupportedOperationException()
 
    fun readText(charset: Charset = Charsets.UTF_8) = inputStream().reader(charset).readText()
    fun writeText(text: String, charset: Charset = Charsets.UTF_8) = writeBytes(text.toByteArray(charset))

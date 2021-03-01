@@ -48,11 +48,6 @@ class ResourceFileNode private constructor(
       ?.inputStream
       ?: throw IllegalStateException("Attempt to open input stream of resource directory")
 
-   override fun delete() = throw UnsupportedOperationException()
-   override fun rename(name: String) = throw UnsupportedOperationException()
-   override fun refresh() = throw UnsupportedOperationException()
-   override fun outputStream() = throw UnsupportedOperationException()
-
    companion object {
       fun resource(resource: Resource, parent: ResourceFileNode) = ResourceFileNode(resource, parent)
       fun directory(name: String, parent: ResourceFileNode) = ResourceFileNode(null, parent, FileType.DIRECTORY, name)

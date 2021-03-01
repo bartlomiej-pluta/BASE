@@ -1,27 +1,29 @@
 package com.bartlomiejpluta.base.editor.code.view.select
 
-import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.file.model.FileType
 import javafx.beans.property.Property
 import javafx.scene.control.TreeItem
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 class SelectJavaClassView : View() {
-   val rootNode: FileSystemNode by param()
-   val selection: Property<FileSystemNode> by param()
+   val rootNode: FileNode by param()
+   val selection: Property<FileNode> by param()
 
-   private val treeView = treeview<FileSystemNode> {
+   private val treeView = treeview<FileNode> {
       root = TreeItem(rootNode)
+      isShowRoot = false
 
       populate {
          it.value?.children
       }
 
       cellFormat {
-         text = it.file.nameWithoutExtension
-         graphic = when {
-            it.file.isFile -> FontIcon("fa-cube")
-            else -> FontIcon("fa-folder")
+         text = it.name
+         graphic = when (it.type) {
+            FileType.FILE -> FontIcon("fa-cube")
+            FileType.DIRECTORY -> FontIcon("fa-folder")
          }
       }
 
