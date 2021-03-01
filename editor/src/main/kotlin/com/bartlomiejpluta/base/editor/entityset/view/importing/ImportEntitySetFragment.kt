@@ -1,7 +1,7 @@
-package com.bartlomiejpluta.base.editor.characterset.view.importing
+package com.bartlomiejpluta.base.editor.entityset.view.importing
 
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
-import com.bartlomiejpluta.base.editor.characterset.viewmodel.CharacterSetAssetDataVM
+import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
+import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Cursor
@@ -9,11 +9,11 @@ import javafx.scene.image.Image
 import javafx.stage.FileChooser
 import tornadofx.*
 
-class ImportCharacterSetFragment : Fragment("Import Spite") {
-   private val dataVM = find<CharacterSetAssetDataVM>()
+class ImportEntitySetFragment : Fragment("Import Entity Set") {
+   private val dataVM = find<EntitySetAssetDataVM>()
    private val imagePreview = SimpleObjectProperty<Image?>()
 
-   private var onCompleteConsumer: ((CharacterSetAssetData) -> Unit)? = null
+   private var onCompleteConsumer: ((EntitySetAssetData) -> Unit)? = null
 
    init {
       dataVM.fileProperty.addListener { _, _, file ->
@@ -24,26 +24,26 @@ class ImportCharacterSetFragment : Fragment("Import Spite") {
       }
    }
 
-   fun onComplete(consumer: (CharacterSetAssetData) -> Unit) {
+   fun onComplete(consumer: (EntitySetAssetData) -> Unit) {
       this.onCompleteConsumer = consumer
    }
 
    override val root = form {
       prefHeight = 480.0
 
-      fieldset("Import Character Set") {
+      fieldset("Import Entity Set") {
          hbox {
             vbox {
                scrollpane {
                   prefWidth = 300.0
                   prefHeightProperty().bind(this@form.heightProperty())
                   imageview(imagePreview)
-                  tooltip = tooltip("Click to choose Character Set file")
+                  tooltip = tooltip("Click to choose Entity Set file")
                   cursor = Cursor.HAND
 
                   setOnMouseClicked {
                      dataVM.file = chooseFile(
-                        title = "Select Character Set",
+                        title = "Select Entity Set",
                         filters = arrayOf(FileChooser.ExtensionFilter("PNG Images (*.png)", "*.png"))
                      ).getOrNull(0)
                   }
@@ -61,21 +61,21 @@ class ImportCharacterSetFragment : Fragment("Import Spite") {
             vbox {
                paddingLeft = 20.0
 
-               field("Character Set Name") {
+               field("Entity Set Name") {
                   textfield(dataVM.nameProperty) {
                      required()
                      trimWhitespace()
                   }
                }
 
-               field("Character Set Rows") {
+               field("Entity Set Rows") {
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.rowsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
                   }
                }
 
-               field("Character Set Columns") {
+               field("Entity Set Columns") {
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.columnsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)

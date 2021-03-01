@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.model
 
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
+import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -29,9 +29,9 @@ class Project {
    val maps = observableListOf<GameMapAsset>()
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
-   val characterSets = observableListOf<CharacterSetAsset>()
+   val entitySets = observableListOf<EntitySet>()
 
-   val assetLists = listOf(maps, tileSets, images, characterSets)
+   val assetLists = listOf(maps, tileSets, images, entitySets)
 
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
@@ -45,8 +45,8 @@ class Project {
    var imagesDirectory by imagesDirectoryProperty
       private set
 
-   val characterSetsDirectoryProperty = SimpleObjectProperty<File>()
-   var characterSetsDirectory by characterSetsDirectoryProperty
+   val entitySetsDirectoryProperty = SimpleObjectProperty<File>()
+   var entitySetsDirectory by entitySetsDirectoryProperty
       private set
 
    val codeDirectoryProperty = SimpleObjectProperty<File>()
@@ -78,7 +78,7 @@ class Project {
             mapsDirectory = File(it, MAPS_DIR)
             tileSetsDirectory = File(it, TILE_SETS_DIR)
             imagesDirectory = File(it, IMAGES_DIR)
-            characterSetsDirectory = File(it, CHARACTER_SETS_DIR)
+            entitySetsDirectory = File(it, ENTITY_SETS_DIR)
             codeDirectory = File(it, CODE_DIR)
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
@@ -92,7 +92,7 @@ class Project {
       mapsDirectory?.mkdirs()
       tileSetsDirectory?.mkdirs()
       imagesDirectory?.mkdirs()
-      characterSetsDirectory?.mkdirs()
+      entitySetsDirectory?.mkdirs()
       codeDirectory?.mkdirs()
    }
 
@@ -103,7 +103,7 @@ class Project {
       const val MAPS_DIR = "maps"
       const val TILE_SETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"
-      const val CHARACTER_SETS_DIR = "charsets"
+      const val ENTITY_SETS_DIR = "entsets"
       const val CODE_DIR = "code"
       const val BUILD_DIR = "build"
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"

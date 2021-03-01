@@ -51,9 +51,9 @@ class MainMenuView : View() {
                }
             }
 
-            item("Character Set...") {
+            item("Entity Set...") {
                action {
-                  mainController.importCharacterSet()
+                  mainController.importEntitySet()
                }
             }
          }

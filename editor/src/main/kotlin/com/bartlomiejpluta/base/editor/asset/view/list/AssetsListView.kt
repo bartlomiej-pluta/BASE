@@ -27,8 +27,8 @@ class AssetsListView : View() {
       menuitem("Import Image...") { mainController.importImage() }
    }
 
-   private val characterSets = AssetCategory("Character Sets").apply {
-      menuitem("Import Character Set...") { mainController.importCharacterSet() }
+   private val entitySet = AssetCategory("Entity Sets").apply {
+      menuitem("Import Entity Set...") { mainController.importEntitySet() }
    }
 
    private val rootItem = AssetCategory(
@@ -36,7 +36,7 @@ class AssetsListView : View() {
          maps,
          tileSets,
          images,
-         characterSets
+         entitySet
       )
    )
 
@@ -47,7 +47,7 @@ class AssetsListView : View() {
             Bindings.bindContent(maps.items, it.maps)
             Bindings.bindContent(tileSets.items, it.tileSets)
             Bindings.bindContent(images.items, it.images)
-            Bindings.bindContent(characterSets.items, it.characterSets)
+            Bindings.bindContent(entitySet.items, it.entitySets)
             root.root.expandAll()
          }
       }

@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
+import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -19,7 +19,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllMaps(item.maps.map(this::serializeMap))
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
       proto.addAllImages(item.images.map(this::serializeImage))
-      proto.addAllCharacterSets(item.characterSets.map(this::serializeCharacterSet))
+      proto.addAllEntitySets(item.entitySets.map(this::serializeEntitySet))
       proto.build().writeTo(output)
    }
 
@@ -43,11 +43,11 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(image.name)
       .build()
 
-   private fun serializeCharacterSet(characterSet: CharacterSetAsset) = ProjectProto.CharacterSetAsset.newBuilder()
-      .setUid(characterSet.uid)
-      .setSource(characterSet.source)
-      .setName(characterSet.name)
-      .setRows(characterSet.rows)
-      .setColumns(characterSet.columns)
+   private fun serializeEntitySet(entitySet: EntitySet) = ProjectProto.EntitySetAsset.newBuilder()
+      .setUid(entitySet.uid)
+      .setSource(entitySet.source)
+      .setName(entitySet.name)
+      .setRows(entitySet.rows)
+      .setColumns(entitySet.columns)
       .build()
 }

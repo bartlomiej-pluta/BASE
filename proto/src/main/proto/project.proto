@@ -9,7 +9,7 @@ message Project {
   repeated GameMapAsset maps = 3;
   repeated TileSetAsset tileSets = 4;
   repeated ImageAsset images = 5;
-  repeated CharacterSetAsset characterSets = 6;
+  repeated EntitySetAsset entitySets = 6;
 }
 
 message GameMapAsset {
@@ -32,7 +32,7 @@ message ImageAsset {
   required string name = 3;
 }
 
-message CharacterSetAsset {
+message EntitySetAsset {
   required string uid = 1;
   required string source = 2;
   required string name = 3;

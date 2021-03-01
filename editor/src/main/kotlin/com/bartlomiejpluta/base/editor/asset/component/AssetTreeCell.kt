@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.editor.asset.component
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
+import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
@@ -63,7 +63,7 @@ class AssetTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAs
          is GameMapAsset -> FontIcon("fa-map")
          is TileSetAsset -> FontIcon("fa-th")
          is ImageAsset -> FontIcon("fa-image")
-         is CharacterSetAsset -> FontIcon("fa-male")
+         is EntitySet -> FontIcon("fa-male")
          else -> null
       }
    }

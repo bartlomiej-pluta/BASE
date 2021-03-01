@@ -1,11 +1,11 @@
 package com.bartlomiejpluta.base.editor.project.context
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.service.JavaClassService
+import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
+import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
@@ -164,13 +164,13 @@ class DefaultProjectContext : ProjectContext {
       File(it.imagesDirectory, asset.source).inputStream().use { fis -> Image(fis) }
    } ?: throw IllegalStateException("There is no open project in the context")
 
-   override fun importCharacterSet(data: CharacterSetAssetData) {
+   override fun importEntitySet(data: EntitySetAssetData) {
       project?.let {
-         UID.next(it.characterSets.map(Asset::uid)).let { uid ->
+         UID.next(it.entitySets.map(Asset::uid)).let { uid ->
             val source = "$uid.${data.file.extension}"
-            val targetFile = File(it.characterSetsDirectory, source)
+            val targetFile = File(it.entitySetsDirectory, source)
             data.file.copyTo(targetFile)
-            it.characterSets += CharacterSetAsset(it, uid, source, data.name, data.rows, data.columns)
+            it.entitySets += EntitySet(it, uid, source, data.name, data.rows, data.columns)
 
             save()
          }

@@ -1,12 +1,12 @@
 package com.bartlomiejpluta.base.editor.main.controller
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
-import com.bartlomiejpluta.base.editor.characterset.view.importing.ImportCharacterSetFragment
-import com.bartlomiejpluta.base.editor.characterset.viewmodel.CharacterSetAssetDataVM
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.entityset.view.importing.ImportEntitySetFragment
+import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
@@ -153,14 +153,14 @@ class MainController : Controller() {
       }
    }
 
-   fun importCharacterSet() {
-      val vm = CharacterSetAssetDataVM()
+   fun importEntitySet() {
+      val vm = EntitySetAssetDataVM()
       val scope = Scope()
       setInScope(vm, scope)
 
-      find<ImportCharacterSetFragment>(scope).apply {
+      find<ImportEntitySetFragment>(scope).apply {
          onComplete {
-            projectContext.importCharacterSet(it)
+            projectContext.importEntitySet(it)
          }
 
          openModal(block = true, resizable = false)
