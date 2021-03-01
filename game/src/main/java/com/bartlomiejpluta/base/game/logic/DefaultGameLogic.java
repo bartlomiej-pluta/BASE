@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.game.logic;
 
-import com.bartlomiejpluta.base.core.error.AppException;
+import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.core.gl.render.Renderer;
 import com.bartlomiejpluta.base.core.logic.GameLogic;
@@ -11,11 +11,14 @@ import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.map.manager.MapManager;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.game.project.loader.ProjectLoader;
+import com.bartlomiejpluta.base.game.project.model.Project;
+import com.bartlomiejpluta.base.game.project.model.RenderableContext;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import com.bartlomiejpluta.base.game.world.entity.manager.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,21 +37,26 @@ public class DefaultGameLogic implements GameLogic {
    private final FPSMonitor fpsMonitor;
    private final MapManager mapManager;
    private final ProjectLoader projectLoader;
+   private final ClassLoader classLoader;
+
+   private final RenderableContext context;
 
    private final Camera camera = new Camera();
 
-   private GameMap map;
+   private Project project;
+   private GameRunner runner;
 
+   @SneakyThrows
    @Override
    public void init(Window window) {
       log.info("Initializing game logic");
       renderer.init();
 
-      // Loading is not available right now, because no project is located in the resources
-      // projectLoader.loadProject();
-      // map = mapManager.getTheStartMapFromSomewhere() ...
+      project = projectLoader.loadProject();
+      var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());
+      runner = runnerClass.getConstructor().newInstance();
 
-      throw new AppException("TODO: Everything seems to be working fine. The game engine logic is not implemented yet though...");
+      runner.init(context);
    }
 
    @Override
@@ -63,7 +71,7 @@ public class DefaultGameLogic implements GameLogic {
 
    @Override
    public void render(Window window) {
-      renderer.render(window, camera, map);
+      renderer.render(window, camera, context);
    }
 
    @Override

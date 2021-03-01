@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.game.project.loader;
 import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.map.manager.MapManager;
 import com.bartlomiejpluta.base.game.project.config.ProjectConfiguration;
+import com.bartlomiejpluta.base.game.project.model.Project;
 import com.bartlomiejpluta.base.game.project.serial.ProjectDeserializer;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,13 @@ public class DefaultProjectLoader implements ProjectLoader {
    private final ImageManager imageManager;
 
    @Override
-   public void loadProject() {
+   public Project loadProject() {
       var resource = DefaultProjectLoader.class.getResourceAsStream(configuration.projectFile(configuration.getMainFile()));
       var project = projectDeserializer.deserialize(resource);
       project.getTileSetAssets().forEach(tileSetManager::registerAsset);
       project.getMapAssets().forEach(mapManager::registerAsset);
       project.getImageAssets().forEach(imageManager::registerAsset);
+
+      return project;
    }
 }
