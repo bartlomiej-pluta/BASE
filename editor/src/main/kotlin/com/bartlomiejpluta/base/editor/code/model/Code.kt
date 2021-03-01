@@ -6,7 +6,10 @@ import tornadofx.getValue
 import tornadofx.setValue
 import tornadofx.toProperty
 
-class Code(val fileNode: FileNode, val typeProperty: Property<CodeType>, code: String) {
+class Code(fileNode: FileNode, val typeProperty: Property<CodeType>, code: String) {
+   val fileNodeProperty = fileNode.toProperty()
+   val fileNode by fileNodeProperty
+
    val type by typeProperty
 
    val codeProperty = code.toProperty()

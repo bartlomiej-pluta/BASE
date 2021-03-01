@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.beans.binding.Bindings
 import org.kordamp.ikonli.javafx.FontIcon
@@ -25,7 +26,9 @@ class CodeEditorView : View() {
       }
    }, codeVM.typeProperty)
 
-   private val editor = CodeEditor(highlighter, codeVM.codeProperty)
+   private val editable = Bindings.createBooleanBinding({ codeVM.fileNode is FileSystemNode }, codeVM.itemProperty)
+
+   private val editor = CodeEditor(highlighter, codeVM.codeProperty, !editable.value)
 
    init {
       scope.caretDisplacementRequestListener = { line, column ->
@@ -41,7 +44,7 @@ class CodeEditorView : View() {
       top = toolbar {
          button(graphic = FontIcon("fa-floppy-o")) {
             shortcut("Ctrl+S")
-            enableWhen(codeVM.dirty)
+            enableWhen(codeVM.dirty.and(editable))
 
             action {
                codeVM.item?.let {
@@ -53,6 +56,7 @@ class CodeEditorView : View() {
 
          button(graphic = FontIcon("fa-undo")) {
             shortcut("Ctrl+Z")
+            enableWhen(editable)
 
             action {
                editor.undo()
@@ -61,6 +65,7 @@ class CodeEditorView : View() {
 
          button(graphic = FontIcon("fa-repeat")) {
             shortcut("Ctrl+Shift+Z")
+            enableWhen(editable)
 
             action {
                editor.redo()

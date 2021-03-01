@@ -6,6 +6,9 @@ import tornadofx.getValue
 import tornadofx.setValue
 
 class CodeVM(code: Code) : ItemViewModel<Code>(code) {
+   val fileNodeProperty = bind(Code::fileNodeProperty)
+   val fileNode by fileNodeProperty
+
    val typeProperty = bind(Code::typeProperty)
    val type by typeProperty
 

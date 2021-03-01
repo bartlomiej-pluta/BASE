@@ -1,8 +1,10 @@
 package com.bartlomiejpluta.base.editor.code.view.list
 
+import com.bartlomiejpluta.base.editor.code.api.APIProvider
 import com.bartlomiejpluta.base.editor.code.component.ScriptFileTreeCell
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.file.model.FileType
+import com.bartlomiejpluta.base.editor.file.model.PseudoFileNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.scene.control.TextInputDialog
@@ -18,11 +20,17 @@ import java.io.File
 class ScriptFilesView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
+   private val apiProvider: APIProvider by di()
 
    init {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
-            treeView.root = TreeItem(it.codeFSNode)
+            val rootNode = PseudoFileNode.emptyRoot().apply {
+               children += apiProvider.apiNode
+               children += it.codeFSNode
+            }
+
+            treeView.root = TreeItem(rootNode)
             treeView.populate { item -> item.value?.children }
             root.root.expandAll()
          }
@@ -30,6 +38,8 @@ class ScriptFilesView : View() {
    }
 
    private val treeView: TreeView<FileNode> = treeview {
+      isShowRoot = false
+
       setCellFactory {
          ScriptFileTreeCell(this@ScriptFilesView::onCreate, mainController::closeScript)
       }

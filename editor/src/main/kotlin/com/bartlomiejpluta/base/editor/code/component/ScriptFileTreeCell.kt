@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.component
 
 import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.file.model.FileType
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.cell.TextFieldTreeCell
@@ -89,6 +90,7 @@ class ScriptFileTreeCell(onCreate: (FileNode) -> Unit, onDelete: (FileNode) -> U
 
       contextMenu = when {
          isEditing -> null
+         item !is FileSystemNode -> null
          item.type == FileType.FILE -> fileMenu
          item.type == FileType.DIRECTORY -> directoryMenu
          else -> null

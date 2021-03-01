@@ -16,8 +16,11 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>, codeProperty: Property<String>) :
-   StackPane() {
+class CodeEditor(
+   private val highlighter: ObservableValue<out SyntaxHighlighter>,
+   codeProperty: Property<String>,
+   readonly: Boolean = false
+) : StackPane() {
    private val editor = CodeArea()
    private val executor = Executors.newSingleThreadExecutor()
 
@@ -38,6 +41,8 @@ class CodeEditor(private val highlighter: ObservableValue<out SyntaxHighlighter>
       codeProperty.bind(editor.textProperty())
       editor.paragraphGraphicFactory = LineNumberFactory.get(editor)
       applyHighlighting(highlighter.value.highlight(editor.text))
+
+      editor.isEditable = !readonly
 
       initAutoIndents()
 
