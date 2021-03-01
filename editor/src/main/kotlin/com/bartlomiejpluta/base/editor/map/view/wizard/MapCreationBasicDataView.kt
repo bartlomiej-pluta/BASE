@@ -7,7 +7,12 @@ import tornadofx.*
 class MapCreationBasicDataView : View("Basic Data") {
    private val mapBuilderVM = find<GameMapBuilderVM>()
 
-   override val complete = mapBuilderVM.valid(mapBuilderVM.nameProperty, mapBuilderVM.rowsProperty, mapBuilderVM.columnsProperty)
+   override val complete = mapBuilderVM.valid(
+      mapBuilderVM.nameProperty,
+      mapBuilderVM.rowsProperty,
+      mapBuilderVM.columnsProperty,
+      mapBuilderVM.handlerProperty
+   )
 
    override val root = form {
       fieldset("Map Settings") {
@@ -45,6 +50,13 @@ class MapCreationBasicDataView : View("Basic Data") {
                      else -> error("The map size must be between 1 and 100")
                   }
                }
+            }
+         }
+
+         field("Map Handler class") {
+            textfield(mapBuilderVM.handlerProperty) {
+               required()
+               trimWhitespace()
             }
          }
       }

@@ -17,6 +17,7 @@ class ProtobufMapSerializer : MapSerializer {
       protoMap.rows = item.rows
       protoMap.columns = item.columns
       protoMap.tileSetUID = item.tileSet.uid
+      protoMap.handler = item.handler
 
       item.layers.forEach { layer -> protoMap.addLayers(serializeLayer(layer)) }
 

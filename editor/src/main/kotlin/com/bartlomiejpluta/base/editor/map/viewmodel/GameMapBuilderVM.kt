@@ -17,4 +17,7 @@ class GameMapBuilderVM : ItemViewModel<GameMapBuilder>(GameMapBuilder()) {
 
    val columnsProperty = bind(GameMapBuilder::columnsProperty, autocommit = true)
    var columns by columnsProperty
+
+   val handlerProperty = bind(GameMapBuilder::handlerProperty, autocommit = true)
+   var handler by handlerProperty
 }

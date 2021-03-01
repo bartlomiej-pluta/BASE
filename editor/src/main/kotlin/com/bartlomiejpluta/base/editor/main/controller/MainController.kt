@@ -56,6 +56,7 @@ class MainController : Controller() {
             val map = GameMap(tileSet).apply {
                rows = vm.rows
                columns = vm.columns
+               handler = vm.handler
             }
             projectContext.importMap(vm.name, map)
             openItems[scope] = map

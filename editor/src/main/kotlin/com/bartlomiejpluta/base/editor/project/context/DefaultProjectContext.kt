@@ -91,6 +91,7 @@ class DefaultProjectContext : ProjectContext {
             it.maps += asset
 
             save()
+            javaClassService.createClassFile(map.handler, it.codeFSNode, "map_handler.ftl")
             File(it.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
          }
       }

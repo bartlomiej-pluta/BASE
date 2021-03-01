@@ -19,4 +19,7 @@ class GameMapBuilder {
 
    val columnsProperty = SimpleIntegerProperty(20)
    var columns by columnsProperty
+
+   val handlerProperty = SimpleStringProperty()
+   var handler by handlerProperty
 }

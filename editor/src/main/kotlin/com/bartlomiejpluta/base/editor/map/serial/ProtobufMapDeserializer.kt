@@ -25,6 +25,7 @@ class ProtobufMapDeserializer : MapDeserializer {
       map.uid = proto.uid
       map.rows = proto.rows
       map.columns = proto.columns
+      map.handler = proto.handler
 
       proto.layersList.forEach {
          map.layers.add(deserializeLayer(map.rows, map.columns, tileSet, it))

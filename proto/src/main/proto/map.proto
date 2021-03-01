@@ -9,6 +9,7 @@ message GameMap {
   required uint32 columns = 3;
   required string tileSetUID = 4;
   repeated Layer layers = 5;
+  required string handler = 6;
 }
 
 message Layer {

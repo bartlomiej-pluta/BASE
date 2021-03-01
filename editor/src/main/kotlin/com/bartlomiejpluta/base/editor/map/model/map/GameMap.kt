@@ -2,13 +2,11 @@ package com.bartlomiejpluta.base.editor.map.model.map
 
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
-import javafx.beans.property.ReadOnlyStringWrapper
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import tornadofx.getValue
-import tornadofx.observableListOf
 import tornadofx.setValue
 
 
@@ -34,6 +32,9 @@ class GameMap(val tileSet: TileSet) {
    val heightProperty = SimpleDoubleProperty(INITIAL_ROWS * tileHeight)
    var height by heightProperty
       private set
+
+   val handlerProperty = SimpleStringProperty()
+   var handler by handlerProperty
 
    init {
       rowsProperty.addListener { _, _, newValue ->

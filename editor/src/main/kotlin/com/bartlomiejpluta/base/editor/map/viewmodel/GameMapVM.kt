@@ -30,6 +30,9 @@ class GameMapVM(map: GameMap) : ItemViewModel<GameMap>(map) {
 
    val heightProperty = bind(GameMap::heightProperty)
    val height by heightProperty
+
+   val handlerProperty = bind(GameMap::handlerProperty)
+   var handler by handlerProperty
 }
 
 

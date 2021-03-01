@@ -47,13 +47,17 @@ public class GameMap implements Renderable, Updatable {
    @Getter
    private final Vector2f stepSize;
 
-   public GameMap(TileSet tileSet, int rows, int columns) {
+   @Getter
+   private final String handler;
+
+   public GameMap(TileSet tileSet, int rows, int columns, String handler) {
       this.tileSet = tileSet;
       this.rows = rows;
       this.columns = columns;
       this.stepSize = new Vector2f(tileSet.getTileSet().getSpriteSize());
       this.width = columns * stepSize.x;
       this.height = rows * stepSize.y;
+      this.handler = handler;
    }
 
    @Override

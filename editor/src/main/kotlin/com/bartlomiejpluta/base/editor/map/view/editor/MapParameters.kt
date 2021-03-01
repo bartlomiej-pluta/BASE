@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.view.editor
 
 import com.bartlomiejpluta.base.editor.common.parameter.model.IntegerParameter
+import com.bartlomiejpluta.base.editor.common.parameter.model.JavaClassParameter
 import com.bartlomiejpluta.base.editor.common.parameter.view.ParametersTableFragment
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import tornadofx.View
@@ -12,6 +13,7 @@ class MapParameters : View() {
    private val parameters = observableListOf(
       IntegerParameter("rows", mapVM.rows, 1, 100).apply { bindBidirectional(mapVM.item.rowsProperty) },
       IntegerParameter("columns", mapVM.columns, 1, 100).apply { bindBidirectional(mapVM.item.columnsProperty) },
+      JavaClassParameter("handler", mapVM.handler).apply { bindBidirectional(mapVM.item.handlerProperty) }
    )
 
    override val root = find<ParametersTableFragment>(ParametersTableFragment::parameters to parameters).root
