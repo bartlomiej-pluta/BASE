@@ -1,12 +1,12 @@
 package com.bartlomiejpluta.base.editor.file.model
 
+import javafx.beans.binding.Bindings.createLongBinding
 import javafx.beans.binding.Bindings.createStringBinding
 import tornadofx.getValue
 import tornadofx.observableListOf
 import tornadofx.setValue
 import tornadofx.toProperty
 import java.io.File
-import java.io.FileOutputStream
 import java.nio.file.Path
 
 class FileSystemNode(file: File, override val parent: FileSystemNode? = null) : FileNode {
@@ -30,8 +30,9 @@ class FileSystemNode(file: File, override val parent: FileSystemNode? = null) : 
    }
 
    override val children = observableListOf<FileSystemNode>()
-   override val allChildren: List<FileSystemNode>
-      get() = children + children.flatMap { it.allChildren }
+
+   override val lastModifiedProperty = createLongBinding({ fileProperty.value.lastModified() }, fileProperty)
+   override val lastModified by lastModifiedProperty
 
    init {
       refreshChildren()
@@ -78,7 +79,7 @@ class FileSystemNode(file: File, override val parent: FileSystemNode? = null) : 
             else -> file.createNewFile()
          }
 
-         when (val child = findChild(file)) {
+         when (val child = parent.children.firstOrNull { it.name == file.name }) {
             null -> FileSystemNode(file, parent).also { parent.children += it }
             else -> child
          }
@@ -89,11 +90,5 @@ class FileSystemNode(file: File, override val parent: FileSystemNode? = null) : 
 
    override fun outputStream() = file.outputStream()
 
-   override fun writeBytes(array: ByteArray): Unit = FileOutputStream(file).use { it.write(array) }
-
-   private fun findChild(file: File): FileSystemNode? {
-      return children.firstOrNull { it.file.name == file.name }
-   }
-
-   fun findByFile(file: File) = allChildren.firstOrNull { it.file.equals(file) }
+   fun findByFile(file: File) = allChildren.firstOrNull { it.absolutePath == file.absolutePath }
 }

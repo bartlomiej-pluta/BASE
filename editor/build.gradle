@@ -59,6 +59,18 @@ task provideGameEngine(type: Copy) {
 task provideApi(type: Copy) {
     from project(':api').file('src/main/java')
     into file('build/resources/main/api')
+
+    doLast {
+        def apiDir = file('build/resources/main/api')
+        def apiIndex = file('build/resources/main/api.idx')
+        def buffer = new StringBuilder()
+
+        fileTree(apiDir).matching { include "**/*.java" }.each {
+            buffer.append(apiDir.relativePath(it)).append("\n")
+        }
+
+        apiIndex.write(buffer.toString())
+    }
 }
 
 processResources {
