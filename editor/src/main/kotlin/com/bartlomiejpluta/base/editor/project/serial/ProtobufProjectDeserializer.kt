@@ -15,6 +15,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       val proto = ProjectProto.Project.parseFrom(input)
       val project = Project()
       project.name = proto.name
+      project.runner = proto.runner
       project.maps.addAll(proto.mapsList.map { deserializeMap(project, it) })
       project.tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(project, it) })
       project.images.addAll(proto.imagesList.map { deserializeImage(project, it) })

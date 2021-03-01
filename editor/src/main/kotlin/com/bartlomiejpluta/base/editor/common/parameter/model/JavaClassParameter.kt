@@ -10,7 +10,7 @@ import tornadofx.toProperty
 
 class JavaClassParameter(
    key: String,
-   initialValue: String,
+   initialValue: String = "",
    editable: Boolean = true,
    onCommit: (oldValue: String, newValue: String, submit: () -> Unit) -> Unit = { _, _, submit -> submit() }
 ) : Parameter<String>(key, initialValue, editable, false, onCommit) {

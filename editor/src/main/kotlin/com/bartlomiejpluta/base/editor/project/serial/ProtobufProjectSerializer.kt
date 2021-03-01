@@ -14,6 +14,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
    override fun serialize(item: Project, output: OutputStream) {
       val proto = ProjectProto.Project.newBuilder()
       proto.name = item.name
+      proto.runner = item.runner
       proto.addAllMaps(item.maps.map(this::serializeMap))
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
       proto.addAllImages(item.images.map(this::serializeImage))

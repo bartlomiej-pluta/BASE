@@ -65,16 +65,23 @@ class ProjectSettingsFragment : Fragment("Project Settings") {
                trimWhitespace()
 
                projectVM.validationContext.addValidator(this, projectDirectory) {
-                     when {
-                        it.isNullOrBlank() -> error("Field is required")
-                        File(directory.value).exists() ->  error("The directory ${directory.value} already exists")
-                        else -> null
-                     }
+                  when {
+                     it.isNullOrBlank() -> error("Field is required")
+                     File(directory.value).exists() -> error("The directory ${directory.value} already exists")
+                     else -> null
                   }
+               }
             }
          }
 
          label(Bindings.format("Directory:\n%s", directory))
+
+         field("Game Runner class") {
+            textfield(projectVM.runnerProperty) {
+               required()
+               trimWhitespace()
+            }
+         }
       }
 
       buttonbar {

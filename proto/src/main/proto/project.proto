@@ -5,9 +5,10 @@ option java_outer_classname = "ProjectProto";
 
 message Project {
   required string name = 1;
-  repeated GameMapAsset maps = 2;
-  repeated TileSetAsset tileSets = 3;
-  repeated ImageAsset images = 4;
+  required string runner = 2;
+  repeated GameMapAsset maps = 3;
+  repeated TileSetAsset tileSets = 4;
+  repeated ImageAsset images = 5;
 }
 
 message GameMapAsset {

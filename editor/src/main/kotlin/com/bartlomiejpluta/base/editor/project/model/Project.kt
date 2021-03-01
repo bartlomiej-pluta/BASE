@@ -22,6 +22,9 @@ class Project {
    val projectFileProperty = createObjectBinding({ File(sourceDirectory, PROJECT_FILE) }, sourceDirectoryProperty)
    val projectFile by projectFileProperty
 
+   val runnerProperty = SimpleStringProperty()
+   var runner by runnerProperty
+
    val maps = observableListOf<GameMapAsset>()
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
