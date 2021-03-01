@@ -2,7 +2,9 @@ package com.bartlomiejpluta.base.editor.code.view.list
 
 import com.bartlomiejpluta.base.editor.code.api.APIProvider
 import com.bartlomiejpluta.base.editor.code.component.ScriptFileTreeCell
+import com.bartlomiejpluta.base.editor.code.service.JavaClassService
 import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.file.model.FileType
 import com.bartlomiejpluta.base.editor.file.model.PseudoFileNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
@@ -15,11 +17,11 @@ import tornadofx.View
 import tornadofx.expandAll
 import tornadofx.populate
 import tornadofx.treeview
-import java.io.File
 
 class ScriptFilesView : View() {
    private val projectContext: ProjectContext by di()
    private val mainController: MainController by di()
+   private val javaClassService: JavaClassService by di()
    private val apiProvider: APIProvider by di()
 
    init {
@@ -64,7 +66,11 @@ class ScriptFilesView : View() {
          title = "New class"
       }
          .showAndWait()
-         .map { it.replace(".", File.separator) + ".java" }
+         .map {
+            javaClassService.createClassFile(it, fsNode as FileSystemNode, "empty_class.ftl")
+            it
+         }
+         .map(javaClassService::toPathString)
          .map { fsNode.createNode(it) }
          .ifPresent { mainController.openScript(it) }
    }

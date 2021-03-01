@@ -64,7 +64,7 @@ class Brush {
       }
    }
 
-   private fun getTileByMode(tile: Tile) = when (mode) {
+   private fun getTileByMode(tile: Tile) = when (mode!!) {
       BrushMode.PAINTING_MODE -> tile
       BrushMode.ERASING_MODE -> null
    }

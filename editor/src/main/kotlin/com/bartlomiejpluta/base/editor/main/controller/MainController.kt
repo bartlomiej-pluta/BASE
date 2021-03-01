@@ -38,8 +38,7 @@ class MainController : Controller() {
       find<ProjectSettingsFragment>().apply {
          onComplete {
             openItems.clear()
-            projectContext.project = it
-            projectContext.save()
+            projectContext.createNewProject(it)
          }
 
          openModal(block = true, resizable = false)

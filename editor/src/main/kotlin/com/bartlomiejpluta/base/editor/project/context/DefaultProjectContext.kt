@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.project.context
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
+import com.bartlomiejpluta.base.editor.code.service.JavaClassService
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
@@ -45,6 +46,9 @@ class DefaultProjectContext : ProjectContext {
    @Autowired
    private lateinit var mapDeserializer: MapDeserializer
 
+   @Autowired
+   private lateinit var javaClassService: JavaClassService
+
    override val projectProperty = SimpleObjectProperty<Project?>() as ObjectProperty<Project?>
    override var project by projectProperty
 
@@ -70,6 +74,13 @@ class DefaultProjectContext : ProjectContext {
          .use { projectDeserializer.deserialize(it) }
          .apply { sourceDirectoryProperty.value = file.parentFile }
          .let { project = it }
+   }
+
+   override fun createNewProject(project: Project) {
+      this.project = project
+      save()
+
+      javaClassService.createClassFile(project.runner, project.codeFSNode, "game_runner.ftl")
    }
 
    override fun importMap(name: String, map: GameMap) {
