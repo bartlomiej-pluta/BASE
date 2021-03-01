@@ -18,10 +18,11 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
    protected Project parse(InputStream input) throws Exception {
       var proto = ProjectProto.Project.parseFrom(input);
       var name = proto.getName();
+      var runner = proto.getRunner();
       var tileSetAssets = proto.getTileSetsList().stream().map(this::parseTileSetAsset).collect(toList());
       var mapAssets = proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList());
       var imageAssets = proto.getImagesList().stream().map(this::parseImageAsset).collect(toList());
-      return new Project(name, tileSetAssets, mapAssets, imageAssets);
+      return new Project(name, runner, tileSetAssets, mapAssets, imageAssets);
    }
 
    private TileSetAsset parseTileSetAsset(ProjectProto.TileSetAsset proto) {

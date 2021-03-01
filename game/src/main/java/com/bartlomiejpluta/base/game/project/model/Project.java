@@ -17,6 +17,9 @@ public class Project {
    private final String name;
 
    @NonNull
+   private final String runner;
+
+   @NonNull
    private final List<TileSetAsset> tileSetAssets;
 
    @NonNull
