@@ -13,6 +13,9 @@ interface FileNode {
    val extensionProperty: ObservableValue<String>
    val extension: String
 
+   val nameWithoutExtensionProperty: ObservableValue<String>
+   val nameWithoutExtension: String
+
    val absolutePathProperty: ObservableValue<String>
    val absolutePath: String
 

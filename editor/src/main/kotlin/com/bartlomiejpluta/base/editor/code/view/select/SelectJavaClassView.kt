@@ -20,7 +20,7 @@ class SelectJavaClassView : View() {
       }
 
       cellFormat {
-         text = it.name
+         text = it.nameWithoutExtension
          graphic = when (it.type) {
             FileType.FILE -> FontIcon("fa-cube")
             FileType.DIRECTORY -> FontIcon("fa-folder")

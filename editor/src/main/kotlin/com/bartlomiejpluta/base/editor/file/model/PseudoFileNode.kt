@@ -13,6 +13,9 @@ class PseudoFileNode(name: String, absolutePath: String, override val type: File
    override val extensionProperty = "".toProperty()
    override val extension by extensionProperty
 
+   override val nameWithoutExtensionProperty = nameProperty
+   override val nameWithoutExtension by nameWithoutExtensionProperty
+
    override val absolutePathProperty = absolutePath.toProperty()
    override val absolutePath by absolutePathProperty
 

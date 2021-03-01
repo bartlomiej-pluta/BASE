@@ -20,6 +20,10 @@ class FileSystemNode(file: File, override val parent: FileSystemNode? = null) : 
    override val extensionProperty = createStringBinding({ fileProperty.value.extension }, fileProperty)
    override val extension by extensionProperty
 
+   override val nameWithoutExtensionProperty =
+      createStringBinding({ fileProperty.value.nameWithoutExtension }, fileProperty)
+   override val nameWithoutExtension by nameWithoutExtensionProperty
+
    override val absolutePathProperty = createStringBinding({ fileProperty.value.absolutePath }, fileProperty)
    override val absolutePath by absolutePathProperty
 

@@ -21,6 +21,9 @@ class ResourceFileNode private constructor(
    override val extensionProperty = (resource?.filename?.substringAfter(".") ?: "").toProperty()
    override val extension by extensionProperty
 
+   override val nameWithoutExtensionProperty = (nameProperty.value.removeSuffix(".$extension")).toProperty()
+   override val nameWithoutExtension by nameWithoutExtensionProperty
+
    override val absolutePathProperty: StringProperty =
       ((parent?.absolutePath ?: "") + "/${nameProperty.value}").toProperty()
    override val absolutePath by absolutePathProperty
