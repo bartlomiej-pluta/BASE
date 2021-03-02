@@ -9,16 +9,21 @@ public class ${className} implements MapHandler {
 
    @Override
    public void init(Context context, GameMap map) {
-      throw new RuntimeException("Not implemented yet");
+
    }
 
    @Override
    void input(Keyboard keyboard) {
-      throw new RuntimeException("Not implemented yet");
+
    }
 
    @Override
    public void update(Context context, GameMap map, float dt) {
-      throw new RuntimeException("Not implemented yet");
+
+   }
+
+   @Override
+   public void postRender(float windowWidth, float windowHeight) {
+
    }
 }

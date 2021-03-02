@@ -20,6 +20,7 @@ import com.bartlomiejpluta.base.game.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.joml.Vector2f;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,8 +39,11 @@ public class RenderableContext implements Context, Updatable, Renderable {
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
-   public void init(Window window) {
-      keyboard = new GLFWKeyboard(window);
+   private Camera camera;
+
+   public void init(Window window, Camera camera) {
+      this.keyboard = new GLFWKeyboard(window);
+      this.camera = camera;
    }
 
    @SneakyThrows
@@ -56,6 +60,16 @@ public class RenderableContext implements Context, Updatable, Renderable {
    @Override
    public Entity createEntity(String entitySetUid) {
       return entityManager.createEntity(entitySetUid);
+   }
+
+   @Override
+   public void setCameraPosition(Vector2f position) {
+      camera.setPosition(position);
+   }
+
+   @Override
+   public void setCameraPosition(float x, float y) {
+      camera.setPosition(x, y);
    }
 
    public void input() {
@@ -77,6 +91,10 @@ public class RenderableContext implements Context, Updatable, Renderable {
    public void render(Window window, Camera camera, ShaderManager shaderManager) {
       if (map != null) {
          map.render(window, camera, shaderManager);
+      }
+
+      if (mapHandler != null) {
+         mapHandler.postRender(window.getWidth(), window.getHeight());
       }
    }
 }

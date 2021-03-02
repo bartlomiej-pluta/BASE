@@ -9,4 +9,6 @@ public interface MapHandler {
    void input(Keyboard keyboard);
 
    void update(Context context, GameMap map, float dt);
+
+   void postRender(float windowWidth, float windowHeight);
 }

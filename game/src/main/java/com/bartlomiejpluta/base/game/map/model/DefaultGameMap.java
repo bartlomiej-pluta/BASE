@@ -76,6 +76,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       }
    }
 
+   @Override
    public Vector2f getSize() {
       return new Vector2f(columns * stepSize.x, rows * stepSize.y);
    }
