@@ -2,10 +2,10 @@ package com.bartlomiejpluta.base.game.movement;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.api.entity.Movement;
-import com.bartlomiejpluta.base.api.geo.Vector;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.joml.Vector2i;
 
 @Data
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -26,12 +26,12 @@ public class DefaultMovement implements Movement {
    }
 
    @Override
-   public Vector getFrom() {
+   public Vector2i getFrom() {
       return object.getCoordinates();
    }
 
    @Override
-   public Vector getTo() {
-      return getFrom().add(direction.vector);
+   public Vector2i getTo() {
+      return direction.asVector().add(object.getCoordinates());
    }
 }

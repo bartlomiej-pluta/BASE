@@ -1,11 +1,20 @@
 package com.bartlomiejpluta.base.api.entity;
 
-import com.bartlomiejpluta.base.api.geo.Vector;
+import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 public interface Entity {
-   Vector getCoordinates();
+   Vector2i getCoordinates();
 
-   void setCoordinates(Vector coordinates);
+   void setCoordinates(Vector2i coordinates);
+
+   void setCoordinates(int x, int y);
+
+   Vector2f getPosition();
+
+   void setPosition(Vector2f position);
+
+   void setPosition(float x, float y);
 
    Movement prepareMovement(Direction direction);
 

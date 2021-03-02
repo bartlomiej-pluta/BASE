@@ -1,13 +1,13 @@
 package com.bartlomiejpluta.base.game.map.layer.object;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
-import com.bartlomiejpluta.base.api.geo.Vector;
 import com.bartlomiejpluta.base.api.map.PassageAbility;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.game.movement.MovableSprite;
+import org.joml.Vector2i;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ObjectLayer implements Layer {
       passageMap[row][column] = passageAbility;
    }
 
-   public boolean isMovementPossible(Vector source, Vector target, Direction direction) {
+   public boolean isMovementPossible(Vector2i source, Vector2i target, Direction direction) {
       var isTargetReachable = switch (passageMap[target.y][target.x]) {
          case UP_ONLY -> direction != Direction.DOWN;
          case DOWN_ONLY -> direction != Direction.UP;

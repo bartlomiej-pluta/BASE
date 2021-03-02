@@ -2,7 +2,6 @@ package com.bartlomiejpluta.base.game.entity.model;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.api.entity.Entity;
-import com.bartlomiejpluta.base.api.geo.Vector;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.util.math.MathUtil;
@@ -62,11 +61,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
       }
 
       return false;
-   }
-
-   @Override
-   public void setCoordinates(Vector coordinates) {
-      setCoordinates(coordinates.x, coordinates.y);
    }
 
    @Override

@@ -2,12 +2,12 @@ package com.bartlomiejpluta.base.game.movement;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.api.entity.Movement;
-import com.bartlomiejpluta.base.api.geo.Vector;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.game.animation.AnimatedSprite;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
@@ -18,6 +18,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    private int moveTime = 0;
    private Vector2f movementVector;
 
+   @Getter
    private final Vector2i coordinates = new Vector2i(0, 0);
 
    protected int framesToCrossOneTile = 1;
@@ -63,27 +64,20 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       return true;
    }
 
-   public Vector getCoordinates() {
-      return Vector.of(coordinates.x, coordinates.y);
-   }
-
-   public MovableSprite setCoordinates(int x, int y) {
+   public void setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;
       setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
-      return this;
    }
 
-   public MovableSprite setCoordinates(Vector2i coordinates) {
-      return setCoordinates(coordinates.x, coordinates.y);
+   public void setCoordinates(Vector2i coordinates) {
+      setCoordinates(coordinates.x, coordinates.y);
    }
 
-   public MovableSprite setStepSize(float x, float y) {
+   public void setStepSize(float x, float y) {
       coordinateStepSize.x = x;
       coordinateStepSize.y = y;
       setCoordinates(coordinates);
-
-      return this;
    }
 
    public MovableSprite(Mesh mesh, Material material) {

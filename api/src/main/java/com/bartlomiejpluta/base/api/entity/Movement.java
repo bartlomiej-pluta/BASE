@@ -1,15 +1,16 @@
 package com.bartlomiejpluta.base.api.entity;
 
-import com.bartlomiejpluta.base.api.geo.Vector;
+
+import org.joml.Vector2i;
 
 public interface Movement {
    boolean perform();
 
    Movement another();
 
-   Vector getFrom();
+   Vector2i getFrom();
 
-   Vector getTo();
+   Vector2i getTo();
 
    Direction getDirection();
 }

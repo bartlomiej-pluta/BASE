@@ -27,52 +27,45 @@ public abstract class Model {
    @Setter
    protected float scaleY = 1.0f;
 
-   public Model setPosition(float x, float y) {
+   public void setPosition(float x, float y) {
       position.x = x;
       position.y = y;
-      return this;
    }
 
-   public Model setPosition(Vector2f position) {
+   public void setPosition(Vector2f position) {
       this.position.x = position.x;
       this.position.y = position.y;
-      return this;
    }
-   
-   public Model movePosition(float x, float y) {
+
+   public void movePosition(float x, float y) {
       position.x += x;
       position.y += y;
-      return this;
    }
 
-   public Model movePosition(Vector2f position) {
+   public void movePosition(Vector2f position) {
       this.position.x += position.x;
       this.position.y += position.y;
-      return this;
    }
 
-   public Model moveRotation(float rotation) {
+   public void moveRotation(float rotation) {
       this.rotation += rotation;
-      return this;
    }
 
-   public Model setScale(float scale) {
+   public void setScale(float scale) {
       this.scaleX = scale;
       this.scaleY = scale;
-      return this;
    }
 
-   public Model setScale(float scaleX, float scaleY) {
+   public void setScale(float scaleX, float scaleY) {
       this.scaleX = scaleX;
       this.scaleY = scaleY;
-      return this;
    }
 
    public Matrix4f getModelMatrix() {
       return modelMatrix
-              .identity()
-              .translate(position.x, position.y, 0)
-              .rotateZ((float) toRadians(-rotation))
-              .scaleXY(scaleX, scaleY);
+            .identity()
+            .translate(position.x, position.y, 0)
+            .rotateZ((float) toRadians(-rotation))
+            .scaleXY(scaleX, scaleY);
    }
 }

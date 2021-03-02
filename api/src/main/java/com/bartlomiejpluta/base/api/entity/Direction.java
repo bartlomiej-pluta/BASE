@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.api.entity;
 
-import com.bartlomiejpluta.base.api.geo.Vector;
+import org.joml.Vector2i;
 
 public enum Direction {
    UP(0, -1),
@@ -10,11 +10,13 @@ public enum Direction {
 
    public final int x;
    public final int y;
-   public final Vector vector;
 
    Direction(int x, int y) {
       this.x = x;
       this.y = y;
-      this.vector = Vector.of(x, y);
+   }
+
+   public Vector2i asVector() {
+      return new Vector2i(x, y);
    }
 }
