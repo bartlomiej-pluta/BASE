@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import com.bartlomiejpluta.base.proto.GameMapProto;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +24,17 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    private final ImageManager imageManager;
 
    @Override
-   protected GameMap parse(InputStream input) throws Exception {
+   protected DefaultGameMap parse(InputStream input) throws Exception {
       var proto = GameMapProto.GameMap.parseFrom(input);
       var tileSet = tileSetManager.loadObject(proto.getTileSetUID());
-      var map = new GameMap(tileSet, proto.getRows(), proto.getColumns(), proto.getHandler());
+      var map = new DefaultGameMap(tileSet, proto.getRows(), proto.getColumns(), proto.getHandler());
 
       proto.getLayersList().forEach(layer -> deserializeLayer(map, layer));
 
       return map;
    }
 
-   private void deserializeLayer(GameMap map, GameMapProto.Layer proto) {
+   private void deserializeLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       if (proto.hasTileLayer()) {
          deserializeTileLayer(map, proto);
       } else if (proto.hasObjectLayer()) {
@@ -48,7 +48,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       }
    }
 
-   private void deserializeTileLayer(GameMap map, GameMapProto.Layer proto) {
+   private void deserializeTileLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       var layer = map.createTileLayer();
       var columns = map.getColumns();
       var tiles = proto.getTileLayer().getTilesList();
@@ -64,7 +64,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       }
    }
 
-   private void deserializeObjectLayer(GameMap map, GameMapProto.Layer proto) {
+   private void deserializeObjectLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       var layer = map.createObjectLayer();
       var columns = map.getColumns();
       var passageMap = proto.getObjectLayer().getPassageMapList();
@@ -81,7 +81,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       }
    }
 
-   private void deserializeColorLayer(GameMap map, GameMapProto.Layer proto) {
+   private void deserializeColorLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       var protoColorLayer = proto.getColorLayer();
       map.createColorLayer(
             meshManager,
@@ -92,7 +92,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       );
    }
 
-   private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {
+   private void deserializeImageLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       var protoImageLayer = proto.getImageLayer();
       var image = imageManager.loadObject(protoImageLayer.getImageUID());
 

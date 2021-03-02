@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.geo.Vector;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
+import com.bartlomiejpluta.base.core.util.math.MathUtil;
 import com.bartlomiejpluta.base.game.entity.config.EntitySpriteConfiguration;
 import com.bartlomiejpluta.base.game.movement.MovableSprite;
 import lombok.EqualsAndHashCode;
@@ -75,6 +76,11 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public void setCoordinates(Vector coordinates) {
       setCoordinates(coordinates.x, coordinates.y);
+   }
+
+   @Override
+   public void setSpeed(float speed) {
+      setMovementSlowness((int) (1 / MathUtil.clamp(speed, 0.01, 1.0)));
    }
 
    public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {

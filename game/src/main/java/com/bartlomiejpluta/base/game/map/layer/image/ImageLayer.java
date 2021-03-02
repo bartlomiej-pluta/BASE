@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.game.image.model.Image;
 import com.bartlomiejpluta.base.game.map.layer.base.Layer;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.map.model.DefaultGameMap;
 import lombok.NonNull;
 
 public class ImageLayer implements Layer {
@@ -28,7 +28,7 @@ public class ImageLayer implements Layer {
 
    private boolean parallax;
 
-   public ImageLayer(GameMap map, Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
+   public ImageLayer(DefaultGameMap map, Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
       this.mapWidth = map.getWidth();
       this.mapHeight = map.getHeight();
 

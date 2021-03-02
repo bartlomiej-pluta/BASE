@@ -15,7 +15,7 @@ import com.bartlomiejpluta.base.game.entity.manager.EntityManager;
 import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.input.GLFWKeyboard;
 import com.bartlomiejpluta.base.game.map.manager.MapManager;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.game.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class RenderableContext implements Context, Updatable, Renderable {
    private final ClassLoader classLoader;
 
    private Keyboard keyboard;
-   private GameMap map;
+   private DefaultGameMap map;
    private MapHandler mapHandler;
 
    public void init(Window window) {
@@ -50,7 +50,7 @@ public class RenderableContext implements Context, Updatable, Renderable {
       var handlerClass = classLoader.<MapHandler>loadClass(map.getHandler());
       mapHandler = handlerClass.getConstructor().newInstance();
 
-      mapHandler.init(this);
+      mapHandler.init(this, map);
    }
 
    @Override
@@ -64,6 +64,10 @@ public class RenderableContext implements Context, Updatable, Renderable {
 
    @Override
    public void update(float dt) {
+      if (mapHandler != null) {
+         mapHandler.update(this, map, dt);
+      }
+
       if (map != null) {
          map.update(dt);
       }

@@ -81,6 +81,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    public MovableSprite setStepSize(float x, float y) {
       coordinateStepSize.x = x;
       coordinateStepSize.y = y;
+      setCoordinates(coordinates);
 
       return this;
    }

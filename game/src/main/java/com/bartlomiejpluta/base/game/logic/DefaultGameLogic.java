@@ -67,6 +67,7 @@ public class DefaultGameLogic implements GameLogic {
 
    @Override
    public void update(float dt) {
+      context.update(dt);
       fpsMonitor.update(dt);
    }
 

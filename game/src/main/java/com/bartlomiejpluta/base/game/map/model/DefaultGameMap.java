@@ -1,12 +1,15 @@
 package com.bartlomiejpluta.base.game.map.model;
 
+import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.entity.Movement;
+import com.bartlomiejpluta.base.api.map.GameMap;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
+import com.bartlomiejpluta.base.game.entity.model.DefaultEntity;
 import com.bartlomiejpluta.base.game.image.model.Image;
 import com.bartlomiejpluta.base.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.game.map.layer.color.ColorLayer;
@@ -25,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GameMap implements Renderable, Updatable {
+public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Getter
    private final List<Layer> layers = new ArrayList<>();
 
@@ -50,7 +53,7 @@ public class GameMap implements Renderable, Updatable {
    @Getter
    private final String handler;
 
-   public GameMap(TileSet tileSet, int rows, int columns, String handler) {
+   public DefaultGameMap(TileSet tileSet, int rows, int columns, String handler) {
       this.tileSet = tileSet;
       this.rows = rows;
       this.columns = columns;
@@ -107,48 +110,56 @@ public class GameMap implements Renderable, Updatable {
       return layers.size() - 1;
    }
 
-   public GameMap setTile(int layerIndex, int row, int column, int tileId) {
+   public DefaultGameMap setTile(int layerIndex, int row, int column, int tileId) {
       ((TileLayer) layers.get(layerIndex)).setTile(row, column, tileSet.tileById(tileId));
 
       return this;
    }
 
-   public GameMap setTile(int layerIndex, int row, int column, int tileSetRow, int tileSetColumn) {
+   public DefaultGameMap setTile(int layerIndex, int row, int column, int tileSetRow, int tileSetColumn) {
       ((TileLayer) layers.get(layerIndex)).setTile(row, column, tileSet.tileAt(tileSetRow, tileSetColumn));
 
       return this;
    }
 
-   public GameMap clearTile(int layerIndex, int row, int column) {
+   public DefaultGameMap clearTile(int layerIndex, int row, int column) {
       ((TileLayer) layers.get(layerIndex)).setTile(row, column, null);
 
       return this;
    }
 
-   public GameMap addObject(int layerIndex, MovableSprite object) {
-      ((ObjectLayer) layers.get(layerIndex)).addObject(object);
-
-      return this;
-   }
-
-   public GameMap removeObject(int layerIndex, MovableSprite object) {
+   public DefaultGameMap removeObject(int layerIndex, MovableSprite object) {
       ((ObjectLayer) layers.get(layerIndex)).removeObject(object);
 
       return this;
    }
 
-   public GameMap setPassageAbility(int layerIndex, int row, int column, PassageAbility passageAbility) {
+   public DefaultGameMap setPassageAbility(int layerIndex, int row, int column, PassageAbility passageAbility) {
       ((ObjectLayer) layers.get(layerIndex)).setPassageAbility(row, column, passageAbility);
 
       return this;
    }
 
-   public GameMap setColor(int layerIndex, float r, float g, float b, float alpha) {
+   public DefaultGameMap setColor(int layerIndex, float r, float g, float b, float alpha) {
       ((ColorLayer) layers.get(layerIndex)).setColor(r, g, b, alpha);
 
       return this;
    }
 
+   @Override
+   public void addEntity(int layerIndex, Entity entity) {
+      var object = (DefaultEntity) entity;
+      object.setStepSize(stepSize.x, stepSize.y);
+
+      ((ObjectLayer) layers.get(layerIndex)).addObject(object);
+   }
+
+   @Override
+   public void removeEntity(int layerIndex, Entity entity) {
+      ((ObjectLayer) layers.get(layerIndex)).removeObject((DefaultEntity) entity);
+   }
+
+   @Override
    public boolean isMovementPossible(int layerIndex, Movement movement) {
       var target = movement.getTo();
 

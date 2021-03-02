@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.game.map.manager;
 
 import com.bartlomiejpluta.base.core.error.AppException;
 import com.bartlomiejpluta.base.game.map.asset.GameMapAsset;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.game.map.serial.MapDeserializer;
 import com.bartlomiejpluta.base.game.project.config.ProjectConfiguration;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultMapManager implements MapManager {
-   private final Map<String, GameMap> maps = new HashMap<>();
+   private final Map<String, DefaultGameMap> maps = new HashMap<>();
    private final Map<String, GameMapAsset> assets = new HashMap<>();
    private final MapDeserializer mapDeserializer;
    private final ProjectConfiguration configuration;
@@ -29,7 +29,7 @@ public class DefaultMapManager implements MapManager {
    }
 
    @Override
-   public GameMap loadObject(String uid) {
+   public DefaultGameMap loadObject(String uid) {
       var map = maps.get(uid);
 
       if (map == null) {

@@ -7,14 +7,14 @@ import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.core.world.object.Sprite;
 import com.bartlomiejpluta.base.game.map.layer.base.Layer;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.map.model.DefaultGameMap;
 import lombok.NonNull;
 
 public class ColorLayer extends Sprite implements Layer {
    private final float mapWidth;
    private final float mapHeight;
 
-   public ColorLayer(@NonNull MeshManager meshManager, @NonNull GameMap map, float r, float g, float b, float alpha) {
+   public ColorLayer(@NonNull MeshManager meshManager, @NonNull DefaultGameMap map, float r, float g, float b, float alpha) {
       super(meshManager.createQuad(1, 1, 0, 0), Material.colored(r, g, b, alpha));
       this.mapWidth = map.getWidth();
       this.mapHeight = map.getHeight();
