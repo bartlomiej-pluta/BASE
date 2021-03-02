@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.common.logs.style.LogsPaneStyle
 import com.bartlomiejpluta.base.editor.common.logs.stylesheet.LogsPaneStylesheet
 import javafx.scene.layout.StackPane
 import org.codehaus.commons.compiler.Location
+import org.fxmisc.flowless.VirtualizedScrollPane
 import org.fxmisc.richtext.StyledTextArea
 import tornadofx.addClass
 
@@ -16,7 +17,7 @@ class LogsPane(private val locationClick: (location: Location) -> Unit = {}) : S
    ).apply { isEditable = false }
 
    init {
-      children += editor
+      children += VirtualizedScrollPane(editor)
    }
 
    fun appendEntry(
