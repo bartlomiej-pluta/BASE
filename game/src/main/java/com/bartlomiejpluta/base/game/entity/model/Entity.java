@@ -1,10 +1,10 @@
-package com.bartlomiejpluta.base.game.world.entity.model;
+package com.bartlomiejpluta.base.game.entity.model;
 
+import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.base.game.world.movement.Direction;
-import com.bartlomiejpluta.base.game.world.movement.MovableSprite;
-import com.bartlomiejpluta.base.game.world.entity.config.EntitySpriteConfiguration;
+import com.bartlomiejpluta.base.game.entity.config.EntitySpriteConfiguration;
+import com.bartlomiejpluta.base.game.movement.MovableSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

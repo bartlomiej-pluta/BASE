@@ -1,6 +1,6 @@
-package com.bartlomiejpluta.base.game.world.entity.config;
+package com.bartlomiejpluta.base.game.entity.config;
 
-import com.bartlomiejpluta.base.game.world.movement.Direction;
+import com.bartlomiejpluta.base.api.entity.Direction;
 import lombok.Data;
 import org.joml.Vector2i;
 import org.springframework.boot.context.properties.ConfigurationProperties;

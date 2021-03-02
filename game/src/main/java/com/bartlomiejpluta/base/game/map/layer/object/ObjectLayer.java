@@ -1,11 +1,11 @@
 package com.bartlomiejpluta.base.game.map.layer.object;
 
+import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
 import com.bartlomiejpluta.base.game.map.layer.base.Layer;
-import com.bartlomiejpluta.base.game.world.movement.Direction;
-import com.bartlomiejpluta.base.game.world.movement.MovableSprite;
+import com.bartlomiejpluta.base.game.movement.MovableSprite;
 import org.joml.Vector2i;
 
 import java.util.List;

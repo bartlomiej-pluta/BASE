@@ -1,5 +1,6 @@
-package com.bartlomiejpluta.base.game.world.movement;
+package com.bartlomiejpluta.base.game.movement;
 
+import com.bartlomiejpluta.base.api.entity.Direction;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class Movement {
    }
 
    public Vector2i getTargetCoordinate() {
-      return direction.asIntVector().add(object.getCoordinates());
+      return new Vector2i(direction.x, direction.y).add(object.getCoordinates());
    }
 
    public Movement another() {

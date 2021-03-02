@@ -1,9 +1,10 @@
-package com.bartlomiejpluta.base.game.world.movement;
+package com.bartlomiejpluta.base.game.movement;
 
+import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.logic.Updatable;
-import com.bartlomiejpluta.base.game.world.animation.AnimatedSprite;
+import com.bartlomiejpluta.base.game.animation.AnimatedSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;
@@ -56,7 +57,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       }
 
       var speed = new Vector2f(coordinateStepSize).div(framesToCrossOneTile);
-      movementVector = direction.asFloatVector().mul(speed);
+      movementVector = new Vector2f(direction.x, direction.y).mul(speed);
       moveTime = framesToCrossOneTile;
 
       return true;
