@@ -56,9 +56,15 @@ public class ObjectLayer implements Layer {
 
    @Override
    public void render(Window window, Camera camera, ShaderManager shaderManager) {
+      objects.sort(this::compareObjects);
+
       for (var object : objects) {
          object.render(window, camera, shaderManager);
       }
+   }
+
+   private int compareObjects(MovableSprite a, MovableSprite b) {
+      return Float.compare(a.getPosition().y, b.getPosition().y);
    }
 
    @Override
