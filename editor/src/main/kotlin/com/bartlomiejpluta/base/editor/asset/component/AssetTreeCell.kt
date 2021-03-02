@@ -7,34 +7,40 @@ import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import javafx.scene.control.ContextMenu
-import javafx.scene.control.MenuItem
 import javafx.scene.control.cell.TextFieldTreeCell
+import javafx.scene.input.Clipboard
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.action
+import tornadofx.item
+import tornadofx.putString
 
 class AssetTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAsset: (asset: Asset) -> Unit) :
    TextFieldTreeCell<Any>() {
-   private val assetMenu = ContextMenu()
 
-   init {
-      converter = AssetStringConverter(this, renameAsset)
-      MenuItem("Rename").apply {
+   private val assetMenu = ContextMenu().apply {
+      item("Copy UID") {
+         action {
+            Clipboard.getSystemClipboard().putString((item as Asset).uid)
+         }
+      }
+
+      item("Rename") {
          action {
             treeView.isEditable = true
             startEdit()
             treeView.isEditable = false
          }
-
-         assetMenu.items.add(this)
       }
 
-      MenuItem("Delete").apply {
+      item("Delete") {
          action {
             deleteAsset(item as Asset)
          }
-
-         assetMenu.items.add(this)
       }
+   }
+
+   init {
+      converter = AssetStringConverter(this, renameAsset)
    }
 
    override fun updateItem(item: Any?, empty: Boolean) {
