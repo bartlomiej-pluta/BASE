@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.entity;
 
+import com.bartlomiejpluta.base.api.geo.Vector;
+
 public enum Direction {
    UP(0, -1),
    DOWN(0, 1),
@@ -8,9 +10,11 @@ public enum Direction {
 
    public final int x;
    public final int y;
+   public final Vector vector;
 
    Direction(int x, int y) {
       this.x = x;
       this.y = y;
+      this.vector = Vector.of(x, y);
    }
 }

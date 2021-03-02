@@ -1,12 +1,13 @@
 package com.bartlomiejpluta.base.game.movement;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
+import com.bartlomiejpluta.base.api.entity.Movement;
+import com.bartlomiejpluta.base.api.geo.Vector;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.logic.Updatable;
 import com.bartlomiejpluta.base.game.animation.AnimatedSprite;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
@@ -17,7 +18,6 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    private int moveTime = 0;
    private Vector2f movementVector;
 
-   @Getter
    private final Vector2i coordinates = new Vector2i(0, 0);
 
    protected int framesToCrossOneTile = 1;
@@ -28,8 +28,8 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
 
    @Override
    public void update(float dt) {
-      if(movementVector != null) {
-         if(moveTime > 0) {
+      if (movementVector != null) {
+         if (moveTime > 0) {
             --moveTime;
             movePosition(movementVector);
          } else {
@@ -48,7 +48,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    }
 
    public Movement prepareMovement(Direction direction) {
-      return new Movement(this, direction);
+      return new DefaultMovement(this, direction);
    }
 
    protected boolean move(Direction direction) {
@@ -61,6 +61,10 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       moveTime = framesToCrossOneTile;
 
       return true;
+   }
+
+   public Vector getCoordinates() {
+      return Vector.of(coordinates.x, coordinates.y);
    }
 
    public MovableSprite setCoordinates(int x, int y) {

@@ -1,32 +1,37 @@
 package com.bartlomiejpluta.base.game.movement;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
+import com.bartlomiejpluta.base.api.entity.Movement;
+import com.bartlomiejpluta.base.api.geo.Vector;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.joml.Vector2i;
 
 @Data
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class Movement {
+public class DefaultMovement implements Movement {
    private final MovableSprite object;
    private final Direction direction;
    private boolean performed = false;
 
+   @Override
    public boolean perform() {
       performed = object.move(direction);
       return performed;
    }
 
-   public Vector2i getSourceCoordinate() {
-      return new Vector2i(object.getCoordinates());
-   }
-
-   public Vector2i getTargetCoordinate() {
-      return new Vector2i(direction.x, direction.y).add(object.getCoordinates());
-   }
-
+   @Override
    public Movement another() {
       return object.prepareMovement(direction);
+   }
+
+   @Override
+   public Vector getFrom() {
+      return object.getCoordinates();
+   }
+
+   @Override
+   public Vector getTo() {
+      return getFrom().add(direction.vector);
    }
 }

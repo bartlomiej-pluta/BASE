@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.game.map.model;
 
+import com.bartlomiejpluta.base.api.entity.Movement;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.logic.Updatable;
@@ -15,7 +16,6 @@ import com.bartlomiejpluta.base.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.game.map.layer.tile.TileLayer;
 import com.bartlomiejpluta.base.game.movement.MovableSprite;
-import com.bartlomiejpluta.base.game.movement.Movement;
 import com.bartlomiejpluta.base.game.tileset.model.TileSet;
 import lombok.Getter;
 import lombok.NonNull;
@@ -150,14 +150,14 @@ public class GameMap implements Renderable, Updatable {
    }
 
    public boolean isMovementPossible(int layerIndex, Movement movement) {
-      var target = movement.getTargetCoordinate();
+      var target = movement.getTo();
 
       // Is trying to go beyond the map
       if (target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
          return false;
       }
 
-      var source = movement.getSourceCoordinate();
+      var source = movement.getFrom();
       var direction = movement.getDirection();
 
       return ((ObjectLayer) layers.get(layerIndex)).isMovementPossible(source, target, direction);
