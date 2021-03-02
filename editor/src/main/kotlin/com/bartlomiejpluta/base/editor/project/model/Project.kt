@@ -64,6 +64,10 @@ class Project {
    var buildClassesDirectory by buildClassesDirectoryProperty
       private set
 
+   val buildDependenciesDirectoryProperty = SimpleObjectProperty<File>()
+   var buildDependenciesDirectory by buildDependenciesDirectoryProperty
+      private set
+
    val buildOutDirectoryProperty = SimpleObjectProperty<File>()
    var buildOutDirectory by buildOutDirectoryProperty
       private set
@@ -82,6 +86,7 @@ class Project {
             codeDirectory = File(it, CODE_DIR)
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
+            buildDependenciesDirectory = File(it, BUILD_DEPENDENCIES_DIR)
             buildOutDirectory = File(it, BUILD_OUT_DIR)
          }
       }
@@ -108,5 +113,6 @@ class Project {
       const val BUILD_DIR = "build"
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"
       const val BUILD_OUT_DIR = "$BUILD_DIR/out"
+      const val BUILD_DEPENDENCIES_DIR = "$BUILD_DIR/dependencies"
    }
 }

@@ -22,8 +22,8 @@ class JaninoCompiler : Compiler {
    @Autowired
    private lateinit var apiProvider: APIProvider
 
-   override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File) = try {
-      tryToCompile(sourceDirectory, targetDirectory)
+   override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File, classPath: Array<File>) = try {
+      tryToCompile(sourceDirectory, targetDirectory, classPath)
 
       /* Because Janino parser does not provide error handler for parsers:
       *
@@ -42,11 +42,13 @@ class JaninoCompiler : Compiler {
       throw BuildException(Severity.ERROR, "Compiler", e.location, message, e)
    }
 
-   private fun tryToCompile(sourceDirectory: FileSystemNode, targetDirectory: File) {
+   private fun tryToCompile(sourceDirectory: FileSystemNode, targetDirectory: File, classPath: Array<File>) {
       val compilationUnits = prepareCompilationUnits(sourceDirectory)
 
       compilerFactory.newCompiler().apply {
          setDestinationDirectory(targetDirectory, false)
+
+         setClassPath(classPath)
 
          setWarningHandler { handle, message, location ->
             eventbus.fire(AppendBuildLogsEvent(Severity.WARNING, "$message ($handle)", location, "Compiler"))

@@ -23,8 +23,6 @@ javafx {
     modules = ['javafx.controls', 'javafx.graphics']
 }
 
-
-
 compileKotlin {
     kotlinOptions.jvmTarget = "14"
 }
@@ -57,6 +55,13 @@ task provideGameEngine(type: Copy) {
     into file("build/resources/main/engine")
 }
 
+task provideApiDependencies(type: Copy) {
+    dependsOn(":api:relayDependencies")
+
+    from project(':api').file('build/dependencies')
+    into file("build/resources/main/dependencies")
+}
+
 task provideApi(type: Copy) {
     from project(':api').file('src/main/java')
     into file('build/resources/main/api')
@@ -76,6 +81,7 @@ task provideApi(type: Copy) {
 
 processResources {
     dependsOn(provideGameEngine)
+    dependsOn(provideApiDependencies)
     dependsOn(provideApi)
 }
 

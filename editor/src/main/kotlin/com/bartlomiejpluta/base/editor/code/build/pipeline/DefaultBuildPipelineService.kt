@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.game.GameEngineProvider
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
 import com.bartlomiejpluta.base.editor.code.build.project.ProjectAssembler
+import com.bartlomiejpluta.base.editor.code.dependency.DependenciesProvider
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.ClearBuildLogsEvent
@@ -18,6 +19,9 @@ import tornadofx.FX.Companion.eventbus
 
 @Component
 class DefaultBuildPipelineService : BuildPipelineService {
+
+   @Autowired
+   private lateinit var dependenciesProvider: DependenciesProvider
 
    @Autowired
    private lateinit var compiler: Compiler
@@ -76,8 +80,11 @@ class DefaultBuildPipelineService : BuildPipelineService {
       val outputFile = project.buildOutputJarFile
       val startTime = System.currentTimeMillis()
 
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Providing compile-time dependencies...", tag = TAG))
+      val dependencies = dependenciesProvider.provideDependenciesTo(project.buildDependenciesDirectory)
+
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Compiling sources...", tag = TAG))
-      compiler.compile(project.codeFSNode, project.buildClassesDirectory)
+      compiler.compile(project.codeFSNode, project.buildClassesDirectory, dependencies.toTypedArray())
 
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
       engineProvider.provideBaseGameEngine(outputFile)
@@ -95,6 +102,7 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
       project.buildClassesDirectory.mkdirs()
       project.buildOutDirectory.mkdirs()
+      project.buildDependenciesDirectory.mkdirs()
    }
 
    override fun clean() {
