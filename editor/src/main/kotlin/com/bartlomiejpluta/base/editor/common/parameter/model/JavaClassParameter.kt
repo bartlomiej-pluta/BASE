@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent
 import tornadofx.Scope
 import tornadofx.find
 import tornadofx.toProperty
+import tornadofx.tooltip
 
 class JavaClassParameter(
    key: String,
@@ -18,6 +19,10 @@ class JavaClassParameter(
 
    override val editor = Label(initialValue).apply {
       textProperty().bind(editorValueProperty)
+
+      tooltip {
+         textProperty().bind(editorValueProperty)
+      }
 
       addEventHandler(MouseEvent.MOUSE_CLICKED) {
          if (it.button == MouseButton.PRIMARY) {
