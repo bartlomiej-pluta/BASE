@@ -44,7 +44,7 @@ public class RenderableContext implements Context, Updatable, Renderable {
    @SneakyThrows
    @Override
    public void openMap(String mapUid) {
-      map = mapManager.loadMap(mapUid);
+      map = mapManager.loadObject(mapUid);
 
       var handlerClass = classLoader.<MapHandler>loadClass(map.getHandler());
       mapHandler = handlerClass.getConstructor().newInstance();

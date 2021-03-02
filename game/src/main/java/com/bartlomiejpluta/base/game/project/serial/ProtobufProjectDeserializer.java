@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.game.project.serial;
 
+import com.bartlomiejpluta.base.game.entity.asset.EntitySetAsset;
 import com.bartlomiejpluta.base.game.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.game.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.game.project.model.Project;
@@ -22,7 +23,9 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
       var tileSetAssets = proto.getTileSetsList().stream().map(this::parseTileSetAsset).collect(toList());
       var mapAssets = proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList());
       var imageAssets = proto.getImagesList().stream().map(this::parseImageAsset).collect(toList());
-      return new Project(name, runner, tileSetAssets, mapAssets, imageAssets);
+      var entitySetAssets = proto.getEntitySetsList().stream().map(this::parseEntitySetAsset).collect(toList());
+
+      return new Project(name, runner, tileSetAssets, mapAssets, imageAssets, entitySetAssets);
    }
 
    private TileSetAsset parseTileSetAsset(ProjectProto.TileSetAsset proto) {
@@ -35,5 +38,9 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
 
    private ImageAsset parseImageAsset(ProjectProto.ImageAsset proto) {
       return new ImageAsset(proto.getUid(), proto.getSource());
+   }
+
+   private EntitySetAsset parseEntitySetAsset(ProjectProto.EntitySetAsset proto) {
+      return new EntitySetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
    }
 }

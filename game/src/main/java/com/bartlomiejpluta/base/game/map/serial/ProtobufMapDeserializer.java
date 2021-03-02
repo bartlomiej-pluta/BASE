@@ -26,7 +26,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    @Override
    protected GameMap parse(InputStream input) throws Exception {
       var proto = GameMapProto.GameMap.parseFrom(input);
-      var tileSet = tileSetManager.loadTileSet(proto.getTileSetUID());
+      var tileSet = tileSetManager.loadObject(proto.getTileSetUID());
       var map = new GameMap(tileSet, proto.getRows(), proto.getColumns(), proto.getHandler());
 
       proto.getLayersList().forEach(layer -> deserializeLayer(map, layer));
@@ -94,7 +94,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
 
    private void deserializeImageLayer(GameMap map, GameMapProto.Layer proto) {
       var protoImageLayer = proto.getImageLayer();
-      var image = imageManager.loadImage(protoImageLayer.getImageUID());
+      var image = imageManager.loadObject(protoImageLayer.getImageUID());
 
       var mode = switch (proto.getImageLayer().getMode()) {
          case NORMAL -> ImageLayerMode.NORMAL;

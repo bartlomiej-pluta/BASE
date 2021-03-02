@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.game.project.loader;
 
+import com.bartlomiejpluta.base.game.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.map.manager.MapManager;
 import com.bartlomiejpluta.base.game.project.config.ProjectConfiguration;
@@ -18,6 +19,7 @@ public class DefaultProjectLoader implements ProjectLoader {
    private final TileSetManager tileSetManager;
    private final MapManager mapManager;
    private final ImageManager imageManager;
+   private final EntitySetManager entitySetManager;
 
    @Override
    public Project loadProject() {
@@ -26,6 +28,7 @@ public class DefaultProjectLoader implements ProjectLoader {
       project.getTileSetAssets().forEach(tileSetManager::registerAsset);
       project.getMapAssets().forEach(mapManager::registerAsset);
       project.getImageAssets().forEach(imageManager::registerAsset);
+      project.getEntitySetAssets().forEach(entitySetManager::registerAsset);
 
       return project;
    }

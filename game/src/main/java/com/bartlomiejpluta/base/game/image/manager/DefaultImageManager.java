@@ -33,7 +33,7 @@ public class DefaultImageManager implements ImageManager {
    }
 
    @Override
-   public Image loadImage(String uid) {
+   public Image loadObject(String uid) {
       var asset = assets.get(uid);
 
       if (asset == null) {

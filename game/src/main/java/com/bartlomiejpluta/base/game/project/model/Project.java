@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.game.project.model;
 
+import com.bartlomiejpluta.base.game.entity.asset.EntitySetAsset;
 import com.bartlomiejpluta.base.game.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.game.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.game.tileset.asset.TileSetAsset;
@@ -27,4 +28,7 @@ public class Project {
 
    @NonNull
    private final List<ImageAsset> imageAssets;
+
+   @NonNull
+   private final List<EntitySetAsset> entitySetAssets;
 }

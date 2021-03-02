@@ -26,12 +26,12 @@ public class DefaultTileSetManager implements TileSetManager {
 
    @Override
    public void registerAsset(TileSetAsset asset) {
-      log.info("Registering [{}] tileset asset under UID: [{}]", asset.getSource(), asset.getUid());
+      log.info("Registering [{}] tile set asset under UID: [{}]", asset.getSource(), asset.getUid());
       assets.put(asset.getUid(), asset);
    }
 
    @Override
-   public TileSet loadTileSet(String uid) {
+   public TileSet loadObject(String uid) {
       var tileset = tileSets.get(uid);
 
       if (tileset == null) {

@@ -29,7 +29,7 @@ public class DefaultMapManager implements MapManager {
    }
 
    @Override
-   public GameMap loadMap(String uid) {
+   public GameMap loadObject(String uid) {
       var map = maps.get(uid);
 
       if (map == null) {
