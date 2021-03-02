@@ -46,7 +46,7 @@ public class DefaultTileSetManager implements TileSetManager {
          var size = texture.getSpriteSize();
          var mesh = meshManager.createQuad(size.x, size.y, 0, 0);
          tileset = new TileSet(texture, mesh);
-         log.info("Loading tileset from assets to cache under the key: [{}]", uid);
+         log.info("Loading tile set from assets to cache under the key: [{}]", uid);
          tileSets.put(uid, tileset);
       }
 

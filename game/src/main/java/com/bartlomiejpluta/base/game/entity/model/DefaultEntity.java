@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.game.entity.model;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
+import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.geo.Vector;
 import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.game.entity.config.EntitySpriteConfiguration;
@@ -13,7 +15,7 @@ import org.joml.Vector2f;
 import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
-public class Entity extends MovableSprite {
+public class DefaultEntity extends MovableSprite implements Entity {
    private final Map<Direction, Integer> spriteDirectionRows;
    private final int defaultSpriteColumn;
 
@@ -40,7 +42,7 @@ public class Entity extends MovableSprite {
       var frames = material.getTexture().getRows();
       var array = new Vector2f[frames];
 
-      for(int column=0; column<frames; ++column) {
+      for (int column = 0; column < frames; ++column) {
          array[column] = new Vector2f(column, row);
       }
 
@@ -54,7 +56,7 @@ public class Entity extends MovableSprite {
 
    @Override
    protected boolean move(Direction direction) {
-      if(super.move(direction)) {
+      if (super.move(direction)) {
          faceDirection = direction;
          return true;
       }
@@ -70,8 +72,13 @@ public class Entity extends MovableSprite {
       return framesToCrossOneTile;
    }
 
-   public Entity(Mesh mesh, Material material, Vector2f coordinateStepSize, EntitySpriteConfiguration configuration) {
-      super(mesh, material, coordinateStepSize);
+   @Override
+   public void setCoordinates(Vector coordinates) {
+      setCoordinates(coordinates.x, coordinates.y);
+   }
+
+   public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {
+      super(mesh, material);
       this.defaultSpriteColumn = configuration.getDefaultSpriteColumn();
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
       this.faceDirection = Direction.DOWN;

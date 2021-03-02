@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.game.project.model;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.input.Keyboard;
 import com.bartlomiejpluta.base.api.map.MapHandler;
 import com.bartlomiejpluta.base.core.gl.object.texture.TextureManager;
@@ -50,6 +51,11 @@ public class RenderableContext implements Context, Updatable, Renderable {
       mapHandler = handlerClass.getConstructor().newInstance();
 
       mapHandler.init(this);
+   }
+
+   @Override
+   public Entity createEntity(String entitySetUid) {
+      return entityManager.createEntity(entitySetUid);
    }
 
    public void input() {

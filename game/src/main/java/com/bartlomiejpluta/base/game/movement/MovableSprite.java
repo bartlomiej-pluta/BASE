@@ -13,7 +13,7 @@ import org.joml.Vector2i;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class MovableSprite extends AnimatedSprite implements Updatable {
-   private final Vector2f coordinateStepSize;
+   private final Vector2f coordinateStepSize = new Vector2f(0, 0);
 
    private int moveTime = 0;
    private Vector2f movementVector;
@@ -78,9 +78,15 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       return setCoordinates(coordinates.x, coordinates.y);
    }
 
-   public MovableSprite(Mesh mesh, Material material, Vector2f coordinateStepSize) {
+   public MovableSprite setStepSize(float x, float y) {
+      coordinateStepSize.x = x;
+      coordinateStepSize.y = y;
+
+      return this;
+   }
+
+   public MovableSprite(Mesh mesh, Material material) {
       super(mesh, material);
-      this.coordinateStepSize = coordinateStepSize;
       setCoordinates(0, 0);
    }
 }

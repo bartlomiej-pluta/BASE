@@ -4,8 +4,7 @@ import com.bartlomiejpluta.base.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.game.entity.config.EntitySpriteConfiguration;
-import com.bartlomiejpluta.base.game.entity.model.Entity;
-import com.bartlomiejpluta.base.game.map.model.GameMap;
+import com.bartlomiejpluta.base.game.entity.model.DefaultEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultEntityManager implements EntityManager {
    private final MeshManager meshManager;
+   private final EntitySetManager entitySetManager;
    private final EntitySpriteConfiguration configuration;
 
    @Override
-   public Entity createEntity(Material material, GameMap map) {
-      return new Entity(buildMesh(material), material, map.getStepSize(), configuration);
+   public DefaultEntity createEntity(String entitySetUid) {
+      var material = entitySetManager.loadObject(entitySetUid);
+      return new DefaultEntity(buildMesh(material), material, configuration);
    }
 
    private Mesh buildMesh(Material material) {
