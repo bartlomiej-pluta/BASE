@@ -20,7 +20,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    private final Map<Direction, Integer> spriteDirectionRows;
    private final int defaultSpriteColumn;
 
-   @Setter
    private int animationSpeed = 100;
 
    @Setter
@@ -65,14 +64,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
       return false;
    }
 
-   public void setMovementSlowness(int slowness) {
-      framesToCrossOneTile = slowness;
-   }
-
-   public int getMovementSlowness() {
-      return framesToCrossOneTile;
-   }
-
    @Override
    public void setCoordinates(Vector coordinates) {
       setCoordinates(coordinates.x, coordinates.y);
@@ -80,7 +71,12 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    public void setSpeed(float speed) {
-      setMovementSlowness((int) (1 / MathUtil.clamp(speed, 0.01, 1.0)));
+      framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
+   }
+
+   @Override
+   public void setAnimationSpeed(float speed) {
+      animationSpeed = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
    }
 
    public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {

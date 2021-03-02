@@ -14,4 +14,6 @@ public interface Entity {
    void setFaceDirection(Direction direction);
 
    void setSpeed(float speed);
+
+   void setAnimationSpeed(float speed);
 }

@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.game.map.model;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.entity.Movement;
 import com.bartlomiejpluta.base.api.map.GameMap;
+import com.bartlomiejpluta.base.api.map.PassageAbility;
 import com.bartlomiejpluta.base.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.logic.Updatable;
@@ -16,9 +17,7 @@ import com.bartlomiejpluta.base.game.map.layer.color.ColorLayer;
 import com.bartlomiejpluta.base.game.map.layer.image.ImageLayer;
 import com.bartlomiejpluta.base.game.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.game.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.game.map.layer.tile.TileLayer;
-import com.bartlomiejpluta.base.game.movement.MovableSprite;
 import com.bartlomiejpluta.base.game.tileset.model.TileSet;
 import lombok.Getter;
 import lombok.NonNull;
@@ -110,57 +109,46 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return layers.size() - 1;
    }
 
-   public DefaultGameMap setTile(int layerIndex, int row, int column, int tileId) {
-      ((TileLayer) layers.get(layerIndex)).setTile(row, column, tileSet.tileById(tileId));
-
-      return this;
-   }
-
-   public DefaultGameMap setTile(int layerIndex, int row, int column, int tileSetRow, int tileSetColumn) {
-      ((TileLayer) layers.get(layerIndex)).setTile(row, column, tileSet.tileAt(tileSetRow, tileSetColumn));
-
-      return this;
-   }
-
-   public DefaultGameMap clearTile(int layerIndex, int row, int column) {
-      ((TileLayer) layers.get(layerIndex)).setTile(row, column, null);
-
-      return this;
-   }
-
-   public DefaultGameMap removeObject(int layerIndex, MovableSprite object) {
-      ((ObjectLayer) layers.get(layerIndex)).removeObject(object);
-
-      return this;
-   }
-
-   public DefaultGameMap setPassageAbility(int layerIndex, int row, int column, PassageAbility passageAbility) {
-      ((ObjectLayer) layers.get(layerIndex)).setPassageAbility(row, column, passageAbility);
-
-      return this;
-   }
-
-   public DefaultGameMap setColor(int layerIndex, float r, float g, float b, float alpha) {
-      ((ColorLayer) layers.get(layerIndex)).setColor(r, g, b, alpha);
-
-      return this;
-   }
-
    @Override
-   public void addEntity(int layerIndex, Entity entity) {
+   public void addEntity(int objectLayerIndex, Entity entity) {
       var object = (DefaultEntity) entity;
       object.setStepSize(stepSize.x, stepSize.y);
 
-      ((ObjectLayer) layers.get(layerIndex)).addObject(object);
+      ((ObjectLayer) layers.get(objectLayerIndex)).addObject(object);
    }
 
    @Override
-   public void removeEntity(int layerIndex, Entity entity) {
-      ((ObjectLayer) layers.get(layerIndex)).removeObject((DefaultEntity) entity);
+   public void removeEntity(int objectLayerIndex, Entity entity) {
+      ((ObjectLayer) layers.get(objectLayerIndex)).removeObject((DefaultEntity) entity);
    }
 
    @Override
-   public boolean isMovementPossible(int layerIndex, Movement movement) {
+   public void setTile(int tileLayerIndex, int row, int column, int tileId) {
+      ((TileLayer) layers.get(tileLayerIndex)).setTile(row, column, tileSet.tileById(tileId));
+   }
+
+   @Override
+   public void setTile(int tileLayerIndex, int row, int column, int tileSetRow, int tileSetColumn) {
+      ((TileLayer) layers.get(tileLayerIndex)).setTile(row, column, tileSet.tileAt(tileSetRow, tileSetColumn));
+   }
+
+   @Override
+   public void clearTile(int tileLayerIndex, int row, int column) {
+      ((TileLayer) layers.get(tileLayerIndex)).setTile(row, column, null);
+   }
+
+   @Override
+   public void setPassageAbility(int objectLayerIndex, int row, int column, PassageAbility passageAbility) {
+      ((ObjectLayer) layers.get(objectLayerIndex)).setPassageAbility(row, column, passageAbility);
+   }
+
+   @Override
+   public void setColor(int colorLayerIndex, float r, float g, float b, float alpha) {
+      ((ColorLayer) layers.get(colorLayerIndex)).setColor(r, g, b, alpha);
+   }
+
+   @Override
+   public boolean isMovementPossible(int objectLayerIndex, Movement movement) {
       var target = movement.getTo();
 
       // Is trying to go beyond the map
@@ -171,6 +159,6 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       var source = movement.getFrom();
       var direction = movement.getDirection();
 
-      return ((ObjectLayer) layers.get(layerIndex)).isMovementPossible(source, target, direction);
+      return ((ObjectLayer) layers.get(objectLayerIndex)).isMovementPossible(source, target, direction);
    }
 }

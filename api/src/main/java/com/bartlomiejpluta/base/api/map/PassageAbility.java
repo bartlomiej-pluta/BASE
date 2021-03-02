@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.game.map.layer.object;
+package com.bartlomiejpluta.base.api.map;
 
 public enum PassageAbility {
    BLOCK,

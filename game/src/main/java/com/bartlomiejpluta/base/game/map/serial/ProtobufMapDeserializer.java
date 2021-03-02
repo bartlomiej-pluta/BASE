@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.game.map.serial;
 
+import com.bartlomiejpluta.base.api.map.PassageAbility;
 import com.bartlomiejpluta.base.core.error.AppException;
 import com.bartlomiejpluta.base.core.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.game.image.manager.ImageManager;
 import com.bartlomiejpluta.base.game.map.layer.image.ImageLayerMode;
-import com.bartlomiejpluta.base.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.game.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.game.tileset.manager.TileSetManager;
 import com.bartlomiejpluta.base.proto.GameMapProto;

@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.game.map.layer.object;
 
 import com.bartlomiejpluta.base.api.entity.Direction;
 import com.bartlomiejpluta.base.api.geo.Vector;
+import com.bartlomiejpluta.base.api.map.PassageAbility;
 import com.bartlomiejpluta.base.core.gl.shader.manager.ShaderManager;
 import com.bartlomiejpluta.base.core.ui.Window;
 import com.bartlomiejpluta.base.core.world.camera.Camera;
