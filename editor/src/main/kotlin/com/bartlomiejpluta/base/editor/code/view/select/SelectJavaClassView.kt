@@ -10,6 +10,7 @@ import tornadofx.*
 class SelectJavaClassView : View() {
    val rootNode: FileNode by param()
    val selection: Property<FileNode> by param()
+   val expandedRootChildren: Array<Int> by param()
 
    private val treeView = treeview<FileNode> {
       root = TreeItem(rootNode)
@@ -31,7 +32,7 @@ class SelectJavaClassView : View() {
    }
 
    init {
-      treeView.root.expandAll()
+      treeView.root.children.filterIndexed { index, _ -> index in expandedRootChildren }.forEach { it.expandAll() }
    }
 
    override val root = treeView

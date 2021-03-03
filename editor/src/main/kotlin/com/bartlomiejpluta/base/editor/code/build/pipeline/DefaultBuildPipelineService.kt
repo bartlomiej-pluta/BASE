@@ -94,7 +94,7 @@ class DefaultBuildPipelineService : BuildPipelineService {
       projectAssembler.assembly(project, outputFile)
 
       val buildingTime = (System.currentTimeMillis() - startTime) / 1000.0
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Done [${buildingTime}s]", tag = TAG))
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Build done [${buildingTime}s]", tag = TAG))
    }
 
    private fun prepareBuildDirectory(project: Project) {
@@ -107,6 +107,7 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
    override fun clean() {
       projectContext.project?.apply { buildDirectory.deleteRecursively() }
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Cleaning done", tag = TAG))
    }
 
    companion object {

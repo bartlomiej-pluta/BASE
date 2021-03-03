@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.code.build.pipeline.BuildPipelineService
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.process.runner.app.ApplicationRunner
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
 class MainMenuView : View() {
@@ -62,7 +63,9 @@ class MainMenuView : View() {
       menu("Build") {
          enableWhen(projectContext.projectProperty.isNotNull)
 
-         item("Compile") {
+         item("Build project") {
+            graphic = FontIcon("fa-gavel")
+
             enableWhen(buildPipelineService.isRunningProperty.not().and(applicationRunner.isRunningProperty.not()))
 
             action {
@@ -71,14 +74,27 @@ class MainMenuView : View() {
          }
 
          item("Run") {
-            enableWhen(applicationRunner.isRunningProperty.not())
+            graphic = FontIcon("fa-play")
+
+            enableWhen(buildPipelineService.isRunningProperty.not().and(applicationRunner.isRunningProperty.not()))
 
             action {
                applicationRunner.run()
             }
          }
 
+         item("Rebuild & Run") {
+            enableWhen(buildPipelineService.isRunningProperty.not().and(applicationRunner.isRunningProperty.not()))
+
+            action {
+               buildPipelineService.clean()
+               applicationRunner.run()
+            }
+         }
+
          item("Terminate") {
+            graphic = FontIcon("fa-stop")
+
             enableWhen(applicationRunner.processProperty.isNotNull)
 
             action {
@@ -86,7 +102,9 @@ class MainMenuView : View() {
             }
          }
 
-         item("Clean") {
+         item("Clean build") {
+            graphic = FontIcon("fa-trash")
+
             action {
                buildPipelineService.clean()
             }

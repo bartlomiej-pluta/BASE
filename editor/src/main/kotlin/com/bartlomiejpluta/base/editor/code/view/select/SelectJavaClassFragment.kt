@@ -22,7 +22,8 @@ class SelectJavaClassFragment : Fragment("Select Java Class") {
 
    private val selectJavaClassView = find<SelectJavaClassView>(
       SelectJavaClassView::rootNode to rootNode,
-      SelectJavaClassView::selection to selection
+      SelectJavaClassView::selection to selection,
+      SelectJavaClassView::expandedRootChildren to arrayOf(1)
    )
 
    private val isFile = createBooleanBinding({ selection.value?.type == FileType.FILE }, selection)

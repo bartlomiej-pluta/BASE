@@ -34,7 +34,7 @@ class ScriptFilesView : View() {
 
             treeView.root = TreeItem(rootNode)
             treeView.populate { item -> item.value?.children }
-            root.root.expandAll()
+            root.root.children[1].expandAll()
          }
       }
    }
