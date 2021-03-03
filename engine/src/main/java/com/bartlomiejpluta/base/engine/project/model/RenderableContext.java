@@ -18,7 +18,6 @@ import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.joml.Vector2f;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -59,13 +58,8 @@ public class RenderableContext implements Context, Updatable, Renderable {
    }
 
    @Override
-   public void setCameraPosition(Vector2f position) {
-      camera.setPosition(position);
-   }
-
-   @Override
-   public void setCameraPosition(float x, float y) {
-      camera.setPosition(x, y);
+   public Camera getCamera() {
+      return camera;
    }
 
    public void input(Window window) {
