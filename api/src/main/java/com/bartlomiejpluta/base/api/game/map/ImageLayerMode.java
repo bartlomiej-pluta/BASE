@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.world.map.layer.image;
+package com.bartlomiejpluta.base.api.game.map;
 
 public enum ImageLayerMode {
    NORMAL,

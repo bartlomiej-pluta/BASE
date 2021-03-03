@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.image.manager;
 
+import com.bartlomiejpluta.base.api.game.map.Image;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
@@ -7,7 +8,7 @@ import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.util.math.MathUtil;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
-import com.bartlomiejpluta.base.engine.world.image.model.Image;
+import com.bartlomiejpluta.base.engine.world.image.model.DefaultImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class DefaultImageManager implements ImageManager {
       var material = Material.textured(texture);
       log.info("Creating new image on asset with UID: [{}]", uid);
 
-      return new Image(mesh, material, initialWidth, initialHeight, gcd);
+      return new DefaultImage(mesh, material, initialWidth, initialHeight, gcd);
    }
 
    @Override

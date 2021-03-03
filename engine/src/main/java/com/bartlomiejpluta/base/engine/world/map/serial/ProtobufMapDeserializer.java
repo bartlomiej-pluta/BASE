@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.map.serial;
 
+import com.bartlomiejpluta.base.api.game.map.ImageLayerMode;
 import com.bartlomiejpluta.base.api.game.map.PassageAbility;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
-import com.bartlomiejpluta.base.engine.world.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
 import com.bartlomiejpluta.base.proto.GameMapProto;

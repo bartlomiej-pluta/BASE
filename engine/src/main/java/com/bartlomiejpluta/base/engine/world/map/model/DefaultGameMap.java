@@ -3,20 +3,15 @@ package com.bartlomiejpluta.base.engine.world.map.model;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
-import com.bartlomiejpluta.base.api.game.map.GameMap;
-import com.bartlomiejpluta.base.api.game.map.Layer;
-import com.bartlomiejpluta.base.api.game.map.PassageAbility;
-import com.bartlomiejpluta.base.api.game.map.TileLayer;
+import com.bartlomiejpluta.base.api.game.map.*;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
-import com.bartlomiejpluta.base.engine.world.image.model.Image;
 import com.bartlomiejpluta.base.engine.world.map.layer.color.ColorLayer;
-import com.bartlomiejpluta.base.engine.world.map.layer.image.ImageLayer;
-import com.bartlomiejpluta.base.engine.world.map.layer.image.ImageLayerMode;
+import com.bartlomiejpluta.base.engine.world.map.layer.image.DefaultImageLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.tile.DefaultTileLayer;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
@@ -88,6 +83,11 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return (TileLayer) layers.get(layerIndex);
    }
 
+   @Override
+   public ImageLayer getImageLayer(int layerIndex) {
+      return (ImageLayer) layers.get(layerIndex);
+   }
+
    public int createObjectLayer() {
       var passageMap = new PassageAbility[rows][columns];
       for (int i = 0; i < rows; ++i) {
@@ -112,10 +112,11 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return layers.size() - 1;
    }
 
-   public int createImageLayer(Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
-      layers.add(new ImageLayer(this, image, opacity, x, y, scaleX, scaleY, mode, parallax));
+   public ImageLayer createImageLayer(Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
+      var layer = new DefaultImageLayer(this, image, opacity, x, y, scaleX, scaleY, mode, parallax);
+      layers.add(layer);
 
-      return layers.size() - 1;
+      return layer;
    }
 
    @Override

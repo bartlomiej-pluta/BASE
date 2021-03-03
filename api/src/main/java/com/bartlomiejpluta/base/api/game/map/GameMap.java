@@ -5,9 +5,19 @@ import com.bartlomiejpluta.base.api.game.entity.Movement;
 import org.joml.Vector2f;
 
 public interface GameMap {
+   float getWidth();
+
+   float getHeight();
+
+   int getRows();
+
+   int getColumns();
+
    Vector2f getSize();
 
    TileLayer getTileLayer(int layerIndex);
+
+   ImageLayer getImageLayer(int layerIndex);
 
    void addEntity(int objectLayerIndex, Entity entity);
 
