@@ -1,13 +1,13 @@
 package com.bartlomiejpluta.base.engine.project.model;
 
+import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.map.MapHandler;
-import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;

@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.core.gl.object.mesh;
 
-import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.api.internal.window.Window;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.system.MemoryStack;
 

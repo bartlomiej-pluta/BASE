@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.api.internal.window;
+package com.bartlomiejpluta.base.api.game.window;
 
 import com.bartlomiejpluta.base.api.game.input.Key;
 import org.joml.Vector2f;

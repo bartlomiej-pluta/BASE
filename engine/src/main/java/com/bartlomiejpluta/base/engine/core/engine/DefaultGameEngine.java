@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.core.engine;
 
-import com.bartlomiejpluta.base.api.internal.window.Window;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.engine.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;

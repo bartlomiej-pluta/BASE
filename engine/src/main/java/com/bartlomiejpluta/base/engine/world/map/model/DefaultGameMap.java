@@ -1,14 +1,14 @@
 package com.bartlomiejpluta.base.engine.world.map.model;
 
+import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.GameMap;
 import com.bartlomiejpluta.base.api.game.map.PassageAbility;
-import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
 import com.bartlomiejpluta.base.engine.world.image.model.Image;

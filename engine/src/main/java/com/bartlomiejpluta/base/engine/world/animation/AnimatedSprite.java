@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.engine.world.animation;
 
-import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;

@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.ui;
 
-import com.bartlomiejpluta.base.api.internal.window.Window;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import org.springframework.stereotype.Component;
 
 @Component

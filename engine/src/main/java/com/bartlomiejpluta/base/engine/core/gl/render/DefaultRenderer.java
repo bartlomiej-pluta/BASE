@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.core.gl.render;
 
-import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

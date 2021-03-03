@@ -3,7 +3,7 @@ package ${package};
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.map.GameMap;
 import com.bartlomiejpluta.base.api.game.map.MapHandler;
-import com.bartlomiejpluta.base.api.internal.window.Window;
+import com.bartlomiejpluta.base.api.game.window.Window;
 
 public class ${className} implements MapHandler {
 

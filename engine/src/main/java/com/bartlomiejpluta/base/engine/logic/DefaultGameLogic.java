@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.engine.logic;
 
+import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
-import com.bartlomiejpluta.base.api.internal.camera.Camera;
-import com.bartlomiejpluta.base.api.internal.window.Window;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.core.gl.render.Renderer;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;

@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.ui;
 
 import com.bartlomiejpluta.base.api.game.input.Key;
-import com.bartlomiejpluta.base.api.internal.window.Window;
+import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import lombok.Getter;
 import lombok.NonNull;
