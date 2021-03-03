@@ -1,20 +1,16 @@
 package com.bartlomiejpluta.base.api.game.entity;
 
-import org.joml.Vector2f;
+import com.bartlomiejpluta.base.api.internal.logic.Updatable;
+import com.bartlomiejpluta.base.api.internal.object.Placeable;
+import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import org.joml.Vector2i;
 
-public interface Entity {
+public interface Entity extends Placeable, Renderable, Updatable {
    Vector2i getCoordinates();
 
    void setCoordinates(Vector2i coordinates);
 
    void setCoordinates(int x, int y);
-
-   Vector2f getPosition();
-
-   void setPosition(Vector2f position);
-
-   void setPosition(float x, float y);
 
    Movement prepareMovement(Direction direction);
 

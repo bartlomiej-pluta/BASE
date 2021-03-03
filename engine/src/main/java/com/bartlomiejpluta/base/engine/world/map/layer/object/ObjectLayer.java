@@ -1,31 +1,31 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.object;
 
 import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.map.PassageAbility;
 import com.bartlomiejpluta.base.api.internal.camera.Camera;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.Layer;
-import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import org.joml.Vector2i;
 
 import java.util.List;
 
 public class ObjectLayer implements Layer {
-   private final List<MovableSprite> objects;
+   private final List<Entity> objects;
 
    private final PassageAbility[][] passageMap;
 
-   public ObjectLayer(List<MovableSprite> objects, PassageAbility[][] passageMap) {
+   public ObjectLayer(List<Entity> objects, PassageAbility[][] passageMap) {
       this.objects = objects;
       this.passageMap = passageMap;
    }
 
-   public void addObject(MovableSprite object) {
+   public void addObject(Entity object) {
       objects.add(object);
    }
 
-   public void removeObject(MovableSprite object) {
+   public void removeObject(Entity object) {
       objects.remove(object);
    }
 
@@ -63,7 +63,7 @@ public class ObjectLayer implements Layer {
       }
    }
 
-   private int compareObjects(MovableSprite a, MovableSprite b) {
+   private int compareObjects(Entity a, Entity b) {
       return Float.compare(a.getPosition().y, b.getPosition().y);
    }
 

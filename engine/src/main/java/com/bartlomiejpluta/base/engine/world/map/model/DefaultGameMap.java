@@ -120,7 +120,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
 
    @Override
    public void removeEntity(int objectLayerIndex, Entity entity) {
-      ((ObjectLayer) layers.get(objectLayerIndex)).removeObject((DefaultEntity) entity);
+      ((ObjectLayer) layers.get(objectLayerIndex)).removeObject(entity);
    }
 
    @Override
