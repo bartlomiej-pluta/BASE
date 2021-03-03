@@ -7,7 +7,6 @@ import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.engine.world.image.model.DefaultImage;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -18,7 +17,7 @@ public class DefaultImageLayer implements ImageLayer {
 
    @NonNull
    @Getter
-   private DefaultImage image;
+   private Image image;
    private float imagePrimaryWidth;
    private float imagePrimaryHeight;
 
@@ -66,13 +65,13 @@ public class DefaultImageLayer implements ImageLayer {
 
    @Override
    public void setImage(Image image) {
-      this.image = (DefaultImage) image;
+      this.image = image;
       this.imagePrimaryWidth = image.getPrimaryWidth();
       this.imagePrimaryHeight = image.getPrimaryHeight();
 
       this.image.setPosition(x, y);
 
-      this.image.getMaterial().setAlpha(opacity);
+      this.image.setOpacity(opacity);
 
       recalculate();
    }
@@ -81,7 +80,7 @@ public class DefaultImageLayer implements ImageLayer {
    public void setOpacity(float opacity) {
       this.opacity = opacity;
 
-      this.image.getMaterial().setAlpha(opacity);
+      this.image.setOpacity(opacity);
    }
 
    @Override

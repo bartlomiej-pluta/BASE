@@ -13,4 +13,8 @@ public interface Image extends Placeable, Renderable {
    int getWidth();
 
    int getHeight();
+
+   void setOpacity(float opacity);
+
+   float getOpacity();
 }

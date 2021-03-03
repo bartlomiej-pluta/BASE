@@ -8,7 +8,6 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2f;
@@ -37,7 +36,7 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void addEntity(Entity entity) {
-      ((DefaultEntity) entity).setStepSize(stepSize.x, stepSize.y);
+      entity.setStepSize(stepSize.x, stepSize.y);
       entities.add(entity);
    }
 

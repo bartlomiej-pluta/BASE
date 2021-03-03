@@ -6,6 +6,8 @@ import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import org.joml.Vector2i;
 
 public interface Entity extends Placeable, Renderable, Updatable {
+   void setStepSize(float x, float y);
+
    Vector2i getCoordinates();
 
    void setCoordinates(Vector2i coordinates);

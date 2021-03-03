@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.entity.manager;
 
+import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
@@ -19,7 +20,7 @@ public class DefaultEntityManager implements EntityManager {
    private final EntitySpriteConfiguration configuration;
 
    @Override
-   public DefaultEntity createEntity(String entitySetUid) {
+   public Entity createEntity(String entitySetUid) {
       var material = entitySetManager.loadObject(entitySetUid);
       return new DefaultEntity(buildMesh(material), material, configuration);
    }
