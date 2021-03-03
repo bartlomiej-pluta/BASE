@@ -2,7 +2,6 @@ package com.bartlomiejpluta.base.engine.project.model;
 
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
-import com.bartlomiejpluta.base.api.game.input.Keyboard;
 import com.bartlomiejpluta.base.api.game.map.MapHandler;
 import com.bartlomiejpluta.base.api.internal.camera.Camera;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
@@ -10,7 +9,6 @@ import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
-import com.bartlomiejpluta.base.engine.input.GLFWKeyboard;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
@@ -35,14 +33,12 @@ public class RenderableContext implements Context, Updatable, Renderable {
    private final MapManager mapManager;
    private final ClassLoader classLoader;
 
-   private Keyboard keyboard;
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
    private Camera camera;
 
-   public void init(Window window, Camera camera) {
-      this.keyboard = new GLFWKeyboard(window);
+   public void init(Camera camera) {
       this.camera = camera;
    }
 
@@ -72,8 +68,8 @@ public class RenderableContext implements Context, Updatable, Renderable {
       camera.setPosition(x, y);
    }
 
-   public void input() {
-      mapHandler.input(keyboard);
+   public void input(Window window) {
+      mapHandler.input(window);
    }
 
    @Override
@@ -94,7 +90,7 @@ public class RenderableContext implements Context, Updatable, Renderable {
       }
 
       if (mapHandler != null) {
-         mapHandler.postRender(window.getWidth(), window.getHeight());
+         mapHandler.postRender(window);
       }
    }
 }

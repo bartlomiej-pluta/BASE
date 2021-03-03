@@ -51,7 +51,7 @@ public class DefaultGameLogic implements GameLogic {
    public void init(Window window) {
       log.info("Initializing game logic");
       renderer.init();
-      context.init(window, camera);
+      context.init(camera);
 
       project = projectLoader.loadProject();
       var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());
@@ -62,7 +62,7 @@ public class DefaultGameLogic implements GameLogic {
 
    @Override
    public void input(Window window) {
-      context.input();
+      context.input(window);
    }
 
    @Override

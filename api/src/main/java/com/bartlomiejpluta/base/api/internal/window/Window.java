@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.api.internal.window;
 
+import com.bartlomiejpluta.base.api.game.input.Key;
 import org.joml.Vector2f;
 
 public interface Window {
@@ -17,7 +18,7 @@ public interface Window {
 
    boolean shouldClose();
 
-   boolean isKeyPressed(int keyCode);
+   boolean isKeyPressed(Key key);
 
    void update();
 
