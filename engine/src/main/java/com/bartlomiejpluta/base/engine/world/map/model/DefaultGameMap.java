@@ -1,7 +1,15 @@
 package com.bartlomiejpluta.base.engine.world.map.model;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.map.*;
+import com.bartlomiejpluta.base.api.game.image.Image;
+import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.game.map.layer.color.ColorLayer;
+import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayer;
+import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayerMode;
+import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
+import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
+import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;

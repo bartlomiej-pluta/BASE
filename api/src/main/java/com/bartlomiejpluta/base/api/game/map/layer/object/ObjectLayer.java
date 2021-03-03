@@ -1,7 +1,8 @@
-package com.bartlomiejpluta.base.api.game.map;
+package com.bartlomiejpluta.base.api.game.map.layer.object;
 
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
+import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 
 import java.util.List;
 

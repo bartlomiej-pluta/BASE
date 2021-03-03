@@ -1,4 +1,6 @@
-package com.bartlomiejpluta.base.api.game.map;
+package com.bartlomiejpluta.base.api.game.map.layer.tile;
+
+import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 
 public interface TileLayer extends Layer {
    void setTile(int row, int column, int tileId);

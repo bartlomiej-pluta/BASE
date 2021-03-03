@@ -1,4 +1,7 @@
-package com.bartlomiejpluta.base.api.game.map;
+package com.bartlomiejpluta.base.api.game.map.layer.image;
+
+import com.bartlomiejpluta.base.api.game.image.Image;
+import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 
 public interface ImageLayer extends Layer {
    void setImage(Image image);

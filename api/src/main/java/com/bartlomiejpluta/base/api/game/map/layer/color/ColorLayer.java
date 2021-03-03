@@ -1,5 +1,6 @@
-package com.bartlomiejpluta.base.api.game.map;
+package com.bartlomiejpluta.base.api.game.map.layer.color;
 
+import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 

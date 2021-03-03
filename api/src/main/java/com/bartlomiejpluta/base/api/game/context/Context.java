@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.api.game.context;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
-import com.bartlomiejpluta.base.api.game.map.Image;
+import com.bartlomiejpluta.base.api.game.image.Image;
 
 public interface Context {
    void openMap(String mapUid);

@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.tile;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.map.TileLayer;
+import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.world.tileset.model.Tile;

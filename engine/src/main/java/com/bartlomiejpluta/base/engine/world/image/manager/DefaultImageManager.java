@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.image.manager;
 
-import com.bartlomiejpluta.base.api.game.map.Image;
+import com.bartlomiejpluta.base.api.game.image.Image;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.error.AppException;

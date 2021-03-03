@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.color;
 
-import com.bartlomiejpluta.base.api.game.map.ColorLayer;
-import com.bartlomiejpluta.base.api.game.map.GameMap;
+import com.bartlomiejpluta.base.api.game.map.layer.color.ColorLayer;
+import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;

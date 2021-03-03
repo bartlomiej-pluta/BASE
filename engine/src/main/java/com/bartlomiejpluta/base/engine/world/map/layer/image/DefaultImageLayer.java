@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.image;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.map.GameMap;
-import com.bartlomiejpluta.base.api.game.map.Image;
-import com.bartlomiejpluta.base.api.game.map.ImageLayer;
-import com.bartlomiejpluta.base.api.game.map.ImageLayerMode;
+import com.bartlomiejpluta.base.api.game.image.Image;
+import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayer;
+import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayerMode;
+import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.world.image.model.DefaultImage;
