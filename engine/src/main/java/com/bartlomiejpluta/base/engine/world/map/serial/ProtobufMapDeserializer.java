@@ -70,7 +70,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       var passageMap = proto.getObjectLayer().getPassageMapList();
 
       for (var i = 0; i < passageMap.size(); ++i) {
-         map.setPassageAbility(layer, i / columns, i % columns, switch (passageMap.get(i)) {
+         layer.setPassageAbility(i / columns, i % columns, switch (passageMap.get(i)) {
             case ALLOW -> PassageAbility.ALLOW;
             case BLOCK -> PassageAbility.BLOCK;
             case RIGHT_ONLY -> PassageAbility.RIGHT_ONLY;

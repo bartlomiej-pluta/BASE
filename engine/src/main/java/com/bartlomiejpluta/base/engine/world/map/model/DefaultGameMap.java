@@ -1,18 +1,15 @@
 package com.bartlomiejpluta.base.engine.world.map.model;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.entity.Entity;
-import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.*;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
-import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
 import com.bartlomiejpluta.base.engine.world.map.layer.color.DefaultColorLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.image.DefaultImageLayer;
-import com.bartlomiejpluta.base.engine.world.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.engine.world.map.layer.object.DefaultObjectLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.tile.DefaultTileLayer;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
 import lombok.Getter;
@@ -60,16 +57,16 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void update(float dt) {
       for (var layer : layers) {
-         layer.render(window, camera, shaderManager);
+         layer.update(dt);
       }
    }
 
    @Override
-   public void update(float dt) {
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
       for (var layer : layers) {
-         layer.update(dt);
+         layer.render(window, camera, shaderManager);
       }
    }
 
@@ -93,26 +90,13 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return (ColorLayer) layers.get(layerIndex);
    }
 
-   public int createObjectLayer() {
-      var passageMap = new PassageAbility[rows][columns];
-      for (int i = 0; i < rows; ++i) {
-         Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
-      }
-
-      layers.add(new ObjectLayer(new ArrayList<>(), passageMap));
-
-      return layers.size() - 1;
+   @Override
+   public ObjectLayer getObjectLayer(int layerIndex) {
+      return (ObjectLayer) layers.get(layerIndex);
    }
 
    public TileLayer createTileLayer() {
       var layer = new DefaultTileLayer(tileSet, rows, columns);
-      layers.add(layer);
-
-      return layer;
-   }
-
-   public ColorLayer createColorLayer(MeshManager meshManager, float red, float green, float blue, float alpha) {
-      var layer = new DefaultColorLayer(meshManager, this, red, green, blue, alpha);
       layers.add(layer);
 
       return layer;
@@ -125,36 +109,23 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return layer;
    }
 
-   @Override
-   public void addEntity(int objectLayerIndex, Entity entity) {
-      var object = (DefaultEntity) entity;
-      object.setStepSize(stepSize.x, stepSize.y);
+   public ColorLayer createColorLayer(MeshManager meshManager, float red, float green, float blue, float alpha) {
+      var layer = new DefaultColorLayer(meshManager, this, red, green, blue, alpha);
+      layers.add(layer);
 
-      ((ObjectLayer) layers.get(objectLayerIndex)).addObject(object);
+      return layer;
    }
 
-   @Override
-   public void removeEntity(int objectLayerIndex, Entity entity) {
-      ((ObjectLayer) layers.get(objectLayerIndex)).removeObject(entity);
-   }
-
-   @Override
-   public void setPassageAbility(int objectLayerIndex, int row, int column, PassageAbility passageAbility) {
-      ((ObjectLayer) layers.get(objectLayerIndex)).setPassageAbility(row, column, passageAbility);
-   }
-
-   @Override
-   public boolean isMovementPossible(int objectLayerIndex, Movement movement) {
-      var target = movement.getTo();
-
-      // Is trying to go beyond the map
-      if (target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
-         return false;
+   public ObjectLayer createObjectLayer() {
+      var passageMap = new PassageAbility[rows][columns];
+      for (int i = 0; i < rows; ++i) {
+         Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
       }
 
-      var source = movement.getFrom();
-      var direction = movement.getDirection();
+      var layer = new DefaultObjectLayer(rows, columns, stepSize, new ArrayList<>(), passageMap);
 
-      return ((ObjectLayer) layers.get(objectLayerIndex)).isMovementPossible(source, target, direction);
+      layers.add(layer);
+
+      return layer;
    }
 }

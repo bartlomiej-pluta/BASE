@@ -3,37 +3,66 @@ package com.bartlomiejpluta.base.engine.world.map.layer.object;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
-import com.bartlomiejpluta.base.api.game.map.Layer;
+import com.bartlomiejpluta.base.api.game.entity.Movement;
+import com.bartlomiejpluta.base.api.game.map.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.PassageAbility;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import org.joml.Vector2i;
+import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
+import lombok.Getter;
+import lombok.NonNull;
+import org.joml.Vector2f;
 
 import java.util.List;
 
-public class ObjectLayer implements Layer {
-   private final List<Entity> objects;
+public class DefaultObjectLayer implements ObjectLayer {
 
+   @Getter
+   private final List<Entity> entities;
+
+   @Getter
    private final PassageAbility[][] passageMap;
 
-   public ObjectLayer(List<Entity> objects, PassageAbility[][] passageMap) {
-      this.objects = objects;
+   private final int rows;
+   private final int columns;
+   private final Vector2f stepSize;
+
+   public DefaultObjectLayer(int rows, int columns, @NonNull Vector2f stepSize, List<Entity> entities, PassageAbility[][] passageMap) {
+      this.rows = rows;
+      this.columns = columns;
+      this.stepSize = stepSize;
+      this.entities = entities;
       this.passageMap = passageMap;
    }
 
-   public void addObject(Entity object) {
-      objects.add(object);
+   @Override
+   public void addEntity(Entity entity) {
+      ((DefaultEntity) entity).setStepSize(stepSize.x, stepSize.y);
+      entities.add(entity);
    }
 
-   public void removeObject(Entity object) {
-      objects.remove(object);
+   @Override
+   public void removeEntity(Entity entity) {
+      entities.remove(entity);
    }
 
+   @Override
    public void setPassageAbility(int row, int column, PassageAbility passageAbility) {
       passageMap[row][column] = passageAbility;
    }
 
-   public boolean isMovementPossible(Vector2i source, Vector2i target, Direction direction) {
+   @Override
+   public boolean isMovementPossible(Movement movement) {
+      var target = movement.getTo();
+
+      // Is trying to go beyond the map
+      if (target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
+         return false;
+      }
+
+      var source = movement.getFrom();
+      var direction = movement.getDirection();
+
       var isTargetReachable = switch (passageMap[target.y][target.x]) {
          case UP_ONLY -> direction != Direction.DOWN;
          case DOWN_ONLY -> direction != Direction.UP;
@@ -55,22 +84,22 @@ public class ObjectLayer implements Layer {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
-      objects.sort(this::compareObjects);
+   public void update(float dt) {
+      for (var object : entities) {
+         object.update(dt);
+      }
+   }
 
-      for (var object : objects) {
+   @Override
+   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+      entities.sort(this::compareObjects);
+
+      for (var object : entities) {
          object.render(window, camera, shaderManager);
       }
    }
 
    private int compareObjects(Entity a, Entity b) {
       return Float.compare(a.getPosition().y, b.getPosition().y);
-   }
-
-   @Override
-   public void update(float dt) {
-      for (var object : objects) {
-         object.update(dt);
-      }
    }
 }
