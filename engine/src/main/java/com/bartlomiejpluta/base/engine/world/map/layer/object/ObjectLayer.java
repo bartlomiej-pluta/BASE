@@ -3,10 +3,10 @@ package com.bartlomiejpluta.base.engine.world.map.layer.object;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
+import com.bartlomiejpluta.base.api.game.map.Layer;
 import com.bartlomiejpluta.base.api.game.map.PassageAbility;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.engine.world.map.layer.base.Layer;
 import org.joml.Vector2i;
 
 import java.util.List;

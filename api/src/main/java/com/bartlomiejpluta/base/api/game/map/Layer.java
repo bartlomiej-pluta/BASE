@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.world.map.layer.base;
+package com.bartlomiejpluta.base.api.game.map;
 
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;

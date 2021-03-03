@@ -57,9 +57,9 @@ public class ProtobufMapDeserializer extends MapDeserializer {
          var tile = tiles.get(i);
 
          if (tile == 0) {
-            map.clearTile(layer, i / columns, i % columns);
+            layer.clearTile(i / columns, i % columns);
          } else {
-            map.setTile(layer, i / columns, i % columns, tile - 1);
+            layer.setTile(i / columns, i % columns, tile - 1);
          }
       }
    }

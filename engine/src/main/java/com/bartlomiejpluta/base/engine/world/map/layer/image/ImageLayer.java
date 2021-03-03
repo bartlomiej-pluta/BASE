@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.image;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.map.Layer;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.world.image.model.Image;
-import com.bartlomiejpluta.base.engine.world.map.layer.base.Layer;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import lombok.NonNull;
 

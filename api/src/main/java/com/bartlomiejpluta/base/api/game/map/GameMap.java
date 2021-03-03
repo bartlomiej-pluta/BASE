@@ -7,6 +7,8 @@ import org.joml.Vector2f;
 public interface GameMap {
    Vector2f getSize();
 
+   TileLayer getTileLayer(int layerIndex);
+
    void addEntity(int objectLayerIndex, Entity entity);
 
    void removeEntity(int objectLayerIndex, Entity entity);
@@ -14,12 +16,6 @@ public interface GameMap {
    boolean isMovementPossible(int objectLayerIndex, Movement movement);
 
    void setPassageAbility(int objectLayerIndex, int row, int column, PassageAbility passageAbility);
-
-   void setTile(int tileLayerIndex, int row, int column, int tileId);
-
-   void setTile(int tileLayerIndex, int row, int column, int tileSetRow, int tileSetColumn);
-
-   void clearTile(int tileLayerIndex, int row, int column);
 
    void setColor(int colorLayerIndex, float r, float g, float b, float alpha);
 }

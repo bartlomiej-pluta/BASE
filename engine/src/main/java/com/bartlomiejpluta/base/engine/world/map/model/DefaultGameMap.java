@@ -4,7 +4,9 @@ import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.GameMap;
+import com.bartlomiejpluta.base.api.game.map.Layer;
 import com.bartlomiejpluta.base.api.game.map.PassageAbility;
+import com.bartlomiejpluta.base.api.game.map.TileLayer;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
@@ -12,12 +14,11 @@ import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
 import com.bartlomiejpluta.base.engine.world.image.model.Image;
-import com.bartlomiejpluta.base.engine.world.map.layer.base.Layer;
 import com.bartlomiejpluta.base.engine.world.map.layer.color.ColorLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.image.ImageLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.engine.world.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.engine.world.map.layer.tile.TileLayer;
+import com.bartlomiejpluta.base.engine.world.map.layer.tile.DefaultTileLayer;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DefaultGameMap implements Renderable, Updatable, GameMap {
+
    @Getter
    private final List<Layer> layers = new ArrayList<>();
 
@@ -81,6 +83,11 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return new Vector2f(columns * stepSize.x, rows * stepSize.y);
    }
 
+   @Override
+   public TileLayer getTileLayer(int layerIndex) {
+      return (TileLayer) layers.get(layerIndex);
+   }
+
    public int createObjectLayer() {
       var passageMap = new PassageAbility[rows][columns];
       for (int i = 0; i < rows; ++i) {
@@ -92,10 +99,11 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return layers.size() - 1;
    }
 
-   public int createTileLayer() {
-      layers.add(new TileLayer(rows, columns));
+   public TileLayer createTileLayer() {
+      var layer = new DefaultTileLayer(tileSet, rows, columns);
+      layers.add(layer);
 
-      return layers.size() - 1;
+      return layer;
    }
 
    public int createColorLayer(MeshManager meshManager, float r, float g, float b, float alpha) {
@@ -121,21 +129,6 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Override
    public void removeEntity(int objectLayerIndex, Entity entity) {
       ((ObjectLayer) layers.get(objectLayerIndex)).removeObject(entity);
-   }
-
-   @Override
-   public void setTile(int tileLayerIndex, int row, int column, int tileId) {
-      ((TileLayer) layers.get(tileLayerIndex)).setTile(row, column, tileSet.tileById(tileId));
-   }
-
-   @Override
-   public void setTile(int tileLayerIndex, int row, int column, int tileSetRow, int tileSetColumn) {
-      ((TileLayer) layers.get(tileLayerIndex)).setTile(row, column, tileSet.tileAt(tileSetRow, tileSetColumn));
-   }
-
-   @Override
-   public void clearTile(int tileLayerIndex, int row, int column) {
-      ((TileLayer) layers.get(tileLayerIndex)).setTile(row, column, null);
    }
 
    @Override
