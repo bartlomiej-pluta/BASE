@@ -49,9 +49,9 @@ dependencies {
 }
 
 task provideGameEngine(type: Copy) {
-    dependsOn(":game:build")
+    dependsOn(":engine:build")
 
-    from project(':game').file('build/libs/game.jar')
+    from project(':engine').file('build/libs/engine.jar')
     into file("build/resources/main/engine")
 }
 
@@ -83,8 +83,4 @@ processResources {
     dependsOn(provideGameEngine)
     dependsOn(provideApiDependencies)
     dependsOn(provideApi)
-}
-
-build {
-    dependsOn(":proto:build")
 }

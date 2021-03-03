@@ -7,10 +7,14 @@
  */
 
 plugins {
-    id 'java-library'
+    id 'java'
+    id 'application'
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
 }
+
+group 'com.bartlomiejpluta.base'
+version 'unspecified'
 
 import org.gradle.internal.os.OperatingSystem
 
@@ -42,18 +46,20 @@ repositories {
 }
 
  bootJar {
-     enabled = false
- }
-
- jar {
      enabled = true
  }
 
+ jar {
+     enabled = false
+ }
+
 dependencies {
-    api platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    implementation project(":proto")
+    implementation project(":api")
 
     // LWJGL
-    api "org.lwjgl:lwjgl-glfw"
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    implementation "org.lwjgl:lwjgl-glfw"
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"
     implementation "org.lwjgl:lwjgl-bgfx"
@@ -75,10 +81,15 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
 
     // Spring
-    api 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     // This dependency is used by the application.
-    api "org.joml:joml:${jomlVersion}"
+    implementation "org.joml:joml:${jomlVersion}"
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'com.bartlomiejpluta.base.engine.App'
 }

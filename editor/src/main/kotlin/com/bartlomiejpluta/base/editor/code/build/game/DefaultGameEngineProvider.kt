@@ -34,6 +34,6 @@ class DefaultGameEngineProvider : GameEngineProvider {
    }
 
    companion object {
-      private const val GAME_ENGINE_JAR = "/engine/game.jar"
+      private const val GAME_ENGINE_JAR = "/engine/engine.jar"
    }
 }
