@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.logic;
+package com.bartlomiejpluta.base.api.internal.logic;
 
 public interface Updatable {
    void update(float dt);

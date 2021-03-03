@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.animation;
 
+import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.base.engine.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.base.engine.ui.Window;
-import com.bartlomiejpluta.base.engine.world.camera.Camera;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2f;

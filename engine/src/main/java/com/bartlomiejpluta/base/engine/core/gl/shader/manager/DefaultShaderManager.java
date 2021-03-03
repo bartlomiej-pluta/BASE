@@ -1,7 +1,9 @@
 package com.bartlomiejpluta.base.engine.core.gl.shader.manager;
 
-import com.bartlomiejpluta.base.engine.core.gl.shader.program.ShaderProgram;
-import com.bartlomiejpluta.base.engine.core.gl.shader.uniform.Uniform;
+import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.internal.render.ShaderProgram;
+import com.bartlomiejpluta.base.api.internal.render.Uniform;
+import com.bartlomiejpluta.base.engine.core.gl.shader.program.GLShaderProgram;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ public class DefaultShaderManager implements ShaderManager {
       log.info("Creating {} shader", programName);
       var vertexShaderCode = resourcesManager.loadResourceAsString(vertexShaderFilename);
       var fragmentShaderCode = resourcesManager.loadResourceAsString(fragmentShaderFilename);
-      var program = ShaderProgram.compile(vertexShaderCode, fragmentShaderCode);
+      var program = GLShaderProgram.compile(vertexShaderCode, fragmentShaderCode);
 
       shaders.put(programName, program);
 

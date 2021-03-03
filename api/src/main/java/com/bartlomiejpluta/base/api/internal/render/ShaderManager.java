@@ -1,7 +1,6 @@
-package com.bartlomiejpluta.base.engine.core.gl.shader.manager;
+package com.bartlomiejpluta.base.api.internal.render;
 
-import com.bartlomiejpluta.base.engine.core.gl.shader.uniform.Uniform;
-import com.bartlomiejpluta.base.engine.gc.Cleanable;
+import com.bartlomiejpluta.base.api.internal.gc.Cleanable;
 import org.joml.*;
 
 public interface ShaderManager extends Cleanable {

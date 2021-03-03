@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.util.profiling.time;
 
-import com.bartlomiejpluta.base.engine.gc.Cleanable;
+import com.bartlomiejpluta.base.api.internal.gc.Cleanable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

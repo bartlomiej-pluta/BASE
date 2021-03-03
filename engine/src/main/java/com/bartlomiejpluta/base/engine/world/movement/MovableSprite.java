@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.movement;
 
-import com.bartlomiejpluta.base.api.entity.Direction;
-import com.bartlomiejpluta.base.api.entity.Movement;
+import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.entity.Movement;
+import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.base.engine.logic.Updatable;
 import com.bartlomiejpluta.base.engine.world.animation.AnimatedSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

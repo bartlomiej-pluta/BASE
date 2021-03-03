@@ -1,9 +1,10 @@
 package com.bartlomiejpluta.base.engine.core.gl.render;
 
+import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.internal.render.Renderable;
+import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
-import com.bartlomiejpluta.base.engine.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.base.engine.ui.Window;
-import com.bartlomiejpluta.base.engine.world.camera.Camera;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.object;
 
-import com.bartlomiejpluta.base.api.entity.Direction;
-import com.bartlomiejpluta.base.api.map.PassageAbility;
-import com.bartlomiejpluta.base.engine.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.base.engine.ui.Window;
-import com.bartlomiejpluta.base.engine.world.camera.Camera;
+import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.map.PassageAbility;
+import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.Layer;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import org.joml.Vector2i;

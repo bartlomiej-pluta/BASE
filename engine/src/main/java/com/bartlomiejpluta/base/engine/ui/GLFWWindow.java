@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.ui;
 
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.error.AppException;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -14,10 +14,9 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Window {
+public class GLFWWindow implements Window {
    private final String title;
-   private long windowHandle;
+   private long windowHandle = -1;
 
    @Getter
    private int width;
@@ -27,9 +26,24 @@ public class Window {
 
    @Getter
    @Setter
-   private boolean resized;
+   private boolean resized = false;
 
+   private boolean initialized = false;
+
+   public GLFWWindow(@NonNull String title, int width, int height) {
+      this.title = title;
+      this.width = width;
+      this.height = height;
+   }
+
+   @Override
    public void init() {
+      if(initialized) {
+         throw new IllegalStateException("The window is already initialized");
+      }
+
+      initialized = true;
+
       // Setup an error callback. The default implementation
       // will print the error message in System.err.
       GLFWErrorCallback.createPrint(System.err).set();
@@ -55,9 +69,9 @@ public class Window {
 
       // Setup resize callback
       glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
-         Window.this.width = width;
-         Window.this.height = height;
-         Window.this.resized = true;
+         GLFWWindow.this.width = width;
+         GLFWWindow.this.height = height;
+         GLFWWindow.this.resized = true;
       });
 
       // Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -92,28 +106,33 @@ public class Window {
       glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
    }
 
+   @Override
    public void update() {
       glfwSwapBuffers(windowHandle);
       glfwPollEvents();
    }
 
+   @Override
    public boolean isKeyPressed(int keyCode) {
       return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
    }
 
+   @Override
    public void clear(float r, float g, float b, float alpha) {
       glClearColor(r, g, b, alpha);
    }
 
+   @Override
    public boolean shouldClose() {
       return glfwWindowShouldClose(windowHandle);
    }
 
+   @Override
    public Vector2f getSize() {
       return new Vector2f(width, height);
    }
 
    public static Window create(String title, int width, int height) {
-      return new Window(title, -1, width, height, false);
+      return new GLFWWindow(title, width, height);
    }
 }

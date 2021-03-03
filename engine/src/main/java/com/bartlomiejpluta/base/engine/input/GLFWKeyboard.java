@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.engine.input;
 
-import com.bartlomiejpluta.base.api.input.Key;
-import com.bartlomiejpluta.base.api.input.Keyboard;
-import com.bartlomiejpluta.base.engine.ui.Window;
+import com.bartlomiejpluta.base.api.game.input.Key;
+import com.bartlomiejpluta.base.api.game.input.Keyboard;
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import lombok.RequiredArgsConstructor;
 
 import static org.lwjgl.glfw.GLFW.*;

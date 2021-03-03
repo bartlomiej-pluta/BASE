@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.api.entity;
+package com.bartlomiejpluta.base.api.game.entity;
 
 
 import org.joml.Vector2i;

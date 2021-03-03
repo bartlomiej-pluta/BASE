@@ -1,7 +1,7 @@
-package com.bartlomiejpluta.base.api.map;
+package com.bartlomiejpluta.base.api.game.map;
 
-import com.bartlomiejpluta.base.api.entity.Entity;
-import com.bartlomiejpluta.base.api.entity.Movement;
+import com.bartlomiejpluta.base.api.game.entity.Entity;
+import com.bartlomiejpluta.base.api.game.entity.Movement;
 import org.joml.Vector2f;
 
 public interface GameMap {

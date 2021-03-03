@@ -1,11 +1,11 @@
 package com.bartlomiejpluta.base.engine.core.gl.object.material;
 
+import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.internal.render.Renderable;
+import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.Texture;
-import com.bartlomiejpluta.base.engine.core.gl.render.Renderable;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
-import com.bartlomiejpluta.base.engine.core.gl.shader.manager.ShaderManager;
-import com.bartlomiejpluta.base.engine.ui.Window;
-import com.bartlomiejpluta.base.engine.world.camera.Camera;
 import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector4f;

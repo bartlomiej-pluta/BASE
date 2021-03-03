@@ -1,6 +1,6 @@
-package com.bartlomiejpluta.base.api.context;
+package com.bartlomiejpluta.base.api.game.context;
 
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.game.entity.Entity;
 import org.joml.Vector2f;
 
 public interface Context {

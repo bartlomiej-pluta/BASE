@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.movement;
 
-import com.bartlomiejpluta.base.api.entity.Direction;
-import com.bartlomiejpluta.base.api.entity.Movement;
+import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.entity.Movement;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

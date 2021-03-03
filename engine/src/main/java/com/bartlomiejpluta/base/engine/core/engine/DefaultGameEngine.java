@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.core.engine;
 
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;
 import com.bartlomiejpluta.base.engine.time.ChronoMeter;
-import com.bartlomiejpluta.base.engine.ui.Window;
 import com.bartlomiejpluta.base.engine.ui.WindowManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

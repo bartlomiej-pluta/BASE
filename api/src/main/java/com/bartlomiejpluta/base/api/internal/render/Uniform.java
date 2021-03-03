@@ -1,6 +1,4 @@
-package com.bartlomiejpluta.base.engine.core.gl.shader.uniform;
-
-import com.bartlomiejpluta.base.engine.core.gl.shader.program.ShaderProgram;
+package com.bartlomiejpluta.base.api.internal.render;
 
 public interface Uniform {
    void createUniform(ShaderProgram shaderProgram, String uniformName);

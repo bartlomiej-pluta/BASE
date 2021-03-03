@@ -1,17 +1,18 @@
 package com.bartlomiejpluta.base.engine.logic;
 
-import com.bartlomiejpluta.base.api.runner.GameRunner;
+import com.bartlomiejpluta.base.api.game.runner.GameRunner;
+import com.bartlomiejpluta.base.api.internal.camera.Camera;
+import com.bartlomiejpluta.base.api.internal.window.Window;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.core.gl.render.Renderer;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.engine.project.loader.ProjectLoader;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.project.model.RenderableContext;
-import com.bartlomiejpluta.base.engine.ui.Window;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.util.profiling.fps.FPSMonitor;
 import com.bartlomiejpluta.base.engine.util.profiling.time.TimeProfilerService;
-import com.bartlomiejpluta.base.engine.world.camera.Camera;
+import com.bartlomiejpluta.base.engine.world.camera.DefaultCamera;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
@@ -40,7 +41,7 @@ public class DefaultGameLogic implements GameLogic {
 
    private final RenderableContext context;
 
-   private final Camera camera = new Camera();
+   private final Camera camera = new DefaultCamera();
 
    private Project project;
    private GameRunner runner;
