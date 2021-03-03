@@ -10,7 +10,7 @@ import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
-import com.bartlomiejpluta.base.engine.world.map.layer.color.ColorLayer;
+import com.bartlomiejpluta.base.engine.world.map.layer.color.DefaultColorLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.image.DefaultImageLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.tile.DefaultTileLayer;
@@ -88,6 +88,11 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return (ImageLayer) layers.get(layerIndex);
    }
 
+   @Override
+   public ColorLayer getColorLayer(int layerIndex) {
+      return (ColorLayer) layers.get(layerIndex);
+   }
+
    public int createObjectLayer() {
       var passageMap = new PassageAbility[rows][columns];
       for (int i = 0; i < rows; ++i) {
@@ -106,10 +111,11 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return layer;
    }
 
-   public int createColorLayer(MeshManager meshManager, float r, float g, float b, float alpha) {
-      layers.add(new ColorLayer(meshManager, this, r, g, b, alpha));
+   public ColorLayer createColorLayer(MeshManager meshManager, float red, float green, float blue, float alpha) {
+      var layer = new DefaultColorLayer(meshManager, this, red, green, blue, alpha);
+      layers.add(layer);
 
-      return layers.size() - 1;
+      return layer;
    }
 
    public ImageLayer createImageLayer(Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
@@ -135,11 +141,6 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Override
    public void setPassageAbility(int objectLayerIndex, int row, int column, PassageAbility passageAbility) {
       ((ObjectLayer) layers.get(objectLayerIndex)).setPassageAbility(row, column, passageAbility);
-   }
-
-   @Override
-   public void setColor(int colorLayerIndex, float r, float g, float b, float alpha) {
-      ((ColorLayer) layers.get(colorLayerIndex)).setColor(r, g, b, alpha);
    }
 
    @Override

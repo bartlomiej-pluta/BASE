@@ -19,6 +19,8 @@ public interface GameMap {
 
    ImageLayer getImageLayer(int layerIndex);
 
+   ColorLayer getColorLayer(int layerIndex);
+
    void addEntity(int objectLayerIndex, Entity entity);
 
    void removeEntity(int objectLayerIndex, Entity entity);
@@ -26,6 +28,4 @@ public interface GameMap {
    boolean isMovementPossible(int objectLayerIndex, Movement movement);
 
    void setPassageAbility(int objectLayerIndex, int row, int column, PassageAbility passageAbility);
-
-   void setColor(int colorLayerIndex, float r, float g, float b, float alpha);
 }
