@@ -11,6 +11,9 @@ import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
 @EqualsAndHashCode(callSuper = true)
 public abstract class MovableSprite extends AnimatedSprite implements Updatable {
    private final Vector2f coordinateStepSize = new Vector2f(0, 0);
@@ -78,6 +81,14 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       coordinateStepSize.x = x;
       coordinateStepSize.y = y;
       setCoordinates(coordinates);
+   }
+
+   public int chebyshevDistance(Vector2i coordinates) {
+      return max(abs(this.coordinates.x - coordinates.x), abs(this.coordinates.y - coordinates.y));
+   }
+
+   public int manhattanDistance(Vector2i coordinates) {
+      return abs(this.coordinates.x - coordinates.x) + abs(this.coordinates.y - coordinates.y);
    }
 
    public MovableSprite(Mesh mesh, Material material) {

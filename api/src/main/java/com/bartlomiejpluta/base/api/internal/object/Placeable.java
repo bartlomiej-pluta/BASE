@@ -15,13 +15,18 @@ public interface Placeable {
    void moveRotation(float rotation);
 
    float getScaleX();
+
    void setScaleX(float scale);
 
    float getScaleY();
+
    void setScaleY(float scale);
 
    void setScale(float scale);
+
    void setScale(float scaleX, float scaleY);
+
+   float euclideanDistance(Placeable other);
 
    Matrix4f getModelMatrix();
 }

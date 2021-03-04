@@ -9,8 +9,8 @@ import com.bartlomiejpluta.base.engine.world.entity.config.EntitySpriteConfigura
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 import java.util.Map;
 
@@ -21,7 +21,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    private int animationSpeed = 100;
 
-   @Setter
    @Getter
    private Direction faceDirection;
 
@@ -64,6 +63,12 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
+   public void setFaceDirection(Direction direction) {
+      this.faceDirection = direction;
+      setDefaultAnimationFrame();
+   }
+
+   @Override
    public void setSpeed(float speed) {
       framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
    }
@@ -71,6 +76,21 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public void setAnimationSpeed(float speed) {
       animationSpeed = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
+   }
+
+   @Override
+   public int chebyshevDistance(Entity other) {
+      return chebyshevDistance(other.getCoordinates());
+   }
+
+   @Override
+   public int manhattanDistance(Entity other) {
+      return manhattanDistance(other.getCoordinates());
+   }
+
+   @Override
+   public Direction getDirectionTowards(Entity target) {
+      return Direction.ofVector(new Vector2i(target.getCoordinates()).sub(getCoordinates()));
    }
 
    public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {

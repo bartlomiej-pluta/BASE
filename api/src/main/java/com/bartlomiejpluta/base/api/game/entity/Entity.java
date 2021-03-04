@@ -23,4 +23,12 @@ public interface Entity extends Placeable, Renderable, Updatable {
    void setSpeed(float speed);
 
    void setAnimationSpeed(float speed);
+
+   boolean isMoving();
+
+   int chebyshevDistance(Entity other);
+
+   int manhattanDistance(Entity other);
+
+   Direction getDirectionTowards(Entity target);
 }

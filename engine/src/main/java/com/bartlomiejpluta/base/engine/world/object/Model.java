@@ -70,6 +70,11 @@ public abstract class Model implements Placeable {
    }
 
    @Override
+   public float euclideanDistance(Placeable other) {
+      return other.getPosition().distance(position);
+   }
+
+   @Override
    public Matrix4f getModelMatrix() {
       return modelMatrix
             .identity()
