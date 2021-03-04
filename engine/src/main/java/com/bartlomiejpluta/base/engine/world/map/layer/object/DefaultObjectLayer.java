@@ -6,12 +6,14 @@ import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
+import com.bartlomiejpluta.base.api.game.rule.Rule;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultObjectLayer implements ObjectLayer {
@@ -21,6 +23,8 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Getter
    private final PassageAbility[][] passageMap;
+
+   private final List<Rule> rules = new ArrayList<>();
 
    private final int rows;
    private final int columns;
@@ -32,6 +36,21 @@ public class DefaultObjectLayer implements ObjectLayer {
       this.stepSize = stepSize;
       this.entities = entities;
       this.passageMap = passageMap;
+   }
+
+   @Override
+   public void registerRule(Rule rule) {
+      rules.add(rule);
+   }
+
+   @Override
+   public void unregisterRule(Rule rule) {
+      rules.remove(rule);
+   }
+
+   @Override
+   public void unregisterRules() {
+      rules.clear();
    }
 
    @Override
@@ -84,8 +103,14 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void update(float dt) {
-      for (var object : entities) {
-         object.update(dt);
+      for (var entity : entities) {
+         for (var rule : rules) {
+            if (rule.test(entity)) {
+               rule.invoke(entity);
+            }
+         }
+
+         entity.update(dt);
       }
    }
 

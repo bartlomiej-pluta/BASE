@@ -51,7 +51,7 @@ public class DefaultGameLogic implements GameLogic {
    public void init(Window window) {
       log.info("Initializing game logic");
       renderer.init();
-      context.init(camera);
+      context.init(window, camera);
 
       project = projectLoader.loadProject();
       var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());

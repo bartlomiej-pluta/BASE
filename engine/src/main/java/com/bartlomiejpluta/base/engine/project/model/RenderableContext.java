@@ -9,14 +9,12 @@ import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
-import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
-import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +23,21 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RenderableContext implements Context, Updatable, Renderable {
-   private final TileSetManager tileSetManager;
-   private final MeshManager meshManager;
-   private final TextureManager textureManager;
    private final EntityManager entityManager;
    private final ImageManager imageManager;
    private final MapManager mapManager;
    private final ClassLoader classLoader;
 
+   @Getter
+   private Window window;
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
+   @Getter
    private Camera camera;
 
-   public void init(Camera camera) {
+   public void init(Window window, Camera camera) {
+      this.window = window;
       this.camera = camera;
    }
 
@@ -61,11 +60,6 @@ public class RenderableContext implements Context, Updatable, Renderable {
    @Override
    public Image getImage(String imageUid) {
       return imageManager.loadObject(imageUid);
-   }
-
-   @Override
-   public Camera getCamera() {
-      return camera;
    }
 
    public void input(Window window) {
