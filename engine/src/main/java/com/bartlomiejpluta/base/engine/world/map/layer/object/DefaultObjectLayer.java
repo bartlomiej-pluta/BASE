@@ -105,8 +105,8 @@ public class DefaultObjectLayer implements ObjectLayer {
    public void update(float dt) {
       for (var entity : entities) {
          for (var rule : rules) {
-            if (rule.test(entity)) {
-               rule.invoke(entity);
+            if (rule.when(entity)) {
+               rule.then(entity);
             }
          }
 
