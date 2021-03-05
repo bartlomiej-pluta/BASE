@@ -172,6 +172,16 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public boolean isBlocking() {
+      return entity.isBlocking();
+   }
+
+   @Override
+   public void setBlocking(boolean blocking) {
+      entity.setBlocking(blocking);
+   }
+
+   @Override
    public void update(float dt) {
       entity.update(dt);
    }

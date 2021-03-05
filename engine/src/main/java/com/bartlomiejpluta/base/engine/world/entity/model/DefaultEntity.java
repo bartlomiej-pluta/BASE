@@ -10,6 +10,7 @@ import com.bartlomiejpluta.base.engine.world.entity.config.EntitySpriteConfigura
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
@@ -34,6 +35,10 @@ public class DefaultEntity extends MovableSprite implements Entity {
    public boolean shouldAnimate() {
       return isMoving();
    }
+
+   @Getter
+   @Setter
+   private boolean blocking;
 
    @Override
    public Vector2f[] getSpriteAnimationFramesPositions() {

@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.object;
 
+import com.bartlomiejpluta.base.api.game.ai.NPC;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
@@ -108,6 +109,12 @@ public class DefaultObjectLayer implements ObjectLayer {
          default -> true;
       };
 
+      for (var entity : entities) {
+         if (entity.isBlocking() && entity.getCoordinates().equals(target)) {
+            return false;
+         }
+      }
+
       return isTargetReachable && canMoveFromCurrentTile;
    }
 
@@ -131,6 +138,10 @@ public class DefaultObjectLayer implements ObjectLayer {
          }
 
          entity.update(dt);
+
+         if (entity instanceof NPC) {
+            ((NPC) entity).getStrategy().nextActivity(this, dt);
+         }
       }
    }
 

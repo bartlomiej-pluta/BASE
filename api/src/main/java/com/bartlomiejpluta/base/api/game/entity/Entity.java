@@ -36,4 +36,8 @@ public interface Entity extends Placeable, Renderable, Updatable {
    void onAdd(ObjectLayer layer);
 
    void onRemove(ObjectLayer layer);
+
+   boolean isBlocking();
+
+   void setBlocking(boolean blocking);
 }
