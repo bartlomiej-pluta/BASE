@@ -25,6 +25,7 @@ public class DefaultImageLayer implements ImageLayer {
    private float y;
    private float scaleX;
    private float scaleY;
+   private float factor;
 
    @NonNull
    private ImageLayerMode mode;
@@ -54,12 +55,8 @@ public class DefaultImageLayer implements ImageLayer {
 
    private void recalculate() {
       switch (mode) {
-         case NORMAL -> image.setScale(image.getWidth() * scaleX, image.getHeight() * scaleY);
+         case NORMAL -> image.setScale(factor * scaleX, factor * scaleY);
          case FIT_MAP -> image.setScale(mapWidth / imagePrimaryWidth, mapHeight / imagePrimaryHeight);
-      }
-
-      if (mode == ImageLayerMode.NORMAL) {
-         System.out.printf("%d * %f, %d * %f", image.getWidth(), scaleX, image.getHeight(), scaleY);
       }
    }
 
@@ -68,6 +65,7 @@ public class DefaultImageLayer implements ImageLayer {
       this.image = image;
       this.imagePrimaryWidth = image.getPrimaryWidth();
       this.imagePrimaryHeight = image.getPrimaryHeight();
+      this.factor = image.getFactor();
 
       this.image.setPosition(x, y);
 
@@ -87,6 +85,8 @@ public class DefaultImageLayer implements ImageLayer {
    public void setPosition(float x, float y) {
       this.x = x;
       this.y = y;
+
+      this.image.setPosition(x, y);
    }
 
    @Override
