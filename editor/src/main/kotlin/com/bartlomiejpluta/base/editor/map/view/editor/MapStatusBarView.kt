@@ -26,8 +26,8 @@ class MapStatusBarView : View() {
       label(
          Bindings.format(
             "Cursor: %d, %d",
-            editorStateVM.cursorColumnProperty.add(1),
-            editorStateVM.cursorRowProperty.add(1)
+            editorStateVM.cursorColumnProperty,
+            editorStateVM.cursorRowProperty
          )
       )
    }
