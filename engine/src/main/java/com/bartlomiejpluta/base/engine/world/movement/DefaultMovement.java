@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.movement;
 
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
+import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,12 @@ public class DefaultMovement implements Movement {
    private boolean performed = false;
 
    @Override
-   public boolean perform() {
-      performed = object.move(direction);
-      return performed;
+   public boolean perform(ObjectLayer layer) {
+      if (!layer.isMovementPossible(this)) {
+         return false;
+      }
+
+      return object.move(direction);
    }
 
    @Override

@@ -27,4 +27,6 @@ public interface ObjectLayer extends Layer {
    PassageAbility[][] getPassageMap();
 
    boolean isMovementPossible(Movement movement);
+
+   void pushMovement(Movement movement);
 }

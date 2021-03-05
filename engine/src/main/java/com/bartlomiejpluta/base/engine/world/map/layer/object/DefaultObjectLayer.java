@@ -14,6 +14,7 @@ import lombok.NonNull;
 import org.joml.Vector2f;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class DefaultObjectLayer implements ObjectLayer {
@@ -23,6 +24,8 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Getter
    private final PassageAbility[][] passageMap;
+
+   private final List<Movement> movements = new LinkedList<>();
 
    private final List<Rule> rules = new ArrayList<>();
 
@@ -109,7 +112,17 @@ public class DefaultObjectLayer implements ObjectLayer {
    }
 
    @Override
+   public void pushMovement(Movement movement) {
+      movements.add(movement);
+   }
+
+   @Override
    public void update(float dt) {
+      for (var iterator = movements.iterator(); iterator.hasNext(); ) {
+         iterator.next().perform(this);
+         iterator.remove();
+      }
+
       for (var entity : entities) {
          for (var rule : rules) {
             if (rule.when(entity)) {
