@@ -12,6 +12,8 @@ public interface ObjectLayer extends Layer {
 
    void removeEntity(Entity entity);
 
+   void clearEntities();
+
    List<Entity> getEntities();
 
    void registerRule(Rule rule);

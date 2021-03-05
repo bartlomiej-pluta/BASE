@@ -55,13 +55,20 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void addEntity(Entity entity) {
+      entity.onAdd(this);
       entity.setStepSize(stepSize.x, stepSize.y);
       entities.add(entity);
    }
 
    @Override
    public void removeEntity(Entity entity) {
+      entity.onRemove(this);
       entities.remove(entity);
+   }
+
+   @Override
+   public void clearEntities() {
+      entities.clear();
    }
 
    @Override

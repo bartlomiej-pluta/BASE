@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.entity.model;
 
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
+import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.util.math.MathUtil;
@@ -91,6 +92,16 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public Direction getDirectionTowards(Entity target) {
       return Direction.ofVector(new Vector2i(target.getCoordinates()).sub(getCoordinates()));
+   }
+
+   @Override
+   public void onAdd(ObjectLayer layer) {
+      // Do nothing
+   }
+
+   @Override
+   public void onRemove(ObjectLayer layer) {
+      // Do nothing
    }
 
    public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {

@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.api.game.entity;
 
+import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
@@ -31,4 +32,8 @@ public interface Entity extends Placeable, Renderable, Updatable {
    int manhattanDistance(Entity other);
 
    Direction getDirectionTowards(Entity target);
+
+   void onAdd(ObjectLayer layer);
+
+   void onRemove(ObjectLayer layer);
 }

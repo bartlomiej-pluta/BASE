@@ -8,12 +8,12 @@ import com.bartlomiejpluta.base.api.game.window.Window;
 public class ${className} implements MapHandler {
 
    @Override
-   public void init(Context context, GameMap map) {
+   public void onCreate(Context context, GameMap map) {
 
    }
 
    @Override
-   public void input(Window window) {
+   public void onOpen(Context context, GameMap map) {
 
    }
 

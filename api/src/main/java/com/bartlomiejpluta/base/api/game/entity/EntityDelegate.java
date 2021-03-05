@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.api.game.entity;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -9,7 +10,7 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 public abstract class EntityDelegate implements Entity {
-   private final Entity entity;
+   protected final Entity entity;
 
    protected EntityDelegate(Entity entity) {
       this.entity = entity;
@@ -158,6 +159,16 @@ public abstract class EntityDelegate implements Entity {
    @Override
    public Matrix4f getModelMatrix() {
       return entity.getModelMatrix();
+   }
+
+   @Override
+   public void onAdd(ObjectLayer layer) {
+      entity.onAdd(layer);
+   }
+
+   @Override
+   public void onRemove(ObjectLayer layer) {
+      entity.onRemove(layer);
    }
 
    @Override
