@@ -17,7 +17,10 @@ class ParametersTableFragment : Fragment() {
 
       column("Key", Parameter<*>::keyProperty)
       TableColumn<Parameter<*>, Any>("Value").apply {
-         setCellValueFactory { it.value.valueProperty as ObservableValue<Any> }
+         setCellValueFactory {
+            @Suppress("UNCHECKED_CAST")
+            it.value.valueProperty as ObservableValue<Any>
+         }
          setCellFactory { ParameterValueEditingCell() }
       }.let { addColumnInternal(it) }
    }
