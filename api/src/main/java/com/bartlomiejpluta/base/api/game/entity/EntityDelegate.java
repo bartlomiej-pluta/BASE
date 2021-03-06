@@ -42,6 +42,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public Movement getMovement() {
+      return entity.getMovement();
+   }
+
+   @Override
    public Direction getFaceDirection() {
       return entity.getFaceDirection();
    }

@@ -24,15 +24,18 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    @Getter
    private final Vector2i coordinates = new Vector2i(0, 0);
 
+   @Getter
+   private Movement movement;
+
    protected int framesToCrossOneTile = 1;
 
    public boolean isMoving() {
-      return movementVector != null;
+      return movement != null;
    }
 
    @Override
    public void update(float dt) {
-      if (movementVector != null) {
+      if (movement != null) {
          if (moveTime > 0) {
             --moveTime;
             movePosition(movementVector);
@@ -40,6 +43,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
             adjustCoordinates();
             setDefaultAnimationFrame();
             movementVector = null;
+            movement = null;
          }
       }
    }
@@ -47,21 +51,25 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    protected abstract void setDefaultAnimationFrame();
 
    private void adjustCoordinates() {
-      var position = new Vector2f(getPosition());
-      setCoordinates(new Vector2i((int) (position.x / coordinateStepSize.x), (int) (position.y / coordinateStepSize.y)));
+      setCoordinates(movement.getTo());
    }
 
    public Movement prepareMovement(Direction direction) {
       return new DefaultMovement(this, direction);
    }
 
-   protected boolean move(Direction direction) {
-      if (this.movementVector != null) {
+   protected boolean move(Movement movement) {
+      if (this.movement != null) {
          return false;
       }
 
+      if (!movement.getFrom().equals(coordinates)) {
+         return false;
+      }
+
+      this.movement = movement;
       var speed = new Vector2f(coordinateStepSize).div(framesToCrossOneTile);
-      movementVector = new Vector2f(direction.x, direction.y).mul(speed);
+      movementVector = new Vector2f(movement.getDirection().x, movement.getDirection().y).mul(speed);
       moveTime = framesToCrossOneTile;
 
       return true;

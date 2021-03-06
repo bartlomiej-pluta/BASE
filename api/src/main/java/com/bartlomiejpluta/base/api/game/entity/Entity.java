@@ -17,6 +17,8 @@ public interface Entity extends Placeable, Renderable, Updatable {
 
    Movement prepareMovement(Direction direction);
 
+   Movement getMovement();
+
    Direction getFaceDirection();
 
    void setFaceDirection(Direction direction);

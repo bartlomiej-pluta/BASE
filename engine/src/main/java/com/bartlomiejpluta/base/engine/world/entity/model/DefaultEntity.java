@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.entity.model;
 
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
+import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
@@ -59,9 +60,9 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   protected boolean move(Direction direction) {
-      if (super.move(direction)) {
-         faceDirection = direction;
+   protected boolean move(Movement movement) {
+      if (super.move(movement)) {
+         faceDirection = movement.getDirection();
          return true;
       }
 

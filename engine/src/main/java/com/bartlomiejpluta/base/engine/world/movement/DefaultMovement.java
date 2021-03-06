@@ -2,26 +2,28 @@ package com.bartlomiejpluta.base.engine.world.movement;
 
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
-import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.joml.Vector2i;
 
 @Data
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class DefaultMovement implements Movement {
    private final MovableSprite object;
    private final Direction direction;
+   private final Vector2i from;
+   private final Vector2i to;
    private boolean performed = false;
 
-   @Override
-   public boolean perform(ObjectLayer layer) {
-      if (!layer.isMovementPossible(this)) {
-         return false;
-      }
+   DefaultMovement(MovableSprite object, Direction direction) {
+      this.object = object;
+      this.direction = direction;
 
-      return object.move(direction);
+      this.from = object.getCoordinates();
+      this.to = direction.asVector().add(object.getCoordinates());
+   }
+
+   @Override
+   public boolean perform() {
+      return object.move(this);
    }
 
    @Override
@@ -31,11 +33,11 @@ public class DefaultMovement implements Movement {
 
    @Override
    public Vector2i getFrom() {
-      return object.getCoordinates();
+      return from;
    }
 
    @Override
    public Vector2i getTo() {
-      return direction.asVector().add(object.getCoordinates());
+      return to;
    }
 }

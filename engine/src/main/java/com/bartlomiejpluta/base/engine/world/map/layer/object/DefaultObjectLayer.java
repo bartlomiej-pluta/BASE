@@ -110,8 +110,18 @@ public class DefaultObjectLayer implements ObjectLayer {
       };
 
       for (var entity : entities) {
-         if (entity.isBlocking() && entity.getCoordinates().equals(target)) {
-            return false;
+         if (entity.isBlocking()) {
+
+            // The tile is occupied by other entity
+            if (entity.getCoordinates().equals(target)) {
+               return false;
+            }
+
+            // The tile is empty, however another entity is moving on it
+            var otherMovement = entity.getMovement();
+            if (otherMovement != null && otherMovement.getTo().equals(target)) {
+               return false;
+            }
          }
       }
 
@@ -126,7 +136,12 @@ public class DefaultObjectLayer implements ObjectLayer {
    @Override
    public void update(float dt) {
       for (var iterator = movements.iterator(); iterator.hasNext(); ) {
-         iterator.next().perform(this);
+         var movement = iterator.next();
+
+         if (isMovementPossible(movement)) {
+            movement.perform();
+         }
+
          iterator.remove();
       }
 
