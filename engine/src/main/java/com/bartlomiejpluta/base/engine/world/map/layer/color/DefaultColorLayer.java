@@ -5,12 +5,17 @@ import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
+import lombok.Getter;
 import lombok.NonNull;
 
 public class DefaultColorLayer extends Sprite implements ColorLayer {
 
-   public DefaultColorLayer(@NonNull MeshManager meshManager, @NonNull GameMap map, float red, float green, float blue, float alpha) {
+   @Getter
+   private final GameMap map;
+
+   public DefaultColorLayer(@NonNull GameMap map, @NonNull MeshManager meshManager, float red, float green, float blue, float alpha) {
       super(meshManager.createQuad(1, 1, 0, 0), Material.colored(red, green, blue, alpha));
+      this.map = map;
       setScale(map.getWidth(), map.getHeight());
    }
 

@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
+import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.rule.Rule;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -19,6 +20,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DefaultObjectLayer implements ObjectLayer {
+
+   @Getter
+   private final GameMap map;
 
    @Getter
    private final List<Entity> entities;
@@ -34,7 +38,8 @@ public class DefaultObjectLayer implements ObjectLayer {
    private final int columns;
    private final Vector2f stepSize;
 
-   public DefaultObjectLayer(int rows, int columns, @NonNull Vector2f stepSize, List<Entity> entities, PassageAbility[][] passageMap) {
+   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, @NonNull Vector2f stepSize, List<Entity> entities, PassageAbility[][] passageMap) {
+      this.map = map;
       this.rows = rows;
       this.columns = columns;
       this.stepSize = stepSize;

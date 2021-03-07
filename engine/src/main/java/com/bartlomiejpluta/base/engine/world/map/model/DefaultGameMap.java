@@ -104,7 +104,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    }
 
    public TileLayer createTileLayer() {
-      var layer = new DefaultTileLayer(tileSet, rows, columns);
+      var layer = new DefaultTileLayer(this, tileSet, rows, columns);
       layers.add(layer);
 
       return layer;
@@ -118,7 +118,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    }
 
    public ColorLayer createColorLayer(MeshManager meshManager, float red, float green, float blue, float alpha) {
-      var layer = new DefaultColorLayer(meshManager, this, red, green, blue, alpha);
+      var layer = new DefaultColorLayer(this, meshManager, red, green, blue, alpha);
       layers.add(layer);
 
       return layer;
@@ -130,7 +130,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
          Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
       }
 
-      var layer = new DefaultObjectLayer(rows, columns, stepSize, new ArrayList<>(), passageMap);
+      var layer = new DefaultObjectLayer(this, rows, columns, stepSize, new ArrayList<>(), passageMap);
 
       layers.add(layer);
 

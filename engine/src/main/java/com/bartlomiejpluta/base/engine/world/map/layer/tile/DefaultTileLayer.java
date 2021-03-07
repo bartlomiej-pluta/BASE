@@ -2,10 +2,12 @@ package com.bartlomiejpluta.base.engine.world.map.layer.tile;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
+import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.world.tileset.model.Tile;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -14,7 +16,11 @@ public class DefaultTileLayer implements TileLayer {
    private final TileSet tileSet;
    private final Tile[][] layer;
 
-   public DefaultTileLayer(@NonNull TileSet tileSet, int rows, int columns) {
+   @Getter
+   private final GameMap map;
+
+   public DefaultTileLayer(@NonNull GameMap map, @NonNull TileSet tileSet, int rows, int columns) {
+      this.map = map;
       this.tileSet = tileSet;
       layer = new Tile[rows][columns];
       Arrays.stream(layer).forEach(tiles -> Arrays.fill(tiles, null));

@@ -15,6 +15,9 @@ public class DefaultImageLayer implements ImageLayer {
    private final float mapWidth;
    private final float mapHeight;
 
+   @Getter
+   private final GameMap map;
+
    @NonNull
    @Getter
    private Image image;
@@ -37,6 +40,7 @@ public class DefaultImageLayer implements ImageLayer {
    private boolean parallax;
 
    public DefaultImageLayer(GameMap map, Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
+      this.map = map;
       this.mapWidth = map.getWidth();
       this.mapHeight = map.getHeight();
 
