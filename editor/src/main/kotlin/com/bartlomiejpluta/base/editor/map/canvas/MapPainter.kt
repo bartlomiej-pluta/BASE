@@ -28,7 +28,7 @@ class MapPainter(
       editorStateVM.selectedLayerProperty.addListener { _, _, layer ->
          cursor = when (layer) {
             is TileLayer -> TilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
-            is ObjectLayer -> ObjectPaintingCursor(tileWidth, tileHeight, editorStateVM)
+            is ObjectLayer -> ObjectPaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
             else -> null
          }
       }

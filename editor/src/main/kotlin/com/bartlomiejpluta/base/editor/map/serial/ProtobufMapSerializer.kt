@@ -37,10 +37,6 @@ class ProtobufMapSerializer : MapSerializer {
                   when (passage) {
                      PassageAbility.ALLOW -> GameMapProto.PassageAbility.ALLOW
                      PassageAbility.BLOCK -> GameMapProto.PassageAbility.BLOCK
-                     PassageAbility.UP_ONLY -> GameMapProto.PassageAbility.UP_ONLY
-                     PassageAbility.DOWN_ONLY -> GameMapProto.PassageAbility.DOWN_ONLY
-                     PassageAbility.LEFT_ONLY -> GameMapProto.PassageAbility.LEFT_ONLY
-                     PassageAbility.RIGHT_ONLY -> GameMapProto.PassageAbility.RIGHT_ONLY
                   }
                )
             }

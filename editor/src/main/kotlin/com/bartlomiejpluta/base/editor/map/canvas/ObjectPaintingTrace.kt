@@ -10,56 +10,86 @@ import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import javafx.scene.input.MouseButton
 
 class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
-   private var layerIndex = 0
-   private var row = 0
-   private var column = 0
-   private lateinit var layer: ObjectLayer
-   private lateinit var formerPassageAbility: PassageAbility
-   private lateinit var passageAbility: PassageAbility
+   private val trace = mutableListOf<Element>()
 
-
-   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      // Do nothing
-   }
-
-   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      // Do nothing
-   }
-
-   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      this.layerIndex = editorStateVM.selectedLayerIndex
-      this.row = editorStateVM.cursorRow
-      this.column = editorStateVM.cursorColumn
-
+   private fun paint(layerIndex: Int, row: Int, column: Int, passageAbility: PassageAbility) {
       if (row >= map.rows || column >= map.columns || row < 0 || column < 0 || layerIndex < 0) {
          return
       }
 
-      this.layer = (map.layers[layerIndex] as ObjectLayer)
+      val passageMap = (map.layers[layerIndex] as ObjectLayer).passageMap
+      val formerPassageAbility = passageMap[row][column]
 
-      formerPassageAbility = layer.passageMap[row][column]
-
-      passageAbility = when (mouseEvent.button) {
-         MouseButton.PRIMARY -> when (brushVM.mode!!) {
-            BrushMode.PAINTING_MODE -> PassageAbility.values()[(formerPassageAbility.ordinal + 1) % PassageAbility.values().size]
-            BrushMode.ERASING_MODE -> PassageAbility.ALLOW
-         }
-
-         MouseButton.SECONDARY -> PassageAbility.ALLOW
-
-         else -> throw IllegalStateException("Unsupported mouse button")
+      if (trace.isEmpty()) {
+         trace += Element(layerIndex, row, column, formerPassageAbility, passageAbility)
+         passageMap[row][column] = passageAbility
+         return
       }
 
-      layer.passageMap[row][column] = passageAbility
+      val tileAlreadyPainted =
+         trace.find { it.layerIndex == layerIndex && it.row == row && it.column == column } != null
+
+      if (!tileAlreadyPainted) {
+         trace += Element(layerIndex, row, column, formerPassageAbility, passageAbility)
+         passageMap[row][column] = passageAbility
+      }
+   }
+
+   override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
+      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+         paint(
+            editorStateVM.selectedLayerIndex,
+            editorStateVM.cursorRow - centerRow + row,
+            editorStateVM.cursorColumn - centerColumn + column,
+            when {
+               brushVM.mode == BrushMode.ERASING_MODE -> PassageAbility.ALLOW
+               mouseEvent.button == MouseButton.PRIMARY -> PassageAbility.BLOCK
+               else -> PassageAbility.ALLOW
+            }
+         )
+      }
+   }
+
+   override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
+      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+         paint(
+            editorStateVM.selectedLayerIndex,
+            editorStateVM.cursorRow - centerRow + row,
+            editorStateVM.cursorColumn - centerColumn + column,
+            when {
+               brushVM.mode == BrushMode.ERASING_MODE -> PassageAbility.ALLOW
+               mouseEvent.button == MouseButton.PRIMARY -> PassageAbility.BLOCK
+               else -> PassageAbility.ALLOW
+            }
+         )
+      }
+   }
+
+   override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
+
    }
 
    override fun undo() {
-      layer.passageMap[row][column] = formerPassageAbility
+      trace.forEach {
+         (map.layers[it.layerIndex] as ObjectLayer).passageMap[it.row][it.column] = it.formerPassageAbility
+      }
    }
 
    override fun redo() {
-      layer.passageMap[row][column] = passageAbility
+      trace.forEach {
+         (map.layers[it.layerIndex] as ObjectLayer).passageMap[it.row][it.column] = it.passageAbility
+      }
    }
 
    override val supportedButtons = arrayOf(MouseButton.PRIMARY, MouseButton.SECONDARY)
+
+   companion object {
+      private data class Element(
+         val layerIndex: Int,
+         val row: Int,
+         val column: Int,
+         val formerPassageAbility: PassageAbility,
+         val passageAbility: PassageAbility
+      )
+   }
 }

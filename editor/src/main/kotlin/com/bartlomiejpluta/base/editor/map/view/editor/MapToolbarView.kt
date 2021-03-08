@@ -110,7 +110,7 @@ class MapToolbarView : View() {
          isSnapToTicks = true
          minorTickCount = 0
 
-         enableWhen(isTileLayerSelected)
+         enableWhen(isTileLayerSelected.or(isObjectLayerSelected))
 
          valueProperty().addListener { _, _, newValue ->
             brushVM.item = brushVM.withRange(newValue.toInt())

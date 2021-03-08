@@ -34,10 +34,6 @@ message ObjectLayer {
 enum PassageAbility {
   ALLOW = 0;
   BLOCK = 1;
-  UP_ONLY = 2;
-  DOWN_ONLY = 3;
-  LEFT_ONLY = 4;
-  RIGHT_ONLY = 5;
 }
 
 message ColorLayer {

@@ -73,10 +73,6 @@ public class ProtobufMapDeserializer extends MapDeserializer {
          layer.setPassageAbility(i / columns, i % columns, switch (passageMap.get(i)) {
             case ALLOW -> PassageAbility.ALLOW;
             case BLOCK -> PassageAbility.BLOCK;
-            case RIGHT_ONLY -> PassageAbility.RIGHT_ONLY;
-            case LEFT_ONLY -> PassageAbility.LEFT_ONLY;
-            case DOWN_ONLY -> PassageAbility.DOWN_ONLY;
-            case UP_ONLY -> PassageAbility.UP_ONLY;
          });
       }
    }

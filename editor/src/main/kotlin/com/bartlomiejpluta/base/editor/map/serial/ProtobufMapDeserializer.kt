@@ -65,10 +65,6 @@ class ProtobufMapDeserializer : MapDeserializer {
          passageMap[index / columns][index % columns] = when (passage!!) {
             GameMapProto.PassageAbility.ALLOW -> PassageAbility.ALLOW
             GameMapProto.PassageAbility.BLOCK -> PassageAbility.BLOCK
-            GameMapProto.PassageAbility.UP_ONLY -> PassageAbility.UP_ONLY
-            GameMapProto.PassageAbility.DOWN_ONLY -> PassageAbility.DOWN_ONLY
-            GameMapProto.PassageAbility.LEFT_ONLY -> PassageAbility.LEFT_ONLY
-            GameMapProto.PassageAbility.RIGHT_ONLY -> PassageAbility.RIGHT_ONLY
          }
       }
 
