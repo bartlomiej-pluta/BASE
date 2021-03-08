@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
 import org.joml.Vector2i;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.PriorityQueue;
@@ -30,8 +31,14 @@ public class AstarPathFinder implements PathFinder {
          new Vector2i(0, 1)
    };
 
+   private final int maxNodes;
+
+   public AstarPathFinder(int maxNodes) {
+      this.maxNodes = maxNodes;
+   }
+
    @Override
-   public LinkedList<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end, int range) {
+   public LinkedList<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end) {
       var columns = layer.getMap().getColumns();
       var rows = layer.getMap().getRows();
 
@@ -47,11 +54,19 @@ public class AstarPathFinder implements PathFinder {
 
       // We are starting with one open node (the start one) end empty closed lists
       var open = new PriorityQueue<Node>();
-      var closed = new LinkedList<Node>();
+      var closed = new HashSet<Node>();
       open.add(startNode);
 
       // As long as there are at least one open node
       while (!open.isEmpty()) {
+
+         // A safety valve which ideally should be used only and only
+         // if the target is not reachable (the path does not exist at all).
+         // It determines the maximum algorithm depth
+         // It's not the part of model A* algorithm.
+         if (closed.size() > maxNodes) {
+            return new LinkedList<>();
+         }
 
          // We are retrieving the node with the **smallest** f score
          // (That's the way the Astar.compare() comparator works)
@@ -81,9 +96,9 @@ public class AstarPathFinder implements PathFinder {
             // We are limiting the algorithm to given range
             // If current neighbour distance to start node exceeds given range parameter
             // we are getting rid of this neighbour
-            if (manhattanDistance(startNode.position, position) > range) {
-               continue;
-            }
+            //if (manhattanDistance(startNode.position, position) > range) {
+            //   continue;
+            //}
 
             // Define new neighbour
             var neighbour = new Node(position);
@@ -97,7 +112,18 @@ public class AstarPathFinder implements PathFinder {
             }
 
             // Get rid of nodes that are not reachable (blocked or something is staying on there)
-            var reachable = layer.getPassageMap()[position.y][position.x] == PassageAbility.ALLOW;
+            //
+            // ASSUME, that the end tile **always is** reachable, even if actually it is not.
+            // That means, if you want to have empty list if target actually is not reachable,
+            // you need to implement that condition by yourself.
+            // The reason for that is the fact, that when ObjectLayer is checking if
+            // the current tile is reachable via isTileReachable() method.
+            // If the target position is actually an entity which is blocking (does not allow other entities pass
+            // through it), the method rejects the end tile as reachable (because de facto it is not reachable since
+            // it is blocking) and eventually the path is assumed as not existing.
+            // It may not be consistent with a A* model implementation, however it is required to adapt
+            // the algorithm for the BASE project purpose.
+            var reachable = layer.isTileReachable(position) || position.equals(end);
             if (!reachable) {
                continue;
             }
@@ -158,12 +184,12 @@ public class AstarPathFinder implements PathFinder {
 
             for (Vector2i node : nodes) {
                if (node.equals(column, row)) {
-                  System.out.print("#");
+                  System.out.print(" # ");
                   continue tiles;
                }
             }
 
-            System.out.print(layer.getPassageMap()[row][column] == PassageAbility.ALLOW ? " " : ".");
+            System.out.print(layer.getPassageMap()[row][column] == PassageAbility.ALLOW ? "   " : " . ");
          }
 
          System.out.println("|");

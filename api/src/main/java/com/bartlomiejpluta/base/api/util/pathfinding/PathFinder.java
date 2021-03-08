@@ -6,5 +6,5 @@ import org.joml.Vector2i;
 import java.util.LinkedList;
 
 public interface PathFinder {
-   LinkedList<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end, int range);
+   LinkedList<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end);
 }

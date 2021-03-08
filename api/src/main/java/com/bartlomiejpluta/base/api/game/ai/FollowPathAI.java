@@ -82,7 +82,7 @@ public class FollowPathAI implements AI {
       public boolean perform(NPC npc, ObjectLayer layer, float dt) {
          Movement movement = npc.prepareMovement(direction);
 
-         if (ignore || layer.isMovementPossible(movement)) {
+         if (ignore || layer.isTileReachable(movement.getTo())) {
             layer.pushMovement(movement);
             return true;
          }

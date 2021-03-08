@@ -2,7 +2,6 @@ package com.bartlomiejpluta.base.engine.world.map.layer.object;
 
 import com.bartlomiejpluta.base.api.game.ai.NPC;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
@@ -14,6 +13,7 @@ import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -86,51 +86,35 @@ public class DefaultObjectLayer implements ObjectLayer {
    }
 
    @Override
-   public boolean isMovementPossible(Movement movement) {
-      var target = movement.getTo();
-
+   public boolean isTileReachable(Vector2i tileCoordinates) {
       // Is trying to go beyond the map
-      if (target.x < 0 || target.y < 0 || target.x >= columns || target.y >= rows) {
+      if (tileCoordinates.x < 0 || tileCoordinates.y < 0 || tileCoordinates.x >= columns || tileCoordinates.y >= rows) {
          return false;
       }
 
-      var source = movement.getFrom();
-      var direction = movement.getDirection();
+      if (passageMap[tileCoordinates.y][tileCoordinates.x] != PassageAbility.ALLOW) {
+         return false;
+      }
 
-      var isTargetReachable = switch (passageMap[target.y][target.x]) {
-         case UP_ONLY -> direction != Direction.DOWN;
-         case DOWN_ONLY -> direction != Direction.UP;
-         case LEFT_ONLY -> direction != Direction.RIGHT;
-         case RIGHT_ONLY -> direction != Direction.LEFT;
-         case BLOCK -> false;
-         case ALLOW -> true;
-      };
-
-      var canMoveFromCurrentTile = switch (passageMap[source.y][source.x]) {
-         case UP_ONLY -> direction == Direction.UP;
-         case DOWN_ONLY -> direction == Direction.DOWN;
-         case LEFT_ONLY -> direction == Direction.LEFT;
-         case RIGHT_ONLY -> direction == Direction.RIGHT;
-         default -> true;
-      };
 
       for (var entity : entities) {
          if (entity.isBlocking()) {
 
             // The tile is occupied by other entity
-            if (entity.getCoordinates().equals(target)) {
+            if (entity.getCoordinates().equals(tileCoordinates)) {
                return false;
             }
 
             // The tile is empty, however another entity is moving on it
             var otherMovement = entity.getMovement();
-            if (otherMovement != null && otherMovement.getTo().equals(target)) {
+            if (otherMovement != null && otherMovement.getTo().equals(tileCoordinates)) {
                return false;
             }
          }
       }
 
-      return isTargetReachable && canMoveFromCurrentTile;
+
+      return true;
    }
 
    @Override
@@ -143,7 +127,7 @@ public class DefaultObjectLayer implements ObjectLayer {
       for (var iterator = movements.iterator(); iterator.hasNext(); ) {
          var movement = iterator.next();
 
-         if (isMovementPossible(movement)) {
+         if (isTileReachable(movement.getTo())) {
             movement.perform();
          }
 
