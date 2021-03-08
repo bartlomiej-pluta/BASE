@@ -61,7 +61,9 @@ public class RenderableContext implements Context, Updatable, Renderable {
    }
 
    public void input(Window window) {
-      mapHandler.input(window);
+      if (mapHandler != null) {
+         mapHandler.input(window);
+      }
    }
 
    @Override
