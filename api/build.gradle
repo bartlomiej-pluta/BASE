@@ -12,8 +12,3 @@ repositories {
 dependencies {
     implementation "org.joml:joml:${jomlVersion}"
 }
-
-task relayDependencies(type: Copy) {
-    from configurations.runtimeClasspath
-    into file("build/dependencies")
-}

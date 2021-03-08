@@ -32,7 +32,9 @@ compileTestKotlin {
 }
 
 dependencies {
+    implementation project(":api")
     implementation project(":proto")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "no.tornado:tornadofx:${tornadoFxVersion}"
     implementation platform("org.kordamp.ikonli:ikonli-bom:${ikonliVersion}")
@@ -55,14 +57,15 @@ task provideGameEngine(type: Copy) {
     into file("build/resources/main/engine")
 }
 
-task provideApiDependencies(type: Copy) {
-    dependsOn(":api:relayDependencies")
+task provideAPIWithDependences(type: Copy) {
+    dependsOn(":api:build")
 
-    from project(':api').file('build/dependencies')
+    from project(':api').file('build/libs')
+    from project(':api').configurations.runtimeClasspath
     into file("build/resources/main/dependencies")
 }
 
-task provideApi(type: Copy) {
+task provideAPISources(type: Copy) {
     from project(':api').file('src/main/java')
     into file('build/resources/main/api')
 
@@ -81,6 +84,6 @@ task provideApi(type: Copy) {
 
 processResources {
     dependsOn(provideGameEngine)
-    dependsOn(provideApiDependencies)
-    dependsOn(provideApi)
+    dependsOn(provideAPIWithDependences)
+    dependsOn(provideAPISources)
 }

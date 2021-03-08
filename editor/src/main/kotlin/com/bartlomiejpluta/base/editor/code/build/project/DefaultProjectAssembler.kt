@@ -18,7 +18,7 @@ class DefaultProjectAssembler : ProjectAssembler {
       try {
          tryToAssembly(project, targetJar)
       } catch (e: Exception) {
-         throw BuildException(Severity.ERROR, "Project Assembler", e.message, e)
+         throw BuildException(Severity.ERROR, TAG, e.message, e)
       }
    }
 
@@ -28,5 +28,9 @@ class DefaultProjectAssembler : ProjectAssembler {
       packager.pack(project.imagesDirectory, targetJar, "BOOT-INF/classes/project/images")
       packager.pack(project.entitySetsDirectory, targetJar, "BOOT-INF/classes/project/entsets")
       packager.copy(project.projectFile, targetJar, "BOOT-INF/classes/project")
+   }
+
+   companion object {
+      private const val TAG = "Project Assembler"
    }
 }

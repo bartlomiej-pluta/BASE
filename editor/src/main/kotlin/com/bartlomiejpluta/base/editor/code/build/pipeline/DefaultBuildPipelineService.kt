@@ -56,21 +56,26 @@ class DefaultBuildPipelineService : BuildPipelineService {
    override fun build() = runAsync {
       latch?.locked?.takeIf { it }?.let {
          cancel()
-         return@runAsync
+         return@runAsync false
       }
 
       latch = Latch()
 
       try {
          projectContext.project?.let(this@DefaultBuildPipelineService::runPipeline)
+         return@runAsync true
       } catch (e: BuildException) {
-         val event = AppendBuildLogsEvent(e.severity, e.message, e.location, e.tag)
-         eventbus.fire(event)
+         e.severity?.let {
+            val event = AppendBuildLogsEvent(it, e.message, e.location, e.tag)
+            eventbus.fire(event)
+         }
+
+         eventbus.fire(AppendBuildLogsEvent(Severity.ERROR, "Build failed", tag = TAG))
       } finally {
          latch?.release()
       }
 
-      Unit
+      false
    }
 
    private fun runPipeline(project: Project) {

@@ -8,7 +8,6 @@ import com.bartlomiejpluta.base.editor.process.runner.jar.JarRunner
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
 import javafx.beans.property.SimpleObjectProperty
-import javafx.event.EventHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import tornadofx.*
@@ -43,7 +42,14 @@ class DefaultApplicationRunner : ApplicationRunner {
          if (project.buildOutputJarFile.exists() && project.buildOutputJarFile.isFile) {
             runApplication(project)
          } else {
-            pipelineService.build().onSucceeded = EventHandler { runApplication(project) }
+            val build = pipelineService.build()
+            build.setOnSucceeded {
+               if (build.value) {
+                  runApplication(project)
+               } else {
+                  isRunning = false
+               }
+            }
          }
       }
    }

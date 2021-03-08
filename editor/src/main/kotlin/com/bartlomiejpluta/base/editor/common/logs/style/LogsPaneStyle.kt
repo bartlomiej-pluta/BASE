@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.editor.common.logs.style
 
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
+import com.bartlomiejpluta.base.editor.common.logs.model.Location
 import javafx.scene.Cursor
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
-import org.codehaus.commons.compiler.Location
 
 class LogsPaneStyle(
    private val location: Location? = null,
@@ -23,6 +23,7 @@ class LogsPaneStyle(
       text.fill = when (severity) {
          Severity.WARNING -> Color.ORANGE
          Severity.ERROR -> Color.RED
+         Severity.NOTE -> Color.DARKGRAY
          Severity.INFO -> text.fill
       }
    }

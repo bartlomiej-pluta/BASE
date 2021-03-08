@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.event
 
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
-import org.codehaus.commons.compiler.Location
+import com.bartlomiejpluta.base.editor.common.logs.model.Location
 import tornadofx.EventBus
 import tornadofx.FXEvent
 

@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.editor.common.logs.component
 
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
+import com.bartlomiejpluta.base.editor.common.logs.model.Location
 import com.bartlomiejpluta.base.editor.common.logs.style.LogsPaneStyle
 import com.bartlomiejpluta.base.editor.common.logs.stylesheet.LogsPaneStylesheet
 import javafx.scene.layout.StackPane
-import org.codehaus.commons.compiler.Location
 import org.fxmisc.flowless.VirtualizedScrollPane
 import org.fxmisc.richtext.StyledTextArea
 import tornadofx.addClass

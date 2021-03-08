@@ -21,7 +21,7 @@ class DefaultGameEngineProvider : GameEngineProvider {
       try {
          tryToProvide(targetJar)
       } catch (e: Exception) {
-         throw BuildException(Severity.ERROR, "Engine Provider", e.message, e)
+         throw BuildException(Severity.ERROR, TAG, e.message, e)
       }
    }
 
@@ -35,5 +35,6 @@ class DefaultGameEngineProvider : GameEngineProvider {
 
    companion object {
       private const val GAME_ENGINE_JAR = "/engine/engine.jar"
+      private const val TAG = "Engine Provider"
    }
 }
