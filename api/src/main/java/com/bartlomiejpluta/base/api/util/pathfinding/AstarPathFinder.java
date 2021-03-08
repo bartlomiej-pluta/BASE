@@ -1,16 +1,17 @@
-package com.bartlomiejpluta.base.api.game.ai.pathfinding;
+package com.bartlomiejpluta.base.api.util.pathfinding;
 
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
 import org.joml.Vector2i;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.function.Function;
 
 import static java.lang.Math.abs;
 
-@SuppressWarnings({"RedundantCast", "rawtypes"})
-public class Astar implements PathFinder {
+public class AstarPathFinder implements PathFinder {
 
    /*
     * We are interested in following adjacent
@@ -30,23 +31,23 @@ public class Astar implements PathFinder {
    };
 
    @Override
-   public List<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end, int range) {
-      int columns = layer.getMap().getColumns();
-      int rows = layer.getMap().getRows();
+   public LinkedList<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end, int range) {
+      var columns = layer.getMap().getColumns();
+      var rows = layer.getMap().getRows();
 
-      Node startNode = new Node(start);
-      Node endNode = new Node(end);
+      var startNode = new Node(start);
+      var endNode = new Node(end);
 
       // The heuristic function defined as Manhattan distance to the end node
-      Function h = createManhattanDistanceHeuristic(endNode);
+      Function<Node, Float> h = node -> manhattanDistance(node.position, end);
 
       // The start node has the actual cost 0 and estimated is a Manhattan distance to the end node
       startNode.g = 0.0f;
-      startNode.f = (Float) h.apply(startNode);
+      startNode.f = h.apply(startNode);
 
       // We are starting with one open node (the start one) end empty closed lists
-      Queue open = new PriorityQueue();
-      List closed = new LinkedList();
+      var open = new PriorityQueue<Node>();
+      var closed = new LinkedList<Node>();
       open.add(startNode);
 
       // As long as there are at least one open node
@@ -56,7 +57,7 @@ public class Astar implements PathFinder {
          // (That's the way the Astar.compare() comparator works)
          // And the same time we are removing the node from open list
          // and pushing it to closed one as we no longer need to analyze this node
-         Node current = (Node) open.poll();
+         var current = open.poll();
          closed.add(current);
 
          // If we found the node with f score and it is
@@ -70,7 +71,7 @@ public class Astar implements PathFinder {
          // (we are analyzing the 4 neighbours,
          // as described in the commend above ADJACENT static field)
          for (Vector2i adjacent : ADJACENT) {
-            Vector2i position = new Vector2i(current.position).add(adjacent);
+            var position = new Vector2i(current.position).add(adjacent);
 
             // We are getting rid the neighbours beyond the map
             if (position.x < 0 || position.x >= columns || position.y < 0 || position.y >= rows) {
@@ -85,18 +86,18 @@ public class Astar implements PathFinder {
             }
 
             // Define new neighbour
-            Node neighbour = new Node(position);
+            var neighbour = new Node(position);
 
             // If we already analyzed this node,
             // we are free to skip it to not analyze it once again
-            for (Object closedNode : closed) {
-               if (((Node) closedNode).position.equals(position)) {
+            for (var closedNode : closed) {
+               if (closedNode.position.equals(position)) {
                   continue adjacent;
                }
             }
 
             // Get rid of nodes that are not reachable (blocked or something is staying on there)
-            boolean reachable = layer.getPassageMap()[position.y][position.x] == PassageAbility.ALLOW;
+            var reachable = layer.getPassageMap()[position.y][position.x] == PassageAbility.ALLOW;
             if (!reachable) {
                continue;
             }
@@ -106,7 +107,7 @@ public class Astar implements PathFinder {
             // path further
             neighbour.parent = current;
             neighbour.g = current.g + 1;
-            neighbour.f = neighbour.g + (Float) h.apply(neighbour);
+            neighbour.f = neighbour.g + h.apply(neighbour);
 
             // If the node already exists in open list,
             // we need to compare current neighbour with existing node
@@ -114,7 +115,7 @@ public class Astar implements PathFinder {
             // If the neighbour is shorter, we can update the existing node
             // with neighbour's parameters
             for (Object openNode : open) {
-               Node node = (Node) openNode;
+               var node = (Node) openNode;
                if (node.position.equals(position) && neighbour.g < node.g) {
                   node.g = neighbour.g;
                   node.parent = current;
@@ -132,28 +133,16 @@ public class Astar implements PathFinder {
       return new LinkedList<>();
    }
 
-   @SuppressWarnings("Convert2Lambda")
-   private Function createManhattanDistanceHeuristic(final Node toNode) {
-      return new Function() {
-
-         @Override
-         public Object apply(Object node) {
-            return manhattanDistance(toNode.position, ((Node) node).position);
-         }
-      };
-   }
-
    private float manhattanDistance(Vector2i a, Vector2i b) {
       return (abs(a.x - b.x) + abs(a.y - b.y));
    }
 
-   private List<Vector2i> recreatePath(Node node) {
-      Node current = node;
-      List<Vector2i> list = new LinkedList<>();
-      list.add(((Node) node).position);
+   private LinkedList<Vector2i> recreatePath(Node node) {
+      var current = node;
+      var list = new LinkedList<Vector2i>();
 
       while (current.parent != null) {
-         list.add(((Node) current).parent.position);
+         list.add(current.position);
          current = current.parent;
       }
 
@@ -167,8 +156,8 @@ public class Astar implements PathFinder {
          tiles:
          for (int column = 0; column < layer.getMap().getColumns(); ++column) {
 
-            for (Object node : nodes) {
-               if (((Vector2i) node).equals(column, row)) {
+            for (Vector2i node : nodes) {
+               if (node.equals(column, row)) {
                   System.out.print("#");
                   continue tiles;
                }
@@ -181,7 +170,7 @@ public class Astar implements PathFinder {
       }
    }
 
-   private static class Node implements Comparable {
+   private static class Node implements Comparable<Node> {
       public Node parent;
       public final Vector2i position;
       public float g = 0.0f;
@@ -195,7 +184,7 @@ public class Astar implements PathFinder {
       public boolean equals(Object o) {
          if (this == o) return true;
          if (o == null || getClass() != o.getClass()) return false;
-         Node node = (Node) o;
+         var node = (Node) o;
          return position.equals(node.position);
       }
 
@@ -205,8 +194,8 @@ public class Astar implements PathFinder {
       }
 
       @Override
-      public int compareTo(Object o) {
-         return Float.compare(f, ((Node) o).f);
+      public int compareTo(Node o) {
+         return Float.compare(f, o.f);
       }
    }
 }
