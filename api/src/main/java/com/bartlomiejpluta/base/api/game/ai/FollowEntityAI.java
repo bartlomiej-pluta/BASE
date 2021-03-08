@@ -3,21 +3,21 @@ package com.bartlomiejpluta.base.api.game.ai;
 import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.api.util.pathfinding.AstarPathFinder;
-import com.bartlomiejpluta.base.api.util.pathfinding.PathFinder;
+import com.bartlomiejpluta.base.api.util.pathfinder.PathFinder;
 import org.joml.Vector2i;
 
 public class FollowEntityAI implements AI {
-   private static final float recalculateInterval = 0.5f;
-
    private final NPC npc;
    private final Entity target;
-   private final PathFinder pathFinder = new AstarPathFinder(100);
-
+   private final PathFinder pathFinder;
    private final int range;
+
+   private final float recalculateInterval;
    private float accumulator = 0.0f;
 
-   public FollowEntityAI(NPC npc, Entity target, int range) {
+   public FollowEntityAI(PathFinder pathFinder, float recalculateInterval, NPC npc, Entity target, int range) {
+      this.pathFinder = pathFinder;
+      this.recalculateInterval = recalculateInterval;
       this.npc = npc;
       this.range = range;
       this.target = target;
@@ -27,7 +27,7 @@ public class FollowEntityAI implements AI {
    public void nextActivity(ObjectLayer layer, float dt) {
       var distance = npc.manhattanDistance(target);
 
-      if (!npc.isMoving() && distance > 1 && distance < range && accumulator >= recalculateInterval) {
+      if (!npc.isMoving() && 1 < distance && distance < range && accumulator >= recalculateInterval) {
          var path = pathFinder.findPath(layer, npc.getCoordinates(), target.getCoordinates());
 
          if (!path.isEmpty()) {
@@ -46,4 +46,3 @@ public class FollowEntityAI implements AI {
       accumulator += dt;
    }
 }
-

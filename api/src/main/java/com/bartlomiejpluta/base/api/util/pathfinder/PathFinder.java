@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.api.util.pathfinding;
+package com.bartlomiejpluta.base.api.util.pathfinder;
 
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import org.joml.Vector2i;
