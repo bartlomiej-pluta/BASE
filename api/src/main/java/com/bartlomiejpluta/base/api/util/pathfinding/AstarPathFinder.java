@@ -1,7 +1,6 @@
 package com.bartlomiejpluta.base.api.util.pathfinding;
 
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
 import org.joml.Vector2i;
 
 import java.util.HashSet;
@@ -173,27 +172,6 @@ public class AstarPathFinder implements PathFinder {
       }
 
       return list;
-   }
-
-   public void print(ObjectLayer layer, Iterable<Vector2i> nodes) {
-      for (int row = 0; row < layer.getMap().getRows(); ++row) {
-         System.out.print("|");
-
-         tiles:
-         for (int column = 0; column < layer.getMap().getColumns(); ++column) {
-
-            for (Vector2i node : nodes) {
-               if (node.equals(column, row)) {
-                  System.out.print(" # ");
-                  continue tiles;
-               }
-            }
-
-            System.out.print(layer.getPassageMap()[row][column] == PassageAbility.ALLOW ? "   " : " . ");
-         }
-
-         System.out.println("|");
-      }
    }
 
    private static class Node implements Comparable<Node> {
