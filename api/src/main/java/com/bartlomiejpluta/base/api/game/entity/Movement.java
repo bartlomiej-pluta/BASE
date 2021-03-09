@@ -1,16 +1,15 @@
 package com.bartlomiejpluta.base.api.game.entity;
 
-
-import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 public interface Movement {
    boolean perform();
 
    Movement another();
 
-   Vector2i getFrom();
+   Vector2ic getFrom();
 
-   Vector2i getTo();
+   Vector2ic getTo();
 
    Direction getDirection();
 }

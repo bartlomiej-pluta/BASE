@@ -4,14 +4,14 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
-import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 public interface Entity extends Placeable, Renderable, Updatable {
    void setStepSize(float x, float y);
 
-   Vector2i getCoordinates();
+   Vector2ic getCoordinates();
 
-   void setCoordinates(Vector2i coordinates);
+   void setCoordinates(Vector2ic coordinates);
 
    void setCoordinates(int x, int y);
 

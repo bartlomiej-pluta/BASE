@@ -14,7 +14,7 @@ public class Tile extends Sprite {
 
    public Tile setCoordinates(int row, int column) {
       var stepSize = material.getTexture().getSpriteSize();
-      setPosition(column * stepSize.x, row * stepSize.y);
+      setPosition(column * stepSize.x(), row * stepSize.y());
       return this;
    }
 

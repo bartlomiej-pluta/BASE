@@ -5,7 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 import static java.lang.Math.toRadians;
 
@@ -13,7 +15,6 @@ import static java.lang.Math.toRadians;
 public abstract class Model implements Placeable {
    private final Matrix4f modelMatrix = new Matrix4f();
 
-   @Getter
    protected final Vector2f position = new Vector2f(0, 0);
 
    @Getter
@@ -29,15 +30,20 @@ public abstract class Model implements Placeable {
    protected float scaleY = 1.0f;
 
    @Override
+   public Vector2fc getPosition() {
+      return position;
+   }
+
+   @Override
    public void setPosition(float x, float y) {
       position.x = x;
       position.y = y;
    }
 
    @Override
-   public void setPosition(Vector2f position) {
-      this.position.x = position.x;
-      this.position.y = position.y;
+   public void setPosition(Vector2fc position) {
+      this.position.x = position.x();
+      this.position.y = position.y();
    }
 
    @Override
@@ -47,9 +53,9 @@ public abstract class Model implements Placeable {
    }
 
    @Override
-   public void movePosition(Vector2f position) {
-      this.position.x += position.x;
-      this.position.y += position.y;
+   public void movePosition(Vector2fc position) {
+      this.position.x += position.x();
+      this.position.y += position.y();
    }
 
    @Override
@@ -75,7 +81,7 @@ public abstract class Model implements Placeable {
    }
 
    @Override
-   public Matrix4f getModelMatrix() {
+   public Matrix4fc getModelMatrix() {
       return modelMatrix
             .identity()
             .translate(position.x, position.y, 0)

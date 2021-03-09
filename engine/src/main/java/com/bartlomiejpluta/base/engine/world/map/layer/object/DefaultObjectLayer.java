@@ -12,8 +12,8 @@ import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
-import org.joml.Vector2f;
-import org.joml.Vector2i;
+import org.joml.Vector2fc;
+import org.joml.Vector2ic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,9 +36,9 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    private final int rows;
    private final int columns;
-   private final Vector2f stepSize;
+   private final Vector2fc stepSize;
 
-   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, @NonNull Vector2f stepSize, List<Entity> entities, PassageAbility[][] passageMap) {
+   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, @NonNull Vector2fc stepSize, List<Entity> entities, PassageAbility[][] passageMap) {
       this.map = map;
       this.rows = rows;
       this.columns = columns;
@@ -65,7 +65,7 @@ public class DefaultObjectLayer implements ObjectLayer {
    @Override
    public void addEntity(Entity entity) {
       entity.onAdd(this);
-      entity.setStepSize(stepSize.x, stepSize.y);
+      entity.setStepSize(stepSize.x(), stepSize.y());
       entities.add(entity);
    }
 
@@ -86,13 +86,13 @@ public class DefaultObjectLayer implements ObjectLayer {
    }
 
    @Override
-   public boolean isTileReachable(Vector2i tileCoordinates) {
+   public boolean isTileReachable(Vector2ic tileCoordinates) {
       // Is trying to go beyond the map
-      if (tileCoordinates.x < 0 || tileCoordinates.y < 0 || tileCoordinates.x >= columns || tileCoordinates.y >= rows) {
+      if (tileCoordinates.x() < 0 || tileCoordinates.y() < 0 || tileCoordinates.x() >= columns || tileCoordinates.y() >= rows) {
          return false;
       }
 
-      if (passageMap[tileCoordinates.y][tileCoordinates.x] != PassageAbility.ALLOW) {
+      if (passageMap[tileCoordinates.y()][tileCoordinates.x()] != PassageAbility.ALLOW) {
          return false;
       }
 
@@ -159,6 +159,6 @@ public class DefaultObjectLayer implements ObjectLayer {
    }
 
    private int compareObjects(Entity a, Entity b) {
-      return Float.compare(a.getPosition().y, b.getPosition().y);
+      return Float.compare(a.getPosition().y(), b.getPosition().y());
    }
 }

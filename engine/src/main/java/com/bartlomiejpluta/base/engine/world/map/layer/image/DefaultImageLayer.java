@@ -118,7 +118,7 @@ public class DefaultImageLayer implements ImageLayer {
       if (image != null) {
          if (parallax) {
             var cameraPosition = camera.getPosition();
-            image.setPosition(cameraPosition.x + x, cameraPosition.y + y);
+            image.setPosition(cameraPosition.x() + x, cameraPosition.y() + y);
          }
 
          if (mode == ImageLayerMode.FIT_SCREEN) {

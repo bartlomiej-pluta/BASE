@@ -95,31 +95,31 @@ public class DefaultShaderManager implements ShaderManager {
    }
 
    @Override
-   public ShaderManager setUniform(String uniformName, Vector2f value) {
+   public ShaderManager setUniform(String uniformName, Vector2fc value) {
       current.setUniform(uniformName, value);
       return this;
    }
 
    @Override
-   public ShaderManager setUniform(String uniformName, Vector3f value) {
+   public ShaderManager setUniform(String uniformName, Vector3fc value) {
       current.setUniform(uniformName, value);
       return this;
    }
 
    @Override
-   public ShaderManager setUniform(String uniformName, Vector4f value) {
+   public ShaderManager setUniform(String uniformName, Vector4fc value) {
       current.setUniform(uniformName, value);
       return this;
    }
 
    @Override
-   public ShaderManager setUniform(String uniformName, Matrix3f value) {
+   public ShaderManager setUniform(String uniformName, Matrix3fc value) {
       current.setUniform(uniformName, value);
       return this;
    }
 
    @Override
-   public ShaderManager setUniform(String uniformName, Matrix4f value) {
+   public ShaderManager setUniform(String uniformName, Matrix4fc value) {
       current.setUniform(uniformName, value);
       return this;
    }

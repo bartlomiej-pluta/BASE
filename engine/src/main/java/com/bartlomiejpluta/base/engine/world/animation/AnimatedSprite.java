@@ -7,7 +7,7 @@ import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
 import lombok.EqualsAndHashCode;
-import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite {
@@ -21,7 +21,7 @@ public abstract class AnimatedSprite extends Sprite {
 
    public abstract boolean shouldAnimate();
 
-   public abstract Vector2f[] getSpriteAnimationFramesPositions();
+   public abstract Vector2fc[] getSpriteAnimationFramesPositions();
 
    @Override
    public void render(Window window, Camera camera, ShaderManager shaderManager) {

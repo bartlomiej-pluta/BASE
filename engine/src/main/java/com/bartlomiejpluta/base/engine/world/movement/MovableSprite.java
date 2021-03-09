@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -21,13 +22,16 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    private int moveTime = 0;
    private Vector2f movementVector;
 
-   @Getter
    private final Vector2i coordinates = new Vector2i(0, 0);
 
    @Getter
    private Movement movement;
 
    protected int framesToCrossOneTile = 1;
+
+   public Vector2ic getCoordinates() {
+      return coordinates;
+   }
 
    public boolean isMoving() {
       return movement != null;
@@ -67,9 +71,11 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
          return false;
       }
 
+      var direction = movement.getDirection().vector;
+
       this.movement = movement;
       var speed = new Vector2f(coordinateStepSize).div(framesToCrossOneTile);
-      movementVector = new Vector2f(movement.getDirection().x, movement.getDirection().y).mul(speed);
+      movementVector = new Vector2f(speed.x * direction.x(), speed.y * direction.y());
       moveTime = framesToCrossOneTile;
 
       return true;
@@ -81,8 +87,8 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
    }
 
-   public void setCoordinates(Vector2i coordinates) {
-      setCoordinates(coordinates.x, coordinates.y);
+   public void setCoordinates(Vector2ic coordinates) {
+      setCoordinates(coordinates.x(), coordinates.y());
    }
 
    public void setStepSize(float x, float y) {
@@ -91,12 +97,12 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       setCoordinates(coordinates);
    }
 
-   public int chebyshevDistance(Vector2i coordinates) {
-      return max(abs(this.coordinates.x - coordinates.x), abs(this.coordinates.y - coordinates.y));
+   public int chebyshevDistance(Vector2ic coordinates) {
+      return max(abs(this.coordinates.x - coordinates.x()), abs(this.coordinates.y - coordinates.y()));
    }
 
-   public int manhattanDistance(Vector2i coordinates) {
-      return abs(this.coordinates.x - coordinates.x) + abs(this.coordinates.y - coordinates.y);
+   public int manhattanDistance(Vector2ic coordinates) {
+      return abs(this.coordinates.x - coordinates.x()) + abs(this.coordinates.y - coordinates.y());
    }
 
    public MovableSprite(Mesh mesh, Material material) {

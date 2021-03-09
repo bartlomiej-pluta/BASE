@@ -117,22 +117,22 @@ public class GLShaderProgram implements ShaderProgram {
    }
 
    @Override
-   public void setUniform(String uniformName, Vector2f value) {
-      glUniform2f(uniforms.get(uniformName), value.x, value.y);
+   public void setUniform(String uniformName, Vector2fc value) {
+      glUniform2f(uniforms.get(uniformName), value.x(), value.y());
    }
 
    @Override
-   public void setUniform(String uniformName, Vector3f value) {
-      glUniform3f(uniforms.get(uniformName), value.x, value.y, value.z);
+   public void setUniform(String uniformName, Vector3fc value) {
+      glUniform3f(uniforms.get(uniformName), value.x(), value.y(), value.z());
    }
 
    @Override
-   public void setUniform(String uniformName, Vector4f value) {
-      glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+   public void setUniform(String uniformName, Vector4fc value) {
+      glUniform4f(uniforms.get(uniformName), value.x(), value.y(), value.z(), value.w());
    }
 
    @Override
-   public void setUniform(String uniformName, Matrix3f value) {
+   public void setUniform(String uniformName, Matrix3fc value) {
       try (var stack = MemoryStack.stackPush()) {
          var buffer = stack.mallocFloat(3 * 3);
          value.get(buffer);
@@ -141,7 +141,7 @@ public class GLShaderProgram implements ShaderProgram {
    }
 
    @Override
-   public void setUniform(String uniformName, Matrix4f value) {
+   public void setUniform(String uniformName, Matrix4fc value) {
       try (var stack = MemoryStack.stackPush()) {
          var buffer = stack.mallocFloat(4 * 4);
          value.get(buffer);

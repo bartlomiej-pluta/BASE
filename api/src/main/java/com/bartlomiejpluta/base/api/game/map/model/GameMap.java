@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.api.game.map.layer.color.ColorLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
-import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 public interface GameMap {
    float getWidth();
@@ -15,7 +15,7 @@ public interface GameMap {
 
    int getColumns();
 
-   Vector2f getSize();
+   Vector2fc getSize();
 
    TileLayer getTileLayer(int layerIndex);
 

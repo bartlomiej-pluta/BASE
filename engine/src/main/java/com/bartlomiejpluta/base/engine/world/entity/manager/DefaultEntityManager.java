@@ -28,9 +28,9 @@ public class DefaultEntityManager implements EntityManager {
    private Mesh buildMesh(Material material) {
       var texture = material.getTexture();
       var dimension = configuration.getDimension().asVector();
-      var spriteWidth = texture.getWidth() / (float) dimension.y;
-      var spriteHeight = texture.getHeight() / (float) dimension.x;
-      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2, spriteHeight*0.9f);
+      var spriteWidth = texture.getWidth() / (float) dimension.x();
+      var spriteHeight = texture.getHeight() / (float) dimension.y();
+      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2, spriteHeight * 0.9f);
    }
 
    @Override

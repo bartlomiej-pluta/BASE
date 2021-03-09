@@ -23,6 +23,7 @@ import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
 import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +50,10 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    private final float height;
 
    @Getter
-   private final Vector2f stepSize;
+   private final Vector2fc stepSize;
+
+   @Getter
+   private final Vector2fc size;
 
    @Getter
    private final String handler;
@@ -59,8 +63,9 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       this.rows = rows;
       this.columns = columns;
       this.stepSize = new Vector2f(tileSet.getTileSet().getSpriteSize());
-      this.width = columns * stepSize.x;
-      this.height = rows * stepSize.y;
+      this.width = columns * stepSize.x();
+      this.height = rows * stepSize.y();
+      this.size = new Vector2f(columns * stepSize.x(), rows * stepSize.y());
       this.handler = handler;
    }
 
@@ -76,11 +81,6 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       for (var layer : layers) {
          layer.render(window, camera, shaderManager);
       }
-   }
-
-   @Override
-   public Vector2f getSize() {
-      return new Vector2f(columns * stepSize.x, rows * stepSize.y);
    }
 
    @Override

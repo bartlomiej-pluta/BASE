@@ -13,14 +13,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.joml.Vector2i;
 
 import java.util.Map;
 
+import static java.util.stream.Collectors.toUnmodifiableMap;
+
 @EqualsAndHashCode(callSuper = true)
 public class DefaultEntity extends MovableSprite implements Entity {
    private final Map<Direction, Integer> spriteDirectionRows;
-   private final int defaultSpriteColumn;
+   private final Map<Direction, Vector2fc> defaultAnimationFrames;
 
    private int animationSpeed = 100;
 
@@ -42,7 +45,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
    private boolean blocking;
 
    @Override
-   public Vector2f[] getSpriteAnimationFramesPositions() {
+   public Vector2fc[] getSpriteAnimationFramesPositions() {
       var row = spriteDirectionRows.get(faceDirection);
       var frames = material.getTexture().getRows();
       var array = new Vector2f[frames];
@@ -56,7 +59,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    protected void setDefaultAnimationFrame() {
-      material.setSpritePosition(new Vector2f(defaultSpriteColumn, spriteDirectionRows.get(faceDirection)));
+      material.setSpritePosition(defaultAnimationFrames.get(faceDirection));
    }
 
    @Override
@@ -97,7 +100,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    public Direction getDirectionTowards(Entity target) {
-      return Direction.ofVector(new Vector2i(target.getCoordinates()).sub(getCoordinates()));
+      return Direction.ofVector(target.getCoordinates().sub(getCoordinates(), new Vector2i()));
    }
 
    @Override
@@ -112,8 +115,14 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {
       super(mesh, material);
-      this.defaultSpriteColumn = configuration.getDefaultSpriteColumn();
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
       this.faceDirection = Direction.DOWN;
+
+      var defaultColumn = configuration.getDefaultSpriteColumn();
+
+      defaultAnimationFrames = spriteDirectionRows
+            .entrySet()
+            .stream()
+            .collect(toUnmodifiableMap(Map.Entry::getKey, entry -> new Vector2f(defaultColumn, entry.getValue())));
    }
 }

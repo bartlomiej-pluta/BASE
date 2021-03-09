@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -31,10 +32,13 @@ public class GLFWWindow implements Window {
 
    private boolean initialized = false;
 
+   private final Vector2f size;
+
    public GLFWWindow(@NonNull String title, int width, int height) {
       this.title = title;
       this.width = width;
       this.height = height;
+      this.size = new Vector2f(width, height);
    }
 
    @Override
@@ -73,6 +77,8 @@ public class GLFWWindow implements Window {
          GLFWWindow.this.width = width;
          GLFWWindow.this.height = height;
          GLFWWindow.this.resized = true;
+         GLFWWindow.this.size.x = width;
+         GLFWWindow.this.size.y = height;
       });
 
       // Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -92,7 +98,7 @@ public class GLFWWindow implements Window {
       glfwMakeContextCurrent(windowHandle);
 
       // Enable V-Sync
-//      glfwSwapInterval(1);
+      // glfwSwapInterval(1);
 
       // Make the window visible
       glfwShowWindow(windowHandle);
@@ -104,7 +110,7 @@ public class GLFWWindow implements Window {
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
       // Set the clear color
-      glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+      clear(0.0f, 0.0f, 0.0f, 0.0f);
    }
 
    @Override
@@ -129,8 +135,8 @@ public class GLFWWindow implements Window {
    }
 
    @Override
-   public Vector2f getSize() {
-      return new Vector2f(width, height);
+   public Vector2fc getSize() {
+      return size;
    }
 
    public static Window create(String title, int width, int height) {

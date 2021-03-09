@@ -44,7 +44,7 @@ public class DefaultTileSetManager implements TileSetManager {
          var source = configuration.projectFile("tilesets", asset.getSource());
          var texture = textureManager.loadTexture(source, asset.getRows(), asset.getColumns());
          var size = texture.getSpriteSize();
-         var mesh = meshManager.createQuad(size.x, size.y, 0, 0);
+         var mesh = meshManager.createQuad(size.x(), size.y(), 0, 0);
          tileset = new TileSet(texture, mesh);
          log.info("Loading tile set from assets to cache under the key: [{}]", uid);
          tileSets.put(uid, tileset);

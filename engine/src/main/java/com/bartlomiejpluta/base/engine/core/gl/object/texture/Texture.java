@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import lombok.Getter;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
@@ -35,10 +36,10 @@ public class Texture implements Disposable {
    private final int columns;
 
    @Getter
-   private final Vector2f spriteFragment;
+   private final Vector2fc spriteFragment;
 
    @Getter
-   private final Vector2f spriteSize;
+   private final Vector2fc spriteSize;
 
 
    Texture(String textureFilename, ByteBuffer buffer, int rows, int columns) {

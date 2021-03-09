@@ -32,6 +32,6 @@ public class DefaultImage extends Sprite implements Image {
 
    @Override
    public float getOpacity() {
-      return material.getColor().w;
+      return material.getColor().w();
    }
 }

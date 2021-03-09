@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.api.game.entity;
 
 import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import static java.lang.Math.PI;
 import static org.joml.Math.atan2;
@@ -13,37 +14,29 @@ public enum Direction {
 
    public final int x;
    public final int y;
+   public final Vector2ic vector;
 
    Direction(int x, int y) {
       this.x = x;
       this.y = y;
-   }
-
-   public Vector2i asVector() {
-      return new Vector2i(x, y);
+      this.vector = new Vector2i(x, y);
    }
 
    public Direction opposite() {
-      switch (this) {
-         case UP:
-            return DOWN;
-         case RIGHT:
-            return LEFT;
-         case DOWN:
-            return UP;
-         case LEFT:
-            return RIGHT;
-      }
-
-      throw new IllegalArgumentException();
+      return switch (this) {
+         case UP -> DOWN;
+         case RIGHT -> LEFT;
+         case DOWN -> UP;
+         case LEFT -> RIGHT;
+      };
    }
 
-   public static Direction ofVector(Vector2i vector) {
+   public static Direction ofVector(Vector2ic vector) {
       // X Versor = [1, 0]
       // dot = 1 * vector.x + 0 * vector.y = vector.x
       // det = 1 * vector.y - 0 * vector.x = vector.y
       // angle = atan2(det, dot) = atan2(vector.y, vector.x)
-      float angle = atan2(vector.y, vector.x);
+      float angle = atan2(vector.y(), vector.x());
 
       if (-PI / 4 < angle && angle < PI / 4) {
          return RIGHT;

@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.api.util.pathfinder;
 
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -37,7 +38,7 @@ public class AstarPathFinder implements PathFinder {
    }
 
    @Override
-   public LinkedList<Vector2i> findPath(ObjectLayer layer, Vector2i start, Vector2i end) {
+   public LinkedList<Vector2ic> findPath(ObjectLayer layer, Vector2ic start, Vector2ic end) {
       var columns = layer.getMap().getColumns();
       var rows = layer.getMap().getRows();
 
@@ -158,13 +159,13 @@ public class AstarPathFinder implements PathFinder {
       return new LinkedList<>();
    }
 
-   private float manhattanDistance(Vector2i a, Vector2i b) {
-      return (abs(a.x - b.x) + abs(a.y - b.y));
+   private float manhattanDistance(Vector2ic a, Vector2ic b) {
+      return (abs(a.x() - b.x()) + abs(a.y() - b.y()));
    }
 
-   private LinkedList<Vector2i> recreatePath(Node node) {
+   private LinkedList<Vector2ic> recreatePath(Node node) {
       var current = node;
-      var list = new LinkedList<Vector2i>();
+      var list = new LinkedList<Vector2ic>();
 
       while (current.parent != null) {
          list.add(current.position);
@@ -176,11 +177,11 @@ public class AstarPathFinder implements PathFinder {
 
    private static class Node implements Comparable<Node> {
       public Node parent;
-      public final Vector2i position;
+      public final Vector2ic position;
       public float g = 0.0f;
       public float f = 0.0f;
 
-      public Node(Vector2i position) {
+      public Node(Vector2ic position) {
          this.position = position;
       }
 

@@ -18,15 +18,15 @@ public interface ShaderProgram extends Disposable {
 
    void setUniform(String uniformName, float value);
 
-   void setUniform(String uniformName, Vector2f value);
+   void setUniform(String uniformName, Vector2fc value);
 
-   void setUniform(String uniformName, Vector3f value);
+   void setUniform(String uniformName, Vector3fc value);
 
-   void setUniform(String uniformName, Vector4f value);
+   void setUniform(String uniformName, Vector4fc value);
 
-   void setUniform(String uniformName, Matrix3f value);
+   void setUniform(String uniformName, Matrix3fc value);
 
-   void setUniform(String uniformName, Matrix4f value);
+   void setUniform(String uniformName, Matrix4fc value);
 
    void setUniform(String uniformName, Uniform uniform);
 

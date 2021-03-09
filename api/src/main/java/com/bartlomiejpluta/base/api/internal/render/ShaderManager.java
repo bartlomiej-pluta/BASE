@@ -26,15 +26,15 @@ public interface ShaderManager extends Cleanable {
 
    ShaderManager setUniform(String uniformName, float value);
 
-   ShaderManager setUniform(String uniformName, Vector2f value);
+   ShaderManager setUniform(String uniformName, Vector2fc value);
 
-   ShaderManager setUniform(String uniformName, Vector3f value);
+   ShaderManager setUniform(String uniformName, Vector3fc value);
 
-   ShaderManager setUniform(String uniformName, Vector4f value);
+   ShaderManager setUniform(String uniformName, Vector4fc value);
 
-   ShaderManager setUniform(String uniformName, Matrix3f value);
+   ShaderManager setUniform(String uniformName, Matrix3fc value);
 
-   ShaderManager setUniform(String uniformName, Matrix4f value);
+   ShaderManager setUniform(String uniformName, Matrix4fc value);
 
    ShaderManager setUniform(String uniformName, Uniform uniform);
 

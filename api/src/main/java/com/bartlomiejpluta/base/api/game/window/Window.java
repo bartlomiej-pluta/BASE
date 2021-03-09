@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.api.game.window;
 
 import com.bartlomiejpluta.base.api.game.input.Key;
-import org.joml.Vector2f;
+import org.joml.Vector2fc;
 
 public interface Window {
    void init();
@@ -10,7 +10,7 @@ public interface Window {
 
    int getHeight();
 
-   Vector2f getSize();
+   Vector2fc getSize();
 
    boolean isResized();
 

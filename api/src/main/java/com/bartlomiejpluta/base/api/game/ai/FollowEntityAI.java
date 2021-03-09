@@ -33,7 +33,7 @@ public class FollowEntityAI implements AI {
          if (!path.isEmpty()) {
             accumulator = recalculateInterval;
 
-            var node = new Vector2i(path.getLast()).sub(npc.getCoordinates());
+            var node = path.getLast().sub(npc.getCoordinates(), new Vector2i());
             var direction = Direction.ofVector(node);
             var movement = npc.prepareMovement(direction);
             layer.pushMovement(movement);

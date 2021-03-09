@@ -1,17 +1,23 @@
 package com.bartlomiejpluta.base.api.internal.object;
 
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
+import org.joml.Matrix4fc;
+import org.joml.Vector2fc;
 
 public interface Placeable {
-   Vector2f getPosition();
+   Vector2fc getPosition();
+
    void setPosition(float x, float y);
-   void setPosition(Vector2f position);
+
+   void setPosition(Vector2fc position);
+
    void movePosition(float x, float y);
-   void movePosition(Vector2f position);
+
+   void movePosition(Vector2fc position);
 
    float getRotation();
+
    void setRotation(float rotation);
+
    void moveRotation(float rotation);
 
    float getScaleX();
@@ -28,5 +34,5 @@ public interface Placeable {
 
    float euclideanDistance(Placeable other);
 
-   Matrix4f getModelMatrix();
+   Matrix4fc getModelMatrix();
 }

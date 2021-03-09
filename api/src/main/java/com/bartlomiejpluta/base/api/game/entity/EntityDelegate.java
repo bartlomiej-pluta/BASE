@@ -5,9 +5,9 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.window.Window;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector2i;
+import org.joml.Matrix4fc;
+import org.joml.Vector2fc;
+import org.joml.Vector2ic;
 
 public abstract class EntityDelegate implements Entity {
    protected final Entity entity;
@@ -22,12 +22,12 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public Vector2i getCoordinates() {
+   public Vector2ic getCoordinates() {
       return entity.getCoordinates();
    }
 
    @Override
-   public void setCoordinates(Vector2i coordinates) {
+   public void setCoordinates(Vector2ic coordinates) {
       entity.setCoordinates(coordinates);
    }
 
@@ -87,7 +87,7 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public Vector2f getPosition() {
+   public Vector2fc getPosition() {
       return entity.getPosition();
    }
 
@@ -97,7 +97,7 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public void setPosition(Vector2f position) {
+   public void setPosition(Vector2fc position) {
       entity.setPosition(position);
    }
 
@@ -107,7 +107,7 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public void movePosition(Vector2f position) {
+   public void movePosition(Vector2fc position) {
       entity.movePosition(position);
    }
 
@@ -162,7 +162,7 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public Matrix4f getModelMatrix() {
+   public Matrix4fc getModelMatrix() {
       return entity.getModelMatrix();
    }
 

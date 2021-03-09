@@ -7,14 +7,13 @@ import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.Texture;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import lombok.Getter;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 
-@Getter
 public class Material implements Renderable {
    private final Vector4f color = new Vector4f();
    private final Vector2f spritePosition = new Vector2f(0, 0);
+
+   @Getter
    private final Texture texture;
 
    private Material(Texture texture, float red, float green, float blue, float alpha) {
@@ -37,17 +36,21 @@ public class Material implements Renderable {
       }
    }
 
-   public void setColor(Vector4f color) {
-      this.color.x = color.x;
-      this.color.y = color.y;
-      this.color.z = color.z;
-      this.color.w = color.w;
+   public Vector4fc getColor() {
+      return color;
    }
 
-   public void setColor(Vector3f color) {
-      this.color.x = color.x;
-      this.color.y = color.y;
-      this.color.z = color.z;
+   public void setColor(Vector4fc color) {
+      this.color.x = color.x();
+      this.color.y = color.y();
+      this.color.z = color.z();
+      this.color.w = color.w();
+   }
+
+   public void setColor(Vector3fc color) {
+      this.color.x = color.x();
+      this.color.y = color.y();
+      this.color.z = color.z();
    }
 
    public void setColor(float red, float green, float blue, float alpha) {
@@ -79,19 +82,23 @@ public class Material implements Renderable {
       this.color.w = alpha;
    }
 
-   public void setSpritePosition(Vector2f spritePosition) {
+   public Vector2fc getSpritePosition() {
+      return spritePosition;
+   }
+
+   public void setSpritePosition(Vector2fc spritePosition) {
       if (texture != null) {
          var size = texture.getSpriteFragment();
-         this.spritePosition.x = size.x * spritePosition.x;
-         this.spritePosition.y = size.y * spritePosition.y;
+         this.spritePosition.x = size.x() * spritePosition.x();
+         this.spritePosition.y = size.y() * spritePosition.y();
       }
    }
 
    public void setSpritePosition(float x, float y) {
       if (texture != null) {
          var size = texture.getSpriteFragment();
-         this.spritePosition.x = size.x * x;
-         this.spritePosition.y = size.y * y;
+         this.spritePosition.x = size.x() * x;
+         this.spritePosition.y = size.y() * y;
       }
    }
 

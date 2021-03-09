@@ -6,13 +6,14 @@ import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.engine.world.object.Model;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 
 public class DefaultCamera extends Model implements Camera {
    private final Matrix4f projectionMatrix = new Matrix4f();
    private final Matrix4f viewMatrix = new Matrix4f();
 
    @Override
-   public Matrix4f computeViewModelMatrix(Matrix4f modelMatrix) {
+   public Matrix4fc computeViewModelMatrix(Matrix4fc modelMatrix) {
       return new Matrix4f(viewMatrix).mul(modelMatrix);
    }
 

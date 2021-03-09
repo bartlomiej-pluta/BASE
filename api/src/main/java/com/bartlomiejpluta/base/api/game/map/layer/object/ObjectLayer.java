@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.game.rule.Rule;
-import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface ObjectLayer extends Layer {
 
    PassageAbility[][] getPassageMap();
 
-   boolean isTileReachable(Vector2i tileCoordinates);
+   boolean isTileReachable(Vector2ic tileCoordinates);
 
    void pushMovement(Movement movement);
 }
