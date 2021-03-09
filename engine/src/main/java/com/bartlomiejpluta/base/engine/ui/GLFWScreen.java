@@ -97,6 +97,9 @@ public class GLFWScreen implements Screen {
       // Make the OpenGL context current
       glfwMakeContextCurrent(windowHandle);
 
+      // Enable antialiasing
+      glfwWindowHint(GLFW_SAMPLES, 4);
+
       // Enable V-Sync
       // glfwSwapInterval(1);
 
@@ -108,6 +111,9 @@ public class GLFWScreen implements Screen {
       // Support for transparencies
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+      // Required by GUI
+      glEnable(GL_STENCIL_TEST);
 
       // Set the clear color
       clear(0.0f, 0.0f, 0.0f, 0.0f);
