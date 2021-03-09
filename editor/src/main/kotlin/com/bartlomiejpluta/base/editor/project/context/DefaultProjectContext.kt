@@ -7,6 +7,8 @@ import com.bartlomiejpluta.base.editor.code.service.JavaClassService
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
+import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -171,6 +173,19 @@ class DefaultProjectContext : ProjectContext {
             val targetFile = File(it.entitySetsDirectory, source)
             data.file.copyTo(targetFile)
             it.entitySets += EntitySet(it, uid, source, data.name, data.rows, data.columns)
+
+            save()
+         }
+      }
+   }
+
+   override fun importFont(data: FontAssetData) {
+      project?.let {
+         UID.next(it.fonts.map(Asset::uid)).let { uid ->
+            val source = "$uid.${data.file.extension}"
+            val targetFile = File(it.fontsDirectory, source)
+            data.file.copyTo(targetFile)
+            it.fonts += FontAsset(it, uid, source, data.name)
 
             save()
          }

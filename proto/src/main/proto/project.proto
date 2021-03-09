@@ -10,6 +10,7 @@ message Project {
   repeated TileSetAsset tileSets = 4;
   repeated ImageAsset images = 5;
   repeated EntitySetAsset entitySets = 6;
+  repeated FontAsset fonts = 7;
 }
 
 message GameMapAsset {
@@ -38,4 +39,10 @@ message EntitySetAsset {
   required string name = 3;
   required uint32 rows = 4;
   required uint32 columns = 5;
+}
+
+message FontAsset {
+  required string uid = 1;
+  required string source = 2;
+  required string name = 3;
 }

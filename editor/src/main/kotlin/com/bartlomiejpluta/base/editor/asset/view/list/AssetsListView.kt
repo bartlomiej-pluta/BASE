@@ -31,12 +31,17 @@ class AssetsListView : View() {
       menuitem("Import Entity Set...") { mainController.importEntitySet() }
    }
 
+   private val fonts = AssetCategory("Fonts").apply {
+      menuitem("Import Font...") { mainController.importFont() }
+   }
+
    private val rootItem = AssetCategory(
       name = "Project", items = observableListOf(
          maps,
          tileSets,
          images,
-         entitySet
+         entitySet,
+         fonts
       )
    )
 
@@ -48,6 +53,7 @@ class AssetsListView : View() {
             Bindings.bindContent(tileSets.items, it.tileSets)
             Bindings.bindContent(images.items, it.images)
             Bindings.bindContent(entitySet.items, it.entitySets)
+            Bindings.bindContent(fonts.items, it.fonts)
             root.root.expandAll()
          }
       }

@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.model
 
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
+import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
@@ -30,8 +31,9 @@ class Project {
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
    val entitySets = observableListOf<EntitySet>()
+   val fonts = observableListOf<FontAsset>()
 
-   val assetLists = listOf(maps, tileSets, images, entitySets)
+   val assetLists = listOf(maps, tileSets, images, entitySets, fonts)
 
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
@@ -47,6 +49,10 @@ class Project {
 
    val entitySetsDirectoryProperty = SimpleObjectProperty<File>()
    var entitySetsDirectory by entitySetsDirectoryProperty
+      private set
+
+   val fontsDirectoryProperty = SimpleObjectProperty<File>()
+   var fontsDirectory by fontsDirectoryProperty
       private set
 
    val codeDirectoryProperty = SimpleObjectProperty<File>()
@@ -83,6 +89,7 @@ class Project {
             tileSetsDirectory = File(it, TILE_SETS_DIR)
             imagesDirectory = File(it, IMAGES_DIR)
             entitySetsDirectory = File(it, ENTITY_SETS_DIR)
+            fontsDirectory = File(it, FONTS_DIR)
             codeDirectory = File(it, CODE_DIR)
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
@@ -98,6 +105,7 @@ class Project {
       tileSetsDirectory?.mkdirs()
       imagesDirectory?.mkdirs()
       entitySetsDirectory?.mkdirs()
+      fontsDirectory?.mkdirs()
       codeDirectory?.mkdirs()
    }
 
@@ -109,6 +117,7 @@ class Project {
       const val TILE_SETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"
       const val ENTITY_SETS_DIR = "entsets"
+      const val FONTS_DIR = "fonts"
       const val CODE_DIR = "code"
       const val BUILD_DIR = "build"
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"

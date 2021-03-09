@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
+import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -20,6 +21,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
       proto.addAllImages(item.images.map(this::serializeImage))
       proto.addAllEntitySets(item.entitySets.map(this::serializeEntitySet))
+      proto.addAllFonts(item.fonts.map(this::serializeFont))
       proto.build().writeTo(output)
    }
 
@@ -49,5 +51,11 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(entitySet.name)
       .setRows(entitySet.rows)
       .setColumns(entitySet.columns)
+      .build()
+
+   private fun serializeFont(font: FontAsset) = ProjectProto.FontAsset.newBuilder()
+      .setUid(font.uid)
+      .setSource(font.source)
+      .setName(font.name)
       .build()
 }

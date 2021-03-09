@@ -9,6 +9,8 @@ import com.bartlomiejpluta.base.editor.entityset.view.importing.ImportEntitySetF
 import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.gui.font.view.importing.ImportFontFragment
+import com.bartlomiejpluta.base.editor.gui.font.viewmodel.FontAssetDataVM
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -161,6 +163,20 @@ class MainController : Controller() {
       find<ImportEntitySetFragment>(scope).apply {
          onComplete {
             projectContext.importEntitySet(it)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
+   fun importFont() {
+      val vm = FontAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportFontFragment>(scope).apply {
+         onComplete {
+            projectContext.importFont(it)
          }
 
          openModal(block = true, resizable = false)
