@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.core.gl.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
@@ -34,9 +34,9 @@ public class DefaultRenderer implements Renderer {
    }
 
    @Override
-   public void render(Window window, Camera camera, Renderable renderable) {
+   public void render(Screen screen, Camera camera, Renderable renderable) {
       clear();
-      updateViewport(window);
+      updateViewport(screen);
 
       shaderManager.selectShader("default").useSelectedShader();
 
@@ -44,8 +44,8 @@ public class DefaultRenderer implements Renderer {
       // The camera render method must be invoked **before** each consecutive item renders
       // due to the fact, that the method updates projection and view matrices, that
       // are used to compute proper vertex coordinates of rendered objects (renderables).
-      camera.render(window, shaderManager);
-      renderable.render(window, camera, shaderManager);
+      camera.render(screen, shaderManager);
+      renderable.render(screen, camera, shaderManager);
 
       shaderManager.detachCurrentShader();
    }
@@ -54,10 +54,10 @@ public class DefaultRenderer implements Renderer {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    }
 
-   private void updateViewport(Window window) {
-      if (window.isResized()) {
-         glViewport(0, 0, window.getWidth(), window.getHeight());
-         window.setResized(false);
+   private void updateViewport(Screen screen) {
+      if (screen.isResized()) {
+         glViewport(0, 0, screen.getWidth(), screen.getHeight());
+         screen.setResized(false);
       }
    }
 

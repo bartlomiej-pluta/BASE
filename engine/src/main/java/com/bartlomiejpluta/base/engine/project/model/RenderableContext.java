@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.image.Image;
 import com.bartlomiejpluta.base.api.game.map.handler.MapHandler;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -29,15 +29,15 @@ public class RenderableContext implements Context, Updatable, Renderable {
    private final ClassLoader classLoader;
 
    @Getter
-   private Window window;
+   private Screen screen;
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
    @Getter
    private Camera camera;
 
-   public void init(Window window, Camera camera) {
-      this.window = window;
+   public void init(Screen screen, Camera camera) {
+      this.screen = screen;
       this.camera = camera;
    }
 
@@ -60,9 +60,9 @@ public class RenderableContext implements Context, Updatable, Renderable {
       return imageManager.loadObject(imageUid);
    }
 
-   public void input(Window window) {
+   public void input(Screen screen) {
       if (mapHandler != null) {
-         mapHandler.input(window);
+         mapHandler.input(screen);
       }
    }
 
@@ -78,13 +78,13 @@ public class RenderableContext implements Context, Updatable, Renderable {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       if (map != null) {
-         map.render(window, camera, shaderManager);
+         map.render(screen, camera, shaderManager);
       }
 
       if (mapHandler != null) {
-         mapHandler.postRender(window);
+         mapHandler.postRender(screen);
       }
    }
 }

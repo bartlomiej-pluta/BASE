@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.animation;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
@@ -24,9 +24,9 @@ public abstract class AnimatedSprite extends Sprite {
    public abstract Vector2fc[] getSpriteAnimationFramesPositions();
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       animate();
-      super.render(window, camera, shaderManager);
+      super.render(screen, camera, shaderManager);
    }
 
    private void animate() {

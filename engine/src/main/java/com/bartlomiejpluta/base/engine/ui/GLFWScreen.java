@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.ui;
 
 import com.bartlomiejpluta.base.api.game.input.Key;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,7 +16,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class GLFWWindow implements Window {
+public class GLFWScreen implements Screen {
    private final String title;
    private long windowHandle = -1;
 
@@ -34,7 +34,7 @@ public class GLFWWindow implements Window {
 
    private final Vector2f size;
 
-   public GLFWWindow(@NonNull String title, int width, int height) {
+   public GLFWScreen(@NonNull String title, int width, int height) {
       this.title = title;
       this.width = width;
       this.height = height;
@@ -74,11 +74,11 @@ public class GLFWWindow implements Window {
 
       // Setup resize callback
       glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
-         GLFWWindow.this.width = width;
-         GLFWWindow.this.height = height;
-         GLFWWindow.this.resized = true;
-         GLFWWindow.this.size.x = width;
-         GLFWWindow.this.size.y = height;
+         GLFWScreen.this.width = width;
+         GLFWScreen.this.height = height;
+         GLFWScreen.this.resized = true;
+         GLFWScreen.this.size.x = width;
+         GLFWScreen.this.size.y = height;
       });
 
       // Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -139,8 +139,8 @@ public class GLFWWindow implements Window {
       return size;
    }
 
-   public static Window create(String title, int width, int height) {
-      return new GLFWWindow(title, width, height);
+   public static Screen create(String title, int width, int height) {
+      return new GLFWScreen(title, width, height);
    }
 
    private static int glfwCode(Key key) {

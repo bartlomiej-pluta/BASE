@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.engine.world.map.layer.tile;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
 import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.world.tileset.model.Tile;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
@@ -52,11 +52,11 @@ public class DefaultTileLayer implements TileLayer {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       for (var row : layer) {
          for (var tile : row) {
             if (tile != null) {
-               tile.render(window, camera, shaderManager);
+               tile.render(screen, camera, shaderManager);
             }
          }
       }

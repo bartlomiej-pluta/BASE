@@ -8,7 +8,7 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.rule.Rule;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
@@ -150,11 +150,11 @@ public class DefaultObjectLayer implements ObjectLayer {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       entities.sort(this::compareObjects);
 
       for (var object : entities) {
-         object.render(window, camera, shaderManager);
+         object.render(screen, camera, shaderManager);
       }
    }
 

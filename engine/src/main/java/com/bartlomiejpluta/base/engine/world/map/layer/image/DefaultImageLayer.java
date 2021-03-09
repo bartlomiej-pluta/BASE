@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.api.game.image.Image;
 import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
@@ -114,7 +114,7 @@ public class DefaultImageLayer implements ImageLayer {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       if (image != null) {
          if (parallax) {
             var cameraPosition = camera.getPosition();
@@ -122,10 +122,10 @@ public class DefaultImageLayer implements ImageLayer {
          }
 
          if (mode == ImageLayerMode.FIT_SCREEN) {
-            image.setScale(window.getWidth() / imagePrimaryWidth, window.getHeight() / imagePrimaryHeight);
+            image.setScale(screen.getWidth() / imagePrimaryWidth, screen.getHeight() / imagePrimaryHeight);
          }
 
-         image.render(window, camera, shaderManager);
+         image.render(screen, camera, shaderManager);
       }
    }
 }

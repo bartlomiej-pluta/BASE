@@ -1,11 +1,11 @@
 package com.bartlomiejpluta.base.engine.core.engine;
 
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;
 import com.bartlomiejpluta.base.engine.time.ChronoMeter;
-import com.bartlomiejpluta.base.engine.ui.WindowManager;
+import com.bartlomiejpluta.base.engine.ui.ScreenManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,20 +16,20 @@ import org.springframework.stereotype.Component;
 public class DefaultGameEngine implements GameEngine {
    private static final String THREAD_NAME = "Game Main Thread";
 
-   private final WindowManager windowManager;
+   private final ScreenManager screenManager;
    private final ThreadManager threadManager;
    private final GameLogic logic;
    private final OffHeapGarbageCollector garbageCollector;
 
    private final Thread thread;
-   private final Window window;
+   private final Screen screen;
    private final ChronoMeter chrono;
    private final int targetUps;
 
    private boolean running = false;
 
    @Autowired
-   public DefaultGameEngine(WindowManager windowManager,
+   public DefaultGameEngine(ScreenManager screenManager,
                             ThreadManager threadManager,
                             GameLogic logic,
                             OffHeapGarbageCollector garbageCollector,
@@ -37,12 +37,12 @@ public class DefaultGameEngine implements GameEngine {
                             @Value("${app.window.width}") int width,
                             @Value("${app.window.height}") int height,
                             @Value("${app.core.targetUps}") int targetUps) {
-      this.windowManager = windowManager;
+      this.screenManager = screenManager;
       this.threadManager = threadManager;
       this.logic = logic;
       this.garbageCollector = garbageCollector;
 
-      this.window = windowManager.createWindow(title, width, height);
+      this.screen = screenManager.createScreen(title, width, height);
       this.thread = threadManager.createThread(THREAD_NAME, this::run);
       this.chrono = new ChronoMeter();
       this.targetUps = targetUps;
@@ -59,9 +59,9 @@ public class DefaultGameEngine implements GameEngine {
 
    private void init() {
       log.info("Initializing game engine");
-      window.init();
+      screen.init();
       chrono.init();
-      logic.init(window);
+      logic.init(screen);
    }
 
    private void loop() {
@@ -71,7 +71,7 @@ public class DefaultGameEngine implements GameEngine {
       var accumulator = 0.0f;
       var step = 1.0f / targetUps;
 
-      while (running && !window.shouldClose()) {
+      while (running && !screen.shouldClose()) {
          dt = chrono.getElapsedTime();
          accumulator += dt;
 
@@ -87,7 +87,7 @@ public class DefaultGameEngine implements GameEngine {
    }
 
    private void input() {
-      logic.input(window);
+      logic.input(screen);
    }
 
    private void update(float dt) {
@@ -95,8 +95,8 @@ public class DefaultGameEngine implements GameEngine {
    }
 
    private void render() {
-      window.update();
-      logic.render(window);
+      screen.update();
+      logic.render(screen);
    }
 
    private void cleanUp() {

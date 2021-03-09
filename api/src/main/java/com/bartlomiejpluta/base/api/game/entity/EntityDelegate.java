@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.api.game.entity;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import org.joml.Matrix4fc;
@@ -192,7 +192,7 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
-      entity.render(window, camera, shaderManager);
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
+      entity.render(screen, camera, shaderManager);
    }
 }

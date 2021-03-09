@@ -10,7 +10,7 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
 import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -77,9 +77,9 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       for (var layer : layers) {
-         layer.render(window, camera, shaderManager);
+         layer.render(screen, camera, shaderManager);
       }
    }
 

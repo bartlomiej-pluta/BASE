@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.engine.logic;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.core.gl.render.Renderer;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
@@ -48,10 +48,10 @@ public class DefaultGameLogic implements GameLogic {
 
    @SneakyThrows
    @Override
-   public void init(Window window) {
+   public void init(Screen screen) {
       log.info("Initializing game logic");
       renderer.init();
-      context.init(window, camera);
+      context.init(screen, camera);
 
       project = projectLoader.loadProject();
       var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());
@@ -61,8 +61,8 @@ public class DefaultGameLogic implements GameLogic {
    }
 
    @Override
-   public void input(Window window) {
-      context.input(window);
+   public void input(Screen screen) {
+      context.input(screen);
    }
 
    @Override
@@ -72,8 +72,8 @@ public class DefaultGameLogic implements GameLogic {
    }
 
    @Override
-   public void render(Window window) {
-      renderer.render(window, camera, context);
+   public void render(Screen screen) {
+      renderer.render(screen, camera, context);
    }
 
    @Override

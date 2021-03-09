@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.object;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
@@ -22,9 +22,9 @@ public abstract class Sprite extends Model implements Renderable {
    protected Material material;
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       shaderManager.setUniform(UniformName.UNI_VIEW_MODEL_MATRIX, camera.computeViewModelMatrix(getModelMatrix()));
-      material.render(window, camera, shaderManager);
-      mesh.render(window, camera, shaderManager);
+      material.render(screen, camera, shaderManager);
+      mesh.render(screen, camera, shaderManager);
    }
 }

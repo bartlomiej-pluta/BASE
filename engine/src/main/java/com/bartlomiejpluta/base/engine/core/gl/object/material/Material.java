@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.core.gl.object.material;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.Texture;
@@ -22,7 +22,7 @@ public class Material implements Renderable {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       shaderManager.setUniform(UniformName.UNI_OBJECT_COLOR, color);
 
       if (texture != null) {

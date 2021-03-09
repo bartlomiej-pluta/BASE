@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.core.gl.object.mesh;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.window.Window;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -54,7 +54,7 @@ public class Mesh implements Renderable, Disposable {
    }
 
    @Override
-   public void render(Window window, Camera camera, ShaderManager shaderManager) {
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       glBindVertexArray(vaoId);
 
       glEnableVertexAttribArray(0);

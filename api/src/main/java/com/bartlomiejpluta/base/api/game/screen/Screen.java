@@ -1,9 +1,9 @@
-package com.bartlomiejpluta.base.api.game.window;
+package com.bartlomiejpluta.base.api.game.screen;
 
 import com.bartlomiejpluta.base.api.game.input.Key;
 import org.joml.Vector2fc;
 
-public interface Window {
+public interface Screen {
    void init();
 
    int getWidth();
