@@ -35,6 +35,7 @@ class ZipBasedJarPackager : JarPackager {
 
       FileSystems.newFileSystem(uri, env).use { jar ->
          val path = jar.getPath(Paths.get(root, file.name).normalize().toString())
+         Files.createDirectories(path.parent)
          file.inputStream().use { fis -> Files.copy(fis, path) }
       }
    }
