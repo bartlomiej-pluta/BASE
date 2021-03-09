@@ -7,7 +7,6 @@ import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.util.math.MathUtil;
-import com.bartlomiejpluta.base.engine.world.entity.config.EntitySpriteConfiguration;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,12 +17,10 @@ import org.joml.Vector2i;
 
 import java.util.Map;
 
-import static java.util.stream.Collectors.toUnmodifiableMap;
-
 @EqualsAndHashCode(callSuper = true)
 public class DefaultEntity extends MovableSprite implements Entity {
    private final Map<Direction, Integer> spriteDirectionRows;
-   private final Map<Direction, Vector2fc> defaultAnimationFrames;
+   private final Map<Direction, Vector2fc> spriteDefaultRows;
 
    private int animationSpeed = 100;
 
@@ -59,7 +56,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    protected void setDefaultAnimationFrame() {
-      material.setSpritePosition(defaultAnimationFrames.get(faceDirection));
+      material.setSpritePosition(spriteDefaultRows.get(faceDirection));
    }
 
    @Override
@@ -113,16 +110,10 @@ public class DefaultEntity extends MovableSprite implements Entity {
       // Do nothing
    }
 
-   public DefaultEntity(Mesh mesh, Material material, EntitySpriteConfiguration configuration) {
+   public DefaultEntity(Mesh mesh, Material material, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows) {
       super(mesh, material);
-      this.spriteDirectionRows = configuration.getSpriteDirectionRows();
+      this.spriteDirectionRows = spriteDirectionRows;
       this.faceDirection = Direction.DOWN;
-
-      var defaultColumn = configuration.getDefaultSpriteColumn();
-
-      defaultAnimationFrames = spriteDirectionRows
-            .entrySet()
-            .stream()
-            .collect(toUnmodifiableMap(Map.Entry::getKey, entry -> new Vector2f(defaultColumn, entry.getValue())));
+      this.spriteDefaultRows = spriteDefaultRows;
    }
 }
