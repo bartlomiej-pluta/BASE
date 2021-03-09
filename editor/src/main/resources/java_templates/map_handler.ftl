@@ -18,6 +18,11 @@ public class ${className} implements MapHandler {
    }
 
    @Override
+   public void input(Window window) {
+
+   }
+
+   @Override
    public void update(Context context, GameMap map, float dt) {
 
    }
