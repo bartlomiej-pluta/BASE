@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.loader;
 
+import com.bartlomiejpluta.base.engine.gui.font.manager.FontManager;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;
@@ -20,6 +21,7 @@ public class DefaultProjectLoader implements ProjectLoader {
    private final MapManager mapManager;
    private final ImageManager imageManager;
    private final EntitySetManager entitySetManager;
+   private final FontManager fontManager;
 
    @Override
    public Project loadProject() {
@@ -29,6 +31,7 @@ public class DefaultProjectLoader implements ProjectLoader {
       project.getMapAssets().forEach(mapManager::registerAsset);
       project.getImageAssets().forEach(imageManager::registerAsset);
       project.getEntitySetAssets().forEach(entitySetManager::registerAsset);
+      project.getFontAssets().forEach(fontManager::registerAsset);
 
       return project;
    }

@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.model;
 
+import com.bartlomiejpluta.base.engine.gui.font.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.world.entity.asset.EntitySetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.engine.world.map.asset.GameMapAsset;
@@ -31,4 +32,7 @@ public class Project {
 
    @NonNull
    private final List<EntitySetAsset> entitySetAssets;
+
+   @NonNull
+   private final List<FontAsset> fontAssets;
 }

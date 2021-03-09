@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.serial;
 
+import com.bartlomiejpluta.base.engine.gui.font.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.world.entity.asset.EntitySetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
@@ -24,8 +25,9 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
       var mapAssets = proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList());
       var imageAssets = proto.getImagesList().stream().map(this::parseImageAsset).collect(toList());
       var entitySetAssets = proto.getEntitySetsList().stream().map(this::parseEntitySetAsset).collect(toList());
+      var fontAssets = proto.getFontsList().stream().map(this::parseFontAsset).collect(toList());
 
-      return new Project(name, runner, tileSetAssets, mapAssets, imageAssets, entitySetAssets);
+      return new Project(name, runner, tileSetAssets, mapAssets, imageAssets, entitySetAssets, fontAssets);
    }
 
    private TileSetAsset parseTileSetAsset(ProjectProto.TileSetAsset proto) {
@@ -42,5 +44,9 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
 
    private EntitySetAsset parseEntitySetAsset(ProjectProto.EntitySetAsset proto) {
       return new EntitySetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
+   }
+
+   private FontAsset parseFontAsset(ProjectProto.FontAsset proto) {
+      return new FontAsset(proto.getUid(), proto.getSource());
    }
 }
