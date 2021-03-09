@@ -1,16 +1,29 @@
 package com.bartlomiejpluta.base.editor.map.view.editor
 
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
+import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.main.component.EditorFragment
+import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.REDO_SHORTCUT
+import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.SAVE_SHORTCUT
+import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.UNDO_SHORTCUT
+import com.bartlomiejpluta.base.editor.map.controller.MapController
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
+import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.tileset.view.editor.TileSetView
 import javafx.beans.binding.Bindings
+import javafx.scene.input.KeyEvent
 import tornadofx.*
 
 
-class MapFragment : Fragment() {
+class MapFragment : EditorFragment() {
    override val scope = super.scope as UndoableScope
 
+   private val mapController: MapController by di()
+   private val undoRedoService: UndoRedoService by di()
+
+   private val mapVM = find<GameMapVM>()
    private val editorStateVM = find<EditorStateVM>()
 
    private val mapView = find<MapView>()
@@ -56,5 +69,26 @@ class MapFragment : Fragment() {
       }
 
       bottom = statusBarView.root
+   }
+
+   override fun handleShortcut(event: KeyEvent) {
+      when {
+         SAVE_SHORTCUT.match(event) -> {
+            mapController.saveMap(mapVM.item)
+            event.consume()
+         }
+
+         UNDO_SHORTCUT.match(event) -> {
+            undoRedoService.undo(scope)
+            fire(RedrawMapRequestEvent)
+            event.consume()
+         }
+
+         REDO_SHORTCUT.match(event) -> {
+            undoRedoService.redo(scope)
+            fire(RedrawMapRequestEvent)
+            event.consume()
+         }
+      }
    }
 }

@@ -43,14 +43,12 @@ class MapToolbarView : View() {
 
    override val root = toolbar {
       button(graphic = FontIcon("fa-floppy-o")) {
-         shortcut("Ctrl+S")
          action {
             mapController.saveMap(mapVM.item)
          }
       }
 
       button(graphic = FontIcon("fa-undo")) {
-         shortcut("Ctrl+Z")
          action {
             undoRedoService.undo(scope)
             fire(RedrawMapRequestEvent)
@@ -58,7 +56,6 @@ class MapToolbarView : View() {
       }
 
       button(graphic = FontIcon("fa-repeat")) {
-         shortcut("Ctrl+Shift+Z")
          action {
             undoRedoService.redo(scope)
             fire(RedrawMapRequestEvent)

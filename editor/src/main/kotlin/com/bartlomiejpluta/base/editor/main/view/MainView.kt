@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
+import com.bartlomiejpluta.base.editor.main.component.EditorTab
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
@@ -20,6 +21,7 @@ import javafx.beans.binding.Bindings.createStringBinding
 import javafx.collections.MapChangeListener
 import javafx.event.Event
 import javafx.scene.control.Tab
+import javafx.scene.input.KeyEvent
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 
@@ -106,6 +108,8 @@ class MainView : View("BASE Game Editor") {
    }
 
    override val root = borderpane {
+      addEventHandler(KeyEvent.KEY_PRESSED, this@MainView::handleShortcut)
+
       top = mainMenuView.root
 
       center = tabPane
@@ -137,30 +141,42 @@ class MainView : View("BASE Game Editor") {
    }
 
    private fun createTab(scope: Scope, item: Any) = when (item) {
-      is GameMap -> Tab().apply {
+      is GameMap -> {
          val vm = GameMapVM(item)
          setInScope(vm, scope)
-         projectContext.project?.maps?.first { it.uid == item.uid }
-            ?.let { textProperty().bindBidirectional(it.nameProperty) }
-         content = find<MapFragment>(scope).root
-         graphic = FontIcon("fa-map")
-         setOnClosed { mainController.openItems.remove(scope) }
+
+         EditorTab(find<MapFragment>(scope), FontIcon("fa-map")).apply {
+            projectContext.project
+               ?.maps
+               ?.first { it.uid == item.uid }
+               ?.let { textProperty().bindBidirectional(it.nameProperty) }
+
+            setOnClosed { mainController.openItems.remove(scope) }
+         }
       }
 
-      is Code -> Tab().apply {
+      is Code -> {
          val vm = CodeVM(item)
          setInScope(vm, scope)
-         val editor = find<CodeEditorFragment>(scope)
-         content = editor.root
-         graphic = FontIcon("fa-code")
-         textProperty().bind(item.fileNode.nameProperty)
 
-         setOnClosed {
-            editor.shutdown()
-            mainController.openItems.remove(scope)
+         EditorTab(find<CodeEditorFragment>(scope), FontIcon("fa-code")).apply {
+            textProperty().bind(item.fileNode.nameProperty)
+
+            setOnClosed {
+               fragment.shutdown()
+               mainController.openItems.remove(scope)
+            }
          }
       }
 
       else -> throw IllegalStateException("Unsupported tab item")
+   }
+
+   private fun handleShortcut(event: KeyEvent) {
+      val currentTab = tabPane.selectionModel.selectedItem
+
+      if (currentTab is EditorTab<*>) {
+         currentTab.handleShortcut(event)
+      }
    }
 }

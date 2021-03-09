@@ -43,36 +43,30 @@ class CodeEditorView : View() {
    override val root = borderpane {
       top = toolbar {
          button(graphic = FontIcon("fa-floppy-o")) {
-            shortcut("Ctrl+S")
             enableWhen(codeVM.dirty.and(editable))
-
-            action {
-               codeVM.item?.let {
-                  codeVM.commit(codeVM.codeProperty)
-                  projectContext.saveScript(it)
-               }
-            }
+            action { save() }
          }
 
          button(graphic = FontIcon("fa-undo")) {
-            shortcut("Ctrl+Z")
             enableWhen(editable)
-
-            action {
-               editor.undo()
-            }
+            action { undo() }
          }
 
          button(graphic = FontIcon("fa-repeat")) {
-            shortcut("Ctrl+Shift+Z")
             enableWhen(editable)
-
-            action {
-               editor.redo()
-            }
+            action { redo() }
          }
       }
 
       center = editor
+   }
+
+   fun redo() = editor.redo()
+
+   fun undo() = editor.undo()
+
+   fun save() = codeVM.item?.let {
+      codeVM.commit(codeVM.codeProperty)
+      projectContext.saveScript(it)
    }
 }
