@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import tornadofx.FX
 import java.io.File
-import java.util.*
 import javax.tools.Diagnostic
 import javax.tools.DiagnosticCollector
 import javax.tools.JavaFileObject
@@ -54,7 +53,9 @@ class JDKCompiler : Compiler {
          Diagnostic.Kind.OTHER -> Severity.INFO
       }
 
-      val location = Location(diagnostic.source.name, diagnostic.lineNumber, diagnostic.columnNumber)
+      val location = diagnostic.source?.let {
+         Location(diagnostic.source.name, diagnostic.lineNumber, diagnostic.columnNumber)
+      }
 
 
       FX.eventbus.fire(AppendBuildLogsEvent(severity, diagnostic.getMessage(null), location, TAG))
