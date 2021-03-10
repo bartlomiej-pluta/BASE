@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.gui.render;
+package com.bartlomiejpluta.base.engine.gui.model;
 
 import com.bartlomiejpluta.base.api.game.gui.Color;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;

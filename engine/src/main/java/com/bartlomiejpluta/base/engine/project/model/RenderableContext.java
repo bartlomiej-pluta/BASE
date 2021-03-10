@@ -11,6 +11,7 @@ import com.bartlomiejpluta.base.api.internal.gc.Cleanable;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
 import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
@@ -32,6 +33,7 @@ public class RenderableContext implements Context, Updatable, Renderable, Cleana
    private final EntityManager entityManager;
    private final ImageManager imageManager;
    private final MapManager mapManager;
+   private final FontManager fontManager;
    private final ClassLoader classLoader;
 
    @Getter
@@ -70,7 +72,7 @@ public class RenderableContext implements Context, Updatable, Renderable, Cleana
 
    @Override
    public GUI newGUI() {
-      var gui = new NanoVGGUI();
+      var gui = new NanoVGGUI(fontManager);
       guis.add(gui);
       gui.init(screen);
       return gui;

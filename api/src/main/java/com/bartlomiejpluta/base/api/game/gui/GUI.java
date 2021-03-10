@@ -14,5 +14,11 @@ public interface GUI extends Renderable, Disposable {
 
    void fillColor(Color color);
 
+   void setFontFace(String fontUid);
+
+   void setFontSize(float size);
+
+   void putText(float x, float y, CharSequence text);
+
    Color createColor(float red, float green, float blue, float alpha);
 }
