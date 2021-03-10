@@ -8,6 +8,8 @@ public interface GUI extends Renderable, Disposable {
 
    void setRoot(Widget root);
 
+   void beginPath();
+
    void drawRectangle(float x, float y, float w, float h);
 
    void fillColor(Color color);

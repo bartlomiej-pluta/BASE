@@ -46,6 +46,11 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void beginPath() {
+      nvgBeginPath(context);
+   }
+
+   @Override
    public void drawRectangle(float x, float y, float w, float h) {
       nvgRect(context, x, y, w, h);
    }
