@@ -5,21 +5,19 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 public interface Widget {
    Widget getParent();
 
-   float getAbsoluteX();
+   float getX();
 
-   float getAbsoluteY();
+   float getY();
 
-   void setAbsoluteX(float x);
+   void setX(float x);
 
-   void setAbsoluteY(float y);
+   void setY(float y);
+
+   void setPosition(float x, float y);
 
    float getWidth();
 
    float getHeight();
-
-   void setWidth(float width);
-
-   void setHeight(float height);
 
    void setMargin(float top, float right, float bottom, float left);
 

@@ -31,14 +31,14 @@ public class HBox extends Container {
 
    @Override
    public void draw(Screen screen, GUI gui) {
-      var currentX = absX + paddingLeft;
-      var currentY = absY + paddingTop;
+      var currentX = x + paddingLeft;
+      var currentY = y + paddingTop;
 
       for (var child : children) {
          var childAbsX = currentX + child.getMarginLeft();
          var childAbsY = currentY + child.getMarginTop();
-         child.setAbsoluteX(childAbsX);
-         child.setAbsoluteY(childAbsY);
+         child.setX(childAbsX);
+         child.setY(childAbsY);
 
          currentX += child.getMarginLeft() + child.getWidth() + child.getMarginRight();
 

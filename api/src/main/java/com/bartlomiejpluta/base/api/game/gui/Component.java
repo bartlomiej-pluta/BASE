@@ -3,11 +3,8 @@ package com.bartlomiejpluta.base.api.game.gui;
 public abstract class Component implements Widget {
    protected Widget parent;
 
-   protected float absX;
-   protected float absY;
-
-   protected float width;
-   protected float height;
+   protected float x;
+   protected float y;
 
    protected float marginTop;
    protected float marginRight;
@@ -29,43 +26,29 @@ public abstract class Component implements Widget {
    }
 
    @Override
-   public float getAbsoluteX() {
-      return absX;
+   public float getX() {
+      return x;
    }
 
    @Override
-   public float getAbsoluteY() {
-      return absY;
+   public float getY() {
+      return y;
    }
 
    @Override
-   public void setAbsoluteX(float x) {
-      this.absX = x;
+   public void setX(float x) {
+      this.x = x;
    }
 
    @Override
-   public void setAbsoluteY(float y) {
-      this.absY = y;
+   public void setY(float y) {
+      this.y = y;
    }
 
    @Override
-   public float getWidth() {
-      return width;
-   }
-
-   @Override
-   public float getHeight() {
-      return height;
-   }
-
-   @Override
-   public void setWidth(float width) {
-      this.width = width;
-   }
-
-   @Override
-   public void setHeight(float height) {
-      this.height = height;
+   public void setPosition(float x, float y) {
+      this.x = x;
+      this.y = y;
    }
 
    @Override
