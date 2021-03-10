@@ -23,4 +23,6 @@ public interface Screen {
    void update();
 
    void clear(float r, float g, float b, float alpha);
+
+   void restoreState();
 }

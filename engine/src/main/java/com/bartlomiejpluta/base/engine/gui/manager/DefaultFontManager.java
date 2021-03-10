@@ -1,6 +1,6 @@
-package com.bartlomiejpluta.base.engine.gui.font.manager;
+package com.bartlomiejpluta.base.engine.gui.manager;
 
-import com.bartlomiejpluta.base.engine.gui.font.asset.FontAsset;
+import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.world.tileset.asset.TileSetAsset;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

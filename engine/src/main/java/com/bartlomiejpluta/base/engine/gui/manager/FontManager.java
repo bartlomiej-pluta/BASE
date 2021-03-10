@@ -1,7 +1,7 @@
-package com.bartlomiejpluta.base.engine.gui.font.manager;
+package com.bartlomiejpluta.base.engine.gui.manager;
 
 import com.bartlomiejpluta.base.engine.common.manager.AssetManager;
-import com.bartlomiejpluta.base.engine.gui.font.asset.FontAsset;
+import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 
 public interface FontManager extends AssetManager<FontAsset, Integer> {
 }

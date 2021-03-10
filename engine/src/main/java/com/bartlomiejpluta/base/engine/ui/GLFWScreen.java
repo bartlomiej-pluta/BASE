@@ -136,6 +136,13 @@ public class GLFWScreen implements Screen {
    }
 
    @Override
+   public void restoreState() {
+      glEnable(GL_STENCIL_TEST);
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   }
+
+   @Override
    public boolean shouldClose() {
       return glfwWindowShouldClose(windowHandle);
    }

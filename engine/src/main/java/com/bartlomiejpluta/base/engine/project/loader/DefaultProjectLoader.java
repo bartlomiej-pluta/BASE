@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.loader;
 
-import com.bartlomiejpluta.base.engine.gui.font.manager.FontManager;
+import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;

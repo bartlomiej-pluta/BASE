@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.serial;
 
-import com.bartlomiejpluta.base.engine.gui.font.asset.FontAsset;
+import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.world.entity.asset.EntitySetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;

@@ -48,6 +48,8 @@ public class DefaultRenderer implements Renderer {
       renderable.render(screen, camera, shaderManager);
 
       shaderManager.detachCurrentShader();
+
+      screen.restoreState();
    }
 
    private void clear() {
