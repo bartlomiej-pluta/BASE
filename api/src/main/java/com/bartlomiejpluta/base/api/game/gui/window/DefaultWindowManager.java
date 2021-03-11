@@ -52,14 +52,18 @@ public class DefaultWindowManager extends BaseWidget implements WindowManager {
    public void open(Window window) {
       requireNonNull(window, "Window cannot be null");
 
-      windows.push(window);
+      windows.addLast(window);
       window.setParent(this);
       window.onOpen(this);
    }
 
    @Override
    public void close() {
-      var window = windows.pop();
+      if (windows.isEmpty()) {
+         return;
+      }
+
+      var window = windows.removeLast();
       window.setParent(null);
       window.onClose(this);
    }
