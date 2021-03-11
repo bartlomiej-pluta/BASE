@@ -1,21 +1,14 @@
-package com.bartlomiejpluta.base.engine.util.profiling.time;
-
-import com.bartlomiejpluta.base.api.internal.gc.Cleanable;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+package com.bartlomiejpluta.base.api.util.profiler;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-@Slf4j
-@Component
-public class DefaultTimeProfilerService implements TimeProfilerService, Cleanable {
+public class TimeProfiler {
    private static final DecimalFormat DF = new DecimalFormat("0.00");
    private final Map<String, Double> averages = new HashMap<>();
 
-   @Override
    public void measure(String key, Runnable task) {
       var start = System.nanoTime();
       task.run();
@@ -28,11 +21,10 @@ public class DefaultTimeProfilerService implements TimeProfilerService, Cleanabl
       }
    }
 
-   @Override
-   public void cleanUp() {
+   public void printResult() {
       averages.entrySet().stream()
             .sorted(Entry.<String, Double>comparingByValue().reversed())
-            .forEachOrdered(entry -> log.info("[{}]: [{}ms] [{}us] [{}ns]",
+            .forEachOrdered(entry -> System.out.format("[%s]: [%sms] [%sus] [%sns]",
                   entry.getKey(),
                   DF.format(entry.getValue() / 1_000_000),
                   DF.format(entry.getValue() / 1_000),

@@ -9,9 +9,11 @@ import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultProjectLoader implements ProjectLoader {
@@ -25,6 +27,7 @@ public class DefaultProjectLoader implements ProjectLoader {
 
    @Override
    public Project loadProject() {
+      log.info("Loading project resources");
       var resource = DefaultProjectLoader.class.getResourceAsStream(configuration.projectFile(configuration.getMainFile()));
       var project = projectDeserializer.deserialize(resource);
       project.getTileSetAssets().forEach(tileSetManager::registerAsset);
