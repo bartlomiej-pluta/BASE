@@ -22,7 +22,7 @@ public abstract class BaseContainer extends Component implements Container {
       var theWidestChild = 0.0f;
 
       for (var child : children) {
-         var width = child.getMarginLeft() + child.getWidth() + child.getMarginRight();
+         var width = child.getMarginLeft() + child.getActualWidth() + child.getMarginRight();
          if (width > theWidestChild) {
             theWidestChild = width;
          }
@@ -35,7 +35,7 @@ public abstract class BaseContainer extends Component implements Container {
       var theHighestChild = 0.0f;
 
       for (var child : children) {
-         var height = child.getMarginTop() + child.getHeight() + child.getMarginBottom();
+         var height = child.getMarginTop() + child.getActualHeight() + child.getMarginBottom();
          if (height > theHighestChild) {
             theHighestChild = height;
          }

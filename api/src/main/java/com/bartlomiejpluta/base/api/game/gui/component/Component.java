@@ -1,12 +1,19 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
 import com.bartlomiejpluta.base.api.game.gui.base.Widget;
 
 public abstract class Component implements Widget {
    protected Widget parent;
 
+   protected SizeMode widthMode = SizeMode.NORMAL;
+   protected SizeMode heightMode = SizeMode.NORMAL;
+
    protected float x;
    protected float y;
+
+   protected float width;
+   protected float height;
 
    protected float marginTop;
    protected float marginRight;
@@ -17,6 +24,74 @@ public abstract class Component implements Widget {
    protected float paddingRight;
    protected float paddingBottom;
    protected float paddingLeft;
+
+   protected abstract float getContentWidth();
+
+   protected abstract float getContentHeight();
+
+   @Override
+   public float getWidth() {
+      return widthMode == SizeMode.MATCH_PARENT
+            ? (parent != null ? parent.getWidth() : 0)
+            : getActualWidth();
+   }
+
+   protected float getActualWidth() {
+      return paddingLeft + (widthMode == SizeMode.NORMAL ? width : getContentWidth()) + paddingRight;
+   }
+
+   @Override
+   public float getHeight() {
+      return heightMode == SizeMode.MATCH_PARENT
+            ? (parent != null ? parent.getHeight() : 0)
+            : getActualHeight();
+   }
+
+   protected float getActualHeight() {
+      return paddingTop + (heightMode == SizeMode.NORMAL ? height : getContentHeight()) + paddingBottom;
+   }
+
+   @Override
+   public void setWidth(float width) {
+      this.width = width;
+   }
+
+   @Override
+   public void setHeight(float height) {
+      this.height = height;
+   }
+
+   @Override
+   public void setSize(float width, float height) {
+      this.width = width;
+      this.height = height;
+   }
+
+   @Override
+   public void setSizeMode(SizeMode widthMode, SizeMode heightMode) {
+      this.widthMode = widthMode;
+      this.heightMode = heightMode;
+   }
+
+   @Override
+   public SizeMode getWidthMode() {
+      return widthMode;
+   }
+
+   @Override
+   public void setWidthMode(SizeMode mode) {
+      this.widthMode = mode;
+   }
+
+   @Override
+   public SizeMode getHeightMode() {
+      return heightMode;
+   }
+
+   @Override
+   public void setHeightMode(SizeMode mode) {
+      this.heightMode = mode;
+   }
 
    @Override
    public Widget getParent() {

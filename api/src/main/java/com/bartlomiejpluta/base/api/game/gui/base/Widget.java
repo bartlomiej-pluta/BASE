@@ -19,6 +19,22 @@ public interface Widget {
 
    float getHeight();
 
+   void setWidth(float width);
+
+   void setHeight(float height);
+
+   void setSize(float width, float height);
+
+   SizeMode getWidthMode();
+
+   void setWidthMode(SizeMode mode);
+
+   SizeMode getHeightMode();
+
+   void setHeightMode(SizeMode mode);
+
+   void setSizeMode(SizeMode widthMode, SizeMode heightMode);
+
    void setMargin(float top, float right, float bottom, float left);
 
    void setMargin(float top, float rightLeft, float bottom);

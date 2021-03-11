@@ -6,13 +6,13 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 public class HLayout extends BaseContainer {
 
    @Override
-   public float getWidth() {
-      return paddingLeft + sumChildrenWidth() + paddingRight;
+   protected float getContentWidth() {
+      return sumChildrenWidth();
    }
 
    @Override
-   public float getHeight() {
-      return paddingTop + maxChildrenHeight() + paddingBottom;
+   protected float getContentHeight() {
+      return maxChildrenHeight();
    }
 
    @Override
