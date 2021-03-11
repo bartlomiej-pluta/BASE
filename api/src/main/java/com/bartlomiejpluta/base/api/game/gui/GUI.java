@@ -4,6 +4,14 @@ import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 
 public interface GUI extends Renderable, Disposable {
+   int ALIGN_LEFT = 1 << 0;
+   int ALIGN_CENTER = 1 << 1;
+   int ALIGN_RIGHT = 1 << 2;
+   int ALIGN_TOP = 1 << 3;
+   int ALIGN_MIDDLE = 1 << 4;
+   int ALIGN_BOTTOM = 1 << 5;
+   int ALIGN_BASELINE = 1 << 6;
+
    Widget getRoot();
 
    void setRoot(Widget root);
@@ -20,5 +28,13 @@ public interface GUI extends Renderable, Disposable {
 
    void setFontSize(float size);
 
+   void setTextAlignment(int alignment);
+
+   void putText(float x, float y, CharSequence text, Bounds outTextBounds);
+
    void putText(float x, float y, CharSequence text);
+
+   void putTextBox(float x, float y, float lineWidth, CharSequence text, Bounds outTextBoxBounds);
+
+   void putTextBox(float x, float y, float lineWidth, CharSequence text);
 }

@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.gui.Bounds;
 import com.bartlomiejpluta.base.api.game.gui.GUI;
 import com.bartlomiejpluta.base.api.game.gui.Widget;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
@@ -27,6 +28,7 @@ public class NanoVGGUI implements GUI {
 
    private NVGColor color;
    private final Set<String> loadedFonts = new HashSet<>();
+   private final float[] boundBuffer = new float[4];
 
    private final FontManager fontManager;
 
@@ -66,8 +68,27 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void putText(float x, float y, CharSequence text, Bounds outTextBounds) {
+      nvgText(context, x, y, text);
+      nvgTextBounds(context, x, y, text, boundBuffer);
+      outTextBounds.update(boundBuffer[0], boundBuffer[1], boundBuffer[2], boundBuffer[3]);
+   }
+
+   @Override
    public void putText(float x, float y, CharSequence text) {
       nvgText(context, x, y, text);
+   }
+
+   @Override
+   public void putTextBox(float x, float y, float lineWidth, CharSequence text, Bounds outTextBoxBounds) {
+      nvgTextBox(context, x, y, lineWidth, text);
+      nvgTextBoxBounds(context, x, y, lineWidth, text, boundBuffer);
+      outTextBoxBounds.update(boundBuffer[0], boundBuffer[1], boundBuffer[2], boundBuffer[3]);
+   }
+
+   @Override
+   public void putTextBox(float x, float y, float lineWidth, CharSequence text) {
+      nvgTextBox(context, x, y, lineWidth, text);
    }
 
    @Override
@@ -106,6 +127,11 @@ public class NanoVGGUI implements GUI {
    @Override
    public void setFontSize(float size) {
       nvgFontSize(context, size);
+   }
+
+   @Override
+   public void setTextAlignment(int alignment) {
+      nvgTextAlign(context, alignment);
    }
 
    @Override
