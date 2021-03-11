@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.api.game.gui.component;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseContainer extends Component implements Container {
+public abstract class BaseContainer extends BaseComponent implements Container {
    protected final List<Component> children = new LinkedList<>();
 
    @Override

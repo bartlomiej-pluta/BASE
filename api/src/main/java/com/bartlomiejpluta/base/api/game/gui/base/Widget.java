@@ -19,7 +19,11 @@ public interface Widget {
 
    float getWidth();
 
+   float getActualWidth();
+
    float getHeight();
+
+   float getActualHeight();
 
    void setWidth(float width);
 

@@ -22,8 +22,18 @@ public class ScreenWidget implements Widget {
    }
 
    @Override
+   public float getActualWidth() {
+      return screen.getWidth();
+   }
+
+   @Override
    public float getHeight() {
       return screen.getHeight();
+   }
+
+   @Override
+   public float getActualHeight() {
+      return screen.getWidth();
    }
 
    @Override
