@@ -1,9 +1,8 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.gui.Bounds;
-import com.bartlomiejpluta.base.api.game.gui.GUI;
-import com.bartlomiejpluta.base.api.game.gui.Widget;
+import com.bartlomiejpluta.base.api.game.gui.base.GUI;
+import com.bartlomiejpluta.base.api.game.gui.base.Widget;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
@@ -68,10 +67,9 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void putText(float x, float y, CharSequence text, Bounds outTextBounds) {
+   public void putText(float x, float y, CharSequence text, float[] outTextBounds) {
       nvgText(context, x, y, text);
-      nvgTextBounds(context, x, y, text, boundBuffer);
-      outTextBounds.update(boundBuffer[0], boundBuffer[1], boundBuffer[2], boundBuffer[3]);
+      nvgTextBounds(context, x, y, text, outTextBounds);
    }
 
    @Override
@@ -80,10 +78,9 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void putTextBox(float x, float y, float lineWidth, CharSequence text, Bounds outTextBoxBounds) {
+   public void putTextBox(float x, float y, float lineWidth, CharSequence text, float[] outTextBounds) {
       nvgTextBox(context, x, y, lineWidth, text);
-      nvgTextBoxBounds(context, x, y, lineWidth, text, boundBuffer);
-      outTextBoxBounds.update(boundBuffer[0], boundBuffer[1], boundBuffer[2], boundBuffer[3]);
+      nvgTextBoxBounds(context, x, y, lineWidth, text, outTextBounds);
    }
 
    @Override

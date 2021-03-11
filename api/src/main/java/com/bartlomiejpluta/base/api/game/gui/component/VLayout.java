@@ -1,32 +1,18 @@
-package com.bartlomiejpluta.base.api.game.gui;
+package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 
-public class VBox extends Container {
+public class VLayout extends BaseContainer {
 
    @Override
    public float getWidth() {
-      var theWidestChild = 0.0f;
-
-      for (var child : children) {
-         var width = child.getMarginLeft() + child.getWidth() + child.getMarginRight();
-         if (width > theWidestChild) {
-            theWidestChild = width;
-         }
-      }
-
-      return paddingLeft + theWidestChild + paddingRight;
+      return paddingLeft + maxChildrenWidth() + paddingRight;
    }
 
    @Override
    public float getHeight() {
-      var childrenHeight = 0.0f;
-
-      for (var child : children) {
-         childrenHeight += child.getMarginTop() + child.getHeight() + child.getMarginBottom();
-      }
-
-      return paddingTop + childrenHeight + paddingBottom;
+      return paddingTop + sumChildrenHeight() + paddingBottom;
    }
 
    @Override

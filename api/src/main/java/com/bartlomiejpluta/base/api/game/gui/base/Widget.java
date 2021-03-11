@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.api.game.gui;
+package com.bartlomiejpluta.base.api.game.gui.base;
 
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 

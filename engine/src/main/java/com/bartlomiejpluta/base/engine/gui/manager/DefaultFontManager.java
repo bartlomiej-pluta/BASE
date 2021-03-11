@@ -1,9 +1,8 @@
 package com.bartlomiejpluta.base.engine.gui.manager;
 
-import com.bartlomiejpluta.base.api.game.gui.Font;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
-import com.bartlomiejpluta.base.engine.gui.model.DefaultFont;
+import com.bartlomiejpluta.base.engine.gui.model.Font;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,6 @@ public class DefaultFontManager implements FontManager {
          fontBuffers.put(uid, buffer);
       }
 
-      return new DefaultFont(uid, buffer.duplicate());
+      return new Font(uid, buffer.duplicate());
    }
 }

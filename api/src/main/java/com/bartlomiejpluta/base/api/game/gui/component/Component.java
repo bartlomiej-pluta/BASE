@@ -1,4 +1,6 @@
-package com.bartlomiejpluta.base.api.game.gui;
+package com.bartlomiejpluta.base.api.game.gui.component;
+
+import com.bartlomiejpluta.base.api.game.gui.base.Widget;
 
 public abstract class Component implements Widget {
    protected Widget parent;

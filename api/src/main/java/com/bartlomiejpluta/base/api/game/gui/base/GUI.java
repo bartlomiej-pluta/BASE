@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.api.game.gui;
+package com.bartlomiejpluta.base.api.game.gui.base;
 
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
@@ -30,11 +30,11 @@ public interface GUI extends Renderable, Disposable {
 
    void setTextAlignment(int alignment);
 
-   void putText(float x, float y, CharSequence text, Bounds outTextBounds);
+   void putText(float x, float y, CharSequence text, float[] outTextBounds);
 
    void putText(float x, float y, CharSequence text);
 
-   void putTextBox(float x, float y, float lineWidth, CharSequence text, Bounds outTextBoxBounds);
+   void putTextBox(float x, float y, float lineWidth, CharSequence text, float[] outTextBounds);
 
    void putTextBox(float x, float y, float lineWidth, CharSequence text);
 }
