@@ -32,7 +32,7 @@ public class DefaultMeshManager implements MeshManager {
    public void cleanUp() {
       log.info("Disposing meshes");
       quads.forEach((dim, mesh) -> mesh.dispose());
-      log.info("{} meshes has been disposed", quads.size());
+      log.info("{} meshes have been disposed", quads.size());
    }
 
    @Data

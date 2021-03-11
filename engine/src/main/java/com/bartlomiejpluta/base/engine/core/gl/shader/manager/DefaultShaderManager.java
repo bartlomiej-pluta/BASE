@@ -146,6 +146,6 @@ public class DefaultShaderManager implements ShaderManager {
    public void cleanUp() {
       log.info("Disposing shaders");
       shaders.forEach((name, program) -> program.dispose());
-      log.info("{} shaders has been disposed", shaders.size());
+      log.info("{} shaders have been disposed", shaders.size());
    }
 }

@@ -42,6 +42,6 @@ public class DefaultTextureManager implements TextureManager {
    public void cleanUp() {
       log.info("Disposing textures");
       loadedTextures.forEach((name, texture) -> texture.dispose());
-      log.info("{} textures has been disposed", loadedTextures.size());
+      log.info("{} textures have been disposed", loadedTextures.size());
    }
 }

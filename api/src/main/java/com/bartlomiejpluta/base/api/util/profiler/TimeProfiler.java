@@ -1,11 +1,16 @@
 package com.bartlomiejpluta.base.api.util.profiler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class TimeProfiler {
+   private static final Logger log = LoggerFactory.getLogger(TimeProfiler.class);
+
    private static final DecimalFormat DF = new DecimalFormat("0.00");
    private final Map<String, Double> averages = new HashMap<>();
 
@@ -24,7 +29,7 @@ public class TimeProfiler {
    public void printResult() {
       averages.entrySet().stream()
             .sorted(Entry.<String, Double>comparingByValue().reversed())
-            .forEachOrdered(entry -> System.out.format("[%s]: [%sms] [%sus] [%sns]",
+            .forEachOrdered(entry -> log.info("[{}]: [{}sms] [{}sus] [{}ns]",
                   entry.getKey(),
                   DF.format(entry.getValue() / 1_000_000),
                   DF.format(entry.getValue() / 1_000),

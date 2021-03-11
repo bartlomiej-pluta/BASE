@@ -1,5 +1,8 @@
 package com.bartlomiejpluta.base.api.util.profiler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +13,8 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 public class FPSProfiler {
+   private static final Logger log = LoggerFactory.getLogger(FPSProfiler.class);
+
    private static final int MOD = 30;
    private final List<Double> values = new LinkedList<>();
    private float fpsAccumulator = 0;
@@ -29,7 +34,7 @@ public class FPSProfiler {
    }
 
    public void printResult() {
-      System.out.format("Min FPS: %f, max FPS: %f, avg FPS: %f",
+      log.info("Min FPS: {}, max FPS: {}, avg FPS: {}",
             values.stream().min(Double::compareTo).orElse(-1.0),
             values.stream().max(Double::compareTo).orElse(-1.0),
             totalAverage()
@@ -51,6 +56,6 @@ public class FPSProfiler {
             .entrySet()
             .stream()
             .sorted(comparingInt(Map.Entry::getKey))
-            .forEach(e -> System.out.printf("%s FPS: %f%% (%d occurrences)", e.getKey(), e.getValue() * 100.0f / values.size(), e.getValue()));
+            .forEach(e -> log.info("{} FPS: {}% ({} occurrences)", e.getKey(), e.getValue() * 100.0f / values.size(), e.getValue()));
    }
 }

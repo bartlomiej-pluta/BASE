@@ -11,4 +11,5 @@ repositories {
 
 dependencies {
     implementation "org.joml:joml:${jomlVersion}"
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 }
