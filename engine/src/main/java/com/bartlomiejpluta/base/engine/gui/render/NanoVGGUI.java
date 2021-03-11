@@ -2,7 +2,9 @@ package com.bartlomiejpluta.base.engine.gui.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
+import com.bartlomiejpluta.base.api.game.gui.base.LineCap;
 import com.bartlomiejpluta.base.api.game.gui.base.Widget;
+import com.bartlomiejpluta.base.api.game.gui.base.WindingDirection;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
@@ -25,7 +27,8 @@ public class NanoVGGUI implements GUI {
    @Setter
    private Widget root;
 
-   private NVGColor color;
+   private NVGColor fillColor;
+   private NVGColor strokeColor;
    private final Set<String> loadedFonts = new HashSet<>();
    private final float[] boundBuffer = new float[4];
 
@@ -38,7 +41,8 @@ public class NanoVGGUI implements GUI {
    public void init(Screen screen) {
       context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
-      color = NVGColor.create();
+      fillColor = NVGColor.create();
+      strokeColor = NVGColor.create();
 
       if (context == NULL) {
          throw new AppException("Could not onCreate NanoVG");
@@ -62,8 +66,115 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void drawRectangle(float x, float y, float w, float h) {
-      nvgRect(context, x, y, w, h);
+   public void closePath() {
+      nvgClosePath(context);
+   }
+
+   @Override
+   public void drawRectangle(float x, float y, float width, float height) {
+      nvgRect(context, x, y, width, height);
+   }
+
+   @Override
+   public void drawRoundedRectangle(float x, float y, float width, float height, float radius) {
+      nvgRoundedRect(context, x, y, width, height, radius);
+   }
+
+   @Override
+   public void drawCircle(float x, float y, float radius) {
+      nvgCircle(context, x, y, radius);
+   }
+
+   @Override
+   public void drawEllipse(float x, float y, float radiusX, float radiusY) {
+      nvgEllipse(context, x, y, radiusX, radiusY);
+   }
+
+   @Override
+   public void drawArc(float x, float y, float radius, float start, float end, WindingDirection direction) {
+      nvgArc(context, x, y, radius, start, end, direction == WindingDirection.CLOCKWISE ? NVG_CW : NVG_CCW);
+   }
+
+   @Override
+   public void drawArcTo(float x1, float y1, float x2, float y2, float radius) {
+      nvgArcTo(context, x1, y1, x2, y2, radius);
+   }
+
+   @Override
+   public void drawLineTo(float x, float y) {
+      nvgLineTo(context, x, y);
+   }
+
+   @Override
+   public void drawBezierTo(float controlX1, float controlY1, float controlX2, float controlY2, float targetX, float targetY) {
+      nvgBezierTo(context, controlX1, controlY1, controlX2, controlY2, targetX, targetY);
+   }
+
+   @Override
+   public void drawQuadBezierTo(float controlX, float controlY, float targetX, float targetY) {
+      nvgQuadTo(context, controlX, controlY, targetX, targetY);
+   }
+
+   @Override
+   public void setLineCap(LineCap cap) {
+      nvgLineCap(context, lineCapToNanoVGInteger(cap));
+   }
+
+   private int lineCapToNanoVGInteger(LineCap cap) {
+      return switch (cap) {
+         case BUTT -> NVG_BUTT;
+         case ROUND -> NVG_ROUND;
+         case SQUARE -> NVG_SQUARE;
+         case BEVEL -> NVG_BEVEL;
+         case MITER -> NVG_MITER;
+      };
+   }
+
+   @Override
+   public void setLineJoin(LineCap join) {
+      nvgLineJoin(context, lineCapToNanoVGInteger(join));
+   }
+
+   @Override
+   public void moveTo(float x, float y) {
+      nvgMoveTo(context, x, y);
+   }
+
+   @Override
+   public void setGlobalAlpha(float alpha) {
+      nvgGlobalAlpha(context, alpha);
+   }
+
+   @Override
+   public void setPathWinding(WindingDirection direction) {
+      nvgPathWinding(context, direction == WindingDirection.CLOCKWISE ? NVG_CW : NVG_CCW);
+   }
+
+   @Override
+   public void fillColor(float red, float green, float blue, float alpha) {
+      fillColor.r(red);
+      fillColor.g(green);
+      fillColor.b(blue);
+      fillColor.a(alpha);
+
+      nvgFillColor(context, fillColor);
+      nvgFill(context);
+   }
+
+   @Override
+   public void strokeColor(float red, float green, float blue, float alpha) {
+      strokeColor.r(red);
+      strokeColor.g(green);
+      strokeColor.b(blue);
+      strokeColor.a(alpha);
+
+      nvgStrokeColor(context, strokeColor);
+      nvgStroke(context);
+   }
+
+   @Override
+   public void setStrokeWidth(float width) {
+      nvgStrokeWidth(context, width);
    }
 
    @Override
@@ -89,28 +200,6 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void fillColor(float red, float green, float blue, float alpha) {
-      color.r(red);
-      color.g(green);
-      color.b(blue);
-      color.a(alpha);
-
-      nvgFillColor(context, color);
-      nvgFill(context);
-   }
-
-   @Override
-   public void strokeColor(float red, float green, float blue, float alpha) {
-      color.r(red);
-      color.g(green);
-      color.b(blue);
-      color.a(alpha);
-
-      nvgStrokeColor(context, color);
-      nvgFill(context);
-   }
-
-   @Override
    public void setFontFace(String fontUid) {
       if (!loadedFonts.contains(fontUid)) {
          var font = fontManager.loadObject(fontUid);
@@ -127,13 +216,29 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void setFontBlur(float blur) {
+      nvgFontBlur(context, blur);
+   }
+
+   @Override
    public void setTextAlignment(int alignment) {
       nvgTextAlign(context, alignment);
    }
 
    @Override
+   public void setTextLineHeight(float textLineHeight) {
+      nvgTextLineHeight(context, textLineHeight);
+   }
+
+   @Override
+   public void clip(float x, float y, float width, float height) {
+      nvgScissor(context, x, y, width, height);
+   }
+
+   @Override
    public void dispose() {
-      color.free();
+      fillColor.free();
+      strokeColor.free();
       nvgDelete(context);
    }
 }

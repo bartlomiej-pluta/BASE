@@ -18,17 +18,43 @@ public interface GUI extends Renderable, Disposable {
 
    void beginPath();
 
-   void drawRectangle(float x, float y, float w, float h);
+   void closePath();
 
-   void fillColor(float red, float green, float blue, float alpha);
+   void drawRectangle(float x, float y, float width, float height);
 
-   void strokeColor(float red, float green, float blue, float alpha);
+   void drawRoundedRectangle(float x, float y, float width, float height, float radius);
+
+   void drawCircle(float x, float y, float radius);
+
+   void drawEllipse(float x, float y, float radiusX, float radiusY);
+
+   void drawArc(float x, float y, float radius, float start, float end, WindingDirection direction);
+
+   void drawArcTo(float x1, float y1, float x2, float y2, float radius);
+
+   void drawLineTo(float x, float y);
+
+   void drawBezierTo(float controlX1, float controlY1, float controlX2, float controlY2, float targetX, float targetY);
+
+   void drawQuadBezierTo(float controlX, float controlY, float targetX, float targetY);
+
+   void setLineCap(LineCap cap);
+
+   void setLineJoin(LineCap join);
+
+   void moveTo(float x, float y);
+
+   void setPathWinding(WindingDirection direction);
 
    void setFontFace(String fontUid);
 
    void setFontSize(float size);
 
+   void setFontBlur(float blur);
+
    void setTextAlignment(int alignment);
+
+   void setTextLineHeight(float textLineHeight);
 
    void putText(float x, float y, CharSequence text, float[] outTextBounds);
 
@@ -37,4 +63,14 @@ public interface GUI extends Renderable, Disposable {
    void putTextBox(float x, float y, float lineWidth, CharSequence text, float[] outTextBounds);
 
    void putTextBox(float x, float y, float lineWidth, CharSequence text);
+
+   void setGlobalAlpha(float alpha);
+
+   void fillColor(float red, float green, float blue, float alpha);
+
+   void setStrokeWidth(float width);
+
+   void strokeColor(float red, float green, float blue, float alpha);
+
+   void clip(float x, float y, float width, float height);
 }
