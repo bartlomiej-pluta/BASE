@@ -112,9 +112,6 @@ public class GLFWScreen implements Screen {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-      // Required by GUI
-      glEnable(GL_STENCIL_TEST);
-
       // Set the clear color
       clear(0.0f, 0.0f, 0.0f, 0.0f);
    }
@@ -137,7 +134,6 @@ public class GLFWScreen implements Screen {
 
    @Override
    public void restoreState() {
-      glEnable(GL_STENCIL_TEST);
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    }

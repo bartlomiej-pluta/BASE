@@ -12,13 +12,13 @@ public interface GUI extends Renderable, Disposable {
 
    void drawRectangle(float x, float y, float w, float h);
 
-   void fillColor(Color color);
+   void fillColor(float red, float green, float blue, float alpha);
+
+   void strokeColor(float red, float green, float blue, float alpha);
 
    void setFontFace(String fontUid);
 
    void setFontSize(float size);
 
    void putText(float x, float y, CharSequence text);
-
-   Color createColor(float red, float green, float blue, float alpha);
 }

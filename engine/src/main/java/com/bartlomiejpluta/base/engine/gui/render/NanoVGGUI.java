@@ -1,20 +1,17 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.gui.Color;
 import com.bartlomiejpluta.base.api.game.gui.GUI;
 import com.bartlomiejpluta.base.api.game.gui.Widget;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
-import com.bartlomiejpluta.base.engine.gui.model.NanoVGColorAdapter;
 import lombok.Getter;
 import lombok.Setter;
+import org.lwjgl.nanovg.NVGColor;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import static org.lwjgl.nanovg.NanoVG.*;
@@ -28,7 +25,7 @@ public class NanoVGGUI implements GUI {
    @Setter
    private Widget root;
 
-   private final List<NanoVGColorAdapter> createdColors = new LinkedList<>();
+   private NVGColor color;
    private final Set<String> loadedFonts = new HashSet<>();
 
    private final FontManager fontManager;
@@ -39,6 +36,8 @@ public class NanoVGGUI implements GUI {
 
    public void init(Screen screen) {
       context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+
+      color = NVGColor.create();
 
       if (context == NULL) {
          throw new AppException("Could not onCreate NanoVG");
@@ -67,21 +66,30 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void fillColor(Color color) {
-      nvgFillColor(context, (NanoVGColorAdapter) color);
-      nvgFill(context);
-   }
-
-   @Override
    public void putText(float x, float y, CharSequence text) {
       nvgText(context, x, y, text);
    }
 
    @Override
-   public Color createColor(float red, float green, float blue, float alpha) {
-      var color = new NanoVGColorAdapter(red, green, blue, alpha);
-      createdColors.add(color);
-      return color;
+   public void fillColor(float red, float green, float blue, float alpha) {
+      color.r(red);
+      color.g(green);
+      color.b(blue);
+      color.a(alpha);
+
+      nvgFillColor(context, color);
+      nvgFill(context);
+   }
+
+   @Override
+   public void strokeColor(float red, float green, float blue, float alpha) {
+      color.r(red);
+      color.g(green);
+      color.b(blue);
+      color.a(alpha);
+
+      nvgStrokeColor(context, color);
+      nvgFill(context);
    }
 
    @Override
@@ -102,7 +110,7 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void dispose() {
-      createdColors.forEach(NanoVGColorAdapter::dispose);
+      color.free();
       nvgDelete(context);
    }
 }
