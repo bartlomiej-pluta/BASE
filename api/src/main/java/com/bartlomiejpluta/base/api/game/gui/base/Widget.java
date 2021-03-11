@@ -5,6 +5,8 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 public interface Widget {
    Widget getParent();
 
+   void setParent(Widget parent);
+
    float getX();
 
    float getY();

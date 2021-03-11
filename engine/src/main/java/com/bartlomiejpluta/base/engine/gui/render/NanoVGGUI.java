@@ -9,8 +9,8 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
+import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
 import lombok.Getter;
-import lombok.Setter;
 import org.lwjgl.nanovg.NVGColor;
 
 import java.util.HashSet;
@@ -24,8 +24,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class NanoVGGUI implements GUI {
    private long context;
 
-   @Setter
-   private Widget root;
+   private ScreenWidget screenWidget;
 
    private NVGColor fillColor;
    private NVGColor strokeColor;
@@ -41,23 +40,34 @@ public class NanoVGGUI implements GUI {
    public void init(Screen screen) {
       context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
+      if (context == NULL) {
+         throw new AppException("Could not init NanoVG");
+      }
+
+      screenWidget = new ScreenWidget(screen);
+
       fillColor = NVGColor.create();
       strokeColor = NVGColor.create();
-
-      if (context == NULL) {
-         throw new AppException("Could not onCreate NanoVG");
-      }
    }
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       nvgBeginFrame(context, screen.getWidth(), screen.getHeight(), 1);
 
-      if (root != null) {
-         root.draw(screen, this);
-      }
+      screenWidget.draw(screen, this);
 
       nvgEndFrame(context);
+   }
+
+   @Override
+   public Widget getRoot() {
+      return screenWidget.getRoot();
+   }
+
+   @Override
+   public void setRoot(Widget root) {
+      screenWidget.setRoot(root);
+      root.setParent(screenWidget);
    }
 
    @Override

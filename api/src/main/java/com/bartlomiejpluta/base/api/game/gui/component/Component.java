@@ -98,6 +98,7 @@ public abstract class Component implements Widget {
       return parent;
    }
 
+   @Override
    public void setParent(Widget parent) {
       this.parent = parent;
    }
