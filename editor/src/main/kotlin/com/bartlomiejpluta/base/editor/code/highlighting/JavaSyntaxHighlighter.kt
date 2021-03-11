@@ -47,7 +47,8 @@ class JavaSyntaxHighlighter : SyntaxHighlighter {
          "new", "package", "private", "protected", "public",
          "return", "short", "static", "strictfp", "super",
          "switch", "synchronized", "this", "throw", "throws",
-         "transient", "try", "void", "volatile", "while", "null"
+         "transient", "try", "void", "volatile", "while", "null",
+         "var", "true", "false"
       )
 
       private val KEYWORD_PATTERN = "\\b(" + KEYWORDS.joinToString("|") + ")\\b"
