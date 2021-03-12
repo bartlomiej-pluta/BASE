@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.project.model;
+package com.bartlomiejpluta.base.engine.context.model;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.context.Context;

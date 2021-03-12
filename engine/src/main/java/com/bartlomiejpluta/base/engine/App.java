@@ -3,8 +3,8 @@
  */
 package com.bartlomiejpluta.base.engine;
 
+import com.bartlomiejpluta.base.engine.context.manager.ContextManager;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
-import com.bartlomiejpluta.base.engine.project.model.ContextManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

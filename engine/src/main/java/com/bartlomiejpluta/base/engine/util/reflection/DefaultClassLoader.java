@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.project.loader;
+package com.bartlomiejpluta.base.engine.util.reflection;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
