@@ -73,16 +73,67 @@ public class DefaultWindowManager extends BaseWidget implements WindowManager {
       switch (displayMode) {
          case DISPLAY_STACK -> {
             for (var window : windows) {
-               window.draw(screen, gui);
+               drawWindow(screen, window, gui);
             }
          }
 
          case DISPLAY_TOP -> {
             var topWindow = windows.peekFirst();
             if (topWindow != null) {
-               topWindow.draw(screen, gui);
+               drawWindow(screen, topWindow, gui);
             }
          }
       }
+   }
+
+   private void drawWindow(Screen screen, Window window, GUI gui) {
+      switch (window.getWindowPosition()) {
+         case TOP -> window.setPosition(
+               (screen.getWidth() - window.getWidth()) / 2,
+               window.getMarginTop()
+         );
+
+         case TOP_RIGHT -> window.setPosition(
+               screen.getWidth() - window.getWidth() - window.getMarginRight(),
+               window.getMarginTop()
+         );
+
+         case RIGHT -> window.setPosition(
+               screen.getWidth() - window.getWidth() - window.getMarginRight(),
+               (screen.getHeight() - window.getHeight()) / 2
+         );
+
+         case BOTTOM_RIGHT -> window.setPosition(
+               screen.getWidth() - window.getWidth() - window.getMarginRight(),
+               screen.getHeight() - window.getHeight() - window.getMarginBottom()
+         );
+
+         case BOTTOM -> window.setPosition(
+               (screen.getWidth() - window.getWidth()) / 2,
+               screen.getHeight() - window.getHeight() - window.getMarginBottom()
+         );
+
+         case BOTTOM_LEFT -> window.setPosition(
+               window.getMarginLeft(),
+               screen.getHeight() - window.getHeight() - window.getMarginBottom()
+         );
+
+         case LEFT -> window.setPosition(
+               window.getMarginLeft(),
+               (screen.getHeight() - window.getHeight()) / 2
+         );
+
+         case TOP_LEFT -> window.setPosition(
+               window.getMarginLeft(),
+               window.getMarginTop()
+         );
+
+         case CENTER -> window.setPosition(
+               (screen.getWidth() - window.getWidth()) / 2,
+               (screen.getHeight() - window.getHeight()) / 2
+         );
+      }
+
+      window.draw(screen, gui);
    }
 }

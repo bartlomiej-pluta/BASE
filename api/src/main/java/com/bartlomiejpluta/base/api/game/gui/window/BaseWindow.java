@@ -5,6 +5,17 @@ import com.bartlomiejpluta.base.api.game.gui.component.Component;
 
 public abstract class BaseWindow extends BaseWidget implements Window {
    protected Component content;
+   protected WindowPosition windowPosition;
+
+   @Override
+   public WindowPosition getWindowPosition() {
+      return windowPosition;
+   }
+
+   @Override
+   public void setWindowPosition(WindowPosition windowPosition) {
+      this.windowPosition = windowPosition;
+   }
 
    @Override
    protected float getContentWidth() {
