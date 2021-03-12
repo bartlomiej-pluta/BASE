@@ -27,6 +27,18 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    GUI newGUI();
 
+   boolean isRunning();
+
+   void close();
+
+   boolean isPaused();
+
+   void pause();
+
+   void resume();
+
+   boolean togglePause();
+
    void init(Screen screen, Camera camera);
 
    void input(Screen screen);

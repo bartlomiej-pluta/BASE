@@ -102,6 +102,36 @@ public class DefaultContext implements Context {
    }
 
    @Override
+   public boolean isRunning() {
+      return engine.isRunning();
+   }
+
+   @Override
+   public void close() {
+      engine.stop();
+   }
+
+   @Override
+   public boolean isPaused() {
+      return engine.isPaused();
+   }
+
+   @Override
+   public void pause() {
+      engine.pause();
+   }
+
+   @Override
+   public void resume() {
+      engine.resume();
+   }
+
+   @Override
+   public boolean togglePause() {
+      return engine.togglePaused();
+   }
+
+   @Override
    public void input(Screen screen) {
       gameRunner.input(screen);
 

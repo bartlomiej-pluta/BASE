@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;
 import com.bartlomiejpluta.base.engine.time.ChronoMeter;
 import com.bartlomiejpluta.base.engine.ui.ScreenManager;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,11 @@ public class DefaultGameEngine implements GameEngine {
 
    private Context context;
 
+   @Getter
    private boolean running = false;
+
+   @Getter
+   private boolean paused = true;
 
    private void run() {
       try {
@@ -62,9 +67,13 @@ public class DefaultGameEngine implements GameEngine {
 
          input();
 
-         while (accumulator >= step) {
-            update(dt);
-            accumulator -= step;
+         if (!paused) {
+            while (accumulator >= step) {
+               update(dt);
+               accumulator -= step;
+            }
+         } else {
+            accumulator = 0;
          }
 
          render();
@@ -103,6 +112,33 @@ public class DefaultGameEngine implements GameEngine {
 
       log.info("Starting [{}] thread", THREAD_NAME);
       thread.start();
+   }
+
+   @Override
+   public void stop() {
+      log.info("Stopping the engine");
+      running = false;
+   }
+
+   @Override
+   public void pause() {
+      log.info("Pausing the engine");
+      paused = true;
+   }
+
+   @Override
+   public void resume() {
+      log.info("Resuming the engine");
+      paused = false;
+   }
+
+   @Override
+   public boolean togglePaused() {
+      paused = !paused;
+
+      log.info("{} the engine", paused ? "Pausing" : "Resuming");
+
+      return paused;
    }
 
    // TODO

@@ -4,4 +4,16 @@ import com.bartlomiejpluta.base.api.game.context.Context;
 
 public interface GameEngine {
    void start(Context context);
+
+   void stop();
+
+   void pause();
+
+   void resume();
+
+   boolean isRunning();
+
+   boolean isPaused();
+
+   boolean togglePaused();
 }

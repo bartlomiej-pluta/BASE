@@ -81,13 +81,6 @@ public class GLFWScreen implements Screen {
          GLFWScreen.this.size.y = height;
       });
 
-      // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-      glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
-         if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-            glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-         }
-      });
-
       // Get the resolution of the primary monitor
       GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
