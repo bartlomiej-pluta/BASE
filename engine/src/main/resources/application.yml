@@ -1,12 +1,4 @@
 app:
-  window:
-    title: "Simple Game"
-    width: 640
-    height: 480
-
-  core:
-    targetUps: 50 # Updates per second
-
   project:
     main-file: project.bep
     resource-path: /project
@@ -24,8 +16,3 @@ app:
         left: 1
         right: 2
         up: 3
-
-
-logging:
-  level:
-    com.bartlomiejpluta.base.core.profiling.time.aspect.ExecutionTimeAspect: DEBUG

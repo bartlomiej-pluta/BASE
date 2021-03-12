@@ -8,68 +8,73 @@ import com.bartlomiejpluta.base.api.game.image.Image;
 import com.bartlomiejpluta.base.api.game.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.gc.Cleanable;
-import com.bartlomiejpluta.base.api.internal.logic.Updatable;
-import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
-import com.bartlomiejpluta.base.engine.project.loader.ClassLoader;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
-@Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class RenderableContext implements Context, Updatable, Renderable, Cleanable {
+@Builder
+public class DefaultContext implements Context {
+
+   @NonNull
+   private final GameEngine engine;
+
+   @NonNull
    private final EntityManager entityManager;
+
+   @NonNull
    private final ImageManager imageManager;
+
+   @NonNull
    private final MapManager mapManager;
+
+   @NonNull
    private final FontManager fontManager;
-   private final ClassLoader classLoader;
+
+   @Getter
+   @NonNull
+   private final GameRunner gameRunner;
+
+   @Getter
+   @NonNull
+   private final String projectName;
 
    @Getter
    private Screen screen;
 
    @Getter
-   private GameRunner gameRunner;
-
-   @Getter
    private Camera camera;
 
-   private Project project;
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
    private final List<GUI> guis = new LinkedList<>();
 
    @SneakyThrows
-   public void init(Screen screen, Camera camera, Project project) {
-      log.info("Initializing game context");
+   @Override
+   public void init(@NonNull Screen screen, @NonNull Camera camera) {
       this.screen = screen;
       this.camera = camera;
-      this.project = project;
-
-      var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());
-      gameRunner = runnerClass.getConstructor().newInstance();
 
       gameRunner.init(this);
    }
 
    @SneakyThrows
    @Override
-   public void openMap(String mapUid) {
+   public void openMap(@NonNull String mapUid) {
       map = mapManager.loadObject(mapUid);
       mapHandler = mapManager.loadHandler(this, mapUid);
 
@@ -77,13 +82,13 @@ public class RenderableContext implements Context, Updatable, Renderable, Cleana
    }
 
    @Override
-   public Entity createEntity(String entitySetUid) {
+   public Entity createEntity(@NonNull String entitySetUid) {
       log.info("Creating new entity with UID: [{}]", entitySetUid);
       return entityManager.createEntity(entitySetUid);
    }
 
    @Override
-   public Image getImage(String imageUid) {
+   public Image getImage(@NonNull String imageUid) {
       return imageManager.loadObject(imageUid);
    }
 
@@ -96,6 +101,7 @@ public class RenderableContext implements Context, Updatable, Renderable, Cleana
       return gui;
    }
 
+   @Override
    public void input(Screen screen) {
       gameRunner.input(screen);
 
@@ -133,11 +139,11 @@ public class RenderableContext implements Context, Updatable, Renderable, Cleana
    }
 
    @Override
-   public void cleanUp() {
-      log.info("Disposing game runner");
-      gameRunner.dispose();
-
+   public void dispose() {
       log.info("Disposing GUIs");
       guis.forEach(GUI::dispose);
+
+      log.info("Disposing game runner");
+      gameRunner.dispose();
    }
 }

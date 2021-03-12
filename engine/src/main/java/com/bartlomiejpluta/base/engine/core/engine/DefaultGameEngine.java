@@ -1,52 +1,37 @@
 package com.bartlomiejpluta.base.engine.core.engine;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;
 import com.bartlomiejpluta.base.engine.time.ChronoMeter;
 import com.bartlomiejpluta.base.engine.ui.ScreenManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultGameEngine implements GameEngine {
-   private static final String THREAD_NAME = "Game Main Thread";
+   private static final String THREAD_NAME = "engine";
 
    private final ScreenManager screenManager;
    private final ThreadManager threadManager;
    private final GameLogic logic;
    private final OffHeapGarbageCollector garbageCollector;
 
-   private final Thread thread;
-   private final Screen screen;
-   private final ChronoMeter chrono;
-   private final int targetUps;
+   private final ChronoMeter chrono = new ChronoMeter();
+
+   private Thread thread;
+   private Screen screen;
+   private int targetUps;
+
+   private Context context;
 
    private boolean running = false;
-
-   @Autowired
-   public DefaultGameEngine(ScreenManager screenManager,
-                            ThreadManager threadManager,
-                            GameLogic logic,
-                            OffHeapGarbageCollector garbageCollector,
-                            @Value("${app.window.title}") String title,
-                            @Value("${app.window.width}") int width,
-                            @Value("${app.window.height}") int height,
-                            @Value("${app.core.targetUps}") int targetUps) {
-      this.screenManager = screenManager;
-      this.threadManager = threadManager;
-      this.logic = logic;
-      this.garbageCollector = garbageCollector;
-
-      this.screen = screenManager.createScreen(title, width, height);
-      this.thread = threadManager.createThread(THREAD_NAME, this::run);
-      this.chrono = new ChronoMeter();
-      this.targetUps = targetUps;
-   }
 
    private void run() {
       try {
@@ -61,7 +46,7 @@ public class DefaultGameEngine implements GameEngine {
       log.info("Initializing game engine");
       screen.init();
       chrono.init();
-      logic.init(screen);
+      logic.init(screen, context);
    }
 
    private void loop() {
@@ -102,10 +87,34 @@ public class DefaultGameEngine implements GameEngine {
    private void cleanUp() {
       log.info("Performing off heap garbage collection");
       garbageCollector.cleanUp();
+
+      log.info("Disposing context");
+      context.dispose();
    }
 
    @Override
-   public void start() {
+   public void start(Context context) {
+      this.context = context;
+
+      this.screen = screenManager.createScreen(context.getProjectName(), WINDOW_WIDTH, WINDOW_HEIGHT);
+      this.thread = threadManager.createThread(THREAD_NAME, this::run);
+
+      this.targetUps = TARGET_UPS;
+
+      log.info("Starting [{}] thread", THREAD_NAME);
       thread.start();
    }
+
+   // TODO
+   // It is supposed to be moved to the Context so that
+   // user will be able to choose default window size,
+   // as well as further possibility to resize the window
+   // or forcing fullscreen mode.
+   // Until it's not implemented yet, the window width and height
+   // are hardcoded right here.
+   //
+   // The same applies for target UPS (updates per second) parameter.
+   private static final int WINDOW_WIDTH = 640;
+   private static final int WINDOW_HEIGHT = 480;
+   private static final int TARGET_UPS = 60;
 }

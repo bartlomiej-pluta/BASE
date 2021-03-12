@@ -1,11 +1,9 @@
 package com.bartlomiejpluta.base.engine.logic;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.render.Renderer;
-import com.bartlomiejpluta.base.engine.project.loader.ProjectLoader;
-import com.bartlomiejpluta.base.engine.project.model.Project;
-import com.bartlomiejpluta.base.engine.project.model.RenderableContext;
 import com.bartlomiejpluta.base.engine.world.camera.DefaultCamera;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,18 +15,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultGameLogic implements GameLogic {
    private final Renderer renderer;
-   private final ProjectLoader projectLoader;
-   private final RenderableContext context;
    private final Camera camera = new DefaultCamera();
 
+   private Context context;
+
    @Override
-   public void init(Screen screen) {
+   public void init(Screen screen, Context context) {
+      this.context = context;
+
       log.info("Initializing game logic");
       renderer.init();
 
-      Project project = projectLoader.loadProject();
-
-      context.init(screen, camera, project);
+      log.info("Initializing game context");
+      context.init(screen, camera);
    }
 
    @Override

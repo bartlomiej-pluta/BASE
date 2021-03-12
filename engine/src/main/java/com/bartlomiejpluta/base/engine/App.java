@@ -4,6 +4,7 @@
 package com.bartlomiejpluta.base.engine;
 
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
+import com.bartlomiejpluta.base.engine.project.model.ContextManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = "com.bartlomiejpluta.base")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class App implements ApplicationRunner {
-    private final GameEngine gameEngine;
+   private final GameEngine gameEngine;
+   private final ContextManager contextManager;
 
-    @Override
-    public void run(ApplicationArguments args) {
-        log.info("Starting game engine");
-        gameEngine.start();
-    }
+   @Override
+   public void run(ApplicationArguments args) {
+      log.info("Creating context");
+      var context = contextManager.createContext();
 
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
+      log.info("Starting game engine");
+      gameEngine.start(context);
+   }
+
+   public static void main(String[] args) {
+      SpringApplication.run(App.class, args);
+   }
 }
