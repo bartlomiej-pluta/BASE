@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.animation;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
+import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
@@ -10,7 +11,8 @@ import lombok.EqualsAndHashCode;
 import org.joml.Vector2fc;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class AnimatedSprite extends Sprite {
+public abstract class AnimatedSprite extends Sprite implements Updatable {
+   private int time;
 
    public AnimatedSprite(Mesh mesh, Material material) {
       super(mesh, material);
@@ -24,6 +26,11 @@ public abstract class AnimatedSprite extends Sprite {
    public abstract Vector2fc[] getSpriteAnimationFramesPositions();
 
    @Override
+   public void update(float dt) {
+      time += dt * 1000;
+   }
+
+   @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       animate();
       super.render(screen, camera, shaderManager);
@@ -33,7 +40,7 @@ public abstract class AnimatedSprite extends Sprite {
       if (shouldAnimate()) {
          var positions = getSpriteAnimationFramesPositions();
          var delay = getAnimationSpeed();
-         var currentPosition = (int) (System.currentTimeMillis() % (positions.length * delay)) / delay;
+         var currentPosition = ((time % (positions.length * delay)) / delay);
          var current = positions[currentPosition];
          material.setSpritePosition(current);
       }

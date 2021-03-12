@@ -39,6 +39,8 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
 
    @Override
    public void update(float dt) {
+      super.update(dt);
+
       if (movement != null) {
          if (moveTime > 0) {
             --moveTime;
