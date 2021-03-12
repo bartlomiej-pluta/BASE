@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.image.Image;
+import com.bartlomiejpluta.base.api.game.input.Input;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
@@ -16,6 +17,8 @@ public interface Context extends Updatable, Renderable, Disposable {
    Screen getScreen();
 
    Camera getCamera();
+
+   Input getInput();
 
    String getProjectName();
 
@@ -39,7 +42,7 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    boolean togglePause();
 
-   void init(Screen screen, Camera camera);
+   void init(Screen screen, Input input, Camera camera);
 
-   void input(Screen screen);
+   void input(Input input);
 }

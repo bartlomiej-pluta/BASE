@@ -1,6 +1,5 @@
 package com.bartlomiejpluta.base.api.game.screen;
 
-import com.bartlomiejpluta.base.api.game.input.Key;
 import org.joml.Vector2fc;
 
 public interface Screen {
@@ -17,8 +16,6 @@ public interface Screen {
    void setResized(boolean resized);
 
    boolean shouldClose();
-
-   boolean isKeyPressed(Key key);
 
    void update();
 

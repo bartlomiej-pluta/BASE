@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.ui;
+package com.bartlomiejpluta.base.engine.ui.model;
 
 import com.bartlomiejpluta.base.api.game.input.Key;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
@@ -115,7 +115,6 @@ public class GLFWScreen implements Screen {
       glfwPollEvents();
    }
 
-   @Override
    public boolean isKeyPressed(Key key) {
       return glfwGetKey(windowHandle, glfwCode(key)) == GLFW_PRESS;
    }
@@ -141,7 +140,7 @@ public class GLFWScreen implements Screen {
       return size;
    }
 
-   public static Screen create(String title, int width, int height) {
+   public static GLFWScreen create(String title, int width, int height) {
       return new GLFWScreen(title, width, height);
    }
 
