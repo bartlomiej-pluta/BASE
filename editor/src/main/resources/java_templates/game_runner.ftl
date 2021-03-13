@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bartlomiejpluta.base.api.game.context.Context;
+import com.bartlomiejpluta.base.api.game.input.Input;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 
@@ -12,6 +13,9 @@ public class ${className} implements GameRunner {
 
    @Override
    public void init(Context context) {
+      // Resume engine, because it is initially paused
+      context.resume();
+
       log.info("The game runner is not implemented yet...");
       throw new RuntimeException("Not implemented yet");
    }

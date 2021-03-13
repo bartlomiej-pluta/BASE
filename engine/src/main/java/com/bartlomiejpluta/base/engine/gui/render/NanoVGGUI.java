@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.LineCap;
 import com.bartlomiejpluta.base.api.game.gui.base.Widget;
 import com.bartlomiejpluta.base.api.game.gui.base.WindingDirection;
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
@@ -243,6 +244,11 @@ public class NanoVGGUI implements GUI {
    @Override
    public void clip(float x, float y, float width, float height) {
       nvgScissor(context, x, y, width, height);
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      screenWidget.handleKeyEvent(event);
    }
 
    @Override

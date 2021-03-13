@@ -33,13 +33,10 @@ public class DefaultGameLogic implements GameLogic {
       camera = new DefaultCamera();
 
       log.info("Initializing input model");
-      var input = new GLFWInput(screen);
-      input.init(context);
+      input = new GLFWInput(screen).init();
 
       log.info("Initializing game context");
       context.init(screen, input, camera);
-
-      this.input = input;
    }
 
    @Override

@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,5 +64,16 @@ public abstract class BaseContainer extends BaseComponent implements Container {
       }
 
       return childrenHeight;
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      for (var child : children) {
+         if (!event.isConsumed()) {
+            return;
+         }
+
+         child.handleKeyEvent(event);
+      }
    }
 }

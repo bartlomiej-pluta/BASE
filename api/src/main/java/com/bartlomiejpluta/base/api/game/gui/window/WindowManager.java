@@ -8,4 +8,6 @@ public interface WindowManager extends Widget {
    void open(Window window);
 
    void close();
+
+   int size();
 }

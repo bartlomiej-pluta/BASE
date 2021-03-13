@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.api.game.gui.window;
 import com.bartlomiejpluta.base.api.game.gui.base.BaseWidget;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 
 import java.util.Deque;
@@ -69,6 +70,11 @@ public class DefaultWindowManager extends BaseWidget implements WindowManager {
    }
 
    @Override
+   public int size() {
+      return windows.size();
+   }
+
+   @Override
    public void draw(Screen screen, GUI gui) {
       switch (displayMode) {
          case DISPLAY_STACK -> {
@@ -83,6 +89,14 @@ public class DefaultWindowManager extends BaseWidget implements WindowManager {
                drawWindow(screen, topWindow, gui);
             }
          }
+      }
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      var topWindow = windows.peekFirst();
+      if (topWindow != null) {
+         topWindow.handleKeyEvent(event);
       }
    }
 

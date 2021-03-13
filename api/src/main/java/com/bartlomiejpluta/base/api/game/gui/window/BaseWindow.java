@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.api.game.gui.window;
 
 import com.bartlomiejpluta.base.api.game.gui.base.BaseWidget;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 
 public abstract class BaseWindow extends BaseWidget implements Window {
    protected Component content;
@@ -35,5 +36,10 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    @Override
    public void onClose(WindowManager manager) {
       // do nothing
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      content.handleKeyEvent(event);
    }
 }

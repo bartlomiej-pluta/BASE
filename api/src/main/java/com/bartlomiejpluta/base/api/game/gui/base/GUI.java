@@ -1,9 +1,10 @@
 package com.bartlomiejpluta.base.api.game.gui.base;
 
+import com.bartlomiejpluta.base.api.game.input.KeyEventHandler;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 
-public interface GUI extends Renderable, Disposable {
+public interface GUI extends Renderable, Disposable, KeyEventHandler {
    int ALIGN_LEFT = 1 << 0;
    int ALIGN_CENTER = 1 << 1;
    int ALIGN_RIGHT = 1 << 2;

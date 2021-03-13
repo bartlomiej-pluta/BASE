@@ -1,8 +1,9 @@
 package com.bartlomiejpluta.base.api.game.gui.base;
 
+import com.bartlomiejpluta.base.api.game.input.KeyEventHandler;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 
-public interface Widget {
+public interface Widget extends KeyEventHandler {
    Widget getParent();
 
    void setParent(Widget parent);

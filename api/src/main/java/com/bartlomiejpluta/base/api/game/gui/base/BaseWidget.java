@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.game.gui.base;
 
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
+
 public abstract class BaseWidget implements Widget {
    protected Widget parent;
 
@@ -270,5 +272,10 @@ public abstract class BaseWidget implements Widget {
    @Override
    public float getPaddingLeft() {
       return paddingLeft;
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      // Designed to be overridden if needed so
    }
 }
