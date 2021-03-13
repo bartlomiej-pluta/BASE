@@ -67,6 +67,15 @@ public abstract class BaseContainer extends BaseComponent implements Container {
    }
 
    @Override
+   public void blur() {
+      super.blur();
+
+      for (var child : children) {
+         child.blur();
+      }
+   }
+
+   @Override
    public void handleKeyEvent(KeyEvent event) {
       for (var child : children) {
          if (!event.isConsumed()) {

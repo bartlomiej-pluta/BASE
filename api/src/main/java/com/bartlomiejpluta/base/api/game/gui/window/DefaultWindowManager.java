@@ -59,6 +59,13 @@ public class DefaultWindowManager extends BaseWidget implements WindowManager {
    }
 
    @Override
+   public void closeAll() {
+      for (var window : windows) {
+         close();
+      }
+   }
+
+   @Override
    public void close() {
       if (windows.isEmpty()) {
          return;

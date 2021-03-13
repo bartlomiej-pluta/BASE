@@ -10,4 +10,10 @@ public interface WindowManager extends Widget {
    void close();
 
    int size();
+
+   default void closeAll() {
+      for (int i = 0; i < size(); ++i) {
+         close();
+      }
+   }
 }
