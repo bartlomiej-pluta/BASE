@@ -11,12 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ScreenManager {
-   private final InputManager inputManager;
 
    public Screen createScreen(String title, int width, int height) {
       log.info("Creating GLFW window ([{}], {}x{})", title, width, height);
-      var screen = GLFWScreen.create(title, width, height);
-      inputManager.registerScreen(screen);
-      return screen;
+      return GLFWScreen.create(title, width, height);
    }
 }

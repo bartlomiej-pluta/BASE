@@ -1,13 +1,11 @@
 package com.bartlomiejpluta.base.engine.core.engine;
 
 import com.bartlomiejpluta.base.api.game.context.Context;
-import com.bartlomiejpluta.base.api.game.input.Input;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;
 import com.bartlomiejpluta.base.engine.time.ChronoMeter;
-import com.bartlomiejpluta.base.engine.ui.manager.InputManager;
 import com.bartlomiejpluta.base.engine.ui.manager.ScreenManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +20,6 @@ public class DefaultGameEngine implements GameEngine {
    private static final String THREAD_NAME = "engine";
 
    private final ScreenManager screenManager;
-   private final InputManager inputManager;
    private final ThreadManager threadManager;
    private final GameLogic logic;
    private final OffHeapGarbageCollector garbageCollector;
@@ -31,7 +28,6 @@ public class DefaultGameEngine implements GameEngine {
 
    private Thread thread;
    private Screen screen;
-   private Input input;
    private int targetUps;
 
    private Context context;
@@ -85,7 +81,7 @@ public class DefaultGameEngine implements GameEngine {
    }
 
    private void input() {
-      logic.input(input);
+      logic.input();
    }
 
    private void update(float dt) {
@@ -111,7 +107,6 @@ public class DefaultGameEngine implements GameEngine {
 
       this.screen = screenManager.createScreen(context.getProjectName(), WINDOW_WIDTH, WINDOW_HEIGHT);
       this.thread = threadManager.createThread(THREAD_NAME, this::run);
-      this.input = inputManager.getInput();
 
       this.targetUps = TARGET_UPS;
 

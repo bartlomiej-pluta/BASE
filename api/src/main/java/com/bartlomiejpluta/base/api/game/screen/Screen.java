@@ -3,8 +3,6 @@ package com.bartlomiejpluta.base.api.game.screen;
 import org.joml.Vector2fc;
 
 public interface Screen {
-   void init();
-
    int getWidth();
 
    int getHeight();
@@ -22,4 +20,8 @@ public interface Screen {
    void clear(float r, float g, float b, float alpha);
 
    void restoreState();
+
+   void init();
+
+   long getID();
 }

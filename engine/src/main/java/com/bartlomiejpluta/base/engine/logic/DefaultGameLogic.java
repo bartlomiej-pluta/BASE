@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.input.Input;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.render.Renderer;
-import com.bartlomiejpluta.base.engine.ui.manager.InputManager;
+import com.bartlomiejpluta.base.engine.ui.model.GLFWInput;
 import com.bartlomiejpluta.base.engine.world.camera.DefaultCamera;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DefaultGameLogic implements GameLogic {
    private final Renderer renderer;
-   private final InputManager inputManager;
-   private final Camera camera = new DefaultCamera();
+   private Camera camera;
+   private Input input;
 
    private Context context;
 
@@ -29,12 +29,21 @@ public class DefaultGameLogic implements GameLogic {
       log.info("Initializing game logic");
       renderer.init();
 
+      log.info("Creating camera model");
+      camera = new DefaultCamera();
+
+      log.info("Initializing input model");
+      var input = new GLFWInput(screen);
+      input.init(context);
+
       log.info("Initializing game context");
-      context.init(screen, inputManager.getInput(), camera);
+      context.init(screen, input, camera);
+
+      this.input = input;
    }
 
    @Override
-   public void input(Input input) {
+   public void input() {
       context.input(input);
    }
 

@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.image.Image;
 import com.bartlomiejpluta.base.api.game.input.Input;
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
@@ -134,6 +135,11 @@ public class DefaultContext implements Context {
    @Override
    public boolean togglePause() {
       return engine.togglePaused();
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      // TODO
    }
 
    @Override

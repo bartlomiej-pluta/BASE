@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.image.Image;
 import com.bartlomiejpluta.base.api.game.input.Input;
+import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
@@ -45,4 +46,6 @@ public interface Context extends Updatable, Renderable, Disposable {
    void init(Screen screen, Input input, Camera camera);
 
    void input(Input input);
+
+   void handleKeyEvent(KeyEvent event);
 }
