@@ -1,8 +1,12 @@
 package com.bartlomiejpluta.base.api.game.gui.window;
 
 import com.bartlomiejpluta.base.api.game.gui.base.BaseWidget;
+import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
+import com.bartlomiejpluta.base.api.game.screen.Screen;
+
+import static java.util.Objects.requireNonNull;
 
 public abstract class BaseWindow extends BaseWidget implements Window {
    protected Component content;
@@ -15,7 +19,7 @@ public abstract class BaseWindow extends BaseWidget implements Window {
 
    @Override
    public void setWindowPosition(WindowPosition windowPosition) {
-      this.windowPosition = windowPosition;
+      this.windowPosition = requireNonNull(windowPosition);
    }
 
    @Override
@@ -26,6 +30,12 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    @Override
    protected float getContentHeight() {
       return content.getMarginTop() + content.getActualHeight() + content.getMarginBottom();
+   }
+
+   @Override
+   public void draw(Screen screen, GUI gui) {
+      content.setPosition(x + paddingLeft, y + paddingTop);
+      content.draw(screen, gui);
    }
 
    @Override
