@@ -63,7 +63,9 @@ public final class WindowManager extends BaseWidget {
    }
 
    public void closeAll() {
-      for (var ignored : windows) {
+
+      // Use iterator to support removal from loop inside
+      for (var iterator = windows.iterator(); iterator.hasNext(); ) {
          close();
       }
    }
