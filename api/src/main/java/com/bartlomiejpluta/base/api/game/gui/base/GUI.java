@@ -19,6 +19,10 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
 
    Color createColor();
 
+   Paint createPaint();
+
+   Image getImage(String imageUid);
+
    void beginPath();
 
    void closePath();
@@ -71,13 +75,25 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
 
    void setFillColor(Color color);
 
+   void setFillPaint(Paint paint);
+
    void fill();
 
    void setStrokeColor(Color color);
 
+   void setStrokePaint(Paint paint);
+
    void setStrokeWidth(float width);
 
    void stroke();
+
+   void boxGradient(float x, float y, float width, float height, float radius, float feather, Color inner, Color outer, Paint target);
+
+   void linearGradient(float x, float y, float endX, float endY, Color start, Color end, Paint target);
+
+   void radialGradient(float x, float y, float innerRadius, float outerRadius, Color start, Color end, Paint target);
+
+   void imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target);
 
    void clip(float x, float y, float width, float height);
 }

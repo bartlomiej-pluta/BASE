@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NVGPaint;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -32,8 +33,9 @@ public class NanoVGGUI implements GUI {
    private ScreenWidget screenWidget;
 
    private final List<NanoVGColor> colors = new LinkedList<>();
+   private final List<NanoVGPaint> paints = new LinkedList<>();
    private final Set<String> loadedFonts = new HashSet<>();
-   private final Map<String, Integer> loadedImages = new HashMap<>();
+   private final Map<String, NanoVGImage> loadedImages = new HashMap<>();
 
    public void init(Screen screen) {
       context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
@@ -71,6 +73,35 @@ public class NanoVGGUI implements GUI {
       var color = new NanoVGColor(NVGColor.create());
       colors.add(color);
       return color;
+   }
+
+   @Override
+   public Paint createPaint() {
+      log.info("Creating new GUI paint");
+      var paint = new NanoVGPaint(NVGPaint.create());
+      paints.add(paint);
+      return paint;
+   }
+
+   @Override
+   public Image getImage(String imageUid) {
+      var image = loadedImages.get(imageUid);
+
+      if (image == null) {
+         log.info("Loading GUI image with UID: [{}]", imageUid);
+         var data = imageManager.loadObjectByteBuffer(imageUid);
+         var handle = nvgCreateImageMem(context, 0, data);
+         var width = new int[1];
+         var height = new int[1];
+         nvgImageSize(context, handle, width, height);
+
+         log.info("GUI image with UID: [{}] and size {}x{} has been loaded", imageUid, width, height);
+         image = new NanoVGImage(handle, width[0], height[0]);
+
+         loadedImages.put(imageUid, image);
+      }
+
+      return image;
    }
 
    @Override
@@ -169,6 +200,11 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void setFillPaint(Paint paint) {
+      nvgFillPaint(context, ((NanoVGPaint) paint).getPaint());
+   }
+
+   @Override
    public void fill() {
       nvgFill(context);
    }
@@ -179,8 +215,72 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void setStrokePaint(Paint paint) {
+      nvgStrokePaint(context, ((NanoVGPaint) paint).getPaint());
+   }
+
+   @Override
    public void stroke() {
       nvgStroke(context);
+   }
+
+   @Override
+   public void boxGradient(float x, float y, float width, float height, float radius, float feather, Color inner, Color outer, Paint target) {
+      nvgBoxGradient(
+            context,
+            x,
+            y,
+            width,
+            height,
+            radius,
+            feather,
+            ((NanoVGColor) inner).getColor(),
+            ((NanoVGColor) outer).getColor(),
+            ((NanoVGPaint) target).getPaint()
+      );
+   }
+
+   @Override
+   public void linearGradient(float x, float y, float endX, float endY, Color start, Color end, Paint target) {
+      nvgLinearGradient(
+            context,
+            x,
+            y,
+            endX,
+            endY,
+            ((NanoVGColor) start).getColor(),
+            ((NanoVGColor) end).getColor(),
+            ((NanoVGPaint) target).getPaint()
+      );
+   }
+
+   @Override
+   public void radialGradient(float x, float y, float innerRadius, float outerRadius, Color start, Color end, Paint target) {
+      nvgRadialGradient(
+            context,
+            x,
+            y,
+            innerRadius,
+            outerRadius,
+            ((NanoVGColor) start).getColor(),
+            ((NanoVGColor) end).getColor(),
+            ((NanoVGPaint) target).getPaint()
+      );
+   }
+
+   @Override
+   public void imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target) {
+      nvgImagePattern(
+            context,
+            x,
+            y,
+            width,
+            height,
+            angle,
+            ((NanoVGImage) image).getImageHandle(),
+            alpha,
+            ((NanoVGPaint) target).getPaint()
+      );
    }
 
    @Override
@@ -255,7 +355,15 @@ public class NanoVGGUI implements GUI {
    public void dispose() {
       log.info("Disposing GUI color buffers");
       colors.forEach(NanoVGColor::dispose);
-      log.info("Disposed {} GUI colors", colors.size());
+      log.info("Disposed {} GUI color buffers", colors.size());
+
+      log.info("Disposing GUI paint buffers");
+      paints.forEach(NanoVGPaint::dispose);
+      log.info("Disposed {} GUI paint buffers", paints.size());
+
+      log.info("Disposing GUI images");
+      loadedImages.values().stream().map(NanoVGImage::getImageHandle).forEach(h -> nvgDeleteImage(context, h));
+      log.info("Disposed {} GUI images", loadedImages.size());
 
       log.info("Disposing GUI context");
       nvgDelete(context);
