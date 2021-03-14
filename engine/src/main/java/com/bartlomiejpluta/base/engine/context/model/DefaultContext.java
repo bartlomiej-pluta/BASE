@@ -100,7 +100,7 @@ public class DefaultContext implements Context {
    @Override
    public GUI newGUI() {
       log.info("Creating new GUI");
-      var gui = new NanoVGGUI(fontManager);
+      var gui = new NanoVGGUI(fontManager, imageManager);
       guis.add(gui);
       gui.init(screen);
       return gui;

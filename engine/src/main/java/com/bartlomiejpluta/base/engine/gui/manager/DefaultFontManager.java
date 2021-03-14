@@ -2,7 +2,6 @@ package com.bartlomiejpluta.base.engine.gui.manager;
 
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
-import com.bartlomiejpluta.base.engine.gui.model.Font;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class DefaultFontManager implements FontManager {
    }
 
    @Override
-   public Font loadObject(String uid) {
+   public ByteBuffer loadObjectByteBuffer(String uid) {
       var buffer = fontBuffers.get(uid);
 
       if (buffer == null) {
@@ -46,6 +45,6 @@ public class DefaultFontManager implements FontManager {
          fontBuffers.put(uid, buffer);
       }
 
-      return new Font(uid, buffer.duplicate());
+      return buffer.duplicate();
    }
 }

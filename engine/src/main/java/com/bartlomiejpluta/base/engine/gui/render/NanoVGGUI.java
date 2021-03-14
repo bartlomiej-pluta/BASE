@@ -11,10 +11,15 @@ import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
+import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.lwjgl.nanovg.NVGColor;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.lwjgl.nanovg.NanoVG.*;
@@ -22,21 +27,18 @@ import static org.lwjgl.nanovg.NanoVGGL3.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Getter
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NanoVGGUI implements GUI {
+   private final FontManager fontManager;
+   private final ImageManager imageManager;
+
    private long context;
-
    private ScreenWidget screenWidget;
-
    private NVGColor fillColor;
    private NVGColor strokeColor;
    private final Set<String> loadedFonts = new HashSet<>();
+   private final Map<String, Integer> loadedImages = new HashMap<>();
    private final float[] boundBuffer = new float[4];
-
-   private final FontManager fontManager;
-
-   public NanoVGGUI(FontManager fontManager) {
-      this.fontManager = fontManager;
-   }
 
    public void init(Screen screen) {
       context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
@@ -213,8 +215,8 @@ public class NanoVGGUI implements GUI {
    @Override
    public void setFontFace(String fontUid) {
       if (!loadedFonts.contains(fontUid)) {
-         var font = fontManager.loadObject(fontUid);
-         nvgCreateFontMem(context, fontUid, font.getByteBuffer(), 0);
+         var fontBuffer = fontManager.loadObjectByteBuffer(fontUid);
+         nvgCreateFontMem(context, fontUid, fontBuffer, 0);
          loadedFonts.add(fontUid);
       }
 
