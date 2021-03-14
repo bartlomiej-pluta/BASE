@@ -33,23 +33,17 @@ public class VOptionChoice extends VLayout {
          return;
       }
 
-      if (event.getKey() == Key.KEY_DOWN) {
-         if (ACTIONS.contains(event.getAction())) {
-            blurAll();
-            selected = (++selected) % children.size();
-            children.get(selected).focus();
-            event.consume();
-         }
-      } else if (event.getKey() == Key.KEY_UP) {
-         if (ACTIONS.contains(event.getAction())) {
-            blurAll();
-            var size = children.size();
-            selected = (((--selected) % size) + size) % size;
-            children.get(selected).focus();
-            event.consume();
-         }
-      } else {
-
+      if (event.getKey() == Key.KEY_DOWN && ACTIONS.contains(event.getAction())) {
+         blurAll();
+         selected = (++selected) % children.size();
+         children.get(selected).focus();
+         event.consume();
+      } else if (event.getKey() == Key.KEY_UP && ACTIONS.contains(event.getAction())) {
+         blurAll();
+         var size = children.size();
+         selected = (((--selected) % size) + size) % size;
+         children.get(selected).focus();
+         event.consume();
       }
    }
 
