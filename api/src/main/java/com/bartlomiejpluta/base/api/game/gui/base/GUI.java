@@ -67,11 +67,15 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
 
    void setGlobalAlpha(float alpha);
 
-   void fillColor(float red, float green, float blue, float alpha);
+   void setFillColor(float red, float green, float blue, float alpha);
+
+   void fill();
+
+   void setStrokeColor(float red, float green, float blue, float alpha);
 
    void setStrokeWidth(float width);
 
-   void strokeColor(float red, float green, float blue, float alpha);
+   void stroke();
 
    void clip(float x, float y, float width, float height);
 }

@@ -15,6 +15,7 @@ import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.lwjgl.nanovg.NVGColor;
+import org.lwjgl.nanovg.NVGPaint;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -34,11 +35,14 @@ public class NanoVGGUI implements GUI {
 
    private long context;
    private ScreenWidget screenWidget;
+
    private NVGColor fillColor;
    private NVGColor strokeColor;
+   private NVGPaint fillPaint;
+   private NVGPaint strokePaint;
+
    private final Set<String> loadedFonts = new HashSet<>();
    private final Map<String, Integer> loadedImages = new HashMap<>();
-   private final float[] boundBuffer = new float[4];
 
    public void init(Screen screen) {
       context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
@@ -51,6 +55,8 @@ public class NanoVGGUI implements GUI {
 
       fillColor = NVGColor.create();
       strokeColor = NVGColor.create();
+      fillPaint = NVGPaint.create();
+      strokePaint = NVGPaint.create();
    }
 
    @Override
@@ -164,24 +170,32 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void fillColor(float red, float green, float blue, float alpha) {
+   public void setFillColor(float red, float green, float blue, float alpha) {
       fillColor.r(red);
       fillColor.g(green);
       fillColor.b(blue);
       fillColor.a(alpha);
 
       nvgFillColor(context, fillColor);
+   }
+
+   @Override
+   public void fill() {
       nvgFill(context);
    }
 
    @Override
-   public void strokeColor(float red, float green, float blue, float alpha) {
+   public void setStrokeColor(float red, float green, float blue, float alpha) {
       strokeColor.r(red);
       strokeColor.g(green);
       strokeColor.b(blue);
       strokeColor.a(alpha);
 
       nvgStrokeColor(context, strokeColor);
+   }
+
+   @Override
+   public void stroke() {
       nvgStroke(context);
    }
 
@@ -257,6 +271,8 @@ public class NanoVGGUI implements GUI {
    public void dispose() {
       fillColor.free();
       strokeColor.free();
+      fillPaint.free();
+      strokePaint.free();
       nvgDelete(context);
    }
 }

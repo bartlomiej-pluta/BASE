@@ -144,7 +144,8 @@ public class Label extends BaseComponent {
       gui.setFontFace(font);
       gui.setTextAlignment(alignment);
       gui.setFontSize(fontSize);
-      gui.fillColor(red, green, blue, alpha);
+      gui.setFillColor(red, green, blue, alpha);
+      gui.fill();
       gui.putTextBox(x + paddingLeft, y + paddingTop, getWidth() - paddingLeft - paddingRight, text, bounds);
    }
 }
