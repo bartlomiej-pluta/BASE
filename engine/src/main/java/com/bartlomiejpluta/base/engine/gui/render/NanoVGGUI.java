@@ -1,10 +1,7 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.gui.base.GUI;
-import com.bartlomiejpluta.base.api.game.gui.base.LineCap;
-import com.bartlomiejpluta.base.api.game.gui.base.Widget;
-import com.bartlomiejpluta.base.api.game.gui.base.WindingDirection;
+import com.bartlomiejpluta.base.api.game.gui.base.*;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -14,19 +11,17 @@ import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.lwjgl.nanovg.NVGColor;
-import org.lwjgl.nanovg.NVGPaint;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL3.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+@Slf4j
 @Getter
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NanoVGGUI implements GUI {
@@ -36,11 +31,7 @@ public class NanoVGGUI implements GUI {
    private long context;
    private ScreenWidget screenWidget;
 
-   private NVGColor fillColor;
-   private NVGColor strokeColor;
-   private NVGPaint fillPaint;
-   private NVGPaint strokePaint;
-
+   private final List<NanoVGColor> colors = new LinkedList<>();
    private final Set<String> loadedFonts = new HashSet<>();
    private final Map<String, Integer> loadedImages = new HashMap<>();
 
@@ -52,11 +43,6 @@ public class NanoVGGUI implements GUI {
       }
 
       screenWidget = new ScreenWidget(screen);
-
-      fillColor = NVGColor.create();
-      strokeColor = NVGColor.create();
-      fillPaint = NVGPaint.create();
-      strokePaint = NVGPaint.create();
    }
 
    @Override
@@ -77,6 +63,14 @@ public class NanoVGGUI implements GUI {
    public void setRoot(Widget root) {
       screenWidget.setRoot(root);
       root.setParent(screenWidget);
+   }
+
+   @Override
+   public Color createColor() {
+      log.info("Creating new GUI color");
+      var color = new NanoVGColor(NVGColor.create());
+      colors.add(color);
+      return color;
    }
 
    @Override
@@ -170,13 +164,8 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void setFillColor(float red, float green, float blue, float alpha) {
-      fillColor.r(red);
-      fillColor.g(green);
-      fillColor.b(blue);
-      fillColor.a(alpha);
-
-      nvgFillColor(context, fillColor);
+   public void setFillColor(Color color) {
+      nvgFillColor(context, ((NanoVGColor) color).getColor());
    }
 
    @Override
@@ -185,13 +174,8 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
-   public void setStrokeColor(float red, float green, float blue, float alpha) {
-      strokeColor.r(red);
-      strokeColor.g(green);
-      strokeColor.b(blue);
-      strokeColor.a(alpha);
-
-      nvgStrokeColor(context, strokeColor);
+   public void setStrokeColor(Color color) {
+      nvgStrokeColor(context, ((NanoVGColor) color).getColor());
    }
 
    @Override
@@ -269,10 +253,11 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void dispose() {
-      fillColor.free();
-      strokeColor.free();
-      fillPaint.free();
-      strokePaint.free();
+      log.info("Disposing GUI color buffers");
+      colors.forEach(NanoVGColor::dispose);
+      log.info("Disposed {} GUI colors", colors.size());
+
+      log.info("Disposing GUI context");
       nvgDelete(context);
    }
 }

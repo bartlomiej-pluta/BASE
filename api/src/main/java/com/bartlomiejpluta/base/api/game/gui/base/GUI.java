@@ -17,6 +17,8 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
 
    void setRoot(Widget root);
 
+   Color createColor();
+
    void beginPath();
 
    void closePath();
@@ -67,11 +69,11 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
 
    void setGlobalAlpha(float alpha);
 
-   void setFillColor(float red, float green, float blue, float alpha);
+   void setFillColor(Color color);
 
    void fill();
 
-   void setStrokeColor(float red, float green, float blue, float alpha);
+   void setStrokeColor(Color color);
 
    void setStrokeWidth(float width);
 
