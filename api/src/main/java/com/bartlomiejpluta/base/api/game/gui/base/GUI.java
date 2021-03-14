@@ -13,6 +13,13 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
    int ALIGN_BOTTOM = 1 << 5;
    int ALIGN_BASELINE = 1 << 6;
 
+   int IMAGE_GENERATE_MIPMAPS = 1 << 0;
+   int IMAGE_REPEAT_X = 1 << 1;
+   int IMAGE_REPEAT_Y = 1 << 2;
+   int IMAGE_FLIP_Y = 1 << 3;
+   int IMAGE_PREMULTIPLIED = 1 << 4;
+   int IMAGE_NEAREST = 1 << 5;
+
    Widget getRoot();
 
    void setRoot(Widget root);
@@ -22,6 +29,8 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
    Paint createPaint();
 
    Image getImage(String imageUid);
+
+   Image getImage(String imageUid, int imageFlags);
 
    void beginPath();
 
@@ -92,6 +101,8 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
    void linearGradient(float x, float y, float endX, float endY, Color start, Color end, Paint target);
 
    void radialGradient(float x, float y, float innerRadius, float outerRadius, Color start, Color end, Paint target);
+
+   void imagePattern(float x, float y, float angle, float alpha, Image image, Paint target);
 
    void imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target);
 
