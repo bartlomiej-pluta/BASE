@@ -5,8 +5,16 @@ import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.Collections.unmodifiableList;
+
 public abstract class BaseContainer extends BaseComponent implements Container {
    protected final List<Component> children = new LinkedList<>();
+   private final List<Component> readOnlyChildren = unmodifiableList(children);
+
+   @Override
+   public Iterable<Component> getChildren() {
+      return readOnlyChildren;
+   }
 
    @Override
    public void add(Component component) {

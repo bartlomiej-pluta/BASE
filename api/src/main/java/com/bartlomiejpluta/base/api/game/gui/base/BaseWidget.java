@@ -53,17 +53,17 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setWidth(float width) {
+   public void setWidth(Float width) {
       this.width = width;
    }
 
    @Override
-   public void setHeight(float height) {
+   public void setHeight(Float height) {
       this.height = height;
    }
 
    @Override
-   public void setSize(float width, float height) {
+   public void setSize(Float width, Float height) {
       this.width = width;
       this.height = height;
    }
@@ -115,23 +115,23 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setX(float x) {
+   public void setX(Float x) {
       this.x = x;
    }
 
    @Override
-   public void setY(float y) {
+   public void setY(Float y) {
       this.y = y;
    }
 
    @Override
-   public void setPosition(float x, float y) {
+   public void setPosition(Float x, Float y) {
       this.x = x;
       this.y = y;
    }
 
    @Override
-   public void setMargin(float top, float right, float bottom, float left) {
+   public void setMargin(Float top, Float right, Float bottom, Float left) {
       this.marginTop = top;
       this.marginRight = right;
       this.marginBottom = bottom;
@@ -139,7 +139,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setMargin(float top, float rightLeft, float bottom) {
+   public void setMargin(Float top, Float rightLeft, Float bottom) {
       this.marginTop = top;
       this.marginRight = rightLeft;
       this.marginBottom = bottom;
@@ -147,7 +147,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setMargin(float topBottom, float rightLeft) {
+   public void setMargin(Float topBottom, Float rightLeft) {
       this.marginTop = topBottom;
       this.marginRight = rightLeft;
       this.marginBottom = topBottom;
@@ -155,7 +155,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setMargin(float all) {
+   public void setMargin(Float all) {
       this.marginTop = all;
       this.marginRight = all;
       this.marginBottom = all;
@@ -163,22 +163,22 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setMarginTop(float margin) {
+   public void setMarginTop(Float margin) {
       this.marginTop = margin;
    }
 
    @Override
-   public void setMarginRight(float margin) {
+   public void setMarginRight(Float margin) {
       this.marginRight = margin;
    }
 
    @Override
-   public void setMarginBottom(float margin) {
+   public void setMarginBottom(Float margin) {
       this.marginBottom = margin;
    }
 
    @Override
-   public void setMarginLeft(float margin) {
+   public void setMarginLeft(Float margin) {
       this.marginLeft = margin;
    }
 
@@ -203,7 +203,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setPadding(float top, float right, float bottom, float left) {
+   public void setPadding(Float top, Float right, Float bottom, Float left) {
       this.paddingTop = top;
       this.paddingRight = right;
       this.paddingBottom = bottom;
@@ -211,7 +211,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setPadding(float top, float rightLeft, float bottom) {
+   public void setPadding(Float top, Float rightLeft, Float bottom) {
       this.paddingTop = top;
       this.paddingRight = rightLeft;
       this.paddingBottom = bottom;
@@ -219,7 +219,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setPadding(float topBottom, float rightLeft) {
+   public void setPadding(Float topBottom, Float rightLeft) {
       this.paddingTop = topBottom;
       this.paddingRight = rightLeft;
       this.paddingBottom = topBottom;
@@ -227,7 +227,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setPadding(float all) {
+   public void setPadding(Float all) {
       this.paddingTop = all;
       this.paddingRight = all;
       this.paddingBottom = all;
@@ -235,22 +235,22 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setPaddingTop(float padding) {
+   public void setPaddingTop(Float padding) {
       this.paddingTop = padding;
    }
 
    @Override
-   public void setPaddingRight(float padding) {
+   public void setPaddingRight(Float padding) {
       this.paddingRight = padding;
    }
 
    @Override
-   public void setPaddingBottom(float padding) {
+   public void setPaddingBottom(Float padding) {
       this.paddingBottom = padding;
    }
 
    @Override
-   public void setPaddingLeft(float padding) {
+   public void setPaddingLeft(Float padding) {
       this.paddingLeft = padding;
    }
 

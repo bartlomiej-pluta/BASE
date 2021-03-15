@@ -7,22 +7,26 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 import static java.util.Objects.requireNonNull;
 
 public class Label extends BaseComponent {
-   private final GUI gui;
+//   private final GUI gui;
 
    private String text = "";
    private String font;
    private float fontSize;
    private int alignment = GUI.ALIGN_LEFT;
-   private final Color color;
+   private Color color;
 
    private final float[] bounds = new float[4];
 
-   public Label(GUI gui, String font) {
-      this.gui = requireNonNull(gui);
-      this.font = requireNonNull(font);
+   public Label() {
 
-      this.color = this.gui.createColor();
    }
+
+//   public Label(GUI gui, String font) {
+//      this.gui = requireNonNull(gui);
+//      this.font = requireNonNull(font);
+//
+//      this.color = this.gui.createColor();
+//   }
 
    public String getText() {
       return text;
@@ -44,7 +48,7 @@ public class Label extends BaseComponent {
       return fontSize;
    }
 
-   public void setFontSize(float fontSize) {
+   public void setFontSize(Float fontSize) {
       this.fontSize = fontSize;
    }
 
@@ -52,7 +56,7 @@ public class Label extends BaseComponent {
       return alignment;
    }
 
-   public void setAlignment(int alignment) {
+   public void setAlignment(Integer alignment) {
       this.alignment = alignment;
    }
 
@@ -60,7 +64,7 @@ public class Label extends BaseComponent {
       return color.getRed();
    }
 
-   public void setRed(float value) {
+   public void setRed(Float value) {
       color.setRed(value);
    }
 
@@ -68,7 +72,7 @@ public class Label extends BaseComponent {
       return color.getGreen();
    }
 
-   public void setGreen(float value) {
+   public void setGreen(Float value) {
       color.setGreen(value);
    }
 
@@ -76,7 +80,7 @@ public class Label extends BaseComponent {
       return color.getBlue();
    }
 
-   public void setBlue(float value) {
+   public void setBlue(Float value) {
       color.setBlue(value);
    }
 
@@ -84,15 +88,15 @@ public class Label extends BaseComponent {
       return color.getAlpha();
    }
 
-   public void setAlpha(float value) {
+   public void setAlpha(Float value) {
       color.setAlpha(value);
    }
 
-   public void setColor(float red, float green, float blue, float alpha) {
+   public void setColor(Float red, Float green, Float blue, Float alpha) {
       color.setRGBA(red, green, blue, alpha);
    }
 
-   public void setColor(float red, float green, float blue) {
+   public void setColor(Float red, Float green, Float blue) {
       color.setRGB(red, green, blue);
    }
 
@@ -115,5 +119,10 @@ public class Label extends BaseComponent {
       gui.setFillColor(color);
       gui.fill();
       gui.putTextBox(x + paddingLeft, y + paddingTop, getWidth() - paddingLeft - paddingRight, text, bounds);
+   }
+
+   @Override
+   public String toString() {
+      return "Label[" + text + "]";
    }
 }

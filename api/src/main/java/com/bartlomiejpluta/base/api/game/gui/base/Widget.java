@@ -12,11 +12,11 @@ public interface Widget extends KeyEventHandler {
 
    float getY();
 
-   void setX(float x);
+   void setX(Float x);
 
-   void setY(float y);
+   void setY(Float y);
 
-   void setPosition(float x, float y);
+   void setPosition(Float x, Float y);
 
    float getWidth();
 
@@ -26,11 +26,11 @@ public interface Widget extends KeyEventHandler {
 
    float getActualHeight();
 
-   void setWidth(float width);
+   void setWidth(Float width);
 
-   void setHeight(float height);
+   void setHeight(Float height);
 
-   void setSize(float width, float height);
+   void setSize(Float width, Float height);
 
    SizeMode getWidthMode();
 
@@ -42,21 +42,21 @@ public interface Widget extends KeyEventHandler {
 
    void setSizeMode(SizeMode widthMode, SizeMode heightMode);
 
-   void setMargin(float top, float right, float bottom, float left);
+   void setMargin(Float top, Float right, Float bottom, Float left);
 
-   void setMargin(float top, float rightLeft, float bottom);
+   void setMargin(Float top, Float rightLeft, Float bottom);
 
-   void setMargin(float topBottom, float rightLeft);
+   void setMargin(Float topBottom, Float rightLeft);
 
-   void setMargin(float all);
+   void setMargin(Float all);
 
-   void setMarginTop(float margin);
+   void setMarginTop(Float margin);
 
-   void setMarginRight(float margin);
+   void setMarginRight(Float margin);
 
-   void setMarginBottom(float margin);
+   void setMarginBottom(Float margin);
 
-   void setMarginLeft(float margin);
+   void setMarginLeft(Float margin);
 
    float getMarginTop();
 
@@ -66,21 +66,21 @@ public interface Widget extends KeyEventHandler {
 
    float getMarginLeft();
 
-   void setPadding(float top, float right, float bottom, float left);
+   void setPadding(Float top, Float right, Float bottom, Float left);
 
-   void setPadding(float top, float rightLeft, float bottom);
+   void setPadding(Float top, Float rightLeft, Float bottom);
 
-   void setPadding(float topBottom, float rightLeft);
+   void setPadding(Float topBottom, Float rightLeft);
 
-   void setPadding(float all);
+   void setPadding(Float all);
 
-   void setPaddingTop(float padding);
+   void setPaddingTop(Float padding);
 
-   void setPaddingRight(float padding);
+   void setPaddingRight(Float padding);
 
-   void setPaddingBottom(float padding);
+   void setPaddingBottom(Float padding);
 
-   void setPaddingLeft(float padding);
+   void setPaddingLeft(Float padding);
 
    float getPaddingTop();
 

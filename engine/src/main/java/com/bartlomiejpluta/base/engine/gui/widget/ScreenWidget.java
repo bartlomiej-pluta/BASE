@@ -58,32 +58,32 @@ public class ScreenWidget implements Widget {
    }
 
    @Override
-   public void setX(float x) {
+   public void setX(Float x) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setY(float y) {
+   public void setY(Float y) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPosition(float x, float y) {
+   public void setPosition(Float x, Float y) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setWidth(float width) {
+   public void setWidth(Float width) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setHeight(float height) {
+   public void setHeight(Float height) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setSize(float width, float height) {
+   public void setSize(Float width, Float height) {
       throw new UnsupportedOperationException();
    }
 
@@ -113,42 +113,42 @@ public class ScreenWidget implements Widget {
    }
 
    @Override
-   public void setMargin(float top, float right, float bottom, float left) {
+   public void setMargin(Float top, Float right, Float bottom, Float left) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMargin(float top, float rightLeft, float bottom) {
+   public void setMargin(Float top, Float rightLeft, Float bottom) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMargin(float topBottom, float rightLeft) {
+   public void setMargin(Float topBottom, Float rightLeft) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMargin(float all) {
+   public void setMargin(Float all) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMarginTop(float margin) {
+   public void setMarginTop(Float margin) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMarginRight(float margin) {
+   public void setMarginRight(Float margin) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMarginBottom(float margin) {
+   public void setMarginBottom(Float margin) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setMarginLeft(float margin) {
+   public void setMarginLeft(Float margin) {
       throw new UnsupportedOperationException();
    }
 
@@ -173,42 +173,42 @@ public class ScreenWidget implements Widget {
    }
 
    @Override
-   public void setPadding(float top, float right, float bottom, float left) {
+   public void setPadding(Float top, Float right, Float bottom, Float left) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPadding(float top, float rightLeft, float bottom) {
+   public void setPadding(Float top, Float rightLeft, Float bottom) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPadding(float topBottom, float rightLeft) {
+   public void setPadding(Float topBottom, Float rightLeft) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPadding(float all) {
+   public void setPadding(Float all) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPaddingTop(float padding) {
+   public void setPaddingTop(Float padding) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPaddingRight(float padding) {
+   public void setPaddingRight(Float padding) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPaddingBottom(float padding) {
+   public void setPaddingBottom(Float padding) {
       throw new UnsupportedOperationException();
    }
 
    @Override
-   public void setPaddingLeft(float padding) {
+   public void setPaddingLeft(Float padding) {
       throw new UnsupportedOperationException();
    }
 
