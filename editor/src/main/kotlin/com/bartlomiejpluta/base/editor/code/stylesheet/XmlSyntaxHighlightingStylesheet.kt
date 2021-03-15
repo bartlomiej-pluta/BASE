@@ -11,6 +11,7 @@ import tornadofx.cssclass
 class XmlSyntaxHighlightingStylesheet : Stylesheet() {
    companion object {
       val prolog by cssclass()
+      val namespace by cssclass()
       val tagmark by cssclass()
       val anytag by cssclass()
       val paren by cssclass()
@@ -23,6 +24,10 @@ class XmlSyntaxHighlightingStylesheet : Stylesheet() {
       prolog {
          fill = c("#BBB529")
          fontStyle = FontPosture.ITALIC
+      }
+
+      namespace {
+         fill = Color.DARKRED
       }
 
       tagmark {
