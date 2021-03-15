@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.code.view.editor
 
 import com.bartlomiejpluta.base.editor.code.component.CodeEditor
 import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter
+import com.bartlomiejpluta.base.editor.code.highlighting.XmlSyntaxHighlighter
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
@@ -18,13 +19,14 @@ class CodeEditorView : View() {
    private val projectContext: ProjectContext by di()
 
    private val javaSyntaxHighlighter: JavaSyntaxHighlighter by di()
+   private val xmlSyntaxHighlighter: XmlSyntaxHighlighter by di()
 
    private val codeVM = find<CodeVM>()
 
    private val highlighter = Bindings.createObjectBinding({
       when (codeVM.type!!) {
          CodeType.JAVA -> javaSyntaxHighlighter
-         CodeType.XML -> javaSyntaxHighlighter
+         CodeType.XML -> xmlSyntaxHighlighter
       }
    }, codeVM.typeProperty)
 
