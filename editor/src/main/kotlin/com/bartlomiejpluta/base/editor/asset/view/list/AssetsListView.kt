@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.asset.view.list
 import com.bartlomiejpluta.base.editor.asset.component.AssetTreeCell
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -35,13 +36,18 @@ class AssetsListView : View() {
       menuitem("Import Font...") { mainController.importFont() }
    }
 
+   private val widgets = AssetCategory("Widgets").apply {
+      menuitem("New Widget...") { mainController.createEmptyWidget() }
+   }
+
    private val rootItem = AssetCategory(
       name = "Project", items = observableListOf(
          maps,
          tileSets,
          images,
          entitySet,
-         fonts
+         fonts,
+         widgets
       )
    )
 
@@ -54,6 +60,7 @@ class AssetsListView : View() {
             Bindings.bindContent(images.items, it.images)
             Bindings.bindContent(entitySet.items, it.entitySets)
             Bindings.bindContent(fonts.items, it.fonts)
+            Bindings.bindContent(widgets.items, it.widgets)
             root.root.expandAll()
          }
       }
@@ -79,6 +86,7 @@ class AssetsListView : View() {
          if (event.clickCount == 2) {
             when (val item = selectionModel?.selectedItem?.value) {
                is GameMapAsset -> mainController.openMap(item.uid)
+               is WidgetAsset -> mainController.openScript(item.fileNode)
             }
          }
 

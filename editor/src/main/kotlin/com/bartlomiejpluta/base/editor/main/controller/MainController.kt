@@ -11,6 +11,8 @@ import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.view.importing.ImportFontFragment
 import com.bartlomiejpluta.base.editor.gui.font.viewmodel.FontAssetDataVM
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -24,6 +26,7 @@ import com.bartlomiejpluta.base.editor.project.view.ProjectSettingsFragment
 import com.bartlomiejpluta.base.editor.project.viewmodel.ProjectVM
 import com.bartlomiejpluta.base.editor.tileset.view.importing.ImportTileSetFragment
 import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
+import javafx.scene.control.TextInputDialog
 import javafx.stage.FileChooser
 import org.springframework.stereotype.Component
 import tornadofx.*
@@ -183,6 +186,29 @@ class MainController : Controller() {
       }
    }
 
+   fun createEmptyWidget() {
+      TextInputDialog().apply {
+         width = 300.0
+         contentText = "Widget name"
+         title = "New Widget"
+      }
+         .showAndWait()
+         .map(::WidgetAssetData)
+         .map(projectContext::createWidget)
+         .map(WidgetAsset::fileNode)
+         .ifPresent(this::openScript)
+   }
+
+   fun closeAsset(asset: Asset) {
+      when (asset) {
+         is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMap && item.uid == asset.uid }?.key?.let {
+            openItems.remove(it)
+         }
+
+         is WidgetAsset -> closeScript(asset.fileNode)
+      }
+   }
+
    fun closeScript(fsNode: FileNode) {
       openItems.entries.firstOrNull { (_, item) -> item is Code && item.fileNode.absolutePath == fsNode.absolutePath }?.key?.let {
          openItems.remove(it)
@@ -190,14 +216,6 @@ class MainController : Controller() {
 
       fsNode.allChildren.forEach { child ->
          openItems.entries.firstOrNull { (_, item) -> item is Code && item.fileNode.absolutePath == child.absolutePath }?.key?.let {
-            openItems.remove(it)
-         }
-      }
-   }
-
-   fun closeAsset(asset: Asset) {
-      when (asset) {
-         is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMap && item.uid == asset.uid }?.key?.let {
             openItems.remove(it)
          }
       }

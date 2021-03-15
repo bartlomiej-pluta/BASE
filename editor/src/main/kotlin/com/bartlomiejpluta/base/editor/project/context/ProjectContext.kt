@@ -5,6 +5,8 @@ import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -37,6 +39,8 @@ interface ProjectContext {
    fun importEntitySet(data: EntitySetAssetData)
 
    fun importFont(data: FontAssetData)
+
+   fun createWidget(data: WidgetAssetData): WidgetAsset
 
    fun deleteAsset(asset: Asset)
    fun loadScript(fileNode: FileNode): Code

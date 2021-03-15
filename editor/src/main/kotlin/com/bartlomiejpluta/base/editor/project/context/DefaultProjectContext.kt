@@ -9,6 +9,8 @@ import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
+import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -192,6 +194,19 @@ class DefaultProjectContext : ProjectContext {
       }
    }
 
+   override fun createWidget(data: WidgetAssetData) = project?.let {
+      UID.next(it.widgets.map(Asset::uid)).let { uid ->
+         val asset = WidgetAsset(it, uid, data.name)
+         val file = File(it.widgetsDirectory, asset.source)
+         file.createNewFile()
+         it.widgets += asset
+
+         save()
+
+         asset
+      }
+   } ?: throw IllegalStateException("There is no open project in the context")
+
    override fun deleteAsset(asset: Asset) {
       project?.let {
          it.assetLists.firstOrNull { assets -> assets.remove(asset) }
@@ -206,6 +221,7 @@ class DefaultProjectContext : ProjectContext {
          bind(createObjectBinding({
             when (fileNode.extension.toLowerCase()) {
                "java" -> CodeType.JAVA
+               "xml" -> CodeType.XML
                else -> throw IllegalStateException("Unsupported script type")
             }
          }))

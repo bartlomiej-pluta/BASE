@@ -23,6 +23,7 @@ class CodeEditorView : View() {
    private val highlighter = Bindings.createObjectBinding({
       when (codeVM.type!!) {
          CodeType.JAVA -> javaSyntaxHighlighter
+         CodeType.XML -> javaSyntaxHighlighter
       }
    }, codeVM.typeProperty)
 
@@ -38,6 +39,7 @@ class CodeEditorView : View() {
 
    fun shutdown() {
       editor.shutdownHighlighterThread()
+      codeVM.fileNode
    }
 
    override val root = borderpane {
