@@ -9,9 +9,9 @@ import com.bartlomiejpluta.base.editor.entityset.view.importing.ImportEntitySetF
 import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.file.model.FileNode
+import com.bartlomiejpluta.base.editor.file.model.ScriptAssetFileNode
 import com.bartlomiejpluta.base.editor.gui.font.view.importing.ImportFontFragment
 import com.bartlomiejpluta.base.editor.gui.font.viewmodel.FontAssetDataVM
-import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
@@ -195,7 +195,6 @@ class MainController : Controller() {
          .showAndWait()
          .map(::WidgetAssetData)
          .map(projectContext::createWidget)
-         .map(WidgetAsset::fileNode)
          .ifPresent(this::openScript)
    }
 
@@ -205,7 +204,7 @@ class MainController : Controller() {
             openItems.remove(it)
          }
 
-         is WidgetAsset -> closeScript(asset.fileNode)
+         is ScriptAssetFileNode -> closeScript(asset)
       }
    }
 
