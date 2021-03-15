@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.Color;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
@@ -7,8 +8,6 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 import static java.util.Objects.requireNonNull;
 
 public class Label extends BaseComponent {
-//   private final GUI gui;
-
    private String text = "";
    private String font;
    private float fontSize;
@@ -17,16 +16,10 @@ public class Label extends BaseComponent {
 
    private final float[] bounds = new float[4];
 
-   public Label() {
-
+   public Label(Context context, GUI gui) {
+      super(context, gui);
+      this.color = gui.createColor();
    }
-
-//   public Label(GUI gui, String font) {
-//      this.gui = requireNonNull(gui);
-//      this.font = requireNonNull(font);
-//
-//      this.color = this.gui.createColor();
-//   }
 
    public String getText() {
       return text;

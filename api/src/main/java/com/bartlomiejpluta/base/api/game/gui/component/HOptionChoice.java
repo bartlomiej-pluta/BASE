@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
+import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.input.Key;
 import com.bartlomiejpluta.base.api.game.input.KeyAction;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
@@ -9,6 +11,10 @@ import java.util.EnumSet;
 public class HOptionChoice extends HLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
    private int selected = 0;
+
+   public HOptionChoice(Context context, GUI gui) {
+      super(context, gui);
+   }
 
    @Override
    public void focus() {

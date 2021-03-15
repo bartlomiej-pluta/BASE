@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.gui.xml.inflater;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
@@ -33,25 +34,25 @@ public class ComponentInflater {
    }
 
    @SneakyThrows
-   public Component inflate(String xml) {
+   public Component inflate(String xml, Context context, GUI gui) {
       var document = builder.parse(xml);
-      return parseNode(document.getDocumentElement());
+      return parseNode(document.getDocumentElement(), context, gui);
    }
 
    @SneakyThrows
-   public Component inflate(File file) {
+   public Component inflate(File file, Context context, GUI gui) {
       var document = builder.parse(file);
-      return parseNode(document.getDocumentElement());
+      return parseNode(document.getDocumentElement(), context, gui);
    }
 
    @SneakyThrows
-   public Component inflate(InputStream is) {
+   public Component inflate(InputStream is, Context context, GUI gui) {
       var document = builder.parse(is);
-      return parseNode(document.getDocumentElement());
+      return parseNode(document.getDocumentElement(), context, gui);
    }
 
    @SneakyThrows
-   private Component parseNode(Node node) {
+   private Component parseNode(Node node, Context context, GUI gui) {
       var uri = node.getNamespaceURI();
       var name = node.getLocalName();
 
@@ -62,7 +63,7 @@ public class ComponentInflater {
       var canonicalName = name.replaceAll("\\*", "").replaceAll("\\.+", ".");
 
       var componentClass = loader.loadClass(canonicalName);
-      var component = createComponent(componentClass, node.getAttributes());
+      var component = createComponent(componentClass, node.getAttributes(), context, gui);
 
       var children = node.getChildNodes();
 
@@ -84,15 +85,15 @@ public class ComponentInflater {
             continue;
          }
 
-         component.add(parseNode(childNode));
+         component.add(parseNode(childNode, context, gui));
       }
 
       return component;
    }
 
    @SneakyThrows
-   private Component createComponent(Class<?> componentClass, NamedNodeMap attributes) {
-      var component = (Component) componentClass.getConstructor().newInstance();
+   private Component createComponent(Class<?> componentClass, NamedNodeMap attributes, Context context, GUI gui) {
+      var component = (Component) componentClass.getConstructor(Context.class, GUI.class).newInstance(context, gui);
 
       // Set attributes via setter methods
       for (int i = 0; i < attributes.getLength(); ++i) {

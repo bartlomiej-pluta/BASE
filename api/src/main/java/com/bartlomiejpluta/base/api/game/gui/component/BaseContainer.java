@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
+import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 
 import java.util.LinkedList;
@@ -10,6 +12,10 @@ import static java.util.Collections.unmodifiableList;
 public abstract class BaseContainer extends BaseComponent implements Container {
    protected final List<Component> children = new LinkedList<>();
    private final List<Component> readOnlyChildren = unmodifiableList(children);
+
+   public BaseContainer(Context context, GUI gui) {
+      super(context, gui);
+   }
 
    @Override
    public Iterable<Component> getChildren() {

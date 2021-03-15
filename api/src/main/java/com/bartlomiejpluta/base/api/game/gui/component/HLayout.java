@@ -1,9 +1,14 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 
 public class HLayout extends BaseContainer {
+
+   public HLayout(Context context, GUI gui) {
+      super(context, gui);
+   }
 
    @Override
    protected float getContentWidth() {

@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.*;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
@@ -8,6 +9,7 @@ import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
+import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +30,12 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 @Getter
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NanoVGGUI implements GUI {
+   private final Context context;
    private final FontManager fontManager;
    private final ImageManager imageManager;
+   private final ComponentInflater componentInflater;
 
-   private long context;
+   private long nvg;
    private ScreenWidget screenWidget;
 
    private final List<NanoVGColor> colors = new LinkedList<>();
@@ -40,9 +44,9 @@ public class NanoVGGUI implements GUI {
    private final Map<String, NanoVGImage> loadedImages = new HashMap<>();
 
    public void init(Screen screen) {
-      context = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+      nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
-      if (context == NULL) {
+      if (nvg == NULL) {
          throw new AppException("Could not init NanoVG");
       }
 
@@ -51,11 +55,11 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
-      nvgBeginFrame(context, screen.getWidth(), screen.getHeight(), 1);
+      nvgBeginFrame(nvg, screen.getWidth(), screen.getHeight(), 1);
 
       screenWidget.draw(screen, this);
 
-      nvgEndFrame(context);
+      nvgEndFrame(nvg);
    }
 
    @Override
@@ -96,10 +100,10 @@ public class NanoVGGUI implements GUI {
       if (image == null) {
          log.info("Loading GUI image with UID: [{}] into cache under the key: [{}]", imageUid, key);
          var data = imageManager.loadObjectByteBuffer(imageUid);
-         var handle = nvgCreateImageMem(context, imageFlags, data);
+         var handle = nvgCreateImageMem(nvg, imageFlags, data);
          var width = new int[1];
          var height = new int[1];
-         nvgImageSize(context, handle, width, height);
+         nvgImageSize(nvg, handle, width, height);
 
          log.info("GUI image with UID: [{}], size {}x{} and flags [0b{}] has been loaded", imageUid, width[0], height[0], toBinaryString(imageFlags));
          image = new NanoVGImage(handle, width[0], height[0]);
@@ -112,62 +116,62 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void beginPath() {
-      nvgBeginPath(context);
+      nvgBeginPath(nvg);
    }
 
    @Override
    public void closePath() {
-      nvgClosePath(context);
+      nvgClosePath(nvg);
    }
 
    @Override
    public void drawRectangle(float x, float y, float width, float height) {
-      nvgRect(context, x, y, width, height);
+      nvgRect(nvg, x, y, width, height);
    }
 
    @Override
    public void drawRoundedRectangle(float x, float y, float width, float height, float radius) {
-      nvgRoundedRect(context, x, y, width, height, radius);
+      nvgRoundedRect(nvg, x, y, width, height, radius);
    }
 
    @Override
    public void drawCircle(float x, float y, float radius) {
-      nvgCircle(context, x, y, radius);
+      nvgCircle(nvg, x, y, radius);
    }
 
    @Override
    public void drawEllipse(float x, float y, float radiusX, float radiusY) {
-      nvgEllipse(context, x, y, radiusX, radiusY);
+      nvgEllipse(nvg, x, y, radiusX, radiusY);
    }
 
    @Override
    public void drawArc(float x, float y, float radius, float start, float end, WindingDirection direction) {
-      nvgArc(context, x, y, radius, start, end, direction == WindingDirection.CLOCKWISE ? NVG_CW : NVG_CCW);
+      nvgArc(nvg, x, y, radius, start, end, direction == WindingDirection.CLOCKWISE ? NVG_CW : NVG_CCW);
    }
 
    @Override
    public void drawArcTo(float x1, float y1, float x2, float y2, float radius) {
-      nvgArcTo(context, x1, y1, x2, y2, radius);
+      nvgArcTo(nvg, x1, y1, x2, y2, radius);
    }
 
    @Override
    public void drawLineTo(float x, float y) {
-      nvgLineTo(context, x, y);
+      nvgLineTo(nvg, x, y);
    }
 
    @Override
    public void drawBezierTo(float controlX1, float controlY1, float controlX2, float controlY2, float targetX, float targetY) {
-      nvgBezierTo(context, controlX1, controlY1, controlX2, controlY2, targetX, targetY);
+      nvgBezierTo(nvg, controlX1, controlY1, controlX2, controlY2, targetX, targetY);
    }
 
    @Override
    public void drawQuadBezierTo(float controlX, float controlY, float targetX, float targetY) {
-      nvgQuadTo(context, controlX, controlY, targetX, targetY);
+      nvgQuadTo(nvg, controlX, controlY, targetX, targetY);
    }
 
    @Override
    public void setLineCap(LineCap cap) {
-      nvgLineCap(context, lineCapToNanoVGInteger(cap));
+      nvgLineCap(nvg, lineCapToNanoVGInteger(cap));
    }
 
    private int lineCapToNanoVGInteger(LineCap cap) {
@@ -182,58 +186,58 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void setLineJoin(LineCap join) {
-      nvgLineJoin(context, lineCapToNanoVGInteger(join));
+      nvgLineJoin(nvg, lineCapToNanoVGInteger(join));
    }
 
    @Override
    public void moveTo(float x, float y) {
-      nvgMoveTo(context, x, y);
+      nvgMoveTo(nvg, x, y);
    }
 
    @Override
    public void setGlobalAlpha(float alpha) {
-      nvgGlobalAlpha(context, alpha);
+      nvgGlobalAlpha(nvg, alpha);
    }
 
    @Override
    public void setPathWinding(WindingDirection direction) {
-      nvgPathWinding(context, direction == WindingDirection.CLOCKWISE ? NVG_CW : NVG_CCW);
+      nvgPathWinding(nvg, direction == WindingDirection.CLOCKWISE ? NVG_CW : NVG_CCW);
    }
 
    @Override
    public void setFillColor(Color color) {
-      nvgFillColor(context, ((NanoVGColor) color).getColor());
+      nvgFillColor(nvg, ((NanoVGColor) color).getColor());
    }
 
    @Override
    public void setFillPaint(Paint paint) {
-      nvgFillPaint(context, ((NanoVGPaint) paint).getPaint());
+      nvgFillPaint(nvg, ((NanoVGPaint) paint).getPaint());
    }
 
    @Override
    public void fill() {
-      nvgFill(context);
+      nvgFill(nvg);
    }
 
    @Override
    public void setStrokeColor(Color color) {
-      nvgStrokeColor(context, ((NanoVGColor) color).getColor());
+      nvgStrokeColor(nvg, ((NanoVGColor) color).getColor());
    }
 
    @Override
    public void setStrokePaint(Paint paint) {
-      nvgStrokePaint(context, ((NanoVGPaint) paint).getPaint());
+      nvgStrokePaint(nvg, ((NanoVGPaint) paint).getPaint());
    }
 
    @Override
    public void stroke() {
-      nvgStroke(context);
+      nvgStroke(nvg);
    }
 
    @Override
    public void boxGradient(float x, float y, float width, float height, float radius, float feather, Color inner, Color outer, Paint target) {
       nvgBoxGradient(
-            context,
+            nvg,
             x,
             y,
             width,
@@ -249,7 +253,7 @@ public class NanoVGGUI implements GUI {
    @Override
    public void linearGradient(float x, float y, float endX, float endY, Color start, Color end, Paint target) {
       nvgLinearGradient(
-            context,
+            nvg,
             x,
             y,
             endX,
@@ -263,7 +267,7 @@ public class NanoVGGUI implements GUI {
    @Override
    public void radialGradient(float x, float y, float innerRadius, float outerRadius, Color start, Color end, Paint target) {
       nvgRadialGradient(
-            context,
+            nvg,
             x,
             y,
             innerRadius,
@@ -277,7 +281,7 @@ public class NanoVGGUI implements GUI {
    @Override
    public void imagePattern(float x, float y, float angle, float alpha, Image image, Paint target) {
       nvgImagePattern(
-            context,
+            nvg,
             x,
             y,
             image.getWidth(),
@@ -292,7 +296,7 @@ public class NanoVGGUI implements GUI {
    @Override
    public void imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target) {
       nvgImagePattern(
-            context,
+            nvg,
             x,
             y,
             width,
@@ -306,65 +310,65 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void setStrokeWidth(float width) {
-      nvgStrokeWidth(context, width);
+      nvgStrokeWidth(nvg, width);
    }
 
    @Override
    public void putText(float x, float y, CharSequence text, float[] outTextBounds) {
-      nvgText(context, x, y, text);
-      nvgTextBounds(context, x, y, text, outTextBounds);
+      nvgText(nvg, x, y, text);
+      nvgTextBounds(nvg, x, y, text, outTextBounds);
    }
 
    @Override
    public void putText(float x, float y, CharSequence text) {
-      nvgText(context, x, y, text);
+      nvgText(nvg, x, y, text);
    }
 
    @Override
    public void putTextBox(float x, float y, float lineWidth, CharSequence text, float[] outTextBounds) {
-      nvgTextBox(context, x, y, lineWidth, text);
-      nvgTextBoxBounds(context, x, y, lineWidth, text, outTextBounds);
+      nvgTextBox(nvg, x, y, lineWidth, text);
+      nvgTextBoxBounds(nvg, x, y, lineWidth, text, outTextBounds);
    }
 
    @Override
    public void putTextBox(float x, float y, float lineWidth, CharSequence text) {
-      nvgTextBox(context, x, y, lineWidth, text);
+      nvgTextBox(nvg, x, y, lineWidth, text);
    }
 
    @Override
    public void setFontFace(String fontUid) {
       if (!loadedFonts.contains(fontUid)) {
          var fontBuffer = fontManager.loadObjectByteBuffer(fontUid);
-         nvgCreateFontMem(context, fontUid, fontBuffer, 0);
+         nvgCreateFontMem(nvg, fontUid, fontBuffer, 0);
          loadedFonts.add(fontUid);
       }
 
-      nvgFontFace(context, fontUid);
+      nvgFontFace(nvg, fontUid);
    }
 
    @Override
    public void setFontSize(float size) {
-      nvgFontSize(context, size);
+      nvgFontSize(nvg, size);
    }
 
    @Override
    public void setFontBlur(float blur) {
-      nvgFontBlur(context, blur);
+      nvgFontBlur(nvg, blur);
    }
 
    @Override
    public void setTextAlignment(int alignment) {
-      nvgTextAlign(context, alignment);
+      nvgTextAlign(nvg, alignment);
    }
 
    @Override
    public void setTextLineHeight(float textLineHeight) {
-      nvgTextLineHeight(context, textLineHeight);
+      nvgTextLineHeight(nvg, textLineHeight);
    }
 
    @Override
    public void clip(float x, float y, float width, float height) {
-      nvgScissor(context, x, y, width, height);
+      nvgScissor(nvg, x, y, width, height);
    }
 
    @Override
@@ -383,10 +387,10 @@ public class NanoVGGUI implements GUI {
       log.info("Disposed {} GUI paint buffers", paints.size());
 
       log.info("Disposing GUI images");
-      loadedImages.values().stream().map(NanoVGImage::getImageHandle).forEach(h -> nvgDeleteImage(context, h));
+      loadedImages.values().stream().map(NanoVGImage::getImageHandle).forEach(h -> nvgDeleteImage(nvg, h));
       log.info("Disposed {} GUI images", loadedImages.size());
 
-      log.info("Disposing GUI context");
-      nvgDelete(context);
+      log.info("Disposing GUI nvg");
+      nvgDelete(nvg);
    }
 }

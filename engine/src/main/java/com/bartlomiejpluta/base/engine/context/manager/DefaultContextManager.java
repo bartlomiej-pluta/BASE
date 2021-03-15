@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
+import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
@@ -33,6 +34,7 @@ public class DefaultContextManager implements ContextManager {
    private final FontManager fontManager;
    private final EntityManager entityManager;
    private final ClassLoader classLoader;
+   private final ComponentInflater inflater;
 
    @SneakyThrows
    @Override
@@ -59,6 +61,7 @@ public class DefaultContextManager implements ContextManager {
             .imageManager(imageManager)
             .mapManager(mapManager)
             .fontManager(fontManager)
+            .inflater(inflater)
             .gameRunner(gameRunner)
             .projectName(project.getName())
             .build();

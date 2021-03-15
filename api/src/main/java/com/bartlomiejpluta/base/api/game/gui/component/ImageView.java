@@ -1,14 +1,12 @@
 package com.bartlomiejpluta.base.api.game.gui.component;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.Image;
 import com.bartlomiejpluta.base.api.game.gui.base.Paint;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 
-import static java.util.Objects.requireNonNull;
-
 public class ImageView extends BaseComponent {
-   private final GUI gui;
    private final Paint paint;
 
    private Image image;
@@ -17,10 +15,9 @@ public class ImageView extends BaseComponent {
    private float scaleX = 1;
    private float scaleY = 1;
 
-   public ImageView(GUI gui, String imageUid) {
-      this.gui = requireNonNull(gui);
+   public ImageView(Context context, GUI gui) {
+      super(context, gui);
       this.paint = gui.createPaint();
-      this.image = gui.getImage(imageUid);
    }
 
    public void setImage(String imageUid) {
