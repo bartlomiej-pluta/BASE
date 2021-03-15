@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.code.stylesheet
 
+import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
@@ -68,6 +69,7 @@ class JavaSyntaxHighlightingStylesheet : Stylesheet() {
 
       comment {
          fill = c("#808080")
+         fontStyle = FontPosture.ITALIC
       }
 
       paragraphBox and hasCaret {

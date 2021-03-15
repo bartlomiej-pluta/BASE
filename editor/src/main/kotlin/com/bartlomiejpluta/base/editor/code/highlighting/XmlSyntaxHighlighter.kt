@@ -25,7 +25,7 @@ class XmlSyntaxHighlighter : SyntaxHighlighter {
             matcher.groups["ELEMENT"] != null -> {
                add(listOf("tagmark"), matcher.end("OPEN") - matcher.start("OPEN"))
                add(listOf("namespace"), matcher.end("NS") - matcher.end("OPEN"))
-               add(listOf("anytag"), matcher.end("ELEM") - matcher.end("NS"))
+               add(listOf("tagname"), matcher.end("ELEM") - matcher.end("NS"))
 
                val attributesString = matcher.groups["ATTRS"]?.let(MatchGroup::value)?.takeIf(String::isNotEmpty)
                val attributesStringLength = attributesString?.length ?: 0
@@ -36,7 +36,7 @@ class XmlSyntaxHighlighter : SyntaxHighlighter {
                      add(emptyList(), attr.range.first - last)
                      add(listOf("attribute"), attr.end("ATTR") - attr.start("ATTR"))
                      add(listOf("tagmark"), attr.end("EQ") - attr.end("ATTR"))
-                     add(listOf("avalue"), attr.end("VALUE") - attr.end("EQ"))
+                     add(listOf("value"), attr.end("VALUE") - attr.end("EQ"))
                      last = attr.end
                   }
 

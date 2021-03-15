@@ -3,9 +3,7 @@ package com.bartlomiejpluta.base.editor.code.stylesheet
 import javafx.scene.paint.Color
 import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
-import tornadofx.Stylesheet
-import tornadofx.c
-import tornadofx.cssclass
+import tornadofx.*
 
 
 class XmlSyntaxHighlightingStylesheet : Stylesheet() {
@@ -13,11 +11,17 @@ class XmlSyntaxHighlightingStylesheet : Stylesheet() {
       val prolog by cssclass()
       val namespace by cssclass()
       val tagmark by cssclass()
-      val anytag by cssclass()
+      val tagname by cssclass()
       val paren by cssclass()
       val attribute by cssclass()
-      val avalue by cssclass()
+      val value by cssclass()
       val comment by cssclass()
+      val paragraphBox by cssclass()
+      val paragraphText by cssclass()
+
+      val hasCaret by csspseudoclass()
+
+      val tabSize by cssproperty<Int>("-fx-tab-size")
    }
 
    init {
@@ -27,15 +31,16 @@ class XmlSyntaxHighlightingStylesheet : Stylesheet() {
       }
 
       namespace {
-         fill = Color.DARKRED
+         fill = Color.DARKVIOLET
       }
 
       tagmark {
          fill = Color.GRAY
       }
 
-      anytag {
-         fill = Color.CRIMSON
+      tagname {
+         fill = c("#000080")
+         fontWeight = FontWeight.BOLD
       }
 
       paren {
@@ -44,15 +49,21 @@ class XmlSyntaxHighlightingStylesheet : Stylesheet() {
       }
 
       attribute {
-         fill = Color.DARKVIOLET
+         fill = Color.DARKSLATEBLUE
+         fontStyle = FontPosture.ITALIC
       }
 
-      avalue {
-         fill = Color.BLACK
+      value {
+         fill = c("#008000")
       }
 
       comment {
-         fill = Color.TEAL
+         fill = c("#808080")
+         fontStyle = FontPosture.ITALIC
+      }
+
+      paragraphText {
+         tabSize.value = 3
       }
    }
 }
