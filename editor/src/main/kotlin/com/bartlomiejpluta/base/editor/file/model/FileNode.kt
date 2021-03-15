@@ -37,7 +37,7 @@ interface FileNode {
    fun inputStream(): InputStream = throw UnsupportedOperationException()
    fun outputStream(): OutputStream = throw UnsupportedOperationException()
 
-   fun readText(charset: Charset = Charsets.UTF_8) = inputStream().reader(charset).readText()
+   fun readText(charset: Charset = Charsets.UTF_8) = inputStream().reader(charset).use { it.readText() }
    fun writeText(text: String, charset: Charset = Charsets.UTF_8) = writeBytes(text.toByteArray(charset))
    fun writeBytes(array: ByteArray) = outputStream().use { it.write(array) }
 }
