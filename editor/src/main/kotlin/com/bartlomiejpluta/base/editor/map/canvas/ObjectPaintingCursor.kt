@@ -14,7 +14,7 @@ class ObjectPaintingCursor(
 ) : PaintingCursor {
 
    override fun render(gc: GraphicsContext) {
-      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
          renderTile(gc, row, column, centerRow, centerColumn)
       }
    }

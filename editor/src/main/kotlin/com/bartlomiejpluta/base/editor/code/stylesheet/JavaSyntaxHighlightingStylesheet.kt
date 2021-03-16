@@ -4,7 +4,7 @@ import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
-class JavaSyntaxHighlightingStylesheet : Stylesheet() {
+class JavaSyntaxHighlightingStylesheet : CodeEditorStylesheet() {
    companion object {
       val keyword by cssclass()
       val semicolon by cssclass()

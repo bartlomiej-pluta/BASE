@@ -3,10 +3,13 @@ package com.bartlomiejpluta.base.editor.code.stylesheet
 import javafx.scene.paint.Color
 import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
-import tornadofx.*
+import tornadofx.c
+import tornadofx.cssclass
+import tornadofx.cssproperty
+import tornadofx.csspseudoclass
 
 
-class XmlSyntaxHighlightingStylesheet : Stylesheet() {
+class XmlSyntaxHighlightingStylesheet : CodeEditorStylesheet() {
    companion object {
       val prolog by cssclass()
       val namespace by cssclass()
