@@ -92,7 +92,7 @@ public abstract class BaseContainer extends BaseComponent implements Container {
    @Override
    public void handleKeyEvent(KeyEvent event) {
       for (var child : children) {
-         if (!event.isConsumed()) {
+         if (event.isConsumed()) {
             return;
          }
 
