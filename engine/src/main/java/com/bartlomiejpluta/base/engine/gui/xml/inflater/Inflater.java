@@ -4,6 +4,8 @@ import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
+import com.bartlomiejpluta.base.api.game.gui.window.Inflatable;
+import com.bartlomiejpluta.base.api.game.gui.window.Ref;
 import com.bartlomiejpluta.base.api.game.gui.window.Window;
 import com.bartlomiejpluta.base.api.game.gui.window.WindowPosition;
 import com.bartlomiejpluta.base.engine.error.AppException;
@@ -18,6 +20,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @org.springframework.stereotype.Component
@@ -77,6 +81,8 @@ public class Inflater {
 
    @SneakyThrows
    private Window inflateWindow(Node root, Context context, GUI gui) {
+      var refs = new HashMap<String, Component>();
+
       var uri = root.getNamespaceURI();
       var name = root.getLocalName();
 
@@ -122,20 +128,42 @@ public class Inflater {
             throw new AppException("Window can have at most 1 child");
          }
 
-         var content = parseNode(child, context, gui);
+         var content = parseNode(child, refs, context, gui);
          window.setContent(content);
          hasContent = true;
+      }
+
+      updateWindowRefs(window, refs);
+
+      if (window instanceof Inflatable) {
+         ((Inflatable) window).onInflate();
       }
 
       return window;
    }
 
+   @SneakyThrows
+   private void updateWindowRefs(Window window, Map<String, Component> refs) {
+      var windowClass = window.getClass();
+      for (var field : windowClass.getDeclaredFields()) {
+         if (field.isAnnotationPresent(Ref.class)) {
+            var ref = field.getAnnotation(Ref.class).value();
+            var referencedComponent = refs.get(ref);
+            if (referencedComponent == null) {
+               throw new AppException("The [%s] window is trying to reference component [%s] which does not exist", windowClass.getSimpleName(), ref);
+            }
+            field.setAccessible(true);
+            field.set(window, referencedComponent);
+         }
+      }
+   }
+
    private Component inflateComponent(Node root, Context context, GUI gui) {
-      return parseNode(root, context, gui);
+      return parseNode(root, new HashMap<>(), context, gui);
    }
 
    @SneakyThrows
-   private Component parseNode(Node node, Context context, GUI gui) {
+   private Component parseNode(Node node, Map<String, Component> refs, Context context, GUI gui) {
       var uri = node.getNamespaceURI();
       var name = node.getLocalName();
 
@@ -146,7 +174,7 @@ public class Inflater {
       var canonicalName = name.replaceAll("\\*", "").replaceAll("\\.+", ".");
 
       var componentClass = loader.loadClass(canonicalName);
-      var component = createComponent(componentClass, node.getAttributes(), context, gui);
+      var component = createComponent(componentClass, node.getAttributes(), refs, context, gui);
 
       var children = node.getChildNodes();
 
@@ -168,14 +196,14 @@ public class Inflater {
             continue;
          }
 
-         component.add(parseNode(childNode, context, gui));
+         component.add(parseNode(childNode, refs, context, gui));
       }
 
       return component;
    }
 
    @SneakyThrows
-   private Component createComponent(Class<?> componentClass, NamedNodeMap attributes, Context context, GUI gui) {
+   private Component createComponent(Class<?> componentClass, NamedNodeMap attributes, Map<String, Component> refs, Context context, GUI gui) {
       var component = (Component) componentClass.getConstructor(Context.class, GUI.class).newInstance(context, gui);
 
       // Set attributes via setter methods
@@ -184,6 +212,12 @@ public class Inflater {
 
          // Ignore namespaces definitions
          if ("xmlns".equals(attribute.getPrefix())) {
+            continue;
+         }
+
+         // Collect referencable components
+         if ("ref".equals(attribute.getLocalName())) {
+            refs.put(attribute.getNodeValue(), component);
             continue;
          }
 
