@@ -24,8 +24,7 @@ class XmlSyntaxHighlighter : SyntaxHighlighter {
 
             matcher.groups["ELEMENT"] != null -> {
                add(listOf("tagmark"), matcher.end("OPEN") - matcher.start("OPEN"))
-               add(listOf("namespace"), matcher.end("NS") - matcher.end("OPEN"))
-               add(listOf("tagname"), matcher.end("ELEM") - matcher.end("NS"))
+               add(listOf("tagname"), matcher.end("ELEM") - matcher.end("OPEN"))
 
                val attributesString = matcher.groups["ATTRS"]?.let(MatchGroup::value)?.takeIf(String::isNotEmpty)
                val attributesStringLength = attributesString?.length ?: 0
@@ -70,7 +69,7 @@ class XmlSyntaxHighlighter : SyntaxHighlighter {
 
    companion object {
       private val XML_TAG =
-         """(?<ELEMENT>(?<OPEN></?\h*)(?<ELEM>(?<NS>\w+:)?\w+)(?<ATTRS>[^<>]*)(?<CLOSE>\h*/?>))|(?<COMMENT><!--[^<>]+-->)|(?<PROLOG><\?[^<>?]+?\?>)""".toRegex()
+         """(?<ELEMENT>(?<OPEN></?\h*)(?<ELEM>[:\w]+)(?<ATTRS>[^<>]*)(?<CLOSE>\h*/?>))|(?<COMMENT><!--[^<>]+-->)|(?<PROLOG><\?[^<>?]+?\?>)""".toRegex()
 
       private val ATTRIBUTES = """(?<ATTR>[:\w]+\h*)(?<EQ>=)(?<VALUE>\h*"[^"]+")""".toRegex()
    }

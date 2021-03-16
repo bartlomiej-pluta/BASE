@@ -12,14 +12,12 @@ import tornadofx.csspseudoclass
 class XmlSyntaxHighlightingStylesheet : CodeEditorStylesheet() {
    companion object {
       val prolog by cssclass()
-      val namespace by cssclass()
       val tagmark by cssclass()
       val tagname by cssclass()
       val paren by cssclass()
       val attribute by cssclass()
       val value by cssclass()
       val comment by cssclass()
-      val paragraphBox by cssclass()
       val paragraphText by cssclass()
 
       val hasCaret by csspseudoclass()
@@ -31,10 +29,6 @@ class XmlSyntaxHighlightingStylesheet : CodeEditorStylesheet() {
       prolog {
          fill = c("#BBB529")
          fontStyle = FontPosture.ITALIC
-      }
-
-      namespace {
-         fill = Color.DARKVIOLET
       }
 
       tagmark {
