@@ -12,6 +12,7 @@ import static java.util.Objects.requireNonNull;
 public abstract class BaseWindow extends BaseWidget implements Window {
    protected Context context;
    protected GUI gui;
+   protected WindowManager manager;
    protected Component content;
    protected WindowPosition windowPosition;
 
@@ -62,5 +63,15 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    @Override
    public void handleKeyEvent(KeyEvent event) {
       content.handleKeyEvent(event);
+   }
+
+   @Override
+   public void onOpen(WindowManager manager) {
+      this.manager = manager;
+   }
+
+   @Override
+   public void onClose(WindowManager manager) {
+      this.manager = null;
    }
 }
