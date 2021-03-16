@@ -28,6 +28,7 @@ class DefaultProjectAssembler : ProjectAssembler {
       packager.pack(project.imagesDirectory, targetJar, "BOOT-INF/classes/project/images")
       packager.pack(project.entitySetsDirectory, targetJar, "BOOT-INF/classes/project/entsets")
       packager.pack(project.fontsDirectory, targetJar, "BOOT-INF/classes/project/fonts")
+      packager.pack(project.widgetsDirectory, targetJar, "BOOT-INF/classes/project/widgets")
       packager.copy(project.projectFile, targetJar, "BOOT-INF/classes/project")
    }
 

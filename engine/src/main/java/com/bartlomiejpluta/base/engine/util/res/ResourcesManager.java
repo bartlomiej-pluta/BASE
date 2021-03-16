@@ -11,8 +11,12 @@ import java.util.Scanner;
 
 @Component
 public class ResourcesManager {
+   public InputStream loadResourceAsStream(String fileName) {
+      return ResourcesManager.class.getResourceAsStream(fileName);
+   }
+
    public String loadResourceAsString(String fileName) {
-      try (InputStream in = ResourcesManager.class.getResourceAsStream(fileName);
+      try (InputStream in = loadResourceAsStream(fileName);
            Scanner scanner = new Scanner(in, java.nio.charset.StandardCharsets.UTF_8.name())) {
          return scanner.useDelimiter("\\A").next();
       } catch (Exception e) {
@@ -22,7 +26,7 @@ public class ResourcesManager {
 
    public ByteBuffer loadResourceAsByteBuffer(String fileName) {
       try {
-         var bytes = ResourcesManager.class.getResourceAsStream(fileName).readAllBytes();
+         var bytes = loadResourceAsStream(fileName).readAllBytes();
          return ByteBuffer
                  .allocateDirect(bytes.length)
                  .order(ByteOrder.nativeOrder())

@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.game.runner.GameRunner;
 import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
+import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;
@@ -35,6 +36,7 @@ public class DefaultContextManager implements ContextManager {
    private final EntityManager entityManager;
    private final ClassLoader classLoader;
    private final ComponentInflater inflater;
+   private final WidgetDefinitionManager widgetDefinitionManager;
 
    @SneakyThrows
    @Override
@@ -49,6 +51,7 @@ public class DefaultContextManager implements ContextManager {
       project.getImageAssets().forEach(imageManager::registerAsset);
       project.getEntitySetAssets().forEach(entitySetManager::registerAsset);
       project.getFontAssets().forEach(fontManager::registerAsset);
+      project.getWidgetDefinitionAssets().forEach(widgetDefinitionManager::registerAsset);
 
       log.info("Creating game runner instance");
       var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());
@@ -62,6 +65,7 @@ public class DefaultContextManager implements ContextManager {
             .mapManager(mapManager)
             .fontManager(fontManager)
             .inflater(inflater)
+            .widgetDefinitionManager(widgetDefinitionManager)
             .gameRunner(gameRunner)
             .projectName(project.getName())
             .build();

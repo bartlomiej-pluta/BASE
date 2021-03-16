@@ -12,6 +12,7 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
+import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
@@ -48,6 +49,9 @@ public class DefaultContext implements Context {
 
    @NonNull
    private final ComponentInflater inflater;
+
+   @NonNull
+   private final WidgetDefinitionManager widgetDefinitionManager;
 
    @Getter
    @NonNull
@@ -104,7 +108,7 @@ public class DefaultContext implements Context {
    @Override
    public GUI newGUI() {
       log.info("Creating new GUI");
-      var gui = new NanoVGGUI(this, fontManager, imageManager, inflater);
+      var gui = new NanoVGGUI(this, fontManager, imageManager, inflater, widgetDefinitionManager);
 
       guis.add(gui);
       gui.init(screen);
