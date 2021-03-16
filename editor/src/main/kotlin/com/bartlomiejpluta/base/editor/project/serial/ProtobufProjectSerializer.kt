@@ -63,6 +63,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
 
    private fun serializeWidget(widget: WidgetAsset) = ProjectProto.WidgetAsset.newBuilder()
       .setUid(widget.uid)
+      .setSource(widget.source)
       .setName(widget.name)
       .build()
 }

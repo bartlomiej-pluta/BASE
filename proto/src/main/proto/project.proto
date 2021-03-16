@@ -50,5 +50,6 @@ message FontAsset {
 
 message WidgetAsset {
   required string uid = 1;
+  required string source = 2;
   required string name = 3;
 }
