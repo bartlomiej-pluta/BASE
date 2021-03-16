@@ -3,7 +3,6 @@ package com.bartlomiejpluta.base.engine.ui.event;
 import com.bartlomiejpluta.base.api.game.input.Key;
 import com.bartlomiejpluta.base.api.game.input.KeyAction;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
-import com.bartlomiejpluta.base.engine.error.AppException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,15 @@ public class GLFWKeyEvent implements KeyEvent {
       consumed = true;
    }
 
-   public static KeyEvent of(int key, int action) {
-      return new GLFWKeyEvent(parseKey(key), parseAction(action));
+   public static KeyEvent of(int keyCode, int actionCode) {
+      var key = parseKey(keyCode);
+      var action = parseAction(actionCode);
+
+      if (key == null && action == null) {
+         return null;
+      }
+
+      return new GLFWKeyEvent(key, action);
    }
 
    public static int glfwCode(Key key) {
@@ -276,7 +282,7 @@ public class GLFWKeyEvent implements KeyEvent {
          case GLFW_KEY_RIGHT_CONTROL -> Key.KEY_RIGHT_CONTROL;
          case GLFW_KEY_RIGHT_ALT -> Key.KEY_RIGHT_ALT;
          case GLFW_KEY_RIGHT_SUPER -> Key.KEY_RIGHT_SUPER;
-         default -> throw new AppException("Unknown key code: %d", code);
+         default -> null;
       };
    }
 
@@ -285,7 +291,7 @@ public class GLFWKeyEvent implements KeyEvent {
          case GLFW_PRESS -> KeyAction.PRESS;
          case GLFW_RELEASE -> KeyAction.RELEASE;
          case GLFW_REPEAT -> KeyAction.REPEAT;
-         default -> throw new AppException("Unknown key code: %d", code);
+         default -> null;
       };
    }
 }

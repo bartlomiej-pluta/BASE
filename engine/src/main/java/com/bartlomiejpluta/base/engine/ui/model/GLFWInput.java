@@ -29,6 +29,10 @@ public class GLFWInput implements Input {
       glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
          var event = GLFWKeyEvent.of(key, action);
 
+         if (event == null) {
+            return;
+         }
+
          // Use iterator to support removal from loop inside
          for (var iterator = keyEventHandlers.iterator(); iterator.hasNext(); ) {
             if (event.isConsumed()) {
