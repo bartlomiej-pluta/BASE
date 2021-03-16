@@ -18,6 +18,7 @@ import org.joml.Vector2ic;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class DefaultObjectLayer implements ObjectLayer {
 
@@ -30,7 +31,7 @@ public class DefaultObjectLayer implements ObjectLayer {
    @Getter
    private final PassageAbility[][] passageMap;
 
-   private final List<Movement> movements = new LinkedList<>();
+   private final Queue<Movement> movements = new LinkedList<>();
 
    private final List<Rule> rules = new ArrayList<>();
 
@@ -124,14 +125,11 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void update(float dt) {
-      for (var iterator = movements.iterator(); iterator.hasNext(); ) {
-         var movement = iterator.next();
-
+      while (!movements.isEmpty()) {
+         var movement = movements.poll();
          if (isTileReachable(movement.getTo())) {
             movement.perform();
          }
-
-         iterator.remove();
       }
 
       for (var entity : entities) {

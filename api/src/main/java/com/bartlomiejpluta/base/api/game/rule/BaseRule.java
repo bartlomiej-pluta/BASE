@@ -2,11 +2,11 @@ package com.bartlomiejpluta.base.api.game.rule;
 
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class BaseRule implements Rule {
-   private final List<Entity> invoked = new LinkedList<>();
+   private final Set<Entity> invoked = new HashSet<>();
 
    protected abstract boolean test(Entity entity);
 
