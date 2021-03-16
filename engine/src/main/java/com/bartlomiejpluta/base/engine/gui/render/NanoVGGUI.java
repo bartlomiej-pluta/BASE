@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.*;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
+import com.bartlomiejpluta.base.api.game.gui.window.Window;
 import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
@@ -11,7 +12,7 @@ import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
-import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
+import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class NanoVGGUI implements GUI {
    private final Context context;
    private final FontManager fontManager;
    private final ImageManager imageManager;
-   private final ComponentInflater inflater;
+   private final Inflater inflater;
    private final WidgetDefinitionManager widgetDefinitionManager;
 
    private long nvg;
@@ -69,7 +70,14 @@ public class NanoVGGUI implements GUI {
    public Component inflateComponent(String widgetUid) {
       log.info("Inflating component by widget definition with UID: [{}]", widgetUid);
       var is = widgetDefinitionManager.loadObject(widgetUid);
-      return inflater.inflate(is, context, this);
+      return inflater.inflateComponent(is, context, this);
+   }
+
+   @Override
+   public Window inflateWindow(String widgetUid) {
+      log.info("Inflating window by widget definition with UID: [{}]", widgetUid);
+      var is = widgetDefinitionManager.loadObject(widgetUid);
+      return inflater.inflateWindow(is, context, this);
    }
 
    @Override

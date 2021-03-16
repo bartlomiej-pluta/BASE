@@ -6,7 +6,7 @@ import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
-import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
+import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
@@ -35,7 +35,7 @@ public class DefaultContextManager implements ContextManager {
    private final FontManager fontManager;
    private final EntityManager entityManager;
    private final ClassLoader classLoader;
-   private final ComponentInflater inflater;
+   private final Inflater inflater;
    private final WidgetDefinitionManager widgetDefinitionManager;
 
    @SneakyThrows

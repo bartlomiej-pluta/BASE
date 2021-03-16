@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.api.game.gui.base;
 
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
+import com.bartlomiejpluta.base.api.game.gui.window.Window;
 import com.bartlomiejpluta.base.api.game.input.KeyEventHandler;
 import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
@@ -22,6 +23,8 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
    int IMAGE_NEAREST = 1 << 5;
 
    Component inflateComponent(String widgetUid);
+
+   Window inflateWindow(String widgetUid);
 
    Widget getRoot();
 

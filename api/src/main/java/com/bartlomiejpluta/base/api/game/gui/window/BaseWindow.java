@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.api.game.gui.window;
 
+import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.BaseWidget;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
@@ -9,8 +10,28 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 import static java.util.Objects.requireNonNull;
 
 public abstract class BaseWindow extends BaseWidget implements Window {
+   protected Context context;
+   protected GUI gui;
    protected Component content;
    protected WindowPosition windowPosition;
+
+   protected BaseWindow(Context context, GUI gui) {
+      this.context = context;
+      this.gui = gui;
+   }
+
+   @Override
+   public void setContent(Component component) {
+      if (this.content != null) {
+         this.content.setParent(null);
+      }
+
+      this.content = component;
+
+      if (component != null) {
+         component.setParent(this);
+      }
+   }
 
    @Override
    public WindowPosition getWindowPosition() {
@@ -36,16 +57,6 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    public void draw(Screen screen, GUI gui) {
       content.setPosition(x + paddingLeft, y + paddingTop);
       content.draw(screen, gui);
-   }
-
-   @Override
-   public void onOpen(WindowManager manager) {
-      // do nothing
-   }
-
-   @Override
-   public void onClose(WindowManager manager) {
-      // do nothing
    }
 
    @Override

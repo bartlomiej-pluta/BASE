@@ -4,6 +4,9 @@ import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
+import com.bartlomiejpluta.base.api.game.gui.window.Window;
+import com.bartlomiejpluta.base.api.game.gui.window.WindowPosition;
+import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import lombok.SneakyThrows;
 import org.codehaus.janino.ExpressionEvaluator;
@@ -18,14 +21,17 @@ import java.io.InputStream;
 import java.util.stream.Stream;
 
 @org.springframework.stereotype.Component
-public class ComponentInflater {
-   private static final String[] IMPORTS = Stream.of(GUI.class, SizeMode.class).map(Class::getCanonicalName).toArray(String[]::new);
+public class Inflater {
+   private static final String[] IMPORTS = Stream.of(GUI.class, SizeMode.class, WindowPosition.class)
+         .map(Class::getCanonicalName)
+         .toArray(String[]::new);
+
    private final DocumentBuilder builder;
    private final ClassLoader loader;
 
    @Autowired
    @SneakyThrows
-   public ComponentInflater(ClassLoader loader) {
+   public Inflater(ClassLoader loader) {
       this.loader = loader;
 
       var factory = DocumentBuilderFactory.newInstance();
@@ -34,21 +40,98 @@ public class ComponentInflater {
    }
 
    @SneakyThrows
-   public Component inflate(String xml, Context context, GUI gui) {
+   public Component inflateComponent(String xml, Context context, GUI gui) {
       var document = builder.parse(xml);
-      return parseNode(document.getDocumentElement(), context, gui);
+      return inflateComponent(document.getDocumentElement(), context, gui);
    }
 
    @SneakyThrows
-   public Component inflate(File file, Context context, GUI gui) {
+   public Component inflateComponent(File file, Context context, GUI gui) {
       var document = builder.parse(file);
-      return parseNode(document.getDocumentElement(), context, gui);
+      return inflateComponent(document.getDocumentElement(), context, gui);
    }
 
    @SneakyThrows
-   public Component inflate(InputStream is, Context context, GUI gui) {
+   public Component inflateComponent(InputStream is, Context context, GUI gui) {
       var document = builder.parse(is);
-      return parseNode(document.getDocumentElement(), context, gui);
+      return inflateComponent(document.getDocumentElement(), context, gui);
+   }
+
+   @SneakyThrows
+   public Window inflateWindow(String xml, Context context, GUI gui) {
+      var document = builder.parse(xml);
+      return inflateWindow(document.getDocumentElement(), context, gui);
+   }
+
+   @SneakyThrows
+   public Window inflateWindow(File file, Context context, GUI gui) {
+      var document = builder.parse(file);
+      return inflateWindow(document.getDocumentElement(), context, gui);
+   }
+
+   @SneakyThrows
+   public Window inflateWindow(InputStream is, Context context, GUI gui) {
+      var document = builder.parse(is);
+      return inflateWindow(document.getDocumentElement(), context, gui);
+   }
+
+   @SneakyThrows
+   private Window inflateWindow(Node root, Context context, GUI gui) {
+      var uri = root.getNamespaceURI();
+      var name = root.getLocalName();
+
+      if (uri != null) {
+         name = uri + "." + name;
+      }
+
+      var canonicalName = name.replaceAll("\\*", "").replaceAll("\\.+", ".");
+
+      var windowClass = loader.loadClass(canonicalName);
+
+      var window = (Window) windowClass.getConstructor(Context.class, GUI.class).newInstance(context, gui);
+      var attributes = root.getAttributes();
+
+      // Set attributes via setter methods
+      for (int i = 0; i < attributes.getLength(); ++i) {
+         var attribute = attributes.item(i);
+
+         // Ignore namespaces definitions
+         if ("xmlns".equals(attribute.getPrefix())) {
+            continue;
+         }
+
+         var setterName = createSetterMethodName(attribute.getLocalName());
+         var value = parseValue(attribute.getNodeValue());
+         var setter = windowClass.getMethod(setterName, value.getClass());
+         setter.invoke(window, value);
+      }
+
+      // Parse window content
+      var children = root.getChildNodes();
+
+      boolean hasContent = false;
+
+      for (int i = 0; i < children.getLength(); ++i) {
+         var child = children.item(i);
+
+         if (child.getNodeType() != Node.ELEMENT_NODE) {
+            continue;
+         }
+
+         if (hasContent) {
+            throw new AppException("Window can have at most 1 child");
+         }
+
+         var content = parseNode(child, context, gui);
+         window.setContent(content);
+         hasContent = true;
+      }
+
+      return window;
+   }
+
+   private Component inflateComponent(Node root, Context context, GUI gui) {
+      return parseNode(root, context, gui);
    }
 
    @SneakyThrows

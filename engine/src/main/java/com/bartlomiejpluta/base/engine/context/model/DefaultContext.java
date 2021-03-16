@@ -14,7 +14,7 @@ import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
-import com.bartlomiejpluta.base.engine.gui.xml.inflater.ComponentInflater;
+import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
@@ -48,7 +48,7 @@ public class DefaultContext implements Context {
    private final FontManager fontManager;
 
    @NonNull
-   private final ComponentInflater inflater;
+   private final Inflater inflater;
 
    @NonNull
    private final WidgetDefinitionManager widgetDefinitionManager;
