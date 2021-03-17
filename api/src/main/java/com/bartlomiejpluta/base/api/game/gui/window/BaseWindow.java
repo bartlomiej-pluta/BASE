@@ -14,7 +14,7 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    protected GUI gui;
    protected WindowManager manager;
    protected Component content;
-   protected WindowPosition windowPosition;
+   protected WindowPosition windowPosition = WindowPosition.CENTER;
 
    protected BaseWindow(Context context, GUI gui) {
       this.context = context;

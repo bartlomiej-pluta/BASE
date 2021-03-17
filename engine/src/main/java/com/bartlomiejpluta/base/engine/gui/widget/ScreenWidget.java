@@ -89,7 +89,7 @@ public class ScreenWidget implements Widget {
 
    @Override
    public SizeMode getWidthMode() {
-      return SizeMode.MATCH_PARENT;
+      return SizeMode.RELATIVE;
    }
 
    @Override
@@ -99,7 +99,7 @@ public class ScreenWidget implements Widget {
 
    @Override
    public SizeMode getHeightMode() {
-      return SizeMode.MATCH_PARENT;
+      return SizeMode.RELATIVE;
    }
 
    @Override

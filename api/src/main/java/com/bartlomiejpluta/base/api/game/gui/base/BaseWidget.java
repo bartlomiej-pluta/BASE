@@ -5,8 +5,8 @@ import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 public abstract class BaseWidget implements Widget {
    protected Widget parent;
 
-   protected SizeMode widthMode = SizeMode.NORMAL;
-   protected SizeMode heightMode = SizeMode.NORMAL;
+   protected SizeMode widthMode = SizeMode.AUTO;
+   protected SizeMode heightMode = SizeMode.AUTO;
 
    protected float x;
    protected float y;
@@ -30,26 +30,26 @@ public abstract class BaseWidget implements Widget {
 
    @Override
    public float getWidth() {
-      return widthMode == SizeMode.MATCH_PARENT
-            ? (parent != null ? parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight() - marginLeft - marginRight : 0)
+      return widthMode == SizeMode.RELATIVE
+            ? (parent != null ? width * parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight() - marginLeft - marginRight : 0)
             : getActualWidth();
    }
 
    @Override
    public float getActualWidth() {
-      return paddingLeft + (widthMode == SizeMode.NORMAL ? width : getContentWidth()) + paddingRight;
+      return paddingLeft + (widthMode == SizeMode.ABSOLUTE ? width : getContentWidth()) + paddingRight;
    }
 
    @Override
    public float getHeight() {
-      return heightMode == SizeMode.MATCH_PARENT
-            ? (parent != null ? parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom() - marginTop - marginBottom : 0)
+      return heightMode == SizeMode.RELATIVE
+            ? (parent != null ? height * parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom() - marginTop - marginBottom : 0)
             : getActualHeight();
    }
 
    @Override
    public float getActualHeight() {
-      return paddingTop + (heightMode == SizeMode.NORMAL ? height : getContentHeight()) + paddingBottom;
+      return paddingTop + (heightMode == SizeMode.ABSOLUTE ? height : getContentHeight()) + paddingBottom;
    }
 
    @Override

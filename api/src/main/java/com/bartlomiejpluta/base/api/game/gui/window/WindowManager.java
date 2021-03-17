@@ -21,7 +21,8 @@ public final class WindowManager extends BaseWidget {
    }
 
    public WindowManager(DisplayMode displayMode) {
-      super.setSizeMode(SizeMode.MATCH_PARENT, SizeMode.MATCH_PARENT);
+      super.setSizeMode(SizeMode.RELATIVE, SizeMode.RELATIVE);
+      super.setSize(1f, 1f);
       this.displayMode = displayMode;
    }
 
