@@ -1,11 +1,11 @@
 package com.bartlomiejpluta.base.engine.world.image.manager;
 
 import com.bartlomiejpluta.base.api.game.image.Image;
+import com.bartlomiejpluta.base.api.util.math.MathUtil;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
-import com.bartlomiejpluta.base.engine.util.math.MathUtil;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;

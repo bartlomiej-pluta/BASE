@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
 
 public abstract class BaseContainer extends BaseComponent implements Container {
    protected final List<Component> children = new LinkedList<>();
@@ -24,13 +25,13 @@ public abstract class BaseContainer extends BaseComponent implements Container {
 
    @Override
    public void add(Component component) {
-      this.children.add(component);
+      this.children.add(requireNonNull(component));
       component.setParent(this);
    }
 
    @Override
    public void remove(Component component) {
-      this.children.remove(component);
+      this.children.remove(requireNonNull(component));
       component.setParent(null);
    }
 

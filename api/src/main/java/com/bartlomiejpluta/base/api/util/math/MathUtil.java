@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.util.math;
+package com.bartlomiejpluta.base.api.util.math;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

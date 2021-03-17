@@ -390,6 +390,11 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void resetClip() {
+      nvgResetScissor(nvg);
+   }
+
+   @Override
    public void handleKeyEvent(KeyEvent event) {
       screenWidget.handleKeyEvent(event);
    }

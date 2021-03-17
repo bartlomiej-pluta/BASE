@@ -113,4 +113,6 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
    void imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target);
 
    void clip(float x, float y, float width, float height);
+
+   void resetClip();
 }
