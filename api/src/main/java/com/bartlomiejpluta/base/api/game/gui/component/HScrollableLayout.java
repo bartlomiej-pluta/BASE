@@ -11,23 +11,32 @@ import com.bartlomiejpluta.base.api.game.screen.Screen;
 import static com.bartlomiejpluta.base.api.util.math.MathUtil.clamp;
 import static java.lang.Math.*;
 
-public class HScrollable extends SingleChildContainer {
+public class HScrollableLayout extends HLayout {
    private float scroll = 0.0f;
    private float scrollStep = 0.25f;
    private float scrollSpeed = 0.1f;
 
-   private float scrollTarget = 0.0f;
-   private float scrollPosition = 0.0f;
-
-   public HScrollable(Context context, GUI gui) {
+   public HScrollableLayout(Context context, GUI gui) {
       super(context, gui);
    }
 
-   public float getScroll() {
+   public float getActualScroll() {
+      return getContentHeight() * -offsetX;
+   }
+
+   public int getCurrentPage() {
+      return (int) floor(scroll / scrollStep);
+   }
+
+   public int getPages() {
+      return (int) ceil(1 / scrollStep);
+   }
+
+   public float getTargetScroll() {
       return scroll;
    }
 
-   public void setScroll(Float scroll) {
+   public void scrollTo(Float scroll) {
       this.scroll = clamp(scroll, 0, 1);
    }
 
@@ -45,11 +54,6 @@ public class HScrollable extends SingleChildContainer {
 
    public void setScrollSpeed(Float scrollSpeed) {
       this.scrollSpeed = clamp(scrollSpeed, 0, 1);
-   }
-
-   @Override
-   public void remove(Component component) {
-      throw new UnsupportedOperationException();
    }
 
    @Override
@@ -80,16 +84,6 @@ public class HScrollable extends SingleChildContainer {
    }
 
    @Override
-   protected float getContentWidth() {
-      return child.getMarginLeft() + child.getActualWidth() + child.getMarginRight();
-   }
-
-   @Override
-   protected float getContentHeight() {
-      return child.getMarginTop() + child.getActualHeight() + child.getMarginBottom();
-   }
-
-   @Override
    public void handleKeyEvent(KeyEvent event) {
       super.handleKeyEvent(event);
 
@@ -99,27 +93,24 @@ public class HScrollable extends SingleChildContainer {
 
       if (event.getKey() == Key.KEY_RIGHT && (event.getAction() == KeyAction.PRESS || event.getAction() == KeyAction.REPEAT)) {
          scroll = min(scroll + scrollStep, 1);
-         scrollTarget = scroll * max(getContentWidth() - getWidth(), 0);
          event.consume();
       }
 
       if (event.getKey() == Key.KEY_LEFT && (event.getAction() == KeyAction.PRESS || event.getAction() == KeyAction.REPEAT)) {
          scroll = max(scroll - scrollStep, 0);
-         scrollTarget = scroll * max(getContentWidth() - getWidth(), 0);
          event.consume();
       }
    }
 
    @Override
    public void draw(Screen screen, GUI gui) {
-      var remainingDistance = scrollTarget - scrollPosition;
+      var remainingDistance = -scroll * max(getContentWidth() - getWidth(), 0) - offsetX;
       if (abs(remainingDistance) > scrollSpeed) {
-         scrollPosition += scrollSpeed * remainingDistance;
+         offsetX += scrollSpeed * remainingDistance;
       }
 
       gui.clip(x, y, getWidth(), getHeight());
-      child.setPosition(x + paddingLeft + child.getMarginLeft() - scrollPosition, y + paddingTop + child.getMarginTop());
-      child.draw(screen, gui);
+      super.draw(screen, gui);
       gui.resetClip();
    }
 }

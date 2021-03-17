@@ -5,6 +5,8 @@ import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 
 public class HLayout extends BaseContainer {
+   protected float offsetX = 0.0f;
+   protected float offsetY = 0.0f;
 
    public HLayout(Context context, GUI gui) {
       super(context, gui);
@@ -22,8 +24,8 @@ public class HLayout extends BaseContainer {
 
    @Override
    public void draw(Screen screen, GUI gui) {
-      var currentX = x + paddingLeft;
-      var currentY = y + paddingTop;
+      var currentX = x + paddingLeft + offsetX;
+      var currentY = y + paddingTop + offsetY;
 
       for (var child : children) {
          var childAbsX = currentX + child.getMarginLeft();
