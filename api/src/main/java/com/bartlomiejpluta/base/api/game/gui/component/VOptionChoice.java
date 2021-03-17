@@ -8,7 +8,7 @@ import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 
 import java.util.EnumSet;
 
-public class VOptionChoice extends VLayout {
+public class VOptionChoice extends VScrollableLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
    private int selected = 0;
 
@@ -43,14 +43,27 @@ public class VOptionChoice extends VLayout {
          blurAll();
          selected = (++selected) % children.size();
          children.get(selected).focus();
+         scrollToSelected();
          event.consume();
       } else if (event.getKey() == Key.KEY_UP && ACTIONS.contains(event.getAction())) {
          blurAll();
          var size = children.size();
          selected = (((--selected) % size) + size) % size;
          children.get(selected).focus();
+         scrollToSelected();
          event.consume();
       }
+   }
+
+   private void scrollToSelected() {
+      var childrenHeight = 0.0f;
+
+      for (int i = 0; i < selected; ++i) {
+         var child = children.get(i);
+         childrenHeight += child.getMarginTop() + child.getHeight() + child.getMarginBottom();
+      }
+
+      scrollTo(childrenHeight / getHeight());
    }
 
    private void blurAll() {

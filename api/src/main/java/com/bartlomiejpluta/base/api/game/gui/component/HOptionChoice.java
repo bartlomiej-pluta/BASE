@@ -8,7 +8,7 @@ import com.bartlomiejpluta.base.api.game.input.KeyEvent;
 
 import java.util.EnumSet;
 
-public class HOptionChoice extends HLayout {
+public class HOptionChoice extends HScrollableLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
    private int selected = 0;
 
@@ -43,15 +43,27 @@ public class HOptionChoice extends HLayout {
          blurAll();
          selected = (++selected) % children.size();
          children.get(selected).focus();
+         scrollToSelected();
          event.consume();
-
       } else if (event.getKey() == Key.KEY_LEFT && ACTIONS.contains(event.getAction())) {
          blurAll();
          var size = children.size();
          selected = (((--selected) % size) + size) % size;
          children.get(selected).focus();
+         scrollToSelected();
          event.consume();
       }
+   }
+
+   private void scrollToSelected() {
+      var childrenWidth = 0.0f;
+
+      for (int i = 0; i < selected; ++i) {
+         var child = this.children.get(i);
+         childrenWidth += child.getMarginLeft() + child.getWidth() + child.getMarginRight();
+      }
+
+      scrollTo(childrenWidth / getWidth());
    }
 
    private void blurAll() {
