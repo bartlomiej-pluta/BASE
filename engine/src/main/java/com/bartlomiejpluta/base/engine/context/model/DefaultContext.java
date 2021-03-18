@@ -88,10 +88,18 @@ public class DefaultContext implements Context {
    @SneakyThrows
    @Override
    public void openMap(@NonNull String mapUid) {
+      log.info("Opening map with UID: [{}]", mapUid);
       map = mapManager.loadObject(mapUid);
       mapHandler = mapManager.loadHandler(this, mapUid);
 
       mapHandler.onOpen(this, map);
+   }
+
+   @Override
+   public void closeMap() {
+      log.info("Closing map");
+      map = null;
+      mapHandler = null;
    }
 
    @Override

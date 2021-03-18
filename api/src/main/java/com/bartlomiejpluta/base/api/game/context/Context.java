@@ -24,6 +24,8 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    void openMap(String mapUid);
 
+   void closeMap();
+
    Entity createEntity(String entitySetUid);
 
    Image getImage(String imageUid);
