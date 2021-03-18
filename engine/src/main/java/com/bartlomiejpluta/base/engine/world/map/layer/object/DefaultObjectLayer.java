@@ -35,6 +35,9 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    private final List<Rule> rules = new ArrayList<>();
 
+   private final List<Entity> entitiesToRemove = new LinkedList<>();
+   private final List<Rule> rulesToRemove = new LinkedList<>();
+
    private final int rows;
    private final int columns;
    private final Vector2fc stepSize;
@@ -55,12 +58,12 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void unregisterRule(Rule rule) {
-      rules.remove(rule);
+      rulesToRemove.add(rule);
    }
 
    @Override
    public void unregisterRules() {
-      rules.clear();
+      rulesToRemove.addAll(rules);
    }
 
    @Override
@@ -72,13 +75,12 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void removeEntity(Entity entity) {
-      entity.onRemove(this);
-      entities.remove(entity);
+      entitiesToRemove.add(entity);
    }
 
    @Override
    public void clearEntities() {
-      entities.clear();
+      entitiesToRemove.addAll(entities);
    }
 
    @Override
@@ -114,7 +116,6 @@ public class DefaultObjectLayer implements ObjectLayer {
          }
       }
 
-
       return true;
    }
 
@@ -144,6 +145,22 @@ public class DefaultObjectLayer implements ObjectLayer {
          if (entity instanceof NPC) {
             ((NPC) entity).getStrategy().nextActivity(this, dt);
          }
+      }
+
+      // Remove entities requested to be removed
+      if (!entitiesToRemove.isEmpty()) {
+         for (var entity : entitiesToRemove) {
+            entities.remove(entity);
+            entity.onRemove(this);
+         }
+
+         entitiesToRemove.clear();
+      }
+
+      // Remove rules requested to be unregistered
+      if (!rulesToRemove.isEmpty()) {
+         rules.removeAll(rulesToRemove);
+         rulesToRemove.clear();
       }
    }
 
