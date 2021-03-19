@@ -21,17 +21,17 @@ public abstract class ComponentWrapper extends BaseComponent {
 
    @Override
    protected float getContentWidth() {
-      return component.getWidth();
+      return component.getMarginLeft() + component.getWidth() + component.getMarginRight();
    }
 
    @Override
    protected float getContentHeight() {
-      return component.getHeight();
+      return component.getMarginTop() + component.getHeight() + component.getMarginBottom();
    }
 
    @Override
    public void draw(Screen screen, GUI gui) {
-      component.setPosition(x, y);
+      component.setPosition(x + component.getMarginLeft(), y + component.getMarginTop());
       component.draw(screen, gui);
    }
 }
