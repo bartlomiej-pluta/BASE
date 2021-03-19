@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
+import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -22,6 +23,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
       proto.addAllImages(item.images.map(this::serializeImage))
       proto.addAllEntitySets(item.entitySets.map(this::serializeEntitySet))
+      proto.addAllAnimations(item.animations.map(this::serializeAnimation))
       proto.addAllFonts(item.fonts.map(this::serializeFont))
       proto.addAllWidgets(item.widgets.map(this::serializeWidget))
       proto.build().writeTo(output)
@@ -53,6 +55,14 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(entitySet.name)
       .setRows(entitySet.rows)
       .setColumns(entitySet.columns)
+      .build()
+
+   private fun serializeAnimation(animation: AnimationAsset) = ProjectProto.AnimationAsset.newBuilder()
+      .setUid(animation.uid)
+      .setSource(animation.source)
+      .setName(animation.name)
+      .setRows(animation.rows)
+      .setColumns(animation.columns)
       .build()
 
    private fun serializeFont(font: FontAsset) = ProjectProto.FontAsset.newBuilder()

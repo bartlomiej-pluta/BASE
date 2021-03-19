@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
+import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -23,6 +24,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       project.tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(project, it) })
       project.images.addAll(proto.imagesList.map { deserializeImage(project, it) })
       project.entitySets.addAll(proto.entitySetsList.map { deserializeEntitySet(project, it) })
+      project.animations.addAll(proto.animationsList.map { deserializeAnimation(project, it) })
       project.fonts.addAll(proto.fontsList.map { deserializeFont(project, it) })
       project.widgets.addAll(proto.widgetsList.map { deserializeWidget(project, it) })
 
@@ -58,6 +60,15 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = entitySetAsset.name,
       rows = entitySetAsset.rows,
       columns = entitySetAsset.columns
+   )
+
+   private fun deserializeAnimation(project: Project, animationAsset: ProjectProto.AnimationAsset) = AnimationAsset(
+      project = project,
+      uid = animationAsset.uid,
+      source = animationAsset.source,
+      name = animationAsset.name,
+      rows = animationAsset.rows,
+      columns = animationAsset.columns
    )
 
    private fun deserializeFont(project: Project, fontAsset: ProjectProto.FontAsset) = FontAsset(

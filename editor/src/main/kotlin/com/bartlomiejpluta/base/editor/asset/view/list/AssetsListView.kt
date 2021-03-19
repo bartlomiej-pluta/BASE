@@ -32,6 +32,10 @@ class AssetsListView : View() {
       menuitem("Import Entity Set...") { mainController.importEntitySet() }
    }
 
+   private val animations = AssetCategory("Animations").apply {
+      menuitem("Import Animation...") { mainController.importAnimation() }
+   }
+
    private val fonts = AssetCategory("Fonts").apply {
       menuitem("Import Font...") { mainController.importFont() }
    }
@@ -46,6 +50,7 @@ class AssetsListView : View() {
          tileSets,
          images,
          entitySet,
+         animations,
          fonts,
          widgets
       )
@@ -59,6 +64,7 @@ class AssetsListView : View() {
             Bindings.bindContent(tileSets.items, it.tileSets)
             Bindings.bindContent(images.items, it.images)
             Bindings.bindContent(entitySet.items, it.entitySets)
+            Bindings.bindContent(animations.items, it.animations)
             Bindings.bindContent(fonts.items, it.fonts)
             Bindings.bindContent(widgets.items, it.widgets)
             root.root.expandAll()

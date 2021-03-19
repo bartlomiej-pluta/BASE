@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.model
 
+import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
@@ -32,10 +33,11 @@ class Project {
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
    val entitySets = observableListOf<EntitySet>()
+   val animations = observableListOf<AnimationAsset>()
    val fonts = observableListOf<FontAsset>()
    val widgets = observableListOf<WidgetAsset>()
 
-   val assetLists = listOf(maps, tileSets, images, entitySets, fonts, widgets)
+   val assetLists = listOf(maps, tileSets, images, entitySets, animations, fonts, widgets)
 
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
@@ -51,6 +53,10 @@ class Project {
 
    val entitySetsDirectoryProperty = SimpleObjectProperty<File>()
    var entitySetsDirectory by entitySetsDirectoryProperty
+      private set
+
+   val animationsDirectoryProperty = SimpleObjectProperty<File>()
+   var animationsDirectory by animationsDirectoryProperty
       private set
 
    val fontsDirectoryProperty = SimpleObjectProperty<File>()
@@ -95,6 +101,7 @@ class Project {
             tileSetsDirectory = File(it, TILE_SETS_DIR)
             imagesDirectory = File(it, IMAGES_DIR)
             entitySetsDirectory = File(it, ENTITY_SETS_DIR)
+            animationsDirectory = File(it, ANIMATIONS_DIR)
             fontsDirectory = File(it, FONTS_DIR)
             widgetsDirectory = File(it, WIDGETS_DIR)
             codeDirectory = File(it, CODE_DIR)
@@ -112,6 +119,7 @@ class Project {
       tileSetsDirectory?.mkdirs()
       imagesDirectory?.mkdirs()
       entitySetsDirectory?.mkdirs()
+      animationsDirectory?.mkdirs()
       fontsDirectory?.mkdirs()
       widgetsDirectory?.mkdirs()
       codeDirectory?.mkdirs()
@@ -125,6 +133,7 @@ class Project {
       const val TILE_SETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"
       const val ENTITY_SETS_DIR = "entsets"
+      const val ANIMATIONS_DIR = "animations"
       const val FONTS_DIR = "fonts"
       const val WIDGETS_DIR = "widgets"
       const val CODE_DIR = "code"

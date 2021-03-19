@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.context
 
+import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
+import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
@@ -175,6 +177,19 @@ class DefaultProjectContext : ProjectContext {
             val targetFile = File(it.entitySetsDirectory, source)
             data.file.copyTo(targetFile)
             it.entitySets += EntitySet(it, uid, source, data.name, data.rows, data.columns)
+
+            save()
+         }
+      }
+   }
+
+   override fun importAnimation(data: AnimationAssetData) {
+      project?.let {
+         UID.next(it.animations.map(Asset::uid)).let { uid ->
+            val source = "$uid.${data.file.extension}"
+            val targetFile = File(it.animationsDirectory, source)
+            data.file.copyTo(targetFile)
+            it.animations += AnimationAsset(it, uid, source, data.name, data.rows, data.columns)
 
             save()
          }

@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.editor.main.controller
 
+import com.bartlomiejpluta.base.editor.animation.view.importing.ImportAnimationFragment
+import com.bartlomiejpluta.base.editor.animation.viewmodel.AnimationAssetDataVM
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
@@ -166,6 +168,20 @@ class MainController : Controller() {
       find<ImportEntitySetFragment>(scope).apply {
          onComplete {
             projectContext.importEntitySet(it)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
+   fun importAnimation() {
+      val vm = AnimationAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportAnimationFragment>(scope).apply {
+         onComplete {
+            projectContext.importAnimation(it)
          }
 
          openModal(block = true, resizable = false)

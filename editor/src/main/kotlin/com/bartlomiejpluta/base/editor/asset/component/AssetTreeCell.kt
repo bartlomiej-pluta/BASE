@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.asset.component
 
+import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
@@ -72,6 +73,7 @@ class AssetTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAs
          is TileSetAsset -> FontIcon("fa-th")
          is ImageAsset -> FontIcon("fa-image")
          is EntitySet -> FontIcon("fa-male")
+         is AnimationAsset -> FontIcon("fa-film")
          is FontAsset -> FontIcon("fa-font")
          is WidgetAsset -> FontIcon("fa-tachometer")
          else -> null
