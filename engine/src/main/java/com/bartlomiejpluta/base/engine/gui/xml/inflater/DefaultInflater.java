@@ -96,7 +96,10 @@ public class DefaultInflater implements Inflater {
          name = uri + "." + name;
       }
 
-      var canonicalName = name.replaceAll("\\*", "").replaceAll("\\.+", ".");
+      var canonicalName = name
+            .replaceAll("\\*", "")
+            .replaceAll("\\.+", ".")
+            .replaceAll("-+", "\\$");
 
       var windowClass = loader.loadClass(canonicalName);
 
@@ -177,7 +180,10 @@ public class DefaultInflater implements Inflater {
          name = uri + "." + name;
       }
 
-      var canonicalName = name.replaceAll("\\*", "").replaceAll("\\.+", ".");
+      var canonicalName = name
+            .replaceAll("\\*", "")
+            .replaceAll("\\.+", ".")
+            .replaceAll("-+", "\\$");
 
       var componentClass = loader.loadClass(canonicalName);
       var component = createComponent(componentClass, node.getAttributes(), refs, context, gui);
