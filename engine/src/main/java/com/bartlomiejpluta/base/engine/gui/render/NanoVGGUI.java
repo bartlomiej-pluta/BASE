@@ -47,6 +47,8 @@ public class NanoVGGUI implements GUI {
    private final Set<String> loadedFonts = new HashSet<>();
    private final Map<String, NanoVGImage> loadedImages = new HashMap<>();
 
+   private boolean visible = true;
+
    public void init(Screen screen) {
       nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
@@ -59,6 +61,10 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
+      if (!visible) {
+         return;
+      }
+
       nvgBeginFrame(nvg, screen.getWidth(), screen.getHeight(), 1);
 
       screenWidget.draw(screen, this);
@@ -78,6 +84,26 @@ public class NanoVGGUI implements GUI {
       log.info("Inflating window by widget definition with UID: [{}]", widgetUid);
       var is = widgetDefinitionManager.loadObject(widgetUid);
       return inflater.inflateWindow(is, context, this);
+   }
+
+   @Override
+   public boolean isVisible() {
+      return visible;
+   }
+
+   @Override
+   public void setVisible(boolean visible) {
+      this.visible = visible;
+   }
+
+   @Override
+   public void show() {
+      this.visible = true;
+   }
+
+   @Override
+   public void hide() {
+      this.visible = false;
    }
 
    @Override

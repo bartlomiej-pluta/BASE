@@ -26,6 +26,14 @@ public interface GUI extends Renderable, Disposable, KeyEventHandler {
 
    Window inflateWindow(String widgetUid);
 
+   boolean isVisible();
+
+   void setVisible(boolean visible);
+
+   void show();
+
+   void hide();
+
    Widget getRoot();
 
    void setRoot(Widget root);
