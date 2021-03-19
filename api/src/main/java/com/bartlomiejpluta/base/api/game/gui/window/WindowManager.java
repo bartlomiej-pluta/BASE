@@ -27,27 +27,27 @@ public final class WindowManager extends BaseWidget {
    }
 
    @Override
-   protected float getContentWidth() {
+   protected final float getContentWidth() {
       return 0;
    }
 
    @Override
-   protected float getContentHeight() {
+   protected final float getContentHeight() {
       return 0;
    }
 
    @Override
-   public void setSizeMode(SizeMode widthMode, SizeMode heightMode) {
+   public final void setSizeMode(SizeMode widthMode, SizeMode heightMode) {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
    @Override
-   public void setWidthMode(SizeMode mode) {
+   public final void setWidthMode(SizeMode mode) {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
    @Override
-   public void setHeightMode(SizeMode mode) {
+   public final void setHeightMode(SizeMode mode) {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
