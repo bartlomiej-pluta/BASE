@@ -69,7 +69,7 @@ class XmlSyntaxHighlighter : SyntaxHighlighter {
 
    companion object {
       private val XML_TAG =
-         """(?<ELEMENT>(?<OPEN></?\h*)(?<ELEM>[:\w]+)(?<ATTRS>[^<>]*)(?<CLOSE>\h*/?>))|(?<COMMENT><!--[^<>]+-->)|(?<PROLOG><\?[^<>?]+?\?>)""".toRegex()
+         """(?<ELEMENT>(?<OPEN></?\h*)(?<ELEM>[:.\-\w]+)(?<ATTRS>[^<>]*)(?<CLOSE>\h*/?>))|(?<COMMENT><!--[^<>]+-->)|(?<PROLOG><\?[^<>?]+?\?>)""".toRegex()
 
       private val ATTRIBUTES = """(?<ATTR>[:\w]+\h*)(?<EQ>=)(?<VALUE>\h*"[^"]+")""".toRegex()
    }
