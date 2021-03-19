@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.engine.gui.xml.inflater;
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
 import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
+import com.bartlomiejpluta.base.api.game.gui.base.Widget;
 import com.bartlomiejpluta.base.api.game.gui.component.Component;
 import com.bartlomiejpluta.base.api.game.gui.window.Inflatable;
 import com.bartlomiejpluta.base.api.game.gui.window.Ref;
@@ -142,33 +143,45 @@ public class DefaultInflater implements Inflater {
          hasContent = true;
       }
 
-      updateWindowRefs(window, refs);
+      updateWidgetRefs(window, refs);
 
-      if (window instanceof Inflatable) {
-         ((Inflatable) window).onInflate();
-      }
+      invokeInflatableHook(window);
 
       return window;
    }
 
-   @SneakyThrows
-   private void updateWindowRefs(Window window, Map<String, Component> refs) {
-      var windowClass = window.getClass();
-      for (var field : windowClass.getDeclaredFields()) {
-         if (field.isAnnotationPresent(Ref.class)) {
-            var ref = field.getAnnotation(Ref.class).value();
-            var referencedComponent = refs.get(ref);
-            if (referencedComponent == null) {
-               throw new AppException("The [%s] window is trying to reference component [%s] which does not exist", windowClass.getSimpleName(), ref);
-            }
-            field.setAccessible(true);
-            field.set(window, referencedComponent);
-         }
+   private void invokeInflatableHook(Widget widget) {
+      if (widget instanceof Inflatable) {
+         ((Inflatable) widget).onInflate();
       }
    }
 
    private Component inflateComponent(Node root, Context context, GUI gui) {
-      return parseNode(root, new HashMap<>(), context, gui);
+      var refs = new HashMap<String, Component>();
+      var component = parseNode(root, refs, context, gui);
+
+      updateWidgetRefs(component, refs);
+      invokeInflatableHook(component);
+
+      return component;
+   }
+
+   @SneakyThrows
+   private void updateWidgetRefs(Widget widget, Map<String, Component> refs) {
+      var widgetClass = widget.getClass();
+      for (var field : widgetClass.getDeclaredFields()) {
+         if (field.isAnnotationPresent(Ref.class)) {
+            var ref = field.getAnnotation(Ref.class).value();
+            var referencedComponent = refs.get(ref);
+
+            if (referencedComponent == null) {
+               throw new AppException("The [%s] widget is trying to reference component [%s] which does not exist", widgetClass.getSimpleName(), ref);
+            }
+
+            field.setAccessible(true);
+            field.set(widget, referencedComponent);
+         }
+      }
    }
 
    @SneakyThrows
