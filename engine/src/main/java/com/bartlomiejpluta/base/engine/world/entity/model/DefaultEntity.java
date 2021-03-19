@@ -27,6 +27,17 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Getter
    private Direction faceDirection;
 
+   @Getter
+   @Setter
+   private boolean blocking;
+
+   public DefaultEntity(Mesh mesh, Material material, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows) {
+      super(mesh, material);
+      this.spriteDirectionRows = spriteDirectionRows;
+      this.faceDirection = Direction.DOWN;
+      this.spriteDefaultRows = spriteDefaultRows;
+   }
+
    @Override
    public int getAnimationSpeed() {
       return animationSpeed;
@@ -36,10 +47,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    public boolean shouldAnimate() {
       return isMoving();
    }
-
-   @Getter
-   @Setter
-   private boolean blocking;
 
    @Override
    public Vector2fc[] getSpriteAnimationFramesPositions() {
@@ -108,12 +115,5 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public void onRemove(ObjectLayer layer) {
       // Do nothing
-   }
-
-   public DefaultEntity(Mesh mesh, Material material, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows) {
-      super(mesh, material);
-      this.spriteDirectionRows = spriteDirectionRows;
-      this.faceDirection = Direction.DOWN;
-      this.spriteDefaultRows = spriteDefaultRows;
    }
 }

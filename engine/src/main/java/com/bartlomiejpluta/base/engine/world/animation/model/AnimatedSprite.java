@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.world.animation;
+package com.bartlomiejpluta.base.engine.world.animation.model;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.screen.Screen;

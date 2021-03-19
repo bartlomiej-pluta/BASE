@@ -2,18 +2,19 @@ package com.bartlomiejpluta.base.engine.project.model;
 
 import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
+import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
 import com.bartlomiejpluta.base.engine.world.entity.asset.EntitySetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.engine.world.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.engine.world.tileset.asset.TileSetAsset;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
 public class Project {
 
    @NonNull
@@ -33,6 +34,9 @@ public class Project {
 
    @NonNull
    private final List<EntitySetAsset> entitySetAssets;
+
+   @NonNull
+   private final List<AnimationAsset> animationAssets;
 
    @NonNull
    private final List<FontAsset> fontAssets;
