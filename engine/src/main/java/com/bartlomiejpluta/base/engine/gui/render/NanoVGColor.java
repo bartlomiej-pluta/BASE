@@ -30,6 +30,21 @@ public class NanoVGColor implements Color, Disposable {
    }
 
    @Override
+   public void setRGB(int hex) {
+      color.r(((hex & 0xFF0000) >> 2 * 8) / 255f);
+      color.g(((hex & 0x00FF00) >> 8) / 255f);
+      color.b(((hex & 0x0000FF)) / 255f);
+   }
+
+   @Override
+   public void setRGBA(long hex) {
+      color.r(((hex & 0xFF000000L) >> 3 * 8) / 255f);
+      color.g(((hex & 0x00FF0000L) >> 2 * 8) / 255f);
+      color.b(((hex & 0x0000FF00L) >> 8) / 255f);
+      color.a(((hex & 0x000000FFL)) / 255f);
+   }
+
+   @Override
    public void setRed(float value) {
       color.r(value);
    }
@@ -37,18 +52,36 @@ public class NanoVGColor implements Color, Disposable {
    @Override
    public void setGreen(float value) {
       color.g(value);
-
    }
 
    @Override
    public void setBlue(float value) {
       color.b(value);
-
    }
 
    @Override
    public void setAlpha(float value) {
       color.a(value);
+   }
+
+   @Override
+   public void setRed(int value) {
+      color.r(value / 255f);
+   }
+
+   @Override
+   public void setGreen(int value) {
+      color.g(value / 255f);
+   }
+
+   @Override
+   public void setBlue(int value) {
+      color.b(value / 255f);
+   }
+
+   @Override
+   public void setAlpha(int value) {
+      color.a(value / 255f);
    }
 
    @Override

@@ -19,6 +19,7 @@ public class Label extends BaseComponent {
    public Label(Context context, GUI gui) {
       super(context, gui);
       this.color = gui.createColor();
+      this.color.setRGBA(0xFFFFFFFF);
    }
 
    public String getText() {
@@ -61,11 +62,19 @@ public class Label extends BaseComponent {
       color.setRed(value);
    }
 
+   public void setRed(Integer value) {
+      color.setRed(value);
+   }
+
    public float getGreen() {
       return color.getGreen();
    }
 
    public void setGreen(Float value) {
+      color.setGreen(value);
+   }
+
+   public void setGreen(Integer value) {
       color.setGreen(value);
    }
 
@@ -77,11 +86,19 @@ public class Label extends BaseComponent {
       color.setBlue(value);
    }
 
+   public void setBlue(Integer value) {
+      color.setBlue(value);
+   }
+
    public float getAlpha() {
       return color.getAlpha();
    }
 
    public void setAlpha(Float value) {
+      color.setAlpha(value);
+   }
+
+   public void setAlpha(Integer value) {
       color.setAlpha(value);
    }
 
@@ -91,6 +108,10 @@ public class Label extends BaseComponent {
 
    public void setColor(Float red, Float green, Float blue) {
       color.setRGB(red, green, blue);
+   }
+
+   public void setColor(Integer hex) {
+      color.setRGB(hex);
    }
 
    @Override
