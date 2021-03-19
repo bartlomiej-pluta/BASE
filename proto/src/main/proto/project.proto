@@ -12,6 +12,7 @@ message Project {
   repeated EntitySetAsset entitySets = 6;
   repeated FontAsset fonts = 7;
   repeated WidgetAsset widgets = 8;
+  repeated AnimationAsset animations = 9;
 }
 
 message GameMapAsset {
@@ -52,4 +53,12 @@ message WidgetAsset {
   required string uid = 1;
   required string source = 2;
   required string name = 3;
+}
+
+message AnimationAsset {
+  required string uid = 1;
+  required string source = 2;
+  required string name = 3;
+  required uint32 rows = 4;
+  required uint32 columns = 5;
 }
