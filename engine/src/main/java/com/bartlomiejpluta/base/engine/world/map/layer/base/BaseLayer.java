@@ -21,7 +21,7 @@ public abstract class BaseLayer implements Layer, Updatable {
    @NonNull
    protected final Vector2fc stepSize;
 
-   private final Queue<Animation> animations = new LinkedList<>();
+   protected final Queue<Animation> animations = new LinkedList<>();
 
    public BaseLayer(@NonNull GameMap map) {
       this.map = map;
@@ -32,6 +32,7 @@ public abstract class BaseLayer implements Layer, Updatable {
    public void pushAnimation(Animation animation) {
       animation.setStepSize(stepSize.x(), stepSize.y());
       animations.add(animation);
+      animation.onAdd(this);
    }
 
    @Override

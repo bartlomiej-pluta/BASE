@@ -1,9 +1,13 @@
 package com.bartlomiejpluta.base.api.game.animation;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
+import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.entity.Movement;
+import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.util.path.Path;
 import org.joml.Matrix4fc;
 import org.joml.Vector2fc;
 import org.joml.Vector2ic;
@@ -138,6 +142,36 @@ public abstract class AnimationDelegate implements Animation {
    @Override
    public Matrix4fc getModelMatrix() {
       return animation.getModelMatrix();
+   }
+
+   @Override
+   public Movement prepareMovement(Direction direction) {
+      return animation.prepareMovement(direction);
+   }
+
+   @Override
+   public Movement getMovement() {
+      return animation.getMovement();
+   }
+
+   @Override
+   public boolean isMoving() {
+      return animation.isMoving();
+   }
+
+   @Override
+   public void followPath(Path<Animation> path, boolean repeat) {
+      animation.followPath(path, repeat);
+   }
+
+   @Override
+   public void setSpeed(float speed) {
+      animation.setSpeed(speed);
+   }
+
+   @Override
+   public void onAdd(Layer layer) {
+      animation.onAdd(layer);
    }
 
    @Override
