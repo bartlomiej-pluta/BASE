@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.engine.world.animation.model.AnimatedSprite;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -86,7 +87,21 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    public void setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;
-      setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
+      super.setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
+   }
+
+   @Override
+   public void setPosition(float x, float y) {
+      super.setPosition(x, y);
+      coordinates.x = (int) (x / coordinateStepSize.x);
+      coordinates.y = (int) (y / coordinateStepSize.y);
+   }
+
+   @Override
+   public void setPosition(Vector2fc position) {
+      super.setPosition(position);
+      coordinates.x = (int) (position.x() / coordinateStepSize.x);
+      coordinates.y = (int) (position.y() / coordinateStepSize.y);
    }
 
    public void setCoordinates(Vector2ic coordinates) {
@@ -96,7 +111,12 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    public void setStepSize(float x, float y) {
       coordinateStepSize.x = x;
       coordinateStepSize.y = y;
-      setCoordinates(coordinates);
+
+      if (!position.equals(0, 0)) {
+         setPosition(position);
+      } else {
+         setCoordinates(coordinates);
+      }
    }
 
    public int chebyshevDistance(Vector2ic coordinates) {

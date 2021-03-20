@@ -30,8 +30,8 @@ public abstract class BaseLayer implements Layer, Updatable {
 
    @Override
    public void pushAnimation(Animation animation) {
-      animations.add(animation);
       animation.setStepSize(stepSize.x(), stepSize.y());
+      animations.add(animation);
    }
 
    @Override
