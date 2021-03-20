@@ -6,7 +6,7 @@ import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;
 import org.joml.Vector2ic;
 
-public interface Entity extends Placeable, Renderable, Updatable {
+public interface Entity extends Placeable, Movable, Renderable, Updatable {
    void setStepSize(float x, float y);
 
    Vector2ic getCoordinates();
@@ -15,10 +15,6 @@ public interface Entity extends Placeable, Renderable, Updatable {
 
    void setCoordinates(int x, int y);
 
-   Movement prepareMovement(Direction direction);
-
-   Movement getMovement();
-
    Direction getFaceDirection();
 
    void setFaceDirection(Direction direction);
@@ -26,8 +22,6 @@ public interface Entity extends Placeable, Renderable, Updatable {
    void setSpeed(float speed);
 
    void setAnimationSpeed(float speed);
-
-   boolean isMoving();
 
    int chebyshevDistance(Entity other);
 
