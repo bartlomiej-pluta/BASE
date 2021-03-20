@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.context.model;
 
+import com.bartlomiejpluta.base.api.game.animation.Animation;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
@@ -15,6 +16,7 @@ import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
+import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
@@ -37,6 +39,9 @@ public class DefaultContext implements Context {
 
    @NonNull
    private final EntityManager entityManager;
+
+   @NonNull
+   private final AnimationManager animationManager;
 
    @NonNull
    private final ImageManager imageManager;
@@ -106,6 +111,11 @@ public class DefaultContext implements Context {
    public Entity createEntity(@NonNull String entitySetUid) {
       log.info("Creating new entity with UID: [{}]", entitySetUid);
       return entityManager.createEntity(entitySetUid);
+   }
+
+   @Override
+   public Animation createAnimation(String animationUid) {
+      return animationManager.loadObject(animationUid);
    }
 
    @Override

@@ -10,9 +10,9 @@ import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.rule.Rule;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
 import lombok.Getter;
 import lombok.NonNull;
-import org.joml.Vector2fc;
 import org.joml.Vector2ic;
 
 import java.util.ArrayList;
@@ -20,10 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class DefaultObjectLayer implements ObjectLayer {
-
-   @Getter
-   private final GameMap map;
+public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Getter
    private final List<Entity> entities;
@@ -40,13 +37,11 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    private final int rows;
    private final int columns;
-   private final Vector2fc stepSize;
 
-   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, @NonNull Vector2fc stepSize, List<Entity> entities, PassageAbility[][] passageMap) {
-      this.map = map;
+   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, List<Entity> entities, PassageAbility[][] passageMap) {
+      super(map);
       this.rows = rows;
       this.columns = columns;
-      this.stepSize = stepSize;
       this.entities = entities;
       this.passageMap = passageMap;
    }
@@ -126,6 +121,8 @@ public class DefaultObjectLayer implements ObjectLayer {
 
    @Override
    public void update(float dt) {
+      super.update(dt);
+
       while (!movements.isEmpty()) {
          var movement = movements.poll();
          if (isTileReachable(movement.getTo())) {
@@ -171,6 +168,8 @@ public class DefaultObjectLayer implements ObjectLayer {
       for (var object : entities) {
          object.render(screen, camera, shaderManager);
       }
+
+      super.render(screen, camera, shaderManager);
    }
 
    private int compareObjects(Entity a, Entity b) {

@@ -64,6 +64,7 @@ public class DefaultContextManager implements ContextManager {
       return DefaultContext.builder()
             .engine(engine)
             .entityManager(entityManager)
+            .animationManager(animationManager)
             .imageManager(imageManager)
             .mapManager(mapManager)
             .fontManager(fontManager)

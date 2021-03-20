@@ -13,6 +13,7 @@ import org.joml.Vector2fc;
 @EqualsAndHashCode(callSuper = true)
 public abstract class AnimatedSprite extends Sprite implements Updatable {
    private int time;
+   protected int currentAnimationFrame;
 
    public AnimatedSprite(Mesh mesh, Material material) {
       super(mesh, material);
@@ -40,8 +41,8 @@ public abstract class AnimatedSprite extends Sprite implements Updatable {
       if (shouldAnimate()) {
          var positions = getSpriteAnimationFramesPositions();
          var delay = getAnimationSpeed();
-         var currentPosition = ((time % (positions.length * delay)) / delay);
-         var current = positions[currentPosition];
+         currentAnimationFrame = ((time % (positions.length * delay)) / delay);
+         var current = positions[currentAnimationFrame];
          material.setSpritePosition(current);
       }
    }

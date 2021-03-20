@@ -17,6 +17,8 @@ public interface GameMap {
 
    Vector2fc getSize();
 
+   Vector2fc getStepSize();
+
    TileLayer getTileLayer(int layerIndex);
 
    ImageLayer getImageLayer(int layerIndex);

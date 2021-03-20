@@ -57,6 +57,8 @@ public class DefaultAnimationManager implements AnimationManager {
    }
 
    private Vector2fc[] createFrames(int rows, int columns) {
+      log.info("Caching [{}x{}] animation ([{}] frames)", columns, rows, columns * rows);
+
       var frames = new Vector2fc[rows * columns];
 
       for (int row = 0; row < rows; ++row) {

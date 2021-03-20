@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.api.game.context;
 
+import com.bartlomiejpluta.base.api.game.animation.Animation;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
 import com.bartlomiejpluta.base.api.game.gui.base.GUI;
@@ -27,6 +28,8 @@ public interface Context extends Updatable, Renderable, Disposable {
    void closeMap();
 
    Entity createEntity(String entitySetUid);
+
+   Animation createAnimation(String animationUid);
 
    Image getImage(String imageUid);
 

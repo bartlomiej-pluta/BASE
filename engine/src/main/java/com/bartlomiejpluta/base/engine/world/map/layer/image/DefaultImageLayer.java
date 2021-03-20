@@ -7,16 +7,14 @@ import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.api.game.map.model.GameMap;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-public class DefaultImageLayer implements ImageLayer {
+public class DefaultImageLayer extends BaseLayer implements ImageLayer {
    private final float mapWidth;
    private final float mapHeight;
-
-   @Getter
-   private final GameMap map;
 
    @NonNull
    @Getter
@@ -40,7 +38,7 @@ public class DefaultImageLayer implements ImageLayer {
    private boolean parallax;
 
    public DefaultImageLayer(GameMap map, Image image, float opacity, float x, float y, float scaleX, float scaleY, ImageLayerMode mode, boolean parallax) {
-      this.map = map;
+      super(map);
       this.mapWidth = map.getWidth();
       this.mapHeight = map.getHeight();
 
@@ -109,11 +107,6 @@ public class DefaultImageLayer implements ImageLayer {
    }
 
    @Override
-   public void update(float dt) {
-      // Do nothing
-   }
-
-   @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       if (image != null) {
          if (parallax) {
@@ -127,5 +120,7 @@ public class DefaultImageLayer implements ImageLayer {
 
          image.render(screen, camera, shaderManager);
       }
+
+      super.render(screen, camera, shaderManager);
    }
 }
