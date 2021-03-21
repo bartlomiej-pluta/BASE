@@ -28,8 +28,8 @@ public class RandomAnimationsRunner implements AnimationRunner {
    private float delay = 0f;
    private RealDistribution delayDistribution;
 
-   private float speed = 0.05f;
-   private RealDistribution speedDistribution;
+   private float animationSpeed = 0.05f;
+   private RealDistribution animationSpeedDistribution;
 
    private float rotation = 0f;
    private RealDistribution rotationDistribution;
@@ -74,18 +74,18 @@ public class RandomAnimationsRunner implements AnimationRunner {
       return this;
    }
 
-   public RandomAnimationsRunner speed(float speed) {
-      this.speed = speed;
+   public RandomAnimationsRunner animationSpeed(float speed) {
+      this.animationSpeed = speed;
       return this;
    }
 
-   public RandomAnimationsRunner uSpeed(float min, float max) {
-      this.speedDistribution = new UniformRealDistribution(min, max);
+   public RandomAnimationsRunner uAnimationSpeed(float min, float max) {
+      this.animationSpeedDistribution = new UniformRealDistribution(min, max);
       return this;
    }
 
-   public RandomAnimationsRunner nSpeed(float mean, float sd) {
-      this.speedDistribution = new NormalDistribution(mean, sd);
+   public RandomAnimationsRunner nAnimationSpeed(float mean, float sd) {
+      this.animationSpeedDistribution = new NormalDistribution(mean, sd);
       return this;
    }
 
@@ -131,7 +131,7 @@ public class RandomAnimationsRunner implements AnimationRunner {
          }
 
          animation.setScale(scaleDistribution != null ? (float) scaleDistribution.sample() : scale);
-         animation.setAnimationSpeed(speedDistribution != null ? (float) speedDistribution.sample() : speed);
+         animation.setAnimationSpeed(animationSpeedDistribution != null ? (float) animationSpeedDistribution.sample() : animationSpeed);
          animation.setRotation(rotationDistribution != null ? (float) rotationDistribution.sample() : rotation);
 
          layer.pushAnimation(new DelayedAnimation(animation, (int) (delayDistribution != null ? delayDistribution.sample() : delay)));
