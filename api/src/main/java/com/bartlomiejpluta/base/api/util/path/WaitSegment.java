@@ -12,14 +12,14 @@ public class WaitSegment<T extends Movable> implements PathSegment<T> {
    }
 
    @Override
-   public boolean perform(T movable, ObjectLayer layer, float dt) {
+   public PathProgress perform(T movable, ObjectLayer layer, float dt) {
       accumulator += dt;
 
       if (accumulator > seconds) {
          accumulator = 0.0f;
-         return true;
+         return PathProgress.SEGMENT_DONE;
       }
 
-      return false;
+      return PathProgress.ONGOING;
    }
 }

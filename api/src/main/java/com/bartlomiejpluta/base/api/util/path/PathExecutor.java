@@ -9,32 +9,42 @@ import java.util.Objects;
 public class PathExecutor<T extends Movable> {
    protected final List<PathSegment<T>> path;
    private final T movable;
-   private final boolean repeat;
+   private final Integer repeat;
 
    private int current = 0;
+   private int iteration = 0;
+   private boolean updated = false;
 
-   public PathExecutor(T movable, boolean repeat, Path<T> path) {
+   public PathExecutor(T movable, Integer repeat, Path<T> path) {
       this.movable = movable;
       this.repeat = repeat;
       this.path = Objects.requireNonNull(path).getPath();
    }
 
-   public boolean execute(ObjectLayer layer, float dt) {
-      if (!repeat && isRetired()) {
-         return false;
+   public PathProgress execute(ObjectLayer layer, float dt) {
+      var size = path.size();
+
+      if (current == size - 1 && !updated) {
+         ++iteration;
+         updated = true;
       }
 
-      if (!movable.isMoving()) {
-         var item = path.get(current % path.size());
-         if (item.perform(movable, layer, dt)) {
-            ++current;
+      if (current == size) {
+         updated = false;
+
+         if (repeat != null && iteration >= repeat) {
+            return PathProgress.DONE;
+         } else {
+            current = 0;
+            return PathProgress.REPEAT;
          }
       }
 
-      return true;
-   }
+      var result = path.get(current).perform(movable, layer, dt);
+      if (result == PathProgress.SEGMENT_DONE) {
+         ++current;
+      }
 
-   private boolean isRetired() {
-      return current == path.size() - 1;
+      return result;
    }
 }

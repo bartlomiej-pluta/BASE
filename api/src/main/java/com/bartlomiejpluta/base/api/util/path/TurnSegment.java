@@ -14,8 +14,8 @@ public class TurnSegment<T extends NPC> implements PathSegment<T> {
    }
 
    @Override
-   public boolean perform(T npc, ObjectLayer layer, float dt) {
+   public PathProgress perform(T npc, ObjectLayer layer, float dt) {
       npc.setFaceDirection(direction);
-      return true;
+      return PathProgress.SEGMENT_DONE;
    }
 }

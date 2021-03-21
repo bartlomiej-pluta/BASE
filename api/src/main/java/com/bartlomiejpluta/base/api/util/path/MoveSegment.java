@@ -20,14 +20,18 @@ public class MoveSegment<T extends Movable> implements PathSegment<T> {
    }
 
    @Override
-   public boolean perform(T movable, ObjectLayer layer, float dt) {
+   public PathProgress perform(T movable, ObjectLayer layer, float dt) {
+      if (movable.isMoving()) {
+         return PathProgress.ONGOING;
+      }
+
       var movement = movable.prepareMovement(direction);
 
       if (ignore || layer.isTileReachable(movement.getTo())) {
          layer.pushMovement(movement);
-         return true;
+         return PathProgress.SEGMENT_DONE;
       }
 
-      return false;
+      return PathProgress.SEGMENT_FAILED;
    }
 }

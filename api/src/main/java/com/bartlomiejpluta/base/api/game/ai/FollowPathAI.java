@@ -10,10 +10,10 @@ public class FollowPathAI implements AI {
    private final NPCPath path;
 
    public FollowPathAI(NPC npc) {
-      this(npc, true);
+      this(npc, null);
    }
 
-   public FollowPathAI(NPC npc, boolean repeat) {
+   public FollowPathAI(NPC npc, Integer repeat) {
       var path = new NPCPath();
       this.executor = new PathExecutor<>(npc, repeat, path);
       this.path = path;

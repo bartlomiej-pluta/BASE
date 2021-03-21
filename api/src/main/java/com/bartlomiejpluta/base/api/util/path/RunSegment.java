@@ -13,8 +13,8 @@ public class RunSegment<T extends Movable> implements PathSegment<T> {
    }
 
    @Override
-   public boolean perform(T movable, ObjectLayer layer, float dt) {
+   public PathProgress perform(T movable, ObjectLayer layer, float dt) {
       runnable.run();
-      return true;
+      return PathProgress.SEGMENT_DONE;
    }
 }
