@@ -175,6 +175,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public void onFinish(Layer layer) {
+      animation.onFinish(layer);
+   }
+
+   @Override
    public void finish() {
       animation.finish();
    }

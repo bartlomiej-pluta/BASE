@@ -30,6 +30,8 @@ public interface Animation extends Placeable, Movable, Renderable, Updatable {
 
    void onAdd(Layer layer);
 
+   void onFinish(Layer layer);
+
    void finish();
 
    boolean finished();

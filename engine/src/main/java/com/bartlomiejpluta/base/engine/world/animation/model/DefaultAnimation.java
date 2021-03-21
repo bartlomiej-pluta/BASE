@@ -100,6 +100,11 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    }
 
    @Override
+   public void onFinish(Layer layer) {
+      // do nothing
+   }
+
+   @Override
    public void finish() {
       this.forcedFinish = true;
    }
