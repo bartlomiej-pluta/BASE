@@ -160,8 +160,8 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
-   public void followPath(Path<Animation> path, boolean repeat) {
-      animation.followPath(path, repeat);
+   public void followPath(Path<Animation> path, Integer repeat, boolean finishOnEnd, boolean finishOnFail) {
+      animation.followPath(path, repeat, finishOnEnd, finishOnFail);
    }
 
    @Override
@@ -172,6 +172,11 @@ public abstract class AnimationDelegate implements Animation {
    @Override
    public void onAdd(Layer layer) {
       animation.onAdd(layer);
+   }
+
+   @Override
+   public void finish() {
+      animation.finish();
    }
 
    @Override

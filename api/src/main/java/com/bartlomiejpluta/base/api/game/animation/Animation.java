@@ -24,11 +24,13 @@ public interface Animation extends Placeable, Movable, Renderable, Updatable {
 
    void setRepeat(Integer repeat);
 
-   void followPath(Path<Animation> path, boolean repeat);
+   void followPath(Path<Animation> path, Integer repeat, boolean finishOnEnd, boolean finishOnFail);
 
    void setSpeed(float speed);
 
    void onAdd(Layer layer);
+
+   void finish();
 
    boolean finished();
 }

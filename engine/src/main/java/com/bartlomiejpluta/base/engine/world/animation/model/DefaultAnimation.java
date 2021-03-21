@@ -14,6 +14,9 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.joml.Vector2fc;
 
+import static com.bartlomiejpluta.base.api.util.path.PathProgress.DONE;
+import static com.bartlomiejpluta.base.api.util.path.PathProgress.SEGMENT_FAILED;
+
 public class DefaultAnimation extends MovableSprite implements Animation {
    private final Vector2fc[] frames;
    private final int lastFrameIndex;
@@ -26,8 +29,12 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    @Setter
    private Integer repeat = 1;
 
+   private boolean forcedFinish = false;
+
    @Getter
    private PathExecutor<Animation> pathExecutor;
+   private boolean finishOnEnd;
+   private boolean finishOnFail;
    private Layer layer;
    private boolean isObjectLayer = false;
 
@@ -63,8 +70,10 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    }
 
    @Override
-   public void followPath(Path<Animation> path, boolean repeat) {
+   public void followPath(Path<Animation> path, Integer repeat, boolean finishOnEnd, boolean finishOnFail) {
       pathExecutor = new PathExecutor<>(this, repeat, path);
+      this.finishOnEnd = finishOnEnd;
+      this.finishOnFail = finishOnFail;
    }
 
    @Override
@@ -77,7 +86,10 @@ public class DefaultAnimation extends MovableSprite implements Animation {
       super.update(dt);
 
       if (pathExecutor != null && isObjectLayer) {
-         pathExecutor.execute((ObjectLayer) layer, dt);
+         var pathProgress = pathExecutor.execute((ObjectLayer) layer, dt);
+         if ((pathProgress == DONE && finishOnEnd) || (pathProgress == SEGMENT_FAILED && finishOnFail)) {
+            finish();
+         }
       }
    }
 
@@ -88,7 +100,16 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    }
 
    @Override
+   public void finish() {
+      this.forcedFinish = true;
+   }
+
+   @Override
    public boolean finished() {
+      if (forcedFinish) {
+         return true;
+      }
+
       if (repeat == null) {
          return false;
       }
