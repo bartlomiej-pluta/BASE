@@ -32,6 +32,8 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    private final List<Rule> rules = new ArrayList<>();
 
+   private final List<Entity> entitiesToAdd = new LinkedList<>();
+   private final List<Rule> rulesToAdd = new LinkedList<>();
    private final List<Entity> entitiesToRemove = new LinkedList<>();
    private final List<Rule> rulesToRemove = new LinkedList<>();
 
@@ -48,7 +50,7 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void registerRule(Rule rule) {
-      rules.add(rule);
+      rulesToAdd.add(rule);
    }
 
    @Override
@@ -63,9 +65,7 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void addEntity(Entity entity) {
-      entity.onAdd(this);
-      entity.setStepSize(stepSize.x(), stepSize.y());
-      entities.add(entity);
+      entitiesToAdd.add(entity);
    }
 
    @Override
@@ -142,6 +142,23 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          if (entity instanceof NPC) {
             ((NPC) entity).getStrategy().nextActivity(this, dt);
          }
+      }
+
+      // Insert entities requested to be added
+      if(!entitiesToAdd.isEmpty()) {
+         for (var entity : entitiesToAdd) {
+            entity.onAdd(this);
+            entity.setStepSize(stepSize.x(), stepSize.y());
+            entities.add(entity);
+         }
+
+         entitiesToAdd.clear();
+      }
+
+      // Insert rules requested to be added
+      if(!rulesToAdd.isEmpty()) {
+         rules.addAll(rulesToAdd);
+         rulesToAdd.clear();
       }
 
       // Remove entities requested to be removed

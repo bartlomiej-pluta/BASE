@@ -11,6 +11,7 @@ import lombok.NonNull;
 import org.joml.Vector2fc;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public abstract class BaseLayer implements Layer, Updatable {
@@ -23,6 +24,8 @@ public abstract class BaseLayer implements Layer, Updatable {
 
    protected final Queue<Animation> animations = new LinkedList<>();
 
+   private final List<Animation> animationsToAdd = new LinkedList<>();
+
    public BaseLayer(@NonNull GameMap map) {
       this.map = map;
       this.stepSize = map.getStepSize();
@@ -30,9 +33,7 @@ public abstract class BaseLayer implements Layer, Updatable {
 
    @Override
    public void pushAnimation(Animation animation) {
-      animation.setStepSize(stepSize.x(), stepSize.y());
-      animations.add(animation);
-      animation.onAdd(this);
+      animationsToAdd.add(animation);
    }
 
    @Override
@@ -42,6 +43,16 @@ public abstract class BaseLayer implements Layer, Updatable {
 
    @Override
    public void update(float dt) {
+      if(!animationsToAdd.isEmpty()) {
+         for(var animation : animationsToAdd) {
+            animation.setStepSize(stepSize.x(), stepSize.y());
+            animations.add(animation);
+            animation.onAdd(this);
+         }
+
+         animationsToAdd.clear();
+      }
+
       for (var iterator = animations.iterator(); iterator.hasNext(); ) {
          var animation = iterator.next();
          animation.update(dt);
