@@ -33,6 +33,10 @@ public class FPSProfiler {
       }
    }
 
+   public double currentFPS() {
+      return fps;
+   }
+
    public void printResult() {
       log.info("Min FPS: {}, max FPS: {}, avg FPS: {}",
             values.stream().min(Double::compareTo).orElse(-1.0),
