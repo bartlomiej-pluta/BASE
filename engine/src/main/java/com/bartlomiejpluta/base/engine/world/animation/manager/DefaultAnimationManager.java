@@ -74,6 +74,6 @@ public class DefaultAnimationManager implements AnimationManager {
       var texture = material.getTexture();
       var spriteWidth = texture.getWidth() / columns;
       var spriteHeight = texture.getHeight() / rows;
-      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2f, spriteHeight * 0.9f);
+      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2f, spriteHeight / 2f);
    }
 }

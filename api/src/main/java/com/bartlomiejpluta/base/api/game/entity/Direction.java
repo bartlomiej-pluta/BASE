@@ -7,18 +7,20 @@ import static java.lang.Math.PI;
 import static org.joml.Math.atan2;
 
 public enum Direction {
-   UP(0, -1),
-   DOWN(0, 1),
-   LEFT(-1, 0),
-   RIGHT(1, 0);
+   RIGHT(1, 0, 0),
+   UP(0, -1, 90),
+   LEFT(-1, 0, 180),
+   DOWN(0, 1, 270);
 
    public final int x;
    public final int y;
+   public final int xAngle;
    public final Vector2ic vector;
 
-   Direction(int x, int y) {
+   Direction(int x, int y, int xAngle) {
       this.x = x;
       this.y = y;
+      this.xAngle = xAngle;
       this.vector = new Vector2i(x, y);
    }
 
