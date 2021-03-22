@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
-import com.bartlomiejpluta.base.api.gui.base.Image;
+import com.bartlomiejpluta.base.api.gui.Image;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

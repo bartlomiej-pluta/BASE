@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
-import com.bartlomiejpluta.base.api.gui.base.Color;
+import com.bartlomiejpluta.base.api.gui.Color;
 import com.bartlomiejpluta.base.internal.gc.Disposable;
 import lombok.*;
 import org.lwjgl.nanovg.NVGColor;

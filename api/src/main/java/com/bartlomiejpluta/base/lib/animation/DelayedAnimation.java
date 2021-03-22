@@ -1,7 +1,6 @@
 package com.bartlomiejpluta.base.lib.animation;
 
 import com.bartlomiejpluta.base.api.animation.Animation;
-import com.bartlomiejpluta.base.api.animation.AnimationDelegate;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;

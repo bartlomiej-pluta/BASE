@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.engine.gui.widget;
 
-import com.bartlomiejpluta.base.api.gui.base.GUI;
-import com.bartlomiejpluta.base.api.gui.base.SizeMode;
-import com.bartlomiejpluta.base.api.gui.base.Widget;
+import com.bartlomiejpluta.base.api.gui.GUI;
+import com.bartlomiejpluta.base.api.gui.SizeMode;
+import com.bartlomiejpluta.base.api.gui.Widget;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import lombok.Getter;

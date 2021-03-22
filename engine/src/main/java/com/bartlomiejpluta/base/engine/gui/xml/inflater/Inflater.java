@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.gui.xml.inflater;
 
 import com.bartlomiejpluta.base.api.context.Context;
-import com.bartlomiejpluta.base.api.gui.base.GUI;
-import com.bartlomiejpluta.base.api.gui.component.Component;
-import com.bartlomiejpluta.base.api.gui.window.Window;
+import com.bartlomiejpluta.base.api.gui.Component;
+import com.bartlomiejpluta.base.api.gui.GUI;
+import com.bartlomiejpluta.base.api.gui.Window;
 
 import java.io.File;
 import java.io.InputStream;

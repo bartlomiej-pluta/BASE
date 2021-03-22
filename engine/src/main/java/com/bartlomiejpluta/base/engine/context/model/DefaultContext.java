@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.entity.Entity;
-import com.bartlomiejpluta.base.api.gui.base.GUI;
+import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;

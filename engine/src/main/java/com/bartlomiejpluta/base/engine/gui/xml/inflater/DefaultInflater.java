@@ -1,14 +1,7 @@
 package com.bartlomiejpluta.base.engine.gui.xml.inflater;
 
 import com.bartlomiejpluta.base.api.context.Context;
-import com.bartlomiejpluta.base.api.gui.base.GUI;
-import com.bartlomiejpluta.base.api.gui.base.SizeMode;
-import com.bartlomiejpluta.base.api.gui.base.Widget;
-import com.bartlomiejpluta.base.api.gui.component.Component;
-import com.bartlomiejpluta.base.api.gui.window.Inflatable;
-import com.bartlomiejpluta.base.api.gui.window.Ref;
-import com.bartlomiejpluta.base.api.gui.window.Window;
-import com.bartlomiejpluta.base.api.gui.window.WindowPosition;
+import com.bartlomiejpluta.base.api.gui.*;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import lombok.SneakyThrows;
