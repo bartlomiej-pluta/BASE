@@ -2,7 +2,6 @@ package com.bartlomiejpluta.base.engine.world.entity.manager;
 
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.move.Direction;
-import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.entity.config.EntitySpriteConfiguration;
@@ -29,6 +28,8 @@ public class DefaultEntityManager implements EntityManager {
    private final Map<Direction, Vector2fc> spriteDefaultRows;
    private final Vector2ic entitySpriteDimension;
 
+   private Mesh mesh;
+
    @Autowired
    public DefaultEntityManager(MeshManager meshManager, EntitySetManager entitySetManager, EntitySpriteConfiguration configuration) {
       this.meshManager = meshManager;
@@ -45,16 +46,13 @@ public class DefaultEntityManager implements EntityManager {
    }
 
    @Override
-   public Entity createEntity(String entitySetUid) {
-      var material = entitySetManager.loadObject(entitySetUid);
-      return new DefaultEntity(buildMesh(material), material, spriteDirectionRows, spriteDefaultRows);
+   public void init() {
+      mesh = meshManager.createQuad(1, 1, 0.5f, 1);
    }
 
-   private Mesh buildMesh(Material material) {
-      var texture = material.getTexture();
-      var spriteWidth = texture.getWidth() / (float) entitySpriteDimension.x();
-      var spriteHeight = texture.getHeight() / (float) entitySpriteDimension.y();
-      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2, spriteHeight * 0.9f);
+   @Override
+   public Entity createEntity(String entitySetUid) {
+      return new DefaultEntity(mesh, entitySetManager, spriteDirectionRows, spriteDefaultRows, entitySetUid);
    }
 
    @Override

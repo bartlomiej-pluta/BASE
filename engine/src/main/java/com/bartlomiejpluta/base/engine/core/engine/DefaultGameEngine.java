@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.core.engine;
 
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.engine.common.init.Initianizable;
 import com.bartlomiejpluta.base.engine.gc.OffHeapGarbageCollector;
 import com.bartlomiejpluta.base.engine.logic.GameLogic;
 import com.bartlomiejpluta.base.engine.thread.ThreadManager;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -23,6 +26,7 @@ public class DefaultGameEngine implements GameEngine {
    private final ThreadManager threadManager;
    private final GameLogic logic;
    private final OffHeapGarbageCollector garbageCollector;
+   private final List<Initianizable> initianizables;
 
    private final ChronoMeter chrono = new ChronoMeter();
 
@@ -51,6 +55,11 @@ public class DefaultGameEngine implements GameEngine {
       log.info("Initializing game engine");
       screen.init();
       chrono.init();
+
+      initianizables.stream()
+            .peek(i -> log.info("Initializing {}", i.getClass().getSimpleName()))
+            .forEach(Initianizable::init);
+
       logic.init(screen, context);
    }
 

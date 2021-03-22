@@ -4,8 +4,8 @@ import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movement;
-import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
+import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
@@ -17,10 +17,15 @@ import org.joml.Vector2i;
 
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 @EqualsAndHashCode(callSuper = true)
 public class DefaultEntity extends MovableSprite implements Entity {
+   private final EntitySetManager entitySetManager;
    private final Map<Direction, Integer> spriteDirectionRows;
    private final Map<Direction, Vector2fc> spriteDefaultRows;
+   private final Vector2f entityScale = new Vector2f(1, 1);
+   private Vector2fc entitySetSize;
 
    private int animationSpeed = 100;
 
@@ -31,11 +36,22 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Setter
    private boolean blocking;
 
-   public DefaultEntity(Mesh mesh, Material material, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows) {
-      super(mesh, material);
+   public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
+      super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
+      this.entitySetManager = entitySetManager;
       this.spriteDirectionRows = spriteDirectionRows;
       this.faceDirection = Direction.DOWN;
       this.spriteDefaultRows = spriteDefaultRows;
+
+      this.entitySetSize = material.getTexture().getSpriteSize();
+      super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+   }
+
+   @Override
+   public void changeEntitySet(String entitySetUid) {
+      this.material = entitySetManager.loadObject(requireNonNull(entitySetUid));
+      this.entitySetSize = material.getTexture().getSpriteSize();
+      super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
    }
 
    @Override
@@ -110,5 +126,41 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public void onRemove(ObjectLayer layer) {
       // Do nothing
+   }
+
+   @Override
+   public void setScaleX(float scaleX) {
+      this.entityScale.x = scaleX;
+      super.setScaleX(entitySetSize.x() * scaleX);
+   }
+
+   @Override
+   public void setScaleY(float scaleY) {
+      this.entityScale.y = scaleY;
+      super.setScaleY(entitySetSize.y() * scaleY);
+   }
+
+   @Override
+   public void setScale(float scale) {
+      this.entityScale.x = scale;
+      this.entityScale.y = scale;
+      super.setScale(entitySetSize.x() * scale, entitySetSize.y() * scale);
+   }
+
+   @Override
+   public void setScale(float scaleX, float scaleY) {
+      this.entityScale.x = scaleX;
+      this.entityScale.y = scaleY;
+      super.setScale(entitySetSize.x() * scaleX, entitySetSize.y() * scaleY);
+   }
+
+   @Override
+   public float getScaleX() {
+      return entityScale.x;
+   }
+
+   @Override
+   public float getScaleY() {
+      return entityScale.y;
    }
 }

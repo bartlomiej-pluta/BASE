@@ -210,6 +210,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public void changeEntitySet(String entitySetUid) {
+      entity.changeEntitySet(entitySetUid);
+   }
+
+   @Override
    public void update(float dt) {
       entity.update(dt);
    }

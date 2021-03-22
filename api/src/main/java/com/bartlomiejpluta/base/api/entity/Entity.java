@@ -30,4 +30,6 @@ public interface Entity extends Placeable, Movable, Renderable, Updatable {
    boolean isBlocking();
 
    void setBlocking(boolean blocking);
+
+   void changeEntitySet(String entitySetUid);
 }

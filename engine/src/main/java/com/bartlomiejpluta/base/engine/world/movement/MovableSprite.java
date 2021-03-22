@@ -28,6 +28,12 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    private Vector2f movementVector;
    private int framesToCrossOneTile = 1;
 
+   private enum PlacingMode {BY_POSITION, BY_COORDINATES}
+
+   ;
+
+   private PlacingMode placingMode;
+
    @Getter
    private Movement movement;
 
@@ -103,6 +109,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       coordinates.x = x;
       coordinates.y = y;
       super.setPosition((x + 0.5f) * coordinateStepSize.x + positionOffset.x, (y + 0.5f) * coordinateStepSize.y + positionOffset.y);
+      placingMode = PlacingMode.BY_COORDINATES;
    }
 
    @Override
@@ -110,6 +117,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       super.setPosition(x, y);
       coordinates.x = (int) ((x - positionOffset.x) / coordinateStepSize.x);
       coordinates.y = (int) ((y - positionOffset.y) / coordinateStepSize.y);
+      placingMode = PlacingMode.BY_POSITION;
    }
 
    @Override
@@ -117,6 +125,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       super.setPosition(position);
       coordinates.x = (int) ((position.x() - positionOffset.x) / coordinateStepSize.x);
       coordinates.y = (int) ((position.y() - positionOffset.y) / coordinateStepSize.y);
+      placingMode = PlacingMode.BY_POSITION;
    }
 
    @Override
@@ -128,10 +137,9 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       coordinateStepSize.x = x;
       coordinateStepSize.y = y;
 
-      if (!position.equals(0, 0)) {
-         setPosition(position);
-      } else {
-         setCoordinates(coordinates);
+      switch (placingMode) {
+         case BY_POSITION -> setPosition(position);
+         case BY_COORDINATES -> setCoordinates(coordinates);
       }
    }
 
