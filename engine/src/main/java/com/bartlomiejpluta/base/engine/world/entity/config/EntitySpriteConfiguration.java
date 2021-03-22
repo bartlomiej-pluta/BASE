@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.entity.config;
 
-import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.move.Direction;
 import lombok.Data;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;

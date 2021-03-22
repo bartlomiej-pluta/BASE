@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.api.game.animation;
 
-import com.bartlomiejpluta.base.api.game.entity.Movable;
 import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.game.move.Movable;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.Renderable;

@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.api.util.path;
 
-import com.bartlomiejpluta.base.api.game.entity.Direction;
-import com.bartlomiejpluta.base.api.game.entity.Movable;
+import com.bartlomiejpluta.base.api.game.move.Direction;
+import com.bartlomiejpluta.base.api.game.move.Movable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.bartlomiejpluta.base.api.snippet.ai;
 
 import com.bartlomiejpluta.base.api.game.ai.AI;
 import com.bartlomiejpluta.base.api.game.ai.NPC;
-import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.game.move.Direction;
 import com.bartlomiejpluta.base.api.util.path.NPCPath;
 import com.bartlomiejpluta.base.api.util.path.PathExecutor;
 

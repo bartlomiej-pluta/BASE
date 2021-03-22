@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.world.entity.model;
 
-import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
-import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.game.move.Direction;
+import com.bartlomiejpluta.base.api.game.move.Movement;
 import com.bartlomiejpluta.base.api.util.math.MathUtil;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;

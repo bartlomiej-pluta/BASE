@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.entity.manager;
 
-import com.bartlomiejpluta.base.api.game.entity.Direction;
 import com.bartlomiejpluta.base.api.game.entity.Entity;
+import com.bartlomiejpluta.base.api.game.move.Direction;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;

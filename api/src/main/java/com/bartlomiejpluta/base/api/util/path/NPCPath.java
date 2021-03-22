@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.api.util.path;
 
 import com.bartlomiejpluta.base.api.game.ai.NPC;
-import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.move.Direction;
 
 public class NPCPath extends Path<NPC> {
 

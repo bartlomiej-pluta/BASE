@@ -2,6 +2,8 @@ package com.bartlomiejpluta.base.api.game.entity;
 
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.game.move.Direction;
+import com.bartlomiejpluta.base.api.game.move.Movement;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.object.Placeable;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;

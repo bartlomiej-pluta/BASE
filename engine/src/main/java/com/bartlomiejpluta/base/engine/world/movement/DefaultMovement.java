@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.movement;
 
-import com.bartlomiejpluta.base.api.game.entity.Direction;
-import com.bartlomiejpluta.base.api.game.entity.Movement;
+import com.bartlomiejpluta.base.api.game.move.Direction;
+import com.bartlomiejpluta.base.api.game.move.Movement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2i;
