@@ -175,6 +175,16 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public int chebyshevDistance(Vector2ic coordinates) {
+      return entity.chebyshevDistance(coordinates);
+   }
+
+   @Override
+   public int manhattanDistance(Vector2ic coordinates) {
+      return entity.manhattanDistance(coordinates);
+   }
+
+   @Override
    public Matrix4fc getModelMatrix() {
       return entity.getModelMatrix();
    }

@@ -161,6 +161,16 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public int chebyshevDistance(Vector2ic coordinates) {
+      return animation.chebyshevDistance(coordinates);
+   }
+
+   @Override
+   public int manhattanDistance(Vector2ic coordinates) {
+      return animation.manhattanDistance(coordinates);
+   }
+
+   @Override
    public void setPositionOffset(Vector2fc offset) {
       animation.setPositionOffset(offset);
    }

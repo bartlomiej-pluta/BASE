@@ -23,4 +23,8 @@ public interface Movable {
    Movement getMovement();
 
    boolean isMoving();
+
+   int chebyshevDistance(Vector2ic coordinates);
+
+   int manhattanDistance(Vector2ic coordinates);
 }

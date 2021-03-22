@@ -31,6 +31,12 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    @Getter
    private Movement movement;
 
+   public MovableSprite(Mesh mesh, Material material) {
+      super(mesh, material);
+      setCoordinates(0, 0);
+   }
+
+   @Override
    public Vector2ic getCoordinates() {
       return coordinates;
    }
@@ -92,6 +98,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       return true;
    }
 
+   @Override
    public void setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;
@@ -112,6 +119,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       coordinates.y = (int) ((position.y() - positionOffset.y) / coordinateStepSize.y);
    }
 
+   @Override
    public void setCoordinates(Vector2ic coordinates) {
       setCoordinates(coordinates.x(), coordinates.y());
    }
@@ -139,16 +147,13 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
       this.positionOffset.y = offsetY;
    }
 
+   @Override
    public int chebyshevDistance(Vector2ic coordinates) {
       return max(abs(this.coordinates.x - coordinates.x()), abs(this.coordinates.y - coordinates.y()));
    }
 
+   @Override
    public int manhattanDistance(Vector2ic coordinates) {
       return abs(this.coordinates.x - coordinates.x()) + abs(this.coordinates.y - coordinates.y());
-   }
-
-   public MovableSprite(Mesh mesh, Material material) {
-      super(mesh, material);
-      setCoordinates(0, 0);
    }
 }
