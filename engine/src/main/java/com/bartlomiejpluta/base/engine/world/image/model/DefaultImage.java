@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.image.model;
 
-import com.bartlomiejpluta.base.api.game.image.Image;
+import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;

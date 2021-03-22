@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.gui.widget;
 
-import com.bartlomiejpluta.base.api.game.gui.base.GUI;
-import com.bartlomiejpluta.base.api.game.gui.base.SizeMode;
-import com.bartlomiejpluta.base.api.game.gui.base.Widget;
-import com.bartlomiejpluta.base.api.game.input.KeyEvent;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
+import com.bartlomiejpluta.base.api.gui.base.GUI;
+import com.bartlomiejpluta.base.api.gui.base.SizeMode;
+import com.bartlomiejpluta.base.api.gui.base.Widget;
+import com.bartlomiejpluta.base.api.input.KeyEvent;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

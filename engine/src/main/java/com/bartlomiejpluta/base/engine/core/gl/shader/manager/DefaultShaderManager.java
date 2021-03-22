@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.core.gl.shader.manager;
 
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
-import com.bartlomiejpluta.base.api.internal.render.ShaderProgram;
-import com.bartlomiejpluta.base.api.internal.render.Uniform;
 import com.bartlomiejpluta.base.engine.core.gl.shader.program.GLShaderProgram;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.internal.render.ShaderProgram;
+import com.bartlomiejpluta.base.internal.render.Uniform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.*;

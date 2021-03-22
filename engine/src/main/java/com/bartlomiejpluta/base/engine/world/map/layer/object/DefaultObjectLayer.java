@@ -1,16 +1,16 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.object;
 
-import com.bartlomiejpluta.base.api.game.ai.NPC;
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.entity.Entity;
-import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.api.game.map.layer.object.PassageAbility;
-import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.move.Movement;
-import com.bartlomiejpluta.base.api.game.rule.Rule;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.ai.NPC;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
+import com.bartlomiejpluta.base.api.map.model.GameMap;
+import com.bartlomiejpluta.base.api.move.Movement;
+import com.bartlomiejpluta.base.api.rule.Rule;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2ic;

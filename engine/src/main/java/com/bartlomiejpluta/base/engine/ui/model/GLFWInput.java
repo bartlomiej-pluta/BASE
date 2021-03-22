@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.ui.model;
 
-import com.bartlomiejpluta.base.api.game.input.Input;
-import com.bartlomiejpluta.base.api.game.input.Key;
-import com.bartlomiejpluta.base.api.game.input.KeyEventHandler;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
+import com.bartlomiejpluta.base.api.input.Input;
+import com.bartlomiejpluta.base.api.input.Key;
+import com.bartlomiejpluta.base.api.input.KeyEventHandler;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.ui.event.GLFWKeyEvent;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;

@@ -1,12 +1,12 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.base;
 
-import com.bartlomiejpluta.base.api.game.animation.Animation;
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
-import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.logic.Updatable;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.animation.Animation;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.map.model.GameMap;
+import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.NonNull;
 import org.joml.Vector2fc;
 

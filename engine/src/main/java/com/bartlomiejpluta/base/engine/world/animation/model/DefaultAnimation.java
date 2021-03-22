@@ -1,21 +1,21 @@
 package com.bartlomiejpluta.base.engine.world.animation.model;
 
-import com.bartlomiejpluta.base.api.game.animation.Animation;
-import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
-import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.api.util.math.MathUtil;
-import com.bartlomiejpluta.base.api.util.path.Path;
-import com.bartlomiejpluta.base.api.util.path.PathExecutor;
+import com.bartlomiejpluta.base.api.animation.Animation;
+import com.bartlomiejpluta.base.api.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
+import com.bartlomiejpluta.base.util.math.MathUtil;
+import com.bartlomiejpluta.base.util.path.Path;
+import com.bartlomiejpluta.base.util.path.PathExecutor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.joml.Vector2fc;
 
-import static com.bartlomiejpluta.base.api.util.path.PathProgress.DONE;
-import static com.bartlomiejpluta.base.api.util.path.PathProgress.SEGMENT_FAILED;
+import static com.bartlomiejpluta.base.util.path.PathProgress.DONE;
+import static com.bartlomiejpluta.base.util.path.PathProgress.SEGMENT_FAILED;
 
 public class DefaultAnimation extends MovableSprite implements Animation {
    private final Vector2fc[] frames;

@@ -3,10 +3,10 @@ package ${package};
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bartlomiejpluta.base.api.game.context.Context;
-import com.bartlomiejpluta.base.api.game.input.Input;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.game.runner.GameRunner;
+import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.input.Input;
+import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.api.runner.GameRunner;
 
 public class ${className} implements GameRunner {
    private static final Logger log = LoggerFactory.getLogger(${className}.class);

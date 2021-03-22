@@ -1,19 +1,19 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.context.Context;
-import com.bartlomiejpluta.base.api.game.gui.base.*;
-import com.bartlomiejpluta.base.api.game.gui.component.Component;
-import com.bartlomiejpluta.base.api.game.gui.window.Window;
-import com.bartlomiejpluta.base.api.game.input.KeyEvent;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.gui.base.*;
+import com.bartlomiejpluta.base.api.gui.component.Component;
+import com.bartlomiejpluta.base.api.gui.window.Window;
+import com.bartlomiejpluta.base.api.input.KeyEvent;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

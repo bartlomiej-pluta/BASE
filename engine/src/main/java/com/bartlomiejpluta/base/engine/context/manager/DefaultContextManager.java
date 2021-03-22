@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.context.manager;
 
-import com.bartlomiejpluta.base.api.game.context.Context;
-import com.bartlomiejpluta.base.api.game.runner.GameRunner;
+import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;

@@ -1,13 +1,13 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.image;
 
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.image.Image;
-import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayer;
-import com.bartlomiejpluta.base.api.game.map.layer.image.ImageLayerMode;
-import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.image.Image;
+import com.bartlomiejpluta.base.api.map.layer.image.ImageLayer;
+import com.bartlomiejpluta.base.api.map.layer.image.ImageLayerMode;
+import com.bartlomiejpluta.base.api.map.model.GameMap;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;

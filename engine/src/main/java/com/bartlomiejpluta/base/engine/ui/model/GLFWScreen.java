@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.ui.model;
 
-import com.bartlomiejpluta.base.api.game.screen.Screen;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import lombok.Getter;
 import lombok.NonNull;

@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.engine.ui.event;
 
-import com.bartlomiejpluta.base.api.game.input.Key;
-import com.bartlomiejpluta.base.api.game.input.KeyAction;
-import com.bartlomiejpluta.base.api.game.input.KeyEvent;
+import com.bartlomiejpluta.base.api.input.Key;
+import com.bartlomiejpluta.base.api.input.KeyAction;
+import com.bartlomiejpluta.base.api.input.KeyEvent;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

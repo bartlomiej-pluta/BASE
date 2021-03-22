@@ -1,13 +1,13 @@
 package com.bartlomiejpluta.base.engine.world.movement;
 
-import com.bartlomiejpluta.base.api.game.move.Direction;
-import com.bartlomiejpluta.base.api.game.move.Movable;
-import com.bartlomiejpluta.base.api.game.move.Movement;
-import com.bartlomiejpluta.base.api.internal.logic.Updatable;
-import com.bartlomiejpluta.base.api.util.math.MathUtil;
+import com.bartlomiejpluta.base.api.move.Direction;
+import com.bartlomiejpluta.base.api.move.Movable;
+import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.animation.model.AnimatedSprite;
+import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;

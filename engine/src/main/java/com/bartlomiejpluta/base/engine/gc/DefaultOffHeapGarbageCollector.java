@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.gc;
 
-import com.bartlomiejpluta.base.api.internal.gc.Cleanable;
+import com.bartlomiejpluta.base.internal.gc.Cleanable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,15 +1,15 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.color;
 
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.map.layer.color.ColorLayer;
-import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.object.Placeable;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.map.layer.color.ColorLayer;
+import com.bartlomiejpluta.base.api.map.model.GameMap;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
+import com.bartlomiejpluta.base.internal.object.Placeable;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.NonNull;
 import org.joml.Matrix4fc;
 import org.joml.Vector2fc;

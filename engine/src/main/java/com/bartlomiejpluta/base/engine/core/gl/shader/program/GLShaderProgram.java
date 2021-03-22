@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.engine.core.gl.shader.program;
 
-import com.bartlomiejpluta.base.api.internal.render.ShaderProgram;
-import com.bartlomiejpluta.base.api.internal.render.Uniform;
 import com.bartlomiejpluta.base.engine.error.AppException;
+import com.bartlomiejpluta.base.internal.render.ShaderProgram;
+import com.bartlomiejpluta.base.internal.render.Uniform;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.*;
 import org.lwjgl.system.MemoryStack;

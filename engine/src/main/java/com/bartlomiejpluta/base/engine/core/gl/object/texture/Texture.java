@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.core.gl.object.texture;
 
-import com.bartlomiejpluta.base.api.internal.gc.Disposable;
 import com.bartlomiejpluta.base.engine.error.AppException;
+import com.bartlomiejpluta.base.internal.gc.Disposable;
 import lombok.Getter;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;

@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.object;
 
-import com.bartlomiejpluta.base.api.internal.object.Placeable;
+import com.bartlomiejpluta.base.internal.object.Placeable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,13 +1,13 @@
 package com.bartlomiejpluta.base.engine.world.map.layer.tile;
 
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.map.layer.tile.TileLayer;
-import com.bartlomiejpluta.base.api.game.map.model.GameMap;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.map.layer.tile.TileLayer;
+import com.bartlomiejpluta.base.api.map.model.GameMap;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
 import com.bartlomiejpluta.base.engine.world.tileset.model.Tile;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.NonNull;
 
 import java.util.Arrays;

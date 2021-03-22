@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.engine.gui.render;
 
-import com.bartlomiejpluta.base.api.game.gui.base.Paint;
-import com.bartlomiejpluta.base.api.internal.gc.Disposable;
+import com.bartlomiejpluta.base.api.gui.base.Paint;
+import com.bartlomiejpluta.base.internal.gc.Disposable;
 import lombok.*;
 import org.lwjgl.nanovg.NVGPaint;
 

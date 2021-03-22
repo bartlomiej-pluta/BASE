@@ -1,7 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.image.manager;
 
-import com.bartlomiejpluta.base.api.game.image.Image;
-import com.bartlomiejpluta.base.api.util.math.MathUtil;
+import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
@@ -10,6 +9,7 @@ import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.engine.world.image.model.DefaultImage;
+import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.camera;
 
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
-import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.engine.world.object.Model;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 

@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.logic;
 
-import com.bartlomiejpluta.base.api.game.camera.Camera;
-import com.bartlomiejpluta.base.api.game.context.Context;
-import com.bartlomiejpluta.base.api.game.input.Input;
-import com.bartlomiejpluta.base.api.game.screen.Screen;
+import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.input.Input;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.render.Renderer;
 import com.bartlomiejpluta.base.engine.ui.model.GLFWInput;
 import com.bartlomiejpluta.base.engine.world.camera.DefaultCamera;

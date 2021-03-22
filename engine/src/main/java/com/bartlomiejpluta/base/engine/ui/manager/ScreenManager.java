@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.engine.ui.manager;
 
-import com.bartlomiejpluta.base.api.game.screen.Screen;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.ui.model.GLFWScreen;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
