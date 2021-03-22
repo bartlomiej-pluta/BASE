@@ -1,5 +1,6 @@
-package com.bartlomiejpluta.base.api.game.ai;
+package com.bartlomiejpluta.base.api.snippet.ai;
 
+import com.bartlomiejpluta.base.api.game.ai.AI;
 import com.bartlomiejpluta.base.api.game.map.layer.object.ObjectLayer;
 
 public class NoopAI implements AI {
