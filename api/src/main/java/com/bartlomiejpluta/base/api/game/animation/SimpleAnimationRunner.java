@@ -15,9 +15,11 @@ public class SimpleAnimationRunner implements AnimationRunner {
    private float speed = 0.05f;
    private float rotation = 0f;
    private Path<Animation> path;
-   private Integer pathRepeat;
+   private Integer repeatPath;
    private boolean finishOnPathEnd;
    private boolean finishOnPathFail;
+   private float offsetX = 0;
+   private float offsetY = 0;
 
    public SimpleAnimationRunner(String animationUid) {
       this.animationUid = animationUid;
@@ -48,14 +50,29 @@ public class SimpleAnimationRunner implements AnimationRunner {
       return this;
    }
 
+   public SimpleAnimationRunner speed(float speed) {
+      this.speed = speed;
+      return this;
+   }
+
    public SimpleAnimationRunner rotation(float rotation) {
       this.rotation = rotation;
       return this;
    }
 
-   public SimpleAnimationRunner path(Path<Animation> path, Integer repeat, boolean finishOnEnd, boolean finishOnFail) {
+   public SimpleAnimationRunner offset(float x, float y) {
+      this.offsetX = x;
+      this.offsetY = y;
+      return this;
+   }
+
+   public SimpleAnimationRunner repeatPath(int n) {
+      this.repeatPath = n;
+      return this;
+   }
+
+   public SimpleAnimationRunner path(Path<Animation> path, boolean finishOnEnd, boolean finishOnFail) {
       this.path = path;
-      this.pathRepeat = repeat;
       this.finishOnPathEnd = finishOnEnd;
       this.finishOnPathFail = finishOnFail;
       return this;
@@ -64,7 +81,7 @@ public class SimpleAnimationRunner implements AnimationRunner {
    @Override
    public void run(Context context, Layer layer, Vector2fc origin) {
       var animation = new DelayedAnimation(context.createAnimation(animationUid), delay);
-      animation.setPosition(origin);
+      animation.setPosition(origin.x() + offsetX, origin.y() + offsetY);
       animation.setScale(scale);
       animation.setAnimationSpeed(animationSpeed);
       animation.setSpeed(speed);
@@ -72,7 +89,7 @@ public class SimpleAnimationRunner implements AnimationRunner {
       animation.setRepeat(repeat);
 
       if (path != null) {
-         animation.followPath(path, pathRepeat, finishOnPathEnd, finishOnPathFail);
+         animation.followPath(path, repeatPath, finishOnPathEnd, finishOnPathFail);
       }
 
       layer.pushAnimation(animation);

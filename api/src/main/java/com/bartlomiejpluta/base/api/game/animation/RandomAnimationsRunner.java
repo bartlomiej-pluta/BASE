@@ -34,6 +34,9 @@ public class RandomAnimationsRunner implements AnimationRunner {
    private float rotation = 0f;
    private RealDistribution rotationDistribution;
 
+   private float offsetX = 0;
+   private float offsetY = 0;
+
    public RandomAnimationsRunner(int count) {
       this.count = max(count, 0);
    }
@@ -119,15 +122,21 @@ public class RandomAnimationsRunner implements AnimationRunner {
       return this;
    }
 
+   public RandomAnimationsRunner offset(float x, float y) {
+      this.offsetX = x;
+      this.offsetY = y;
+      return this;
+   }
+
    @Override
    public void run(Context context, Layer layer, Vector2fc origin) {
       for (int i = 0; i < count; ++i) {
          var animation = context.createAnimation(animationUids.get(random.nextInt(animationUids.size())));
 
          if (rangeDistribution != null) {
-            animation.setPosition(origin.x() + (float) rangeDistribution.sample(), origin.y() + (float) rangeDistribution.sample());
+            animation.setPosition(origin.x() + (float) rangeDistribution.sample() + offsetX, origin.y() + (float) rangeDistribution.sample() + offsetY);
          } else {
-            animation.setPosition(origin.x() + rangeX, origin.y() + rangeY);
+            animation.setPosition(origin.x() + rangeX + offsetX, origin.y() + rangeY + offsetY);
          }
 
          animation.setScale(scaleDistribution != null ? (float) scaleDistribution.sample() : scale);
