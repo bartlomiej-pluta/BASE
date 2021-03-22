@@ -1,8 +1,10 @@
 package com.bartlomiejpluta.base.engine.world.movement;
 
 import com.bartlomiejpluta.base.api.game.entity.Direction;
+import com.bartlomiejpluta.base.api.game.entity.Movable;
 import com.bartlomiejpluta.base.api.game.entity.Movement;
 import com.bartlomiejpluta.base.api.internal.logic.Updatable;
+import com.bartlomiejpluta.base.api.util.math.MathUtil;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.animation.model.AnimatedSprite;
@@ -17,25 +19,30 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class MovableSprite extends AnimatedSprite implements Updatable {
+public abstract class MovableSprite extends AnimatedSprite implements Movable, Updatable {
    private final Vector2f coordinateStepSize = new Vector2f(0, 0);
 
+   private final Vector2i coordinates = new Vector2i(0, 0);
+   private final Vector2f positionOffset = new Vector2f(0, 0);
    private int moveTime = 0;
    private Vector2f movementVector;
-
-   private final Vector2i coordinates = new Vector2i(0, 0);
+   private int framesToCrossOneTile = 1;
 
    @Getter
    private Movement movement;
-
-   protected int framesToCrossOneTile = 1;
 
    public Vector2ic getCoordinates() {
       return coordinates;
    }
 
+   @Override
    public boolean isMoving() {
       return movement != null;
+   }
+
+   @Override
+   public void setSpeed(float speed) {
+      framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
    }
 
    @Override
@@ -61,6 +68,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       setCoordinates(movement.getTo());
    }
 
+   @Override
    public Movement prepareMovement(Direction direction) {
       return new DefaultMovement(this, direction);
    }
@@ -87,21 +95,21 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
    public void setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;
-      super.setPosition((x + 0.5f) * coordinateStepSize.x, (y + 0.5f) * coordinateStepSize.y);
+      super.setPosition((x + 0.5f) * coordinateStepSize.x + positionOffset.x, (y + 0.5f) * coordinateStepSize.y + positionOffset.y);
    }
 
    @Override
    public void setPosition(float x, float y) {
       super.setPosition(x, y);
-      coordinates.x = (int) (x / coordinateStepSize.x);
-      coordinates.y = (int) (y / coordinateStepSize.y);
+      coordinates.x = (int) ((x - positionOffset.x) / coordinateStepSize.x);
+      coordinates.y = (int) ((y - positionOffset.y) / coordinateStepSize.y);
    }
 
    @Override
    public void setPosition(Vector2fc position) {
       super.setPosition(position);
-      coordinates.x = (int) (position.x() / coordinateStepSize.x);
-      coordinates.y = (int) (position.y() / coordinateStepSize.y);
+      coordinates.x = (int) ((position.x() - positionOffset.x) / coordinateStepSize.x);
+      coordinates.y = (int) ((position.y() - positionOffset.y) / coordinateStepSize.y);
    }
 
    public void setCoordinates(Vector2ic coordinates) {
@@ -117,6 +125,18 @@ public abstract class MovableSprite extends AnimatedSprite implements Updatable 
       } else {
          setCoordinates(coordinates);
       }
+   }
+
+   @Override
+   public void setPositionOffset(Vector2fc offset) {
+      this.positionOffset.x = offset.x();
+      this.positionOffset.y = offset.y();
+   }
+
+   @Override
+   public void setPositionOffset(float offsetX, float offsetY) {
+      this.positionOffset.x = offsetX;
+      this.positionOffset.y = offsetY;
    }
 
    public int chebyshevDistance(Vector2ic coordinates) {

@@ -72,6 +72,16 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public void setPositionOffset(Vector2fc offset) {
+      entity.setPositionOffset(offset);
+   }
+
+   @Override
+   public void setPositionOffset(float offsetX, float offsetY) {
+      entity.setPositionOffset(offsetX, offsetY);
+   }
+
+   @Override
    public int chebyshevDistance(Entity other) {
       return entity.chebyshevDistance(other);
    }

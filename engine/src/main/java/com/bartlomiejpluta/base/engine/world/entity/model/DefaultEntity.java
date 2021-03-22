@@ -83,11 +83,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public void setSpeed(float speed) {
-      framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
-   }
-
-   @Override
    public void setAnimationSpeed(float speed) {
       animationSpeed = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
    }

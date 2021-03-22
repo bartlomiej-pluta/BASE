@@ -160,6 +160,16 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public void setPositionOffset(Vector2fc offset) {
+      animation.setPositionOffset(offset);
+   }
+
+   @Override
+   public void setPositionOffset(float offsetX, float offsetY) {
+      animation.setPositionOffset(offsetX, offsetY);
+   }
+
+   @Override
    public void followPath(Path<Animation> path, Integer repeat, boolean finishOnEnd, boolean finishOnFail) {
       animation.followPath(path, repeat, finishOnEnd, finishOnFail);
    }

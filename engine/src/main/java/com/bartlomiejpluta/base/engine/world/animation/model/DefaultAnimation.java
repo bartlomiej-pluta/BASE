@@ -77,11 +77,6 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    }
 
    @Override
-   public void setSpeed(float speed) {
-      framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
-   }
-
-   @Override
    public void update(float dt) {
       super.update(dt);
 
