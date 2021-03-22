@@ -1,5 +1,6 @@
-package com.bartlomiejpluta.base.api.game.animation;
+package com.bartlomiejpluta.base.api.snippet.animation;
 
+import com.bartlomiejpluta.base.api.game.animation.Animation;
 import com.bartlomiejpluta.base.api.game.context.Context;
 import com.bartlomiejpluta.base.api.game.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.util.path.Path;

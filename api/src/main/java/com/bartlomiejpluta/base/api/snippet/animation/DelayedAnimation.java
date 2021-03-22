@@ -1,5 +1,7 @@
-package com.bartlomiejpluta.base.api.game.animation;
+package com.bartlomiejpluta.base.api.snippet.animation;
 
+import com.bartlomiejpluta.base.api.game.animation.Animation;
+import com.bartlomiejpluta.base.api.game.animation.AnimationDelegate;
 import com.bartlomiejpluta.base.api.game.camera.Camera;
 import com.bartlomiejpluta.base.api.game.screen.Screen;
 import com.bartlomiejpluta.base.api.internal.render.ShaderManager;
