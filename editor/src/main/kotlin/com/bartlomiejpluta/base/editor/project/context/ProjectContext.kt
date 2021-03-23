@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.context
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
@@ -44,6 +45,8 @@ interface ProjectContext {
    fun importFont(data: FontAssetData)
 
    fun createWidget(data: WidgetAssetData): WidgetAsset
+
+   fun importSound(data: SoundAssetData)
 
    fun deleteAsset(asset: Asset)
    fun loadScript(fileNode: FileNode): Code

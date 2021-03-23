@@ -3,6 +3,8 @@ package com.bartlomiejpluta.base.editor.project.context
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.service.JavaClassService
@@ -221,6 +223,19 @@ class DefaultProjectContext : ProjectContext {
          asset
       }
    } ?: throw IllegalStateException("There is no open project in the context")
+
+   override fun importSound(data: SoundAssetData) {
+      project?.let {
+         UID.next(it.sounds.map(Asset::uid)).let { uid ->
+            val source = "$uid.${data.file.extension}"
+            val targetFile = File(it.audioDirectory, source)
+            data.file.copyTo(targetFile)
+            it.sounds += SoundAsset(it, uid, source, data.name)
+
+            save()
+         }
+      }
+   }
 
    override fun deleteAsset(asset: Asset) {
       project?.let {

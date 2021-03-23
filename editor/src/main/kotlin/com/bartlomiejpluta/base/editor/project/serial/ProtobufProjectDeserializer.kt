@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -17,18 +18,19 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
 
    override fun deserialize(input: InputStream): Project {
       val proto = ProjectProto.Project.parseFrom(input)
-      val project = Project()
-      project.name = proto.name
-      project.runner = proto.runner
-      project.maps.addAll(proto.mapsList.map { deserializeMap(project, it) })
-      project.tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(project, it) })
-      project.images.addAll(proto.imagesList.map { deserializeImage(project, it) })
-      project.entitySets.addAll(proto.entitySetsList.map { deserializeEntitySet(project, it) })
-      project.animations.addAll(proto.animationsList.map { deserializeAnimation(project, it) })
-      project.fonts.addAll(proto.fontsList.map { deserializeFont(project, it) })
-      project.widgets.addAll(proto.widgetsList.map { deserializeWidget(project, it) })
 
-      return project
+      return Project().apply {
+         name = proto.name
+         runner = proto.runner
+         maps.addAll(proto.mapsList.map { deserializeMap(this, it) })
+         tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(this, it) })
+         images.addAll(proto.imagesList.map { deserializeImage(this, it) })
+         entitySets.addAll(proto.entitySetsList.map { deserializeEntitySet(this, it) })
+         animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
+         fonts.addAll(proto.fontsList.map { deserializeFont(this, it) })
+         widgets.addAll(proto.widgetsList.map { deserializeWidget(this, it) })
+         sounds.addAll(proto.soundsList.map { deserializeSound(this, it) })
+      }
    }
 
    private fun deserializeMap(project: Project, map: ProjectProto.GameMapAsset) = GameMapAsset(
@@ -82,5 +84,12 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       project = project,
       uid = widget.uid,
       name = widget.name
+   )
+
+   private fun deserializeSound(project: Project, sound: ProjectProto.SoundAsset) = SoundAsset(
+      project = project,
+      uid = sound.uid,
+      source = sound.source,
+      name = sound.name
    )
 }

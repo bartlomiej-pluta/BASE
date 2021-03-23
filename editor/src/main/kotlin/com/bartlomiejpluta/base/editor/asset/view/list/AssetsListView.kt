@@ -7,7 +7,7 @@ import com.bartlomiejpluta.base.editor.file.model.ScriptAssetFileNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
-import javafx.beans.binding.Bindings
+import javafx.beans.binding.Bindings.bindContent
 import javafx.scene.control.TreeItem
 import javafx.scene.control.TreeView
 import tornadofx.*
@@ -44,6 +44,10 @@ class AssetsListView : View() {
       menuitem("New Widget...") { mainController.createEmptyWidget() }
    }
 
+   private val audio = AssetCategory("Audio").apply {
+      menuitem("Import Sound...") { mainController.importSound() }
+   }
+
    private val rootItem = AssetCategory(
       name = "Project", items = observableListOf(
          maps,
@@ -52,7 +56,8 @@ class AssetsListView : View() {
          entitySet,
          animations,
          fonts,
-         widgets
+         widgets,
+         audio
       )
    )
 
@@ -60,13 +65,14 @@ class AssetsListView : View() {
       projectContext.projectProperty.addListener { _, _, project ->
          project?.let {
             rootItem.nameProperty.bind(it.nameProperty)
-            Bindings.bindContent(maps.items, it.maps)
-            Bindings.bindContent(tileSets.items, it.tileSets)
-            Bindings.bindContent(images.items, it.images)
-            Bindings.bindContent(entitySet.items, it.entitySets)
-            Bindings.bindContent(animations.items, it.animations)
-            Bindings.bindContent(fonts.items, it.fonts)
-            Bindings.bindContent(widgets.items, it.widgets)
+            bindContent(maps.items, it.maps)
+            bindContent(tileSets.items, it.tileSets)
+            bindContent(images.items, it.images)
+            bindContent(entitySet.items, it.entitySets)
+            bindContent(animations.items, it.animations)
+            bindContent(fonts.items, it.fonts)
+            bindContent(widgets.items, it.widgets)
+            bindContent(audio.items, it.sounds)
             root.root.expandAll()
          }
       }

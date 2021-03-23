@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -26,6 +27,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllAnimations(item.animations.map(this::serializeAnimation))
       proto.addAllFonts(item.fonts.map(this::serializeFont))
       proto.addAllWidgets(item.widgets.map(this::serializeWidget))
+      proto.addAllSounds(item.sounds.map(this::serializeSound))
       proto.build().writeTo(output)
    }
 
@@ -75,5 +77,11 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setUid(widget.uid)
       .setSource(widget.source)
       .setName(widget.name)
+      .build()
+
+   private fun serializeSound(sound: SoundAsset) = ProjectProto.SoundAsset.newBuilder()
+      .setUid(sound.uid)
+      .setSource(sound.source)
+      .setName(sound.name)
       .build()
 }

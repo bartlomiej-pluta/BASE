@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.project.model
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
@@ -36,8 +37,9 @@ class Project {
    val animations = observableListOf<AnimationAsset>()
    val fonts = observableListOf<FontAsset>()
    val widgets = observableListOf<WidgetAsset>()
+   val sounds = observableListOf<SoundAsset>()
 
-   val assetLists = listOf(maps, tileSets, images, entitySets, animations, fonts, widgets)
+   val assetLists = listOf(maps, tileSets, images, entitySets, animations, fonts, widgets, sounds)
 
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
@@ -65,6 +67,10 @@ class Project {
 
    val widgetsDirectoryProperty = SimpleObjectProperty<File>()
    var widgetsDirectory by widgetsDirectoryProperty
+      private set
+
+   val audioDirectoryProperty = SimpleObjectProperty<File>()
+   var audioDirectory by audioDirectoryProperty
       private set
 
    val codeDirectoryProperty = SimpleObjectProperty<File>()
@@ -104,6 +110,7 @@ class Project {
             animationsDirectory = File(it, ANIMATIONS_DIR)
             fontsDirectory = File(it, FONTS_DIR)
             widgetsDirectory = File(it, WIDGETS_DIR)
+            audioDirectory = File(it, AUDIO_DIR)
             codeDirectory = File(it, CODE_DIR)
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
@@ -122,6 +129,7 @@ class Project {
       animationsDirectory?.mkdirs()
       fontsDirectory?.mkdirs()
       widgetsDirectory?.mkdirs()
+      audioDirectory?.mkdirs()
       codeDirectory?.mkdirs()
    }
 
@@ -136,6 +144,7 @@ class Project {
       const val ANIMATIONS_DIR = "animations"
       const val FONTS_DIR = "fonts"
       const val WIDGETS_DIR = "widgets"
+      const val AUDIO_DIR = "audio"
       const val CODE_DIR = "code"
       const val BUILD_DIR = "build"
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"

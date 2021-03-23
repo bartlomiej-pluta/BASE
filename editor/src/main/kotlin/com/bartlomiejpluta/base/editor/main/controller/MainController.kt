@@ -3,6 +3,8 @@ package com.bartlomiejpluta.base.editor.main.controller
 import com.bartlomiejpluta.base.editor.animation.view.importing.ImportAnimationFragment
 import com.bartlomiejpluta.base.editor.animation.viewmodel.AnimationAssetDataVM
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.audio.view.importing.ImportSoundFragment
+import com.bartlomiejpluta.base.editor.audio.viewmodel.SoundAssetDataVM
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
@@ -214,6 +216,20 @@ class MainController : Controller() {
          .ifPresent(this::openScript)
    }
 
+   fun importSound() {
+      val vm = SoundAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportSoundFragment>(scope).apply {
+         onComplete {
+            projectContext.importSound(it)
+         }
+
+         openModal(block = true, resizable = true)
+      }
+   }
+
    fun closeAsset(asset: Asset) {
       when (asset) {
          is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMap && item.uid == asset.uid }?.key?.let {
@@ -235,6 +251,7 @@ class MainController : Controller() {
          }
       }
    }
+
 
    fun clearResources() {
       openItems.clear()

@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.asset.component
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
+import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -76,6 +77,7 @@ class AssetTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAs
          is AnimationAsset -> FontIcon("fa-film")
          is FontAsset -> FontIcon("fa-font")
          is WidgetAsset -> FontIcon("fa-tachometer")
+         is SoundAsset -> FontIcon("fa-music")
          else -> null
       }
    }
