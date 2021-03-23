@@ -114,17 +114,17 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public void setPosition(float x, float y) {
-      super.setPosition(x, y);
-      coordinates.x = (int) ((x - positionOffset.x) / coordinateStepSize.x);
-      coordinates.y = (int) ((y - positionOffset.y) / coordinateStepSize.y);
+      super.setPosition(x - positionOffset.x, y - positionOffset.y);
+      coordinates.x = (int) (x / coordinateStepSize.x);
+      coordinates.y = (int) (y / coordinateStepSize.y);
       placingMode = PlacingMode.BY_POSITION;
    }
 
    @Override
    public void setPosition(Vector2fc position) {
-      super.setPosition(position);
-      coordinates.x = (int) ((position.x() - positionOffset.x) / coordinateStepSize.x);
-      coordinates.y = (int) ((position.y() - positionOffset.y) / coordinateStepSize.y);
+      super.setPosition(position.x() - positionOffset.x, position.y() - positionOffset.y);
+      coordinates.x = (int) (position.x() / coordinateStepSize.x);
+      coordinates.y = (int) (position.y() / coordinateStepSize.y);
       placingMode = PlacingMode.BY_POSITION;
    }
 

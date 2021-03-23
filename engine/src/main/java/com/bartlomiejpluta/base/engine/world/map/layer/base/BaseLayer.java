@@ -45,8 +45,8 @@ public abstract class BaseLayer implements Layer, Updatable {
    public void update(float dt) {
       if(!animationsToAdd.isEmpty()) {
          for(var animation : animationsToAdd) {
-            animation.setStepSize(stepSize.x(), stepSize.y());
             animations.add(animation);
+            animation.setStepSize(stepSize.x(), stepSize.y());
             animation.onAdd(this);
          }
 
