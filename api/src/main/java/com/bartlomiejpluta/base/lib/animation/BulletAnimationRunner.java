@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
+import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.util.path.Path;
 import org.joml.Vector2fc;
 import org.joml.Vector2i;
@@ -110,7 +111,25 @@ public class BulletAnimationRunner implements AnimationRunner {
    @Override
    public void run(Context context, Layer layer, Vector2fc origin) {
       var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, onHit);
-      animation.setPosition(origin.x() + offsetX, origin.y() + offsetY);
+
+      animation.setPosition(origin);
+      animation.setScale(scale);
+      animation.setAnimationSpeed(animationSpeed);
+      animation.setSpeed(speed);
+      animation.setRotation(rotation);
+      animation.setRepeat(repeat);
+      animation.setPositionOffset(offsetX, offsetY);
+
+      animation.followPath(path, range, true, true);
+
+      layer.pushAnimation(animation);
+   }
+
+   @Override
+   public void run(Context context, Layer layer, Movable origin) {
+      var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, onHit);
+
+      animation.setCoordinates(origin.getCoordinates());
       animation.setScale(scale);
       animation.setAnimationSpeed(animationSpeed);
       animation.setSpeed(speed);

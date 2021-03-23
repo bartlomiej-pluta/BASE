@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.lib.animation;
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.util.path.Path;
 import org.joml.Vector2fc;
 
@@ -82,7 +83,9 @@ public class SimpleAnimationRunner implements AnimationRunner {
    @Override
    public void run(Context context, Layer layer, Vector2fc origin) {
       var animation = new DelayedAnimation(context.createAnimation(animationUid), delay);
-      animation.setPosition(origin.x() + offsetX, origin.y() + offsetY);
+
+      animation.setPosition(origin);
+      animation.setPositionOffset(offsetX, offsetY);
       animation.setScale(scale);
       animation.setAnimationSpeed(animationSpeed);
       animation.setSpeed(speed);
@@ -94,5 +97,25 @@ public class SimpleAnimationRunner implements AnimationRunner {
       }
 
       layer.pushAnimation(animation);
+   }
+
+   @Override
+   public void run(Context context, Layer layer, Movable origin) {
+      var animation = new DelayedAnimation(context.createAnimation(animationUid), delay);
+
+      animation.setCoordinates(origin.getCoordinates());
+      animation.setPositionOffset(offsetX, offsetY);
+      animation.setScale(scale);
+      animation.setAnimationSpeed(animationSpeed);
+      animation.setSpeed(speed);
+      animation.setRotation(rotation);
+      animation.setRepeat(repeat);
+
+      if (path != null) {
+         animation.followPath(path, repeatPath, finishOnPathEnd, finishOnPathFail);
+      }
+
+      layer.pushAnimation(animation);
+
    }
 }

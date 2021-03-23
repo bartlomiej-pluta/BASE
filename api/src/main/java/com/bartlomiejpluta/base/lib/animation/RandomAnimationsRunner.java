@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.lib.animation;
 
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.move.Movable;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.RealDistribution;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
@@ -134,16 +135,41 @@ public class RandomAnimationsRunner implements AnimationRunner {
          var animation = context.createAnimation(animationUids.get(random.nextInt(animationUids.size())));
 
          if (rangeDistribution != null) {
-            animation.setPosition(origin.x() + (float) rangeDistribution.sample() + offsetX, origin.y() + (float) rangeDistribution.sample() + offsetY);
+            animation.setPosition(origin.x() + (float) rangeDistribution.sample(), origin.y() + (float) rangeDistribution.sample());
          } else {
-            animation.setPosition(origin.x() + rangeX + offsetX, origin.y() + rangeY + offsetY);
+            animation.setPosition(origin.x() + rangeX, origin.y() + rangeY);
          }
 
+         animation.setPositionOffset(offsetX, offsetY);
          animation.setScale(scaleDistribution != null ? (float) scaleDistribution.sample() : scale);
          animation.setAnimationSpeed(animationSpeedDistribution != null ? (float) animationSpeedDistribution.sample() : animationSpeed);
          animation.setRotation(rotationDistribution != null ? (float) rotationDistribution.sample() : rotation);
 
          layer.pushAnimation(new DelayedAnimation(animation, (int) (delayDistribution != null ? delayDistribution.sample() : delay)));
       }
+   }
+
+   @Override
+   public void run(Context context, Layer layer, Movable origin) {
+      for (int i = 0; i < count; ++i) {
+         var animation = context.createAnimation(animationUids.get(random.nextInt(animationUids.size())));
+
+         var position = origin.getPosition();
+         var offset = origin.getPositionOffset();
+
+         if (rangeDistribution != null) {
+            animation.setPosition(position.x() - offset.x() + (float) rangeDistribution.sample(), position.y() - offset.y() + (float) rangeDistribution.sample());
+         } else {
+            animation.setPosition(position.x() - offset.x() + rangeX, position.y() - offset.y() + rangeY);
+         }
+
+         animation.setPositionOffset(offsetX, offsetY);
+         animation.setScale(scaleDistribution != null ? (float) scaleDistribution.sample() : scale);
+         animation.setAnimationSpeed(animationSpeedDistribution != null ? (float) animationSpeedDistribution.sample() : animationSpeed);
+         animation.setRotation(rotationDistribution != null ? (float) rotationDistribution.sample() : rotation);
+
+         layer.pushAnimation(new DelayedAnimation(animation, (int) (delayDistribution != null ? delayDistribution.sample() : delay)));
+      }
+
    }
 }
