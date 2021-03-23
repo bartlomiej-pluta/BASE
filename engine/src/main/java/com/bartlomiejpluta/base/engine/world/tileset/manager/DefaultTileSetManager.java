@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.world.tileset.manager;
 
+import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
@@ -23,6 +24,12 @@ public class DefaultTileSetManager implements TileSetManager {
    private final Map<String, TileSet> tileSets = new HashMap<>();
    private final Map<String, TileSetAsset> assets = new HashMap<>();
    private final ProjectConfiguration configuration;
+   private Mesh mesh;
+
+   @Override
+   public void init() {
+      this.mesh = meshManager.createQuad(1, 1, 0, 0);
+   }
 
    @Override
    public void registerAsset(TileSetAsset asset) {
@@ -43,8 +50,6 @@ public class DefaultTileSetManager implements TileSetManager {
 
          var source = configuration.projectFile("tilesets", asset.getSource());
          var texture = textureManager.loadTexture(source, asset.getRows(), asset.getColumns());
-         var size = texture.getSpriteSize();
-         var mesh = meshManager.createQuad(size.x(), size.y(), 0, 0);
          tileset = new TileSet(texture, mesh);
          log.info("Loading tile set from assets to cache under the key: [{}]", uid);
          tileSets.put(uid, tileset);

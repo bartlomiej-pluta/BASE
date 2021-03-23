@@ -20,7 +20,7 @@ public class DefaultMeshManager implements MeshManager {
       var mesh = quads.get(dim);
 
       if(mesh == null) {
-         log.info("Creating [w:{}, h:{} | O:{},{}] and putting it into the cache", width, height, originX, originY);
+         log.info("Creating [w:{}, h:{} | O:{}, {}] mesh and putting it into the cache", width, height, originX, originY);
          mesh = Mesh.quad(width, height, originX, originY);
          quads.put(dim, mesh);
       }
