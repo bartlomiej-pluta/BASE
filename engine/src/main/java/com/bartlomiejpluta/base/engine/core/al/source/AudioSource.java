@@ -9,9 +9,11 @@ import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.AL11.alGenSources;
 
 public class AudioSource implements Sound, Disposable {
-   private final int id = alGenSources();
+   private final int id;
 
-   public void setBuffer(AudioBuffer buffer) {
+   public AudioSource(AudioBuffer buffer) {
+      this.id = alGenSources();
+
       stop();
       alSourcei(id, AL_BUFFER, buffer.getId());
    }
@@ -20,14 +22,16 @@ public class AudioSource implements Sound, Disposable {
       alSourcef(id, param, value);
    }
 
-   @Override
    public void setPosition(Vector3fc position) {
       alSource3f(id, AL_POSITION, position.x(), position.y(), position.z());
    }
 
-   @Override
    public void setSpeed(Vector3fc speed) {
       alSource3f(id, AL_VELOCITY, speed.x(), speed.y(), speed.z());
+   }
+
+   public void setRelative(boolean relative) {
+      alSourcei(id, AL_SOURCE_RELATIVE, relative ? AL_TRUE : AL_FALSE);
    }
 
    @Override
@@ -58,11 +62,6 @@ public class AudioSource implements Sound, Disposable {
    @Override
    public void setRepeat(boolean repeat) {
       alSourcei(id, AL_LOOPING, repeat ? AL_TRUE : AL_FALSE);
-   }
-
-   @Override
-   public void setRelative(boolean relative) {
-      alSourcei(id, AL_SOURCE_RELATIVE, relative ? AL_TRUE : AL_FALSE);
    }
 
    @Override

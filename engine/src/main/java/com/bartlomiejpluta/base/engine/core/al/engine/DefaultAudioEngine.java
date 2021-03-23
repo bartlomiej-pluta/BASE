@@ -71,8 +71,7 @@ public class DefaultAudioEngine implements AudioEngine {
          throw new AppException("Audio buffer with name [%s] does not exist", name);
       }
 
-      var source = new AudioSource();
-      source.setBuffer(buffer);
+      var source = new AudioSource(buffer);
 
       sources.add(source);
 
