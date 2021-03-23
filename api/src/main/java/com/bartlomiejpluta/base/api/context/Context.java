@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.api.context;
 
 import com.bartlomiejpluta.base.api.animation.Animation;
+import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.gui.GUI;
@@ -34,6 +35,14 @@ public interface Context extends Updatable, Renderable, Disposable {
    Image getImage(String imageUid);
 
    GUI newGUI();
+
+   Sound createSound(String soundUid);
+
+   void disposeSound(Sound sound);
+
+   void playSound(String soundUid);
+
+   void playSound(String soundUid, float gain);
 
    boolean isRunning();
 

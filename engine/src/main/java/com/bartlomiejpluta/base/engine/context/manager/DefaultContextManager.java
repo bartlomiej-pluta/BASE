@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.context.manager;
 
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
+import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
@@ -39,6 +40,7 @@ public class DefaultContextManager implements ContextManager {
    private final ClassLoader classLoader;
    private final Inflater inflater;
    private final WidgetDefinitionManager widgetDefinitionManager;
+   private final SoundManager soundManager;
 
    @SneakyThrows
    @Override
@@ -55,6 +57,7 @@ public class DefaultContextManager implements ContextManager {
       project.getAnimationAssets().forEach(animationManager::registerAsset);
       project.getFontAssets().forEach(fontManager::registerAsset);
       project.getWidgetDefinitionAssets().forEach(widgetDefinitionManager::registerAsset);
+      project.getSoundAssets().forEach(soundManager::registerAsset);
 
       log.info("Creating game runner instance");
       var runnerClass = classLoader.<GameRunner>loadClass(project.getRunner());
@@ -70,6 +73,7 @@ public class DefaultContextManager implements ContextManager {
             .fontManager(fontManager)
             .inflater(inflater)
             .widgetDefinitionManager(widgetDefinitionManager)
+            .soundManager(soundManager)
             .gameRunner(gameRunner)
             .projectName(project.getName())
             .build();

@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.model;
 
+import com.bartlomiejpluta.base.engine.audio.asset.SoundAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
@@ -43,4 +44,7 @@ public class Project {
 
    @NonNull
    private final List<WidgetDefinitionAsset> widgetDefinitionAssets;
+
+   @NonNull
+   private final List<SoundAsset> soundAssets;
 }

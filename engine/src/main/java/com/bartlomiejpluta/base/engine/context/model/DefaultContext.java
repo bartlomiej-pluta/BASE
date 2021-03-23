@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.context.model;
 
 import com.bartlomiejpluta.base.api.animation.Animation;
+import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.entity.Entity;
@@ -10,6 +11,7 @@ import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
@@ -58,6 +60,9 @@ public class DefaultContext implements Context {
    @NonNull
    private final WidgetDefinitionManager widgetDefinitionManager;
 
+   @NonNull
+   private final SoundManager soundManager;
+
    @Getter
    @NonNull
    private final GameRunner gameRunner;
@@ -79,6 +84,8 @@ public class DefaultContext implements Context {
    private MapHandler mapHandler;
 
    private final List<GUI> guis = new LinkedList<>();
+
+   private final List<Sound> sounds = new LinkedList<>();
 
    @SneakyThrows
    @Override
@@ -134,6 +141,31 @@ public class DefaultContext implements Context {
    }
 
    @Override
+   public Sound createSound(String soundUid) {
+      return soundManager.loadObject(soundUid);
+   }
+
+   @Override
+   public void disposeSound(Sound sound) {
+      soundManager.disposeSound(sound);
+   }
+
+   @Override
+   public void playSound(String soundUid) {
+      var sound = soundManager.loadObject(soundUid);
+      sounds.add(sound);
+      sound.play();
+   }
+
+   @Override
+   public void playSound(String soundUid, float gain) {
+      var sound = soundManager.loadObject(soundUid);
+      sound.setGain(gain);
+      sounds.add(sound);
+      sound.play();
+   }
+
+   @Override
    public boolean isRunning() {
       return engine.isRunning();
    }
@@ -182,6 +214,14 @@ public class DefaultContext implements Context {
 
       if (map != null) {
          map.update(dt);
+      }
+
+      for (var iterator = sounds.iterator(); iterator.hasNext(); ) {
+         var sound = iterator.next();
+         if (!sound.isPlaying()) {
+            iterator.remove();
+            soundManager.disposeSound(sound);
+         }
       }
    }
 

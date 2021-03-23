@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.engine.project.serial;
 
+import com.bartlomiejpluta.base.engine.audio.asset.SoundAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
@@ -32,6 +33,7 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
             .animationAssets(proto.getAnimationsList().stream().map(this::parseAnimationAsset).collect(toList()))
             .fontAssets(proto.getFontsList().stream().map(this::parseFontAsset).collect(toList()))
             .widgetDefinitionAssets(proto.getWidgetsList().stream().map(this::parseWidgetAsset).collect(toList()))
+            .soundAssets(proto.getSoundsList().stream().map(this::parseSoundAsset).collect(toList()))
             .build();
    }
 
@@ -61,5 +63,9 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
 
    private AnimationAsset parseAnimationAsset(ProjectProto.AnimationAsset proto) {
       return new AnimationAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
+   }
+
+   private SoundAsset parseSoundAsset(ProjectProto.SoundAsset proto) {
+      return new SoundAsset(proto.getUid(), proto.getSource());
    }
 }
