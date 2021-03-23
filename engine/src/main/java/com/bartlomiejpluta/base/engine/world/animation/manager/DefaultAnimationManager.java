@@ -28,7 +28,12 @@ public class DefaultAnimationManager implements AnimationManager {
    private final Map<String, AnimationAsset> assets = new HashMap<>();
    private final Map<String, Vector2fc[]> frames = new HashMap<>();
    private final ProjectConfiguration configuration;
+   private Mesh mesh;
 
+   @Override
+   public void init() {
+      mesh = meshManager.createQuad(1, 1, 0.5f, 0.5f);
+   }
 
    @Override
    public void registerAsset(AnimationAsset asset) {
@@ -51,7 +56,6 @@ public class DefaultAnimationManager implements AnimationManager {
       var source = configuration.projectFile("animations", asset.getSource());
       var texture = textureManager.loadTexture(source, asset.getRows(), asset.getColumns());
       var material = Material.textured(texture);
-      var mesh = buildMesh(material, asset.getRows(), asset.getColumns());
 
       return new DefaultAnimation(mesh, material, animationFrames);
    }
@@ -68,12 +72,5 @@ public class DefaultAnimationManager implements AnimationManager {
       }
 
       return frames;
-   }
-
-   private Mesh buildMesh(Material material, int rows, int columns) {
-      var texture = material.getTexture();
-      var spriteWidth = texture.getWidth() / columns;
-      var spriteHeight = texture.getHeight() / rows;
-      return meshManager.createQuad(spriteWidth, spriteHeight, spriteWidth / 2f, spriteHeight / 2f);
    }
 }

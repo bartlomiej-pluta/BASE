@@ -12,6 +12,7 @@ import com.bartlomiejpluta.base.util.path.PathExecutor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.joml.Vector2f;
 import org.joml.Vector2fc;
 
 import static com.bartlomiejpluta.base.util.path.PathProgress.DONE;
@@ -20,6 +21,8 @@ import static com.bartlomiejpluta.base.util.path.PathProgress.SEGMENT_FAILED;
 public class DefaultAnimation extends MovableSprite implements Animation {
    private final Vector2fc[] frames;
    private final int lastFrameIndex;
+   private final Vector2f animationScale = new Vector2f(1, 1);
+   private final Vector2fc animationSpriteSize;
 
    private int animationSpeed = 100;
    private int iteration = 0;
@@ -42,6 +45,9 @@ public class DefaultAnimation extends MovableSprite implements Animation {
       super(mesh, material);
       this.frames = frames;
       this.lastFrameIndex = frames.length - 1;
+
+      this.animationSpriteSize = material.getTexture().getSpriteSize();
+      super.setScale(animationSpriteSize.x() * animationScale.x, animationSpriteSize.y() * animationScale.y);
    }
 
    @Override
@@ -124,5 +130,41 @@ public class DefaultAnimation extends MovableSprite implements Animation {
       }
 
       return iteration >= repeat;
+   }
+
+   @Override
+   public void setScaleX(float scaleX) {
+      this.animationScale.x = scaleX;
+      super.setScaleX(animationSpriteSize.x() * scaleX);
+   }
+
+   @Override
+   public void setScaleY(float scaleY) {
+      this.animationScale.y = scaleY;
+      super.setScaleY(animationSpriteSize.y() * scaleY);
+   }
+
+   @Override
+   public void setScale(float scale) {
+      this.animationScale.x = scale;
+      this.animationScale.y = scale;
+      super.setScale(animationSpriteSize.x() * scale, animationSpriteSize.y() * scale);
+   }
+
+   @Override
+   public void setScale(float scaleX, float scaleY) {
+      this.animationScale.x = scaleX;
+      this.animationScale.y = scaleY;
+      super.setScale(animationSpriteSize.x() * scaleX, animationSpriteSize.y() * scaleY);
+   }
+
+   @Override
+   public float getScaleX() {
+      return animationScale.x;
+   }
+
+   @Override
+   public float getScaleY() {
+      return animationScale.y;
    }
 }
