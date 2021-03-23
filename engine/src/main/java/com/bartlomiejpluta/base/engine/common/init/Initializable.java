@@ -1,5 +1,5 @@
 package com.bartlomiejpluta.base.engine.common.init;
 
-public interface Initianizable {
+public interface Initializable {
    void init();
 }
