@@ -19,14 +19,13 @@ public class DefaultImageLayer extends BaseLayer implements ImageLayer {
    @NonNull
    @Getter
    private Image image;
-   private float imagePrimaryWidth;
-   private float imagePrimaryHeight;
+   private float imageWidth;
+   private float imageHeight;
 
    private float x;
    private float y;
    private float scaleX;
    private float scaleY;
-   private float factor;
 
    @NonNull
    private ImageLayerMode mode;
@@ -57,17 +56,16 @@ public class DefaultImageLayer extends BaseLayer implements ImageLayer {
 
    private void recalculate() {
       switch (mode) {
-         case NORMAL -> image.setScale(factor * scaleX, factor * scaleY);
-         case FIT_MAP -> image.setScale(mapWidth / imagePrimaryWidth, mapHeight / imagePrimaryHeight);
+         case NORMAL -> image.setScale(scaleX, scaleY);
+         case FIT_MAP -> image.setScale(mapWidth / imageWidth, mapHeight / imageHeight);
       }
    }
 
    @Override
    public void setImage(Image image) {
       this.image = image;
-      this.imagePrimaryWidth = image.getPrimaryWidth();
-      this.imagePrimaryHeight = image.getPrimaryHeight();
-      this.factor = image.getFactor();
+      this.imageWidth = image.getWidth();
+      this.imageHeight = image.getHeight();
 
       this.image.setPosition(x, y);
 
@@ -115,7 +113,7 @@ public class DefaultImageLayer extends BaseLayer implements ImageLayer {
          }
 
          if (mode == ImageLayerMode.FIT_SCREEN) {
-            image.setScale(screen.getWidth() / imagePrimaryWidth, screen.getHeight() / imagePrimaryHeight);
+            image.setScale(screen.getWidth() / imageWidth, screen.getHeight() / imageHeight);
          }
 
          image.render(screen, camera, shaderManager);

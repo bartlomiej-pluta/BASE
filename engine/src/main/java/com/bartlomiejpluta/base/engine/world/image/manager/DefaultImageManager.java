@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.image.manager;
 
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
+import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.core.gl.object.texture.TextureManager;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
@@ -29,7 +30,12 @@ public class DefaultImageManager implements ImageManager {
    private final Map<String, ImageAsset> assets = new HashMap<>();
    private final Map<String, ByteBuffer> imageBuffers = new HashMap<>();
    private final ProjectConfiguration configuration;
+   private Mesh mesh;
 
+   @Override
+   public void init() {
+      mesh = meshManager.createQuad(1, 1, 0, 0);
+   }
 
    @Override
    public void registerAsset(ImageAsset asset) {
@@ -52,7 +58,6 @@ public class DefaultImageManager implements ImageManager {
       var gcd = MathUtil.gcdEuclidean(width, height);
       var initialWidth = width / gcd;
       var initialHeight = height / gcd;
-      var mesh = meshManager.createQuad(initialWidth, initialHeight, 0, 0);
       var material = Material.textured(texture);
       log.info("Creating new image on asset with UID: [{}]", uid);
 
