@@ -75,6 +75,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public Vector2fc getPositionOffset() {
+      return entity.getPositionOffset();
+   }
+
+   @Override
    public void setPositionOffset(Vector2fc offset) {
       entity.setPositionOffset(offset);
    }

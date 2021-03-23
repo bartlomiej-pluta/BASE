@@ -171,6 +171,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public Vector2fc getPositionOffset() {
+      return animation.getPositionOffset();
+   }
+
+   @Override
    public void setPositionOffset(Vector2fc offset) {
       animation.setPositionOffset(offset);
    }

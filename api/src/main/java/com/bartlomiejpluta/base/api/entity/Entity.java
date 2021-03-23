@@ -4,10 +4,9 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.internal.logic.Updatable;
-import com.bartlomiejpluta.base.internal.object.Placeable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 
-public interface Entity extends Placeable, Movable, Renderable, Updatable {
+public interface Entity extends Movable, Renderable, Updatable {
 
    Direction getFaceDirection();
 

@@ -144,6 +144,11 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    }
 
    @Override
+   public Vector2fc getPositionOffset() {
+      return positionOffset;
+   }
+
+   @Override
    public void setPositionOffset(Vector2fc offset) {
       this.positionOffset.x = offset.x();
       this.positionOffset.y = offset.y();
