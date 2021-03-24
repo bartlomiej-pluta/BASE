@@ -14,4 +14,13 @@ class CodeVM(code: Code) : ItemViewModel<Code>(code) {
 
    val codeProperty = bind(Code::codeProperty)
    var code by codeProperty
+
+   val saveableProperty = bind(Code::saveableProperty)
+   val saveable by saveableProperty
+
+   val executeProperty = bind(Code::executeProperty)
+
+   fun execute() {
+      item?.execute()
+   }
 }

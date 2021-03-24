@@ -6,7 +6,13 @@ import tornadofx.getValue
 import tornadofx.setValue
 import tornadofx.toProperty
 
-class Code(fileNode: FileNode, val typeProperty: Property<CodeType>, code: String) {
+class Code(
+   fileNode: FileNode,
+   val typeProperty: Property<CodeType>,
+   code: String,
+   saveable: Boolean = true,
+   execute: ((String) -> Unit)? = null
+) {
    val fileNodeProperty = fileNode.toProperty()
    val fileNode by fileNodeProperty
 
@@ -14,4 +20,13 @@ class Code(fileNode: FileNode, val typeProperty: Property<CodeType>, code: Strin
 
    val codeProperty = code.toProperty()
    var code by codeProperty
+
+   val saveableProperty = saveable.toProperty()
+   val saveable by saveableProperty
+
+   val executeProperty = execute.toProperty()
+
+   fun execute() {
+      executeProperty.value?.let { it(code) }
+   }
 }

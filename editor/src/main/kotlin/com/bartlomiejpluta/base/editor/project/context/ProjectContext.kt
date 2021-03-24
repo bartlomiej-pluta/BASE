@@ -49,6 +49,6 @@ interface ProjectContext {
    fun importSound(data: SoundAssetData)
 
    fun deleteAsset(asset: Asset)
-   fun loadScript(fileNode: FileNode): Code
+   fun loadScript(fileNode: FileNode, execute: ((String) -> Unit)?, saveable: Boolean): Code
    fun saveScript(code: Code)
 }

@@ -98,12 +98,18 @@ class MainController : Controller() {
       }
    }
 
-   fun openScript(fsNode: FileNode, line: Int = 1, column: Int = 1) {
+   fun openScript(
+      fsNode: FileNode,
+      line: Int = 1,
+      column: Int = 1,
+      execute: ((String) -> Unit)? = null,
+      saveable: Boolean = true
+   ) {
       val findScript = { script: Code -> script.fileNode.absolutePath == fsNode.absolutePath }
       val updateExistingScope = { scope: CodeScope -> scope.setCaretPosition(line, column) }
 
       openItem(findScript, updateExistingScope) {
-         val code = projectContext.loadScript(fsNode)
+         val code = projectContext.loadScript(fsNode, execute, saveable)
          val vm = CodeVM(code)
          val scope = CodeScope(line, column)
          setInScope(vm, scope)

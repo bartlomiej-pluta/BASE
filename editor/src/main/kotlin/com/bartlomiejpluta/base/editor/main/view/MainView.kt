@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.editor.code.view.build.BuildLogsView
 import com.bartlomiejpluta.base.editor.code.view.editor.CodeEditorFragment
 import com.bartlomiejpluta.base.editor.code.view.list.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
+import com.bartlomiejpluta.base.editor.database.view.list.TablesListView
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
@@ -36,6 +37,7 @@ class MainView : View("BASE Game Editor") {
    private val buildLogsView = find<BuildLogsView>()
    private val processLogsView = find<ProcessLogsView>()
    private val projectPropertiesView = find<ProjectParametersView>()
+   private val databaseTablesListView = find<TablesListView>()
 
    private val openTabs = mutableMapOf<Scope, Tab>()
 
@@ -121,6 +123,10 @@ class MainView : View("BASE Game Editor") {
 
          item("Assets", expanded = false) {
             this += assetsView
+         }
+
+         item("Database", expanded = false) {
+            this += databaseTablesListView
          }
 
          item("Project Parameters") {

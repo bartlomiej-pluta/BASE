@@ -247,7 +247,7 @@ class DefaultProjectContext : ProjectContext {
       } ?: throw IllegalStateException("There is no open project in the context")
    }
 
-   override fun loadScript(fileNode: FileNode): Code {
+   override fun loadScript(fileNode: FileNode, execute: ((String) -> Unit)?, saveable: Boolean): Code {
       val typeProperty = SimpleObjectProperty<CodeType>().apply {
          bind(createObjectBinding({
             when (fileNode.extension.toLowerCase()) {
@@ -261,7 +261,7 @@ class DefaultProjectContext : ProjectContext {
 
       val code = fileNode.readText()
 
-      return Code(fileNode, typeProperty, code)
+      return Code(fileNode, typeProperty, code, saveable, execute)
    }
 
    override fun saveScript(code: Code) {
