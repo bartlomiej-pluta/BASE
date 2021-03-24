@@ -63,8 +63,9 @@ class DefaultProjectContext : ProjectContext {
    override var project by projectProperty
 
    init {
-      projectProperty.addListener { _, _, newProject ->
-         newProject?.mkdirs()
+      projectProperty.addListener { _, prevProject, newProject ->
+         prevProject?.dispose()
+         newProject?.init()
          tileSetCache.clear()
       }
    }

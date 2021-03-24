@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.model
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
+import com.bartlomiejpluta.base.editor.database.source.DataSource
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
@@ -26,6 +27,9 @@ class Project {
 
    val projectFileProperty = createObjectBinding({ File(sourceDirectory, PROJECT_FILE) }, sourceDirectoryProperty)
    val projectFile by projectFileProperty
+
+   val databaseFileProperty = createObjectBinding({ File(sourceDirectory, DATABASE_FILE) }, sourceDirectoryProperty)
+   val databaseFile by databaseFileProperty
 
    val runnerProperty = SimpleStringProperty()
    var runner by runnerProperty
@@ -100,6 +104,8 @@ class Project {
       createObjectBinding({ File(buildOutDirectory, PROJECT_OUTPUT_JAR_FILE) }, buildOutDirectoryProperty)
    val buildOutputJarFile by buildOutputJarFileProperty
 
+   lateinit var database: DataSource
+
    init {
       sourceDirectoryProperty.addListener { _, _, dir ->
          dir?.let {
@@ -120,7 +126,16 @@ class Project {
       }
    }
 
-   fun mkdirs() {
+   fun init() {
+      database = DataSource(databaseFile)
+      mkdirs()
+   }
+
+   fun dispose() {
+      database.close()
+   }
+
+   private fun mkdirs() {
       sourceDirectory?.mkdirs()
       mapsDirectory?.mkdirs()
       tileSetsDirectory?.mkdirs()
@@ -135,6 +150,7 @@ class Project {
 
    companion object {
       const val PROJECT_FILE = "project.bep"
+      const val DATABASE_FILE = "data"
       const val PROJECT_OUTPUT_JAR_FILE = "game.jar"
 
       const val MAPS_DIR = "maps"
