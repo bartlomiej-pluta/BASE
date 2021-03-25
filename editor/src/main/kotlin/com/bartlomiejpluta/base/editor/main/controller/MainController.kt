@@ -122,8 +122,13 @@ class MainController : Controller() {
 
    fun openQuery(query: Query) {
       val findQuery = { q: Query -> q.name == query.name }
+      val updateQuery = { scope: Scope ->
+         openItems -= scope
+//         openItems[scope] = query
+//         find<QueryVM>(scope).item = query
+      }
 
-      openItem<Query, Scope>(findQuery, {}) {
+      openItem(findQuery, updateQuery) {
          val vm = QueryVM(query)
          val scope = Scope()
          setInScope(vm, scope)

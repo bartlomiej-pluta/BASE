@@ -1,19 +1,17 @@
 package com.bartlomiejpluta.base.editor.database.view.list
 
 import com.bartlomiejpluta.base.editor.database.component.SQLElementCell
-import com.bartlomiejpluta.base.editor.database.model.Query
-import com.bartlomiejpluta.base.editor.database.model.SQLDatabase
-import com.bartlomiejpluta.base.editor.database.model.SQLElement
-import com.bartlomiejpluta.base.editor.database.model.SQLTable
+import com.bartlomiejpluta.base.editor.database.model.*
+import com.bartlomiejpluta.base.editor.database.model.Field
 import com.bartlomiejpluta.base.editor.database.service.DatabaseService
 import com.bartlomiejpluta.base.editor.file.model.InMemoryStringFileNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import javafx.scene.control.TreeItem
 import org.kordamp.ikonli.javafx.FontIcon
-import tornadofx.*
 import java.sql.Connection
 import java.sql.SQLException
+import tornadofx.*
 
 class TablesListView : View() {
    private val mainController: MainController by di()
@@ -90,19 +88,19 @@ class TablesListView : View() {
       if (results != null && metadata != null) {
          val columns = mutableListOf<String>()
 
-         for (i in 1..metadata.columnCount) {
+         for(i in 1..metadata.columnCount) {
             columns += metadata.getColumnLabel(i)
          }
 
-         val data = mutableListOf<Map<String, String>>()
+         val data = mutableListOf<Row>()
          while (results.next()) {
-            val record = mutableMapOf<String, String>()
+            val record = mutableMapOf<String, Field>()
 
             for (i in 1..metadata.columnCount) {
-               record[metadata.getColumnLabel(i)] = results.getObject(i).toString()
+               record[metadata.getColumnLabel(i)] = Field(results.getObject(i).toString())
             }
 
-            data += record
+            data += Row(record)
          }
 
          mainController.openQuery(Query(name, columns, data))
