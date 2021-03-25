@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.database.model
 
 enum class ColumnType {
-   INT,
+   INTEGER,
    BOOLEAN,
    TINYINT,
    SMALLINT,

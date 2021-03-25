@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.database.service
 
 import com.bartlomiejpluta.base.editor.database.model.ColumnType
-import com.bartlomiejpluta.base.editor.database.model.Table
+import com.bartlomiejpluta.base.editor.database.model.SQLDatabase
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -9,26 +9,21 @@ import java.sql.Connection
 
 @Service
 class H2DatabaseService : DatabaseService {
-
-   @Autowired
-   private lateinit var projectContext: ProjectContext
-
-   override val tables: List<Table>
+   override val database: SQLDatabase
       get() {
-         val tables = connection {
-            val tables = mutableListOf<Table>()
+         val db = SQLDatabase()
+
+         run {
             val results = prepareStatement("SHOW TABLES").executeQuery()
             while (results.next()) {
                if (results.getString("TABLE_SCHEMA") == "PUBLIC") {
-                  tables.add(Table(results.getString("TABLE_NAME")))
+                  db.addTable(results.getString("TABLE_NAME"))
                }
             }
+         }
 
-            tables
-         } ?: emptyList()
-
-         tables.forEach { table ->
-            connection {
+         db.tables.forEach { table ->
+            run {
                val results = prepareStatement("SHOW COLUMNS FROM ${table.name}").executeQuery()
                while (results.next()) {
                   table.addColumn(
@@ -41,11 +36,15 @@ class H2DatabaseService : DatabaseService {
             }
          }
 
-         return tables
+         return db
       }
 
-   private inline fun <reified T> connection(op: Connection.() -> T) =
+   @Autowired
+   private lateinit var projectContext: ProjectContext
+
+   override fun run(op: Connection.() -> Unit) {
       projectContext.project?.database?.connection?.use(op)
+   }
 
    private fun parseType(type: String) = ColumnType.valueOf(type.replace(" ", "_").substringBefore("("))
 }
