@@ -7,4 +7,7 @@ import tornadofx.getValue
 class QueryVM(query: Query) : ItemViewModel<Query>(query) {
    val nameProperty = bind(Query::nameProperty)
    val name by nameProperty
+
+   val queryProperty = bind(Query::queryProperty)
+   val query by queryProperty
 }

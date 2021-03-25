@@ -1,5 +1,8 @@
 package com.bartlomiejpluta.base.editor.database.service
 
+import com.bartlomiejpluta.base.editor.database.model.data.DataField
+import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
+import com.bartlomiejpluta.base.editor.database.model.data.Query
 import com.bartlomiejpluta.base.editor.database.model.schema.ColumnType
 import com.bartlomiejpluta.base.editor.database.model.schema.SchemaDatabase
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -42,9 +45,38 @@ class H2DatabaseService : DatabaseService {
    @Autowired
    private lateinit var projectContext: ProjectContext
 
-   override fun run(op: Connection.() -> Unit) {
-      projectContext.project?.database?.connection?.use(op)
+   override fun <T> run(op: Connection.() -> T): T? {
+      return projectContext.project?.database?.connection?.use(op)
    }
 
    private fun parseType(type: String) = ColumnType.valueOf(type.replace(" ", "_").substringBefore("("))
+
+   override fun execute(statement: String, name: String): Query? = run {
+      val stmt = prepareStatement(statement).apply { execute() }
+      val results = stmt.resultSet
+      val metadata = stmt.metaData
+
+      if (results != null && metadata != null) {
+         val columns = mutableListOf<String>()
+
+         for (i in 1..metadata.columnCount) {
+            columns += metadata.getColumnLabel(i)
+         }
+
+         val data = mutableListOf<DataRecord>()
+         while (results.next()) {
+            val record = mutableMapOf<String, DataField>()
+
+            for (i in 1..metadata.columnCount) {
+               record[metadata.getColumnLabel(i)] = DataField(results.getObject(i).toString())
+            }
+
+            data += DataRecord(record)
+         }
+
+         return@run Query(name, statement, columns, data)
+      }
+
+      return@run null
+   }
 }
