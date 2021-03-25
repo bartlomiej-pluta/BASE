@@ -20,6 +20,8 @@ class TablesListView : View() {
 
    private var database: SQLDatabase? = null
 
+   private var index = 0
+
    private val treeView = treeview<SQLElement> {
       isShowRoot = false
 
@@ -39,7 +41,7 @@ class TablesListView : View() {
          button("SQL Script", graphic = FontIcon("fa-code")) {
             action {
                mainController.openScript(
-                  fsNode = InMemoryStringFileNode("Script", "sql", "SELECT * FROM myTable;"),
+                  fsNode = InMemoryStringFileNode("Script ${++index}", "sql", ""),
                   execute = { code -> databaseService.run { executeScript(code, this) } },
                   saveable = false
                )

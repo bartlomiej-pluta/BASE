@@ -14,8 +14,8 @@ class InMemoryStringFileNode(name: String, extension: String, val content: Strin
    override val nameWithoutExtensionProperty = name.toProperty()
    override val nameWithoutExtension by nameWithoutExtensionProperty
 
-   override val absolutePathProperty = "".toProperty()
-   override val absolutePath by absolutePathProperty
+   override val absolutePathProperty = nameProperty
+   override val absolutePath = name
 
    override val type = FileType.FILE
 
