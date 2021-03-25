@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.view.editor
 
 import com.bartlomiejpluta.base.editor.main.component.EditorFragment
+import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.EXECUTE_SHORTCUT
 import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.REDO_SHORTCUT
 import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.SAVE_SHORTCUT
 import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.UNDO_SHORTCUT
@@ -17,6 +18,11 @@ class CodeEditorFragment : EditorFragment() {
 
    override fun handleShortcut(event: KeyEvent) {
       when {
+         EXECUTE_SHORTCUT.match(event) -> {
+            editorView.execute()
+            event.consume()
+         }
+
          SAVE_SHORTCUT.match(event) -> {
             editorView.save()
             event.consume()

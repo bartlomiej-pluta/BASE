@@ -14,6 +14,7 @@ import org.fxmisc.richtext.model.StyleSpans
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.Executors
+import kotlin.math.max
 
 
 class CodeEditor(
@@ -71,7 +72,7 @@ class CodeEditor(
    private fun initAutoIndents() {
       editor.addEventHandler(KeyEvent.KEY_PRESSED) { event ->
          if (event.code === KeyCode.ENTER) {
-            WHITESPACE.find(editor.getParagraph(editor.currentParagraph - 1).segments[0])?.apply {
+            WHITESPACE.find(editor.getParagraph(max(editor.currentParagraph - 1, 0)).segments[0])?.apply {
                editor.insertText(editor.caretPosition, value)
             }
          }

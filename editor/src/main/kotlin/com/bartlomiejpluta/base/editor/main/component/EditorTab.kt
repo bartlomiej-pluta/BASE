@@ -15,6 +15,7 @@ class EditorTab<T : EditorFragment>(val fragment: T, graphic: Node) : Tab() {
    fun handleShortcut(event: KeyEvent) = fragment.handleShortcut(event)
 
    companion object {
+      val EXECUTE_SHORTCUT = keyCombination("Ctrl+Enter")!!
       val SAVE_SHORTCUT = keyCombination("Ctrl+S")!!
       val UNDO_SHORTCUT = keyCombination("Ctrl+Z")!!
       val REDO_SHORTCUT = keyCombination("Ctrl+Y")!!
