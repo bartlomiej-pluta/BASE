@@ -12,6 +12,7 @@ import javafx.scene.control.TreeItem
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 import java.sql.Connection
+import java.sql.SQLException
 
 class TablesListView : View() {
    private val mainController: MainController by di()
@@ -42,7 +43,7 @@ class TablesListView : View() {
             action {
                mainController.openScript(
                   fsNode = InMemoryStringFileNode("Script ${++index}", "sql", ""),
-                  execute = { code -> databaseService.run { executeScript(code, this) } },
+                  execute = { code -> onConnection { executeScript(code, this) } },
                   saveable = false
                )
             }
@@ -67,6 +68,16 @@ class TablesListView : View() {
       }
 
       treeView.root.expandTo(1)
+   }
+
+   private fun onConnection(op: Connection.() -> Unit) {
+      databaseService.run {
+         try {
+            op(this)
+         } catch (e: SQLException) {
+            error("SQL Error ${e.sqlState}", e.joinToString("\n") { e.message ?: "" }, title = "SQL Error")
+         }
+      }
    }
 
    private fun executeScript(sql: String, conn: Connection) {
@@ -99,11 +110,11 @@ class TablesListView : View() {
    }
 
    private fun renameElement(element: SQLElement, newName: String): SQLElement {
-      databaseService.run { element.rename(this, newName) }
+      onConnection { element.rename(this, newName) }
       return element
    }
 
    private fun deleteElement(element: SQLElement) {
-      databaseService.run(element::delete)
+      onConnection(element::delete)
    }
 }
