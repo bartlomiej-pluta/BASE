@@ -1,12 +1,10 @@
 package com.bartlomiejpluta.base.editor.main.view
 
 import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
-import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.view.build.BuildLogsView
 import com.bartlomiejpluta.base.editor.code.view.editor.CodeEditorFragment
 import com.bartlomiejpluta.base.editor.code.view.list.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
-import com.bartlomiejpluta.base.editor.database.model.Query
 import com.bartlomiejpluta.base.editor.database.view.list.TablesListView
 import com.bartlomiejpluta.base.editor.database.view.query.QueryResultFragment
 import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
@@ -15,7 +13,6 @@ import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.main.component.EditorTab
 import com.bartlomiejpluta.base.editor.main.controller.MainController
-import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.editor.MapFragment
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.process.view.ProcessLogsView
@@ -149,27 +146,25 @@ class MainView : View("BASE Game Editor") {
       }
    }
 
-   private fun createTab(scope: Scope, item: Any) = when (item) {
-      is GameMap -> {
-         val vm = GameMapVM(item)
+   private fun createTab(scope: Scope, vm: Any) = when (vm) {
+      is GameMapVM -> {
          setInScope(vm, scope)
 
          EditorTab(find<MapFragment>(scope), FontIcon("fa-map")).apply {
             projectContext.project
                ?.maps
-               ?.first { it.uid == item.uid }
+               ?.first { it.uid == vm.uid }
                ?.let { textProperty().bindBidirectional(it.nameProperty) }
 
             setOnClosed { mainController.openItems.remove(scope) }
          }
       }
 
-      is Code -> {
-         val vm = CodeVM(item)
+      is CodeVM -> {
          setInScope(vm, scope)
 
          EditorTab(find<CodeEditorFragment>(scope), FontIcon("fa-code")).apply {
-            textProperty().bind(item.fileNode.nameProperty)
+            textProperty().bind(vm.fileNode.nameProperty)
 
             setOnClosed {
                fragment.shutdown()
@@ -178,12 +173,11 @@ class MainView : View("BASE Game Editor") {
          }
       }
 
-      is Query -> {
-         val vm = QueryVM(item)
+      is QueryVM -> {
          setInScope(vm, scope)
 
          EditorTab(find<QueryResultFragment>(scope), FontIcon("fa-table")).apply {
-            textProperty().bind(item.nameProperty)
+            textProperty().bind(vm.nameProperty)
 
             setOnClosed { mainController.openItems.remove(scope) }
          }

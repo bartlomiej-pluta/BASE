@@ -5,7 +5,6 @@ import com.bartlomiejpluta.base.editor.animation.viewmodel.AnimationAssetDataVM
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.audio.view.importing.ImportSoundFragment
 import com.bartlomiejpluta.base.editor.audio.viewmodel.SoundAssetDataVM
-import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
@@ -42,7 +41,7 @@ import kotlin.collections.set
 class MainController : Controller() {
    private val projectContext: ProjectContext by di()
 
-   val openItems = observableMapOf<Scope, Any>()
+   val openItems = observableMapOf<Scope, ItemViewModel<*>>()
 
    fun createEmptyProject() {
       val vm = ProjectVM(Project())
@@ -72,7 +71,7 @@ class MainController : Controller() {
                handler = vm.handler
             }
             projectContext.importMap(vm.name, map)
-            openItems[scope] = map
+            openItems[scope] = GameMapVM(map)
          }
 
          openModal(block = true, resizable = false)
@@ -90,13 +89,13 @@ class MainController : Controller() {
    }
 
    fun openMap(uid: String) {
-      openItem<GameMap, UndoableScope>({ it.uid == uid }) {
+      openItem<GameMap, GameMapVM, UndoableScope>({ it.uid == uid }) {
          val map = projectContext.loadMap(uid)
          val vm = GameMapVM(map)
          val scope = UndoableScope()
          setInScope(vm, scope)
 
-         scope to map
+         scope to vm
       }
    }
 
@@ -107,7 +106,7 @@ class MainController : Controller() {
       execute: ((String) -> Unit)? = null,
       saveable: Boolean = true
    ) {
-      val findScript = { script: Code -> script.fileNode.absolutePath == fsNode.absolutePath }
+      val findScript = { script: CodeVM -> script.fileNode.absolutePath == fsNode.absolutePath }
       val updateExistingScope = { scope: CodeScope -> scope.setCaretPosition(line, column) }
 
       openItem(findScript, updateExistingScope) {
@@ -116,36 +115,33 @@ class MainController : Controller() {
          val scope = CodeScope(line, column)
          setInScope(vm, scope)
 
-         scope to code
+         scope to vm
       }
    }
 
    fun openQuery(query: Query) {
-      val findQuery = { q: Query -> q.name == query.name }
-      val updateQuery = { scope: Scope ->
-         openItems -= scope
-//         openItems[scope] = query
-//         find<QueryVM>(scope).item = query
-      }
+      val findQuery = { q: QueryVM -> q.name == query.name }
+      val updateModel = { vm: QueryVM -> vm.item = query }
 
-      openItem(findQuery, updateQuery) {
+      openItem<Query, QueryVM, Scope>(findQuery, updateViewModel = updateModel) {
          val vm = QueryVM(query)
          val scope = Scope()
          setInScope(vm, scope)
 
-         scope to query
+         scope to vm
       }
    }
 
-   private inline fun <reified T, S : Scope> openItem(
-      findItem: (item: T) -> Boolean,
+   private inline fun <reified T, reified VM : ItemViewModel<T>, S : Scope> openItem(
+      findItem: (item: VM) -> Boolean,
       updateExistingScope: (S) -> Unit = {},
-      createItem: () -> Pair<Scope, T>
+      updateViewModel: (VM) -> Unit = {},
+      createItem: () -> Pair<Scope, VM>
    ) {
       @Suppress("UNCHECKED_CAST")
       val pair = openItems.entries
-         .filter { (_, item) -> item is T }
-         .map { (scope, item) -> (scope as S) to (item as T) }
+         .filter { (_, item) -> item is VM }
+         .map { (scope, item) -> (scope as S) to (item as VM) }
          .firstOrNull { (_, item) -> findItem(item) }
 
       if (pair == null) {
@@ -155,6 +151,7 @@ class MainController : Controller() {
       } else {
          val scope = pair.first
          updateExistingScope(scope)
+         updateViewModel(pair.second)
          fire(SelectMainViewTabEvent(scope))
       }
    }
@@ -257,7 +254,7 @@ class MainController : Controller() {
 
    fun closeAsset(asset: Asset) {
       when (asset) {
-         is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMap && item.uid == asset.uid }?.key?.let {
+         is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMapVM && item.uid == asset.uid }?.key?.let {
             openItems.remove(it)
          }
 
@@ -266,12 +263,12 @@ class MainController : Controller() {
    }
 
    fun closeScript(fsNode: FileNode) {
-      openItems.entries.firstOrNull { (_, item) -> item is Code && item.fileNode.absolutePath == fsNode.absolutePath }?.key?.let {
+      openItems.entries.firstOrNull { (_, item) -> item is CodeVM && item.fileNode.absolutePath == fsNode.absolutePath }?.key?.let {
          openItems.remove(it)
       }
 
       fsNode.allChildren.forEach { child ->
-         openItems.entries.firstOrNull { (_, item) -> item is Code && item.fileNode.absolutePath == child.absolutePath }?.key?.let {
+         openItems.entries.firstOrNull { (_, item) -> item is CodeVM && item.fileNode.absolutePath == child.absolutePath }?.key?.let {
             openItems.remove(it)
          }
       }
