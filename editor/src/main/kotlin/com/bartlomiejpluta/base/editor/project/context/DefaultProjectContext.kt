@@ -253,6 +253,7 @@ class DefaultProjectContext : ProjectContext {
             when (fileNode.extension.toLowerCase()) {
                "java" -> CodeType.JAVA
                "xml" -> CodeType.XML
+               "sql" -> CodeType.SQL
                else -> throw IllegalStateException("Unsupported script type")
             }
          }))

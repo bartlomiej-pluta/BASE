@@ -39,7 +39,7 @@ class TablesListView : View() {
          button("SQL Script", graphic = FontIcon("fa-code")) {
             action {
                mainController.openScript(
-                  fsNode = InMemoryStringFileNode("script", "java", "SELECT * FROM myTable;"),
+                  fsNode = InMemoryStringFileNode("Script", "sql", "SELECT * FROM myTable;"),
                   execute = { code -> databaseService.run { executeScript(code, this) } },
                   saveable = false
                )

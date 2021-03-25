@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.code.view.editor
 
 import com.bartlomiejpluta.base.editor.code.component.CodeEditor
 import com.bartlomiejpluta.base.editor.code.highlighting.JavaSyntaxHighlighter
+import com.bartlomiejpluta.base.editor.code.highlighting.SqlSyntaxHighlighter
 import com.bartlomiejpluta.base.editor.code.highlighting.XmlSyntaxHighlighter
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.model.CodeType
@@ -21,6 +22,7 @@ class CodeEditorView : View() {
 
    private val javaSyntaxHighlighter: JavaSyntaxHighlighter by di()
    private val xmlSyntaxHighlighter: XmlSyntaxHighlighter by di()
+   private val sqlSyntaxHighlighter: SqlSyntaxHighlighter by di()
 
    private val codeVM = find<CodeVM>()
 
@@ -28,6 +30,7 @@ class CodeEditorView : View() {
       when (codeVM.type!!) {
          CodeType.JAVA -> javaSyntaxHighlighter
          CodeType.XML -> xmlSyntaxHighlighter
+         CodeType.SQL -> sqlSyntaxHighlighter
       }
    }, codeVM.typeProperty)
 
