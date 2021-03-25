@@ -183,7 +183,7 @@ class MainView : View("BASE Game Editor") {
          setInScope(vm, scope)
 
          EditorTab(find<QueryResultFragment>(scope), FontIcon("fa-table")).apply {
-            text = "SQL Query"
+            textProperty().bind(item.nameProperty)
 
             setOnClosed { mainController.openItems.remove(scope) }
          }

@@ -42,9 +42,10 @@ class TablesListView : View() {
       toolbar {
          button("SQL Script", graphic = FontIcon("fa-code")) {
             action {
+               val name = "Script ${++index}"
                mainController.openScript(
-                  fsNode = InMemoryStringFileNode("Script ${++index}", "sql", ""),
-                  execute = { code -> onConnection { executeScript(code, this) } },
+                  fsNode = InMemoryStringFileNode(name, "sql", ""),
+                  execute = { code -> onConnection { executeScript(name, code, this) } },
                   saveable = false
                )
             }
@@ -81,32 +82,30 @@ class TablesListView : View() {
       }
    }
 
-   private fun executeScript(sql: String, conn: Connection) {
-      val stmt = conn.prepareStatement(sql)
-      stmt.execute()
-      val rs = stmt.resultSet
-      val meta = stmt.metaData
+   private fun executeScript(name: String, sql: String, conn: Connection) {
+      val stmt = conn.prepareStatement(sql).apply { execute() }
+      val results = stmt.resultSet
+      val metadata = stmt.metaData
 
-      if (meta != null) {
-         for (i in 1..meta.columnCount) {
-            print(meta.getColumnLabel(i))
-            print(" ")
+      if (results != null && metadata != null) {
+         val columns = mutableListOf<String>()
+
+         for (i in 1..metadata.columnCount) {
+            columns += metadata.getColumnLabel(i)
          }
 
-         println()
-      }
+         val data = mutableListOf<Map<String, String>>()
+         while (results.next()) {
+            val record = mutableMapOf<String, String>()
 
-      if (rs != null) {
-         while (rs.next()) {
-            for (i in 1..meta.columnCount) {
-               print(rs.getObject(i))
-               print(" ")
+            for (i in 1..metadata.columnCount) {
+               record[metadata.getColumnLabel(i)] = results.getObject(i).toString()
             }
 
-            println()
+            data += record
          }
 
-         mainController.openQuery(Query())
+         mainController.openQuery(Query(name, columns, data))
       }
 
       refresh()
