@@ -8,7 +8,7 @@ import javafx.scene.control.cell.TextFieldTreeCell
 import tornadofx.action
 import tornadofx.item
 
-class SQLElementCell(
+class SchemaElementCell(
    renameElement: (element: Schema, name: String) -> Schema,
    deleteElement: (element: Schema) -> Unit
 ) : TextFieldTreeCell<Schema>() {
@@ -45,7 +45,7 @@ class SQLElementCell(
    }
 
    init {
-      converter = SQLElementStringConverter(this, renameElement)
+      converter = SchemaElementStringConverter(this, renameElement)
    }
 
    override fun updateItem(item: Schema?, empty: Boolean) {
@@ -58,7 +58,7 @@ class SQLElementCell(
       }
 
       text = when (item) {
-         is SchemaColumn -> "${item.name}${if (item.nullable) "?" else ""}"
+         is SchemaColumn -> "${item.name}: ${item.rawType}${if (item.nullable) "?" else ""}"
          else -> item.name
       }
 

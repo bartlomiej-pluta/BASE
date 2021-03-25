@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.database.view.list
 
-import com.bartlomiejpluta.base.editor.database.component.SQLElementCell
+import com.bartlomiejpluta.base.editor.database.component.SchemaElementCell
 import com.bartlomiejpluta.base.editor.database.controller.DatabaseController
 import com.bartlomiejpluta.base.editor.database.model.*
 import com.bartlomiejpluta.base.editor.database.model.schema.Schema
@@ -28,7 +28,7 @@ class TablesListView : View() {
       isShowRoot = false
 
       setCellFactory {
-         SQLElementCell(this@TablesListView::renameElement, this@TablesListView::deleteElement)
+         SchemaElementCell(this@TablesListView::renameElement, this@TablesListView::deleteElement)
       }
 
       setOnMouseClicked { event ->

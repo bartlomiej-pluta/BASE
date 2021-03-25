@@ -3,7 +3,6 @@ package com.bartlomiejpluta.base.editor.database.service
 import com.bartlomiejpluta.base.editor.database.model.data.DataField
 import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
 import com.bartlomiejpluta.base.editor.database.model.data.Query
-import com.bartlomiejpluta.base.editor.database.model.schema.ColumnType
 import com.bartlomiejpluta.base.editor.database.model.schema.SchemaDatabase
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,7 +30,7 @@ class H2DatabaseService : DatabaseService {
                while (results.next()) {
                   table.addColumn(
                      results.getString("FIELD"),
-                     parseType(results.getString("TYPE")),
+                     results.getString("TYPE"),
                      results.getBoolean("NULL"),
                      results.getString("KEY") == "PRI"
                   )
@@ -48,8 +47,6 @@ class H2DatabaseService : DatabaseService {
    override fun <T> run(op: Connection.() -> T): T? {
       return projectContext.project?.database?.connection?.use(op)
    }
-
-   private fun parseType(type: String) = ColumnType.valueOf(type.replace(" ", "_").substringBefore("("))
 
    override fun execute(statement: String, name: String): Query? = run {
       val stmt = prepareStatement(statement).apply { execute() }

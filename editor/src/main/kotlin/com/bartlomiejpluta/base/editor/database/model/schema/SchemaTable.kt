@@ -12,7 +12,7 @@ class SchemaTable(val database: SchemaDatabase, name: String) : Schema {
 
    val columns = observableListOf<SchemaColumn>()
 
-   fun addColumn(name: String, type: ColumnType, nullable: Boolean, primary: Boolean) {
+   fun addColumn(name: String, type: String, nullable: Boolean, primary: Boolean) {
       val column = SchemaColumn(this, name, type, nullable, primary)
       columns += column
    }

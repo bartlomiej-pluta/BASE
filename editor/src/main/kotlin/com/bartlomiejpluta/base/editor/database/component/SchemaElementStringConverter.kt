@@ -4,7 +4,7 @@ import com.bartlomiejpluta.base.editor.database.model.schema.Schema
 import javafx.scene.control.TreeCell
 import javafx.util.StringConverter
 
-class SQLElementStringConverter(
+class SchemaElementStringConverter(
    private val cell: TreeCell<Schema>,
    private val rename: (item: Schema, newName: String) -> Schema
 ) : StringConverter<Schema>() {

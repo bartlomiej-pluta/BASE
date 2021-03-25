@@ -6,10 +6,12 @@ import java.sql.Connection
 class SchemaColumn(
    val table: SchemaTable,
    name: String,
-   val type: ColumnType,
+   val rawType: String,
    val nullable: Boolean,
    val primary: Boolean
 ) : Schema {
+   val type = ColumnType.valueOf(rawType.replace(" ", "_").substringBefore("("))
+
    override var name: String = name
       private set(value) {
          field = value.toUpperCase()
@@ -25,7 +27,7 @@ class SchemaColumn(
       table.columns.remove(this)
    }
 
-   override val icon = when (type) {
+   override val icon = if (primary) FontIcon("fa-key") else when (type) {
       ColumnType.INTEGER -> FontIcon("fa-hashtag")
       ColumnType.BOOLEAN -> FontIcon("fa-toggle-on")
       ColumnType.TINYINT -> FontIcon("fa-hashtag")
