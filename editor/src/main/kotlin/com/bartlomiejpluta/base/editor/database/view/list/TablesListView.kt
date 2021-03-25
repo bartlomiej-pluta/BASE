@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.database.view.list
 
 import com.bartlomiejpluta.base.editor.database.component.SQLElementCell
+import com.bartlomiejpluta.base.editor.database.model.Query
 import com.bartlomiejpluta.base.editor.database.model.SQLDatabase
 import com.bartlomiejpluta.base.editor.database.model.SQLElement
 import com.bartlomiejpluta.base.editor.database.model.SQLTable
@@ -104,6 +105,8 @@ class TablesListView : View() {
 
             println()
          }
+
+         mainController.openQuery(Query())
       }
 
       refresh()

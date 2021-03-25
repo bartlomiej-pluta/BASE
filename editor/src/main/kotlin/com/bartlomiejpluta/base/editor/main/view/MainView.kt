@@ -6,7 +6,10 @@ import com.bartlomiejpluta.base.editor.code.view.build.BuildLogsView
 import com.bartlomiejpluta.base.editor.code.view.editor.CodeEditorFragment
 import com.bartlomiejpluta.base.editor.code.view.list.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
+import com.bartlomiejpluta.base.editor.database.model.Query
 import com.bartlomiejpluta.base.editor.database.view.list.TablesListView
+import com.bartlomiejpluta.base.editor.database.view.query.QueryResultFragment
+import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
@@ -172,6 +175,17 @@ class MainView : View("BASE Game Editor") {
                fragment.shutdown()
                mainController.openItems.remove(scope)
             }
+         }
+      }
+
+      is Query -> {
+         val vm = QueryVM(item)
+         setInScope(vm, scope)
+
+         EditorTab(find<QueryResultFragment>(scope), FontIcon("fa-table")).apply {
+            text = "SQL Query"
+
+            setOnClosed { mainController.openItems.remove(scope) }
          }
       }
 

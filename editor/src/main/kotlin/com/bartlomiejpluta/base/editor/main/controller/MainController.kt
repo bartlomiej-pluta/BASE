@@ -9,6 +9,8 @@ import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
+import com.bartlomiejpluta.base.editor.database.model.Query
+import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
 import com.bartlomiejpluta.base.editor.entityset.view.importing.ImportEntitySetFragment
 import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
@@ -115,6 +117,16 @@ class MainController : Controller() {
          setInScope(vm, scope)
 
          scope to code
+      }
+   }
+
+   fun openQuery(query: Query) {
+      openItem<Query, Scope>({ false }, {}) {
+         val vm = QueryVM(query)
+         val scope = Scope()
+         setInScope(vm, scope)
+
+         scope to query
       }
    }
 
