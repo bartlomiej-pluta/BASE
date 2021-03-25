@@ -1,19 +1,19 @@
-package com.bartlomiejpluta.base.editor.database.model
+package com.bartlomiejpluta.base.editor.database.model.schema
 
 import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.observableListOf
 import java.sql.Connection
 
-class SQLTable(val database: SQLDatabase, name: String) : SQLElement {
+class SchemaTable(val database: SchemaDatabase, name: String) : Schema {
    override var name: String = name
       private set(value) {
          field = value.toUpperCase()
       }
 
-   val columns = observableListOf<SQLColumn>()
+   val columns = observableListOf<SchemaColumn>()
 
    fun addColumn(name: String, type: ColumnType, nullable: Boolean, primary: Boolean) {
-      val column = SQLColumn(this, name, type, nullable, primary)
+      val column = SchemaColumn(this, name, type, nullable, primary)
       columns += column
    }
 

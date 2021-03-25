@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.editor.database.viewmodel
 
-import com.bartlomiejpluta.base.editor.database.model.Query
+import com.bartlomiejpluta.base.editor.database.model.data.Query
 import tornadofx.ItemViewModel
 import tornadofx.getValue
 

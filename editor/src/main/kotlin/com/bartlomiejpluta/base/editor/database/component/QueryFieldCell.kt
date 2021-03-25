@@ -1,12 +1,12 @@
 package com.bartlomiejpluta.base.editor.database.component
 
-import com.bartlomiejpluta.base.editor.database.model.Field
-import com.bartlomiejpluta.base.editor.database.model.Row
+import com.bartlomiejpluta.base.editor.database.model.data.DataField
+import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
 import javafx.scene.control.TableCell
 
-class QueryFieldCell : TableCell<Row, Field>() {
+class QueryFieldCell : TableCell<DataRecord, DataField>() {
 
-   override fun updateItem(item: Field?, empty: Boolean) {
+   override fun updateItem(item: DataField?, empty: Boolean) {
       super.updateItem(item, empty)
 
       when {

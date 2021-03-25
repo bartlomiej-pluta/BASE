@@ -8,7 +8,7 @@ import com.bartlomiejpluta.base.editor.audio.viewmodel.SoundAssetDataVM
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
-import com.bartlomiejpluta.base.editor.database.model.Query
+import com.bartlomiejpluta.base.editor.database.model.data.Query
 import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
 import com.bartlomiejpluta.base.editor.entityset.view.importing.ImportEntitySetFragment
 import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM

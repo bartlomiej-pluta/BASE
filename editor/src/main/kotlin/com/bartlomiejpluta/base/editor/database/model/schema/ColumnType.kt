@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.database.model
+package com.bartlomiejpluta.base.editor.database.model.schema
 
 enum class ColumnType {
    INTEGER,

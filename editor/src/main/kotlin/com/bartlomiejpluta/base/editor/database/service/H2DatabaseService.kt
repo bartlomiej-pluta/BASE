@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.editor.database.service
 
-import com.bartlomiejpluta.base.editor.database.model.ColumnType
-import com.bartlomiejpluta.base.editor.database.model.SQLDatabase
+import com.bartlomiejpluta.base.editor.database.model.schema.ColumnType
+import com.bartlomiejpluta.base.editor.database.model.schema.SchemaDatabase
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -9,9 +9,9 @@ import java.sql.Connection
 
 @Service
 class H2DatabaseService : DatabaseService {
-   override val database: SQLDatabase
+   override val database: SchemaDatabase
       get() {
-         val db = SQLDatabase()
+         val db = SchemaDatabase()
 
          run {
             val results = prepareStatement("SHOW TABLES").executeQuery()

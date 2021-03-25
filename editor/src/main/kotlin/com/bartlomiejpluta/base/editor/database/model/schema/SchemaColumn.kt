@@ -1,15 +1,15 @@
-package com.bartlomiejpluta.base.editor.database.model
+package com.bartlomiejpluta.base.editor.database.model.schema
 
 import org.kordamp.ikonli.javafx.FontIcon
 import java.sql.Connection
 
-class SQLColumn(
-   val table: SQLTable,
+class SchemaColumn(
+   val table: SchemaTable,
    name: String,
    val type: ColumnType,
    val nullable: Boolean,
    val primary: Boolean
-) : SQLElement {
+) : Schema {
    override var name: String = name
       private set(value) {
          field = value.toUpperCase()

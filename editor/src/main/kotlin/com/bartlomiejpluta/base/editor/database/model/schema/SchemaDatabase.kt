@@ -1,15 +1,15 @@
-package com.bartlomiejpluta.base.editor.database.model
+package com.bartlomiejpluta.base.editor.database.model.schema
 
 import javafx.scene.Node
 import tornadofx.observableListOf
 import java.sql.Connection
 
-class SQLDatabase : SQLElement {
+class SchemaDatabase : Schema {
    override val name = "Database"
-   val tables = observableListOf<SQLTable>()
+   val tables = observableListOf<SchemaTable>()
 
    fun addTable(name: String) {
-      tables.add(SQLTable(this, name))
+      tables.add(SchemaTable(this, name))
    }
 
    override fun rename(connection: Connection, newName: String) {
