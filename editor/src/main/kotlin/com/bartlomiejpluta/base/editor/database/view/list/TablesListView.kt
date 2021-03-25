@@ -33,6 +33,15 @@ class TablesListView : View() {
       setCellFactory {
          SQLElementCell(this@TablesListView::renameElement, this@TablesListView::deleteElement)
       }
+
+      setOnMouseClicked { event ->
+         val selected = selectionModel?.selectedItem?.value
+         if (event.clickCount == 2 && selected is SchemaTable) {
+            onConnection {
+               executeScript(selected.name, "SELECT * FROM ${selected.name}", this)
+            }
+         }
+      }
    }
 
    init {
@@ -41,8 +50,8 @@ class TablesListView : View() {
       }
    }
 
-   override val root = vbox {
-      toolbar {
+   override val root = borderpane {
+      top = toolbar {
          button("SQL Script", graphic = FontIcon("fa-code")) {
             action {
                val name = "Script ${++index}"
@@ -55,7 +64,7 @@ class TablesListView : View() {
          }
       }
 
-      this += treeView
+      center = treeView
    }
 
    private fun refresh() {
@@ -93,7 +102,7 @@ class TablesListView : View() {
       if (results != null && metadata != null) {
          val columns = mutableListOf<String>()
 
-         for(i in 1..metadata.columnCount) {
+         for (i in 1..metadata.columnCount) {
             columns += metadata.getColumnLabel(i)
          }
 
