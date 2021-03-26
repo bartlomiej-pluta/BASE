@@ -13,7 +13,7 @@ class SchemaElementCell(
    deleteElement: (element: Schema) -> Unit
 ) : TextFieldTreeCell<Schema>() {
    private val tableMenu = ContextMenu().apply {
-      item("Rename") {
+      item("Rename table") {
          action {
             treeView.isEditable = true
             startEdit()
@@ -21,7 +21,7 @@ class SchemaElementCell(
          }
       }
 
-      item("Delete") {
+      item("Drop table") {
          action {
             deleteElement(item)
          }
@@ -29,7 +29,7 @@ class SchemaElementCell(
    }
 
    private val columnMenu = ContextMenu().apply {
-      item("Rename") {
+      item("Rename column") {
          action {
             treeView.isEditable = true
             startEdit()
@@ -37,7 +37,7 @@ class SchemaElementCell(
          }
       }
 
-      item("Delete") {
+      item("Drop column") {
          action {
             deleteElement(item)
          }

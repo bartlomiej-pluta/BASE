@@ -63,7 +63,7 @@ class QueryResultView : View() {
          }
 
          button(graphic = FontIcon("fa-minus")) {
-            enableWhen(queryVM.schemaProperty.isNotNull)
+            enableWhen(queryVM.schemaProperty.isNotNull.and(table.selectionModel.selectedItemProperty().isNotNull))
 
             action {
                val selected = table.selectionModel.selectedItem
@@ -74,7 +74,7 @@ class QueryResultView : View() {
             }
          }
 
-         button(graphic = FontIcon("fa-check")) {
+         button(graphic = FontIcon("fa-floppy-o")) {
             enableWhen(queryVM.schemaProperty.isNotNull)
 
             action {
