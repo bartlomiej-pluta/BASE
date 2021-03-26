@@ -31,6 +31,24 @@ class DataRecord(
             statement
          }
 
+         Operation.UPDATE -> {
+            val fieldsNumber = fields.size
+            val pk = schema.columns.filtered { it.primary }
+            val filterClause = pk.joinToString(" AND ") { "`${it.name}` = ?" }
+            val parametersClause = fields.map { (column, _) -> "`$column` = ?" }.joinToString(", ")
+            val sql = "UPDATE `${schema.name}` SET $parametersClause WHERE $filterClause"
+            val statement = connection.prepareStatement(sql)
+            fields.values.forEachIndexed { index, field -> statement.setObject(index + 1, field.value) }
+            pk.forEachIndexed { index, column ->
+               statement.setObject(
+                  index + 1 + fieldsNumber,
+                  fields[column.name]!!.value
+               )
+            }
+
+            statement
+         }
+
          Operation.DELETE -> {
             val pk = schema.columns.filtered { it.primary }
             val filterClause = pk.joinToString(" AND ") { "`${it.name}` = ?" }
