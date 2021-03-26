@@ -25,7 +25,7 @@ class QueryResultView : View() {
    init {
       updateColumns()
 
-      queryVM.itemProperty.addListener { _, _, query ->
+      queryVM.itemProperty.addListener { _, _, _ ->
          updateColumns()
       }
    }
