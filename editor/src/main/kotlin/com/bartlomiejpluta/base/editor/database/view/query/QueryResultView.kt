@@ -17,7 +17,7 @@ class QueryResultView : View() {
    private val queryVM = find<QueryVM>()
 
    private val table = tableview(queryVM.dataProperty) {
-      editableProperty().bind(queryVM.tableProperty.isNotNull)
+      editableProperty().bind(queryVM.schemaProperty.isNotNull)
 
       setRowFactory { DataRecordRow() }
    }
@@ -55,7 +55,7 @@ class QueryResultView : View() {
          }
 
          button(graphic = FontIcon("fa-plus")) {
-            enableWhen(queryVM.tableProperty.isNotNull)
+            enableWhen(queryVM.schemaProperty.isNotNull)
 
             action {
                queryVM.item?.addEmptyRecord()
@@ -63,7 +63,7 @@ class QueryResultView : View() {
          }
 
          button(graphic = FontIcon("fa-minus")) {
-            enableWhen(queryVM.tableProperty.isNotNull)
+            enableWhen(queryVM.schemaProperty.isNotNull)
 
             action {
                val selected = table.selectionModel.selectedItem
@@ -75,10 +75,10 @@ class QueryResultView : View() {
          }
 
          button(graphic = FontIcon("fa-check")) {
-            enableWhen(queryVM.tableProperty.isNotNull)
+            enableWhen(queryVM.schemaProperty.isNotNull)
 
             action {
-               val success = databaseController.submitBatch(queryVM.name, queryVM.data)
+               val success = databaseController.submitBatch(queryVM.data)
                if (success) {
                   refresh()
                }
@@ -90,7 +90,7 @@ class QueryResultView : View() {
    }
 
    private fun refresh() {
-      databaseController.execute(queryVM.query, queryVM.name, queryVM.table)?.let {
+      databaseController.execute(queryVM.query, queryVM.name, queryVM.schema)?.let {
          queryVM.item = it
       }
    }

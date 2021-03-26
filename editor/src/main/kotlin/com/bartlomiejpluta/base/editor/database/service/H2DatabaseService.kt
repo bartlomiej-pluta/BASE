@@ -2,8 +2,10 @@ package com.bartlomiejpluta.base.editor.database.service
 
 import com.bartlomiejpluta.base.editor.database.model.data.DataField
 import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
+import com.bartlomiejpluta.base.editor.database.model.data.Operation
 import com.bartlomiejpluta.base.editor.database.model.data.Query
 import com.bartlomiejpluta.base.editor.database.model.schema.SchemaDatabase
+import com.bartlomiejpluta.base.editor.database.model.schema.SchemaTable
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -49,7 +51,7 @@ class H2DatabaseService : DatabaseService {
       return projectContext.project?.database?.connection?.use(op)
    }
 
-   override fun execute(statement: String, name: String, table: String?): Query? = run {
+   override fun execute(statement: String, name: String, schema: SchemaTable?): Query? = run {
       val stmt = prepareStatement(statement).apply { execute() }
       val results = stmt.resultSet
       val metadata = stmt.metaData
@@ -70,10 +72,10 @@ class H2DatabaseService : DatabaseService {
                record[metadata.getColumnLabel(i)] = field
             }
 
-            data += DataRecord(record)
+            data += DataRecord(record, Operation.DO_NOTHING, schema)
          }
 
-         return@run Query(name, statement, columns, data, table)
+         return@run Query(name, statement, columns, data, schema)
       }
 
       return@run null

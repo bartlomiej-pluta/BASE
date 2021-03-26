@@ -2,19 +2,21 @@ package com.bartlomiejpluta.base.editor.database.controller
 
 import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
 import com.bartlomiejpluta.base.editor.database.model.data.Query
+import com.bartlomiejpluta.base.editor.database.model.schema.SchemaTable
 import com.bartlomiejpluta.base.editor.database.service.DatabaseService
 import org.springframework.stereotype.Component
 import tornadofx.Controller
 import tornadofx.error
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.SQLException
 
 @Component
 class DatabaseController : Controller() {
    private val databaseService: DatabaseService by di()
 
-   fun execute(statement: String, name: String, table: String? = null): Query? = try {
-      databaseService.execute(statement, name, table)
+   fun execute(statement: String, name: String, schema: SchemaTable? = null): Query? = try {
+      databaseService.execute(statement, name, schema)
    } catch (e: SQLException) {
       sqlErrorAlert(e)
       null
@@ -30,15 +32,12 @@ class DatabaseController : Controller() {
       }
    } ?: false
 
-   fun submitBatch(table: String, records: List<DataRecord>) = execute {
+   fun submitBatch(records: List<DataRecord>) = execute {
       autoCommit = false
-      records.forEach {
-         it.prepareStatement(table)?.let { sql ->
-            val statement = prepareStatement(sql)
-            it.fields.values.forEachIndexed { index, field -> statement.setObject(index + 1, field.value) }
-            statement.execute()
-         }
-      }
+
+      records
+         .mapNotNull { it.prepareStatement(this) }
+         .forEach(PreparedStatement::execute)
 
       commit()
    }

@@ -1,7 +1,8 @@
 package com.bartlomiejpluta.base.editor.database.model.data
 
+import com.bartlomiejpluta.base.editor.database.model.schema.SchemaTable
 import javafx.beans.property.SimpleListProperty
-import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
 import tornadofx.getValue
 import tornadofx.toProperty
@@ -11,10 +12,10 @@ class Query(
    query: String,
    columns: ObservableList<String>,
    data: ObservableList<DataRecord>,
-   table: String? = null
+   schema: SchemaTable? = null
 ) {
-   val tableProperty = SimpleStringProperty(table)
-   val table by tableProperty
+   val schemaProperty = SimpleObjectProperty<SchemaTable>(schema)
+   val schema by schemaProperty
 
    val nameProperty = name.toProperty()
    val name by nameProperty
@@ -30,6 +31,6 @@ class Query(
 
    fun addEmptyRecord() {
       val fields = columns.map { it to DataField(null) }.toMap()
-      data += DataRecord(fields, Operation.INSERT)
+      data += DataRecord(fields, Operation.INSERT, schema)
    }
 }
