@@ -159,7 +159,7 @@ public class BulletAnimationRunner implements AnimationRunner {
             if (layer instanceof ObjectLayer) {
                for (var entity : ((ObjectLayer) layer).getEntities()) {
                   var movement = entity.getMovement();
-                  if (entity.getCoordinates().equals(target) || movement != null && movement.getTo().equals(target)) {
+                  if ((entity.getCoordinates().equals(target) || movement != null && movement.getTo().equals(target)) && entity.isBlocking()) {
                      action.accept(entity);
                      return;
                   }
