@@ -96,9 +96,17 @@ class Project {
    var buildDependenciesDirectory by buildDependenciesDirectoryProperty
       private set
 
+   val buildDatabaseDumpDirectoryProperty = SimpleObjectProperty<File>()
+   var buildDatabaseDumpDirectory by buildDatabaseDumpDirectoryProperty
+      private set
+
    val buildOutDirectoryProperty = SimpleObjectProperty<File>()
    var buildOutDirectory by buildOutDirectoryProperty
       private set
+
+   val buildDatabaseDumpFileProperty =
+      createObjectBinding({ File(buildDatabaseDumpDirectory, DATABASE_DUMP_FILE) }, buildDatabaseDumpDirectoryProperty)
+   val buildDatabaseDumpFile by buildDatabaseDumpFileProperty
 
    val buildOutputJarFileProperty =
       createObjectBinding({ File(buildOutDirectory, PROJECT_OUTPUT_JAR_FILE) }, buildOutDirectoryProperty)
@@ -121,6 +129,7 @@ class Project {
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
             buildDependenciesDirectory = File(it, BUILD_DEPENDENCIES_DIR)
+            buildDatabaseDumpDirectory = File(it, BUILD_DATABASE_DUMP_DIR)
             buildOutDirectory = File(it, BUILD_OUT_DIR)
          }
       }
@@ -151,6 +160,7 @@ class Project {
    companion object {
       const val PROJECT_FILE = "project.bep"
       const val DATABASE_FILE = "data"
+      const val DATABASE_DUMP_FILE = "data.sql"
       const val PROJECT_OUTPUT_JAR_FILE = "game.jar"
 
       const val MAPS_DIR = "maps"
@@ -166,5 +176,6 @@ class Project {
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"
       const val BUILD_OUT_DIR = "$BUILD_DIR/out"
       const val BUILD_DEPENDENCIES_DIR = "$BUILD_DIR/dependencies"
+      const val BUILD_DATABASE_DUMP_DIR = "$BUILD_DIR/db"
    }
 }

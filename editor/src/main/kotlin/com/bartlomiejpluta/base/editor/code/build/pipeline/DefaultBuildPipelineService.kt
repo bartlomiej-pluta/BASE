@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.code.build.pipeline
 
 import com.bartlomiejpluta.base.editor.code.build.compiler.Compiler
+import com.bartlomiejpluta.base.editor.code.build.database.DatabaseAssembler
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.game.GameEngineProvider
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
@@ -34,6 +35,9 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
    @Autowired
    private lateinit var projectAssembler: ProjectAssembler
+
+   @Autowired
+   private lateinit var databaseAssembler: DatabaseAssembler
 
    @Autowired
    private lateinit var projectContext: ProjectContext
@@ -94,9 +98,14 @@ class DefaultBuildPipelineService : BuildPipelineService {
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
       engineProvider.provideBaseGameEngine(outputFile)
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling project assets...", tag = TAG))
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling compiled classes...", tag = TAG))
       packager.pack(project.buildClassesDirectory, outputFile, "BOOT-INF/classes")
+
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling project assets...", tag = TAG))
       projectAssembler.assembly(project, outputFile)
+
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling database...", tag = TAG))
+      databaseAssembler.assembly(project, outputFile)
 
       val buildingTime = (System.currentTimeMillis() - startTime) / 1000.0
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Build done [${buildingTime}s]", tag = TAG))
