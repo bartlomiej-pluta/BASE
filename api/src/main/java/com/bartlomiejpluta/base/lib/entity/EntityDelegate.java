@@ -220,6 +220,16 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public int getZIndex() {
+      return entity.getZIndex();
+   }
+
+   @Override
+   public void setZIndex(int zIndex) {
+      entity.setZIndex(zIndex);
+   }
+
+   @Override
    public void update(float dt) {
       entity.update(dt);
    }

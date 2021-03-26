@@ -27,6 +27,10 @@ public class DefaultEntity extends MovableSprite implements Entity {
    private final Vector2f entityScale = new Vector2f(1, 1);
    private Vector2fc entitySetSize;
 
+   @Getter
+   @Setter
+   private int zIndex = 0;
+
    private int animationSpeed = 100;
 
    @Getter

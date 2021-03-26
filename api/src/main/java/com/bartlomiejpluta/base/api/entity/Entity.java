@@ -31,4 +31,8 @@ public interface Entity extends Movable, Renderable, Updatable {
    void setBlocking(boolean blocking);
 
    void changeEntitySet(String entitySetUid);
+
+   int getZIndex();
+
+   void setZIndex(int zIndex);
 }

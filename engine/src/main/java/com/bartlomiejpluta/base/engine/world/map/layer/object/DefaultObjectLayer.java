@@ -20,6 +20,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import static java.lang.Float.compare;
+import static java.lang.Integer.compare;
+
 public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Getter
@@ -190,6 +193,7 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
    }
 
    private int compareObjects(Entity a, Entity b) {
-      return Float.compare(a.getPosition().y(), b.getPosition().y());
+      var z = compare(a.getZIndex(), b.getZIndex());
+      return z == 0 ? compare(a.getPosition().y(), b.getPosition().y()) : z;
    }
 }
