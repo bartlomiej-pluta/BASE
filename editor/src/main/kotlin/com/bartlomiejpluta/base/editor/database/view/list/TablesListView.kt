@@ -35,7 +35,7 @@ class TablesListView : View() {
          val selected = selectionModel?.selectedItem?.value
          if (event.clickCount == 2 && selected is SchemaTable) {
             databaseController
-               .execute("SELECT * FROM ${selected.name}", selected.name)
+               .execute("SELECT * FROM ${selected.name}", selected.name, selected.name)
                ?.let(mainController::openQuery)
          }
       }

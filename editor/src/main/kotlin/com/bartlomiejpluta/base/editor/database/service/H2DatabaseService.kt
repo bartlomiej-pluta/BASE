@@ -49,7 +49,7 @@ class H2DatabaseService : DatabaseService {
       return projectContext.project?.database?.connection?.use(op)
    }
 
-   override fun execute(statement: String, name: String): Query? = run {
+   override fun execute(statement: String, name: String, table: String?): Query? = run {
       val stmt = prepareStatement(statement).apply { execute() }
       val results = stmt.resultSet
       val metadata = stmt.metaData
@@ -66,13 +66,14 @@ class H2DatabaseService : DatabaseService {
             val record = mutableMapOf<String, DataField>()
 
             for (i in 1..metadata.columnCount) {
-               record[metadata.getColumnLabel(i)] = DataField(results.getObject(i)?.toString())
+               val field = DataField(results.getObject(i)?.toString())
+               record[metadata.getColumnLabel(i)] = field
             }
 
             data += DataRecord(record)
          }
 
-         return@run Query(name, statement, columns, data)
+         return@run Query(name, statement, columns, data, table)
       }
 
       return@run null

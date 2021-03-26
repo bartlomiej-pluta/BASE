@@ -1,11 +1,21 @@
 package com.bartlomiejpluta.base.editor.database.model.data
 
 import javafx.beans.property.SimpleListProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import tornadofx.getValue
 import tornadofx.toProperty
 
-class Query(name: String, query: String, columns: ObservableList<String>, data: ObservableList<DataRecord>) {
+class Query(
+   name: String,
+   query: String,
+   columns: ObservableList<String>,
+   data: ObservableList<DataRecord>,
+   table: String? = null
+) {
+   val tableProperty = SimpleStringProperty(table)
+   val table by tableProperty
+
    val nameProperty = name.toProperty()
    val name by nameProperty
 

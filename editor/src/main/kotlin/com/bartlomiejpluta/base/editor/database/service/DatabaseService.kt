@@ -9,5 +9,5 @@ interface DatabaseService {
 
    fun <T> run(op: Connection.() -> T): T?
 
-   fun execute(statement: String, name: String = ""): Query?
+   fun execute(statement: String, name: String, table: String? = null): Query?
 }

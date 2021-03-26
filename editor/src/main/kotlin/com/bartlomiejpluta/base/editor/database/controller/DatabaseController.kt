@@ -12,8 +12,8 @@ import java.sql.SQLException
 class DatabaseController : Controller() {
    private val databaseService: DatabaseService by di()
 
-   fun execute(statement: String, name: String = ""): Query? = try {
-      databaseService.execute(statement, name)
+   fun execute(statement: String, name: String, table: String? = null): Query? = try {
+      databaseService.execute(statement, name, table)
    } catch (e: SQLException) {
       sqlErrorAlert(e)
       null
