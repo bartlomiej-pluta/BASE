@@ -1,8 +1,6 @@
 package com.bartlomiejpluta.base.editor.database.view.query
 
-import com.bartlomiejpluta.base.editor.database.component.QueryFieldCell
 import com.bartlomiejpluta.base.editor.database.controller.DatabaseController
-import com.bartlomiejpluta.base.editor.database.model.data.DataField
 import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
 import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
 import javafx.scene.control.TableColumn
@@ -13,36 +11,40 @@ class QueryResultView : View() {
    private val databaseController: DatabaseController by di()
    private val queryVM = find<QueryVM>()
 
-   private val table = tableview<DataRecord>()
+   private val table = tableview(queryVM.dataProperty)
 
    init {
-      queryVM.itemProperty.addListener { _, _, _ -> refreshData() }
+      updateColumns()
 
-      refreshData()
+      queryVM.itemProperty.addListener { _, _, query ->
+         updateColumns()
+      }
    }
 
-   private fun refreshData() {
+   private fun updateColumns() {
       table.columns.clear()
-      table.items.clear()
-      queryVM.item?.let { query ->
-         table.items.addAll(query.data)
-         query.columns.map { column ->
-            TableColumn<DataRecord, DataField>(column).apply {
-               setCellValueFactory {
-                  it.value.fields[column].toProperty()
-               }
-
-               setCellFactory { QueryFieldCell() }
+      queryVM.columns.map { column ->
+         TableColumn<DataRecord, String>(column).apply {
+            setCellValueFactory {
+               it.value.fields[column]!!.valueProperty
             }
-         }.forEach { table.addColumnInternal(it) }
-      }
+         }
+      }.let(table.columns::addAll)
    }
 
    override val root = borderpane {
       top = toolbar {
          button(graphic = FontIcon("fa-refresh")) {
             action {
-               databaseController.execute(queryVM.query, queryVM.name)?.let { queryVM.item = it }
+               databaseController.execute(queryVM.query, queryVM.name)?.let {
+                  queryVM.item = it
+               }
+            }
+         }
+
+         button(graphic = FontIcon("fa-plus")) {
+            action {
+               queryVM.item?.addEmptyRecord()
             }
          }
       }

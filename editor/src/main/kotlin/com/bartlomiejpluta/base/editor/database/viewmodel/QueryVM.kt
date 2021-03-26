@@ -10,4 +10,10 @@ class QueryVM(query: Query) : ItemViewModel<Query>(query) {
 
    val queryProperty = bind(Query::queryProperty)
    val query by queryProperty
+
+   val columnsProperty = bind(Query::columnsProperty)
+   val columns by columnsProperty
+
+   val dataProperty = bind(Query::dataProperty)
+   val data by dataProperty
 }

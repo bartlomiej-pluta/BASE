@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.database.model.schema.SchemaDatabase
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import tornadofx.observableListOf
 import java.sql.Connection
 
 @Service
@@ -54,18 +55,18 @@ class H2DatabaseService : DatabaseService {
       val metadata = stmt.metaData
 
       if (results != null && metadata != null) {
-         val columns = mutableListOf<String>()
+         val columns = observableListOf<String>()
 
          for (i in 1..metadata.columnCount) {
             columns += metadata.getColumnLabel(i)
          }
 
-         val data = mutableListOf<DataRecord>()
+         val data = observableListOf<DataRecord>()
          while (results.next()) {
             val record = mutableMapOf<String, DataField>()
 
             for (i in 1..metadata.columnCount) {
-               record[metadata.getColumnLabel(i)] = DataField(results.getObject(i).toString())
+               record[metadata.getColumnLabel(i)] = DataField(results.getObject(i)?.toString())
             }
 
             data += DataRecord(record)
