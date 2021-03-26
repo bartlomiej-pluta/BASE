@@ -91,6 +91,10 @@ dependencies {
 
     // This dependency is used by the application.
     implementation "org.joml:joml:${jomlVersion}"
+
+    // Database
+    implementation "com.h2database:h2:${h2Version}"
+    implementation "com.zaxxer:HikariCP:${hikariVersion}"
 }
 
 application {

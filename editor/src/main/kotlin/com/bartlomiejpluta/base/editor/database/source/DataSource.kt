@@ -11,8 +11,6 @@ class DataSource(dbFile: File) {
 
    init {
       config.jdbcUrl = "jdbc:h2:file:${dbFile.absolutePath.replace("\\", "/")}"
-      config.username = "root"
-      config.password = ""
       source = HikariDataSource(config)
    }
 

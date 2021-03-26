@@ -12,7 +12,7 @@ import java.nio.file.Path;
 public class ProjectConfiguration {
    private String mainFile;
    private String resourcePath;
-
+   private String databaseScriptFile;
 
    public String projectFile(String... path) {
       return Path.of(resourcePath, path).toString().replaceAll("\\\\", "/");

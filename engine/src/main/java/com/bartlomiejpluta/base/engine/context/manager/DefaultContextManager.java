@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
+import com.bartlomiejpluta.base.engine.database.service.DatabaseService;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
@@ -41,6 +42,7 @@ public class DefaultContextManager implements ContextManager {
    private final Inflater inflater;
    private final WidgetDefinitionManager widgetDefinitionManager;
    private final SoundManager soundManager;
+   private final DatabaseService databaseService;
 
    @SneakyThrows
    @Override
@@ -74,6 +76,7 @@ public class DefaultContextManager implements ContextManager {
             .inflater(inflater)
             .widgetDefinitionManager(widgetDefinitionManager)
             .soundManager(soundManager)
+            .databaseService(databaseService)
             .gameRunner(gameRunner)
             .projectName(project.getName())
             .build();

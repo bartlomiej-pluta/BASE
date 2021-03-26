@@ -2,6 +2,7 @@ app:
   project:
     main-file: project.bep
     resource-path: /project
+    database-script-file: /database/data.sql
 
   sprite:
     entity:

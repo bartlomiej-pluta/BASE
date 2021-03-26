@@ -13,6 +13,7 @@ import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
+import com.bartlomiejpluta.base.engine.database.service.DatabaseService;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
@@ -23,12 +24,16 @@ import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.util.lambda.UncheckedConsumer;
+import com.bartlomiejpluta.base.util.lambda.UncheckedFunction;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,6 +67,9 @@ public class DefaultContext implements Context {
 
    @NonNull
    private final SoundManager soundManager;
+
+   @NonNull
+   private final DatabaseService databaseService;
 
    @Getter
    @NonNull
@@ -143,6 +151,25 @@ public class DefaultContext implements Context {
    @Override
    public Sound createSound(String soundUid) {
       return soundManager.loadObject(soundUid);
+   }
+
+   @Override
+   public void withDatabase(UncheckedConsumer<Connection, SQLException> consumer) {
+      try (var connection = databaseService.getConnection()) {
+         consumer.accept(connection);
+      } catch (SQLException e) {
+         log.error("SQL Error", e);
+      }
+   }
+
+   @Override
+   public <T> T withDatabase(UncheckedFunction<Connection, T, SQLException> extractor) {
+      try (var connection = databaseService.getConnection()) {
+         return extractor.apply(connection);
+      } catch (SQLException e) {
+         log.error("SQL Error", e);
+         return null;
+      }
    }
 
    @Override

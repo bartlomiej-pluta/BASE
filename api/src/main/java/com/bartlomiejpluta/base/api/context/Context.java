@@ -12,6 +12,11 @@ import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.gc.Disposable;
 import com.bartlomiejpluta.base.internal.logic.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
+import com.bartlomiejpluta.base.util.lambda.UncheckedConsumer;
+import com.bartlomiejpluta.base.util.lambda.UncheckedFunction;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public interface Context extends Updatable, Renderable, Disposable {
    GameRunner getGameRunner();
@@ -37,6 +42,10 @@ public interface Context extends Updatable, Renderable, Disposable {
    GUI newGUI();
 
    Sound createSound(String soundUid);
+
+   void withDatabase(UncheckedConsumer<Connection, SQLException> consumer);
+
+   <T> T withDatabase(UncheckedFunction<Connection, T, SQLException> extractor);
 
    void disposeSound(Sound sound);
 
