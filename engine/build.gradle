@@ -83,8 +83,8 @@ dependencies {
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     implementation "org.codehaus.janino:janino:${janinoVersion}"
     implementation "org.codehaus.janino:commons-compiler:${janinoVersion}"

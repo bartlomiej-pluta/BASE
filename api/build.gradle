@@ -13,4 +13,5 @@ dependencies {
     implementation "org.joml:joml:${jomlVersion}"
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"
     implementation "org.apache.commons:commons-math3:${apacheCommonsVersion}"
+    implementation "org.projectlombok:lombok:${lombokVersion}"
 }
