@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.database.controller
 
+import com.bartlomiejpluta.base.editor.database.model.data.DataRecord
 import com.bartlomiejpluta.base.editor.database.model.data.Query
 import com.bartlomiejpluta.base.editor.database.service.DatabaseService
 import org.springframework.stereotype.Component
@@ -19,14 +20,27 @@ class DatabaseController : Controller() {
       null
    }
 
-   fun execute(op: Connection.() -> Unit) {
-      databaseService.run<Unit> {
-         try {
-            op(this)
-         } catch (e: SQLException) {
-            sqlErrorAlert(e)
+   fun execute(op: Connection.() -> Unit): Boolean = databaseService.run {
+      try {
+         op(this)
+         true
+      } catch (e: SQLException) {
+         sqlErrorAlert(e)
+         false
+      }
+   } ?: false
+
+   fun submitBatch(table: String, records: List<DataRecord>) = execute {
+      autoCommit = false
+      records.forEach {
+         it.prepareStatement(table)?.let { sql ->
+            val statement = prepareStatement(sql)
+            it.fields.values.forEachIndexed { index, field -> statement.setObject(index + 1, field.value) }
+            statement.execute()
          }
       }
+
+      commit()
    }
 
    private fun sqlErrorAlert(e: SQLException) =

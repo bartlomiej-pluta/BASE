@@ -51,11 +51,7 @@ class QueryResultView : View() {
    override val root = borderpane {
       top = toolbar {
          button(graphic = FontIcon("fa-refresh")) {
-            action {
-               databaseController.execute(queryVM.query, queryVM.name, queryVM.table)?.let {
-                  queryVM.item = it
-               }
-            }
+            action { refresh() }
          }
 
          button(graphic = FontIcon("fa-plus")) {
@@ -82,11 +78,20 @@ class QueryResultView : View() {
             enableWhen(queryVM.tableProperty.isNotNull)
 
             action {
-               println(queryVM.data.size)
+               val success = databaseController.submitBatch(queryVM.name, queryVM.data)
+               if (success) {
+                  refresh()
+               }
             }
          }
       }
 
       center = table
+   }
+
+   private fun refresh() {
+      databaseController.execute(queryVM.query, queryVM.name, queryVM.table)?.let {
+         queryVM.item = it
+      }
    }
 }

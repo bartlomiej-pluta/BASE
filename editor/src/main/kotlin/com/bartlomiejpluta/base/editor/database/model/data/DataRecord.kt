@@ -3,10 +3,8 @@ package com.bartlomiejpluta.base.editor.database.model.data
 import tornadofx.getValue
 import tornadofx.setValue
 import tornadofx.toProperty
-import kotlin.collections.Map
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.forEach
 
 class DataRecord(val fields: Map<String, DataField>, operation: Operation = Operation.DO_NOTHING) {
    val operationProperty = operation.toProperty()
@@ -15,4 +13,11 @@ class DataRecord(val fields: Map<String, DataField>, operation: Operation = Oper
    init {
       fields.forEach { (_, field) -> field.record = this }
    }
+
+   fun prepareStatement(table: String) = when (operation) {
+      Operation.INSERT -> "INSERT INTO `$table` SET $parameters;"
+      else -> null
+   }
+
+   private val parameters = fields.map { (column, _) -> "`$column` = ?" }.joinToString(", ")
 }
