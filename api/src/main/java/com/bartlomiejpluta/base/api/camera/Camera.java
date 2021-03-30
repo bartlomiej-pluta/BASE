@@ -8,5 +8,7 @@ import org.joml.Matrix4fc;
 public interface Camera extends Placeable {
    Matrix4fc computeViewModelMatrix(Matrix4fc modelMatrix);
 
+   boolean insideFrustum(float x, float y, float radius);
+
    void render(Screen screen, ShaderManager shaderManager);
 }

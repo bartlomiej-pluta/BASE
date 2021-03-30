@@ -5,12 +5,16 @@ import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.gc.Disposable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
+import lombok.Getter;
+import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.system.MemoryStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -20,11 +24,17 @@ public class Mesh implements Renderable, Disposable {
    private final List<Integer> vboIds = new ArrayList<>(2);
    private final int elementsCount;
 
+   @Getter
+   private final Vector2fc farthestVertex;
+
+   @Getter
+   private final Vector2fc primarySize;
+
    public Mesh(float[] vertices, float[] texCoords, int[] elements) {
-      elementsCount = elements.length;
+      this.elementsCount = elements.length;
 
       var vboId = 0;
-      try(var stack = MemoryStack.stackPush()) {
+      try (var stack = MemoryStack.stackPush()) {
          vaoId = glGenVertexArrays();
          glBindVertexArray(vaoId);
 
@@ -51,6 +61,35 @@ public class Mesh implements Renderable, Disposable {
          glBindBuffer(GL_ARRAY_BUFFER, 0);
          glBindVertexArray(0);
       }
+
+      var minX = Float.MAX_VALUE;
+      var minY = Float.MAX_VALUE;
+      var maxX = 0f;
+      var maxY = 0f;
+
+      for (int i = 0; i < vertices.length / 2; ++i) {
+         var x = vertices[2 * i];
+         var y = vertices[2 * i + 1];
+
+         if (x < minX) {
+            minX = x;
+         }
+
+         if (x > maxX) {
+            maxX = x;
+         }
+
+         if (y < minY) {
+            minY = y;
+         }
+
+         if (y > maxY) {
+            maxY = y;
+         }
+      }
+
+      farthestVertex = new Vector2f(abs(maxX) > abs(minX) ? maxX : minX, abs(maxY) > abs(minY) ? maxY : minY);
+      primarySize = new Vector2f(maxX - minX, maxY - minY);
    }
 
    @Override

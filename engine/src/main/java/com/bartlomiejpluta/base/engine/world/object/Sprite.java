@@ -7,13 +7,15 @@ import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
-@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public abstract class Sprite extends Model implements Renderable {
+   private final float farthestVertexDistance;
 
-   @NonNull
    protected final Mesh mesh;
 
    @NonNull
@@ -21,8 +23,19 @@ public abstract class Sprite extends Model implements Renderable {
    @Getter
    protected Material material;
 
+   public Sprite(Mesh mesh, Material material) {
+      this.mesh = mesh;
+      this.material = material;
+
+      this.farthestVertexDistance = this.mesh.getFarthestVertex().lengthSquared();
+   }
+
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
+      if (!camera.insideFrustum(position.x, position.y, farthestVertexDistance * (scaleX > scaleY ? scaleX : scaleY))) {
+         return;
+      }
+
       shaderManager.setUniform(UniformName.UNI_VIEW_MODEL_MATRIX, camera.computeViewModelMatrix(getModelMatrix()));
       material.render(screen, camera, shaderManager);
       mesh.render(screen, camera, shaderManager);
