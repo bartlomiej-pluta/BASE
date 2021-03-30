@@ -41,7 +41,7 @@ public abstract class EntityDelegate implements Entity {
 
    @Override
    public Movement prepareMovement(Direction direction) {
-      return entity.prepareMovement(direction);
+      return new Movement(this, direction);
    }
 
    @Override
@@ -227,6 +227,11 @@ public abstract class EntityDelegate implements Entity {
    @Override
    public void setZIndex(int zIndex) {
       entity.setZIndex(zIndex);
+   }
+
+   @Override
+   public boolean move(Movement movement) {
+      return entity.move(movement);
    }
 
    @Override

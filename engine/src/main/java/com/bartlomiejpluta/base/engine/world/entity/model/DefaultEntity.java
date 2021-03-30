@@ -87,7 +87,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   protected boolean move(Movement movement) {
+   public boolean move(Movement movement) {
       if (super.move(movement)) {
          faceDirection = movement.getDirection();
          return true;

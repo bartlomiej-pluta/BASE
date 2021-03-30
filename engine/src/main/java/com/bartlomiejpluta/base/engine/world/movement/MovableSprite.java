@@ -82,10 +82,11 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public Movement prepareMovement(Direction direction) {
-      return new DefaultMovement(this, direction);
+      return new Movement(this, direction);
    }
 
-   protected boolean move(Movement movement) {
+   @Override
+   public boolean move(Movement movement) {
       if (this.movement != null) {
          return false;
       }

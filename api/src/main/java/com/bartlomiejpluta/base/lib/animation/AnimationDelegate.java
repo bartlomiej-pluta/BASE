@@ -147,7 +147,7 @@ public abstract class AnimationDelegate implements Animation {
 
    @Override
    public Movement prepareMovement(Direction direction) {
-      return animation.prepareMovement(direction);
+      return new Movement(this, direction);
    }
 
    @Override
@@ -193,6 +193,11 @@ public abstract class AnimationDelegate implements Animation {
    @Override
    public void setSpeed(float speed) {
       animation.setSpeed(speed);
+   }
+
+   @Override
+   public boolean move(Movement movement) {
+      return animation.move(movement);
    }
 
    @Override
