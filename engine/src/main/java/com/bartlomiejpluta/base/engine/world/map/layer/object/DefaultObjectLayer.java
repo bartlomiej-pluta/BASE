@@ -7,7 +7,7 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.move.Movement;
-import com.bartlomiejpluta.base.api.rule.Rule;
+import com.bartlomiejpluta.base.api.rule.MovementRule;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
@@ -33,12 +33,12 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    private final Queue<Movement> movements = new LinkedList<>();
 
-   private final List<Rule> rules = new ArrayList<>();
+   private final List<MovementRule> movementRules = new ArrayList<>();
 
    private final List<Entity> entitiesToAdd = new LinkedList<>();
-   private final List<Rule> rulesToAdd = new LinkedList<>();
+   private final List<MovementRule> movementRulesToAdd = new LinkedList<>();
    private final List<Entity> entitiesToRemove = new LinkedList<>();
-   private final List<Rule> rulesToRemove = new LinkedList<>();
+   private final List<MovementRule> movementRulesToRemove = new LinkedList<>();
 
    private final int rows;
    private final int columns;
@@ -52,18 +52,18 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
    }
 
    @Override
-   public void registerRule(Rule rule) {
-      rulesToAdd.add(rule);
+   public void registerMovementRule(MovementRule rule) {
+      movementRulesToAdd.add(rule);
    }
 
    @Override
-   public void unregisterRule(Rule rule) {
-      rulesToRemove.add(rule);
+   public void unregisterMovementRule(MovementRule rule) {
+      movementRulesToRemove.add(rule);
    }
 
    @Override
    public void unregisterRules() {
-      rulesToRemove.addAll(rules);
+      movementRulesToRemove.addAll(movementRules);
    }
 
    @Override
@@ -128,18 +128,20 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
       while (!movements.isEmpty()) {
          var movement = movements.poll();
-         if (isTileReachable(movement.getTo())) {
+         var from = movement.getFrom();
+         var to = movement.getTo();
+         if (isTileReachable(to)) {
             movement.perform();
+
+            for(var rule : movementRules) {
+               if(((from.equals(rule.from())) || (to.equals(rule.to())))) {
+                  rule.invoke(movement);
+               }
+            }
          }
       }
 
       for (var entity : entities) {
-         for (var rule : rules) {
-            if (rule.when(entity)) {
-               rule.then(entity);
-            }
-         }
-
          entity.update(dt);
 
          if (entity instanceof NPC) {
@@ -159,9 +161,9 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       }
 
       // Insert rules requested to be added
-      if(!rulesToAdd.isEmpty()) {
-         rules.addAll(rulesToAdd);
-         rulesToAdd.clear();
+      if(!movementRulesToAdd.isEmpty()) {
+         movementRules.addAll(movementRulesToAdd);
+         movementRulesToAdd.clear();
       }
 
       // Remove entities requested to be removed
@@ -175,9 +177,9 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       }
 
       // Remove rules requested to be unregistered
-      if (!rulesToRemove.isEmpty()) {
-         rules.removeAll(rulesToRemove);
-         rulesToRemove.clear();
+      if (!movementRulesToRemove.isEmpty()) {
+         movementRules.removeAll(movementRulesToRemove);
+         movementRulesToRemove.clear();
       }
    }
 

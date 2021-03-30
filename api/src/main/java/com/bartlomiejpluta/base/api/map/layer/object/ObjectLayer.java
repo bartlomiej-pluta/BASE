@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.api.map.layer.object;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.move.Movement;
-import com.bartlomiejpluta.base.api.rule.Rule;
+import com.bartlomiejpluta.base.api.rule.MovementRule;
 import org.joml.Vector2ic;
 
 import java.util.List;
@@ -17,9 +17,9 @@ public interface ObjectLayer extends Layer {
 
    List<Entity> getEntities();
 
-   void registerRule(Rule rule);
+   void registerMovementRule(MovementRule rule);
 
-   void unregisterRule(Rule rule);
+   void unregisterMovementRule(MovementRule rule);
 
    void unregisterRules();
 

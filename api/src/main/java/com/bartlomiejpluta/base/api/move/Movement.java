@@ -3,6 +3,8 @@ package com.bartlomiejpluta.base.api.move;
 import org.joml.Vector2ic;
 
 public interface Movement {
+   Movable getObject();
+
    boolean perform();
 
    Movement another();
