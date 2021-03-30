@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
+import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.gc.Disposable;
@@ -28,6 +29,8 @@ public interface Context extends Updatable, Renderable, Disposable {
    Input getInput();
 
    String getProjectName();
+
+   GameMap getMap();
 
    void openMap(String mapUid);
 

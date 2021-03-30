@@ -88,6 +88,7 @@ public class DefaultContext implements Context {
    @Getter
    private Camera camera;
 
+   @Getter
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
