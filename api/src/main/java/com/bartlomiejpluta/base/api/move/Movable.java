@@ -32,4 +32,6 @@ public interface Movable extends Placeable {
    int manhattanDistance(Vector2ic coordinates);
 
    boolean move(Movement movement);
+
+   void abortMove();
 }

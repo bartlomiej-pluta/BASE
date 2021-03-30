@@ -22,6 +22,8 @@ public interface Entity extends Movable, Renderable, Updatable {
 
    Direction getDirectionTowards(Entity target);
 
+   ObjectLayer getLayer();
+
    void onAdd(ObjectLayer layer);
 
    void onRemove(ObjectLayer layer);

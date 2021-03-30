@@ -195,6 +195,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public ObjectLayer getLayer() {
+      return entity.getLayer();
+   }
+
+   @Override
    public void onAdd(ObjectLayer layer) {
       entity.onAdd(layer);
    }
@@ -232,6 +237,11 @@ public abstract class EntityDelegate implements Entity {
    @Override
    public boolean move(Movement movement) {
       return entity.move(movement);
+   }
+
+   @Override
+   public void abortMove() {
+      entity.abortMove();
    }
 
    @Override

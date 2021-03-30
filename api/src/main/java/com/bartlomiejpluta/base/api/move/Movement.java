@@ -26,6 +26,10 @@ public final class Movement {
       return object.move(this);
    }
 
+   public void abort() {
+      object.abortMove();
+   }
+
    public Movement another() {
       return object.prepareMovement(direction);
    }

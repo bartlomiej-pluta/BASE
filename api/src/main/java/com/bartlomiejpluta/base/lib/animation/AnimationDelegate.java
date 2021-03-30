@@ -201,6 +201,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public void abortMove() {
+      animation.abortMove();
+   }
+
+   @Override
    public void onAdd(Layer layer) {
       animation.onAdd(layer);
    }

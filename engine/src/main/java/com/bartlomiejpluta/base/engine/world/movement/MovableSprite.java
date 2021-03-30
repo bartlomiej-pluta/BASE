@@ -106,6 +106,14 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    }
 
    @Override
+   public void abortMove() {
+      setCoordinates(movement.getFrom());
+      setDefaultAnimationFrame();
+      movementVector = null;
+      movement = null;
+   }
+
+   @Override
    public void setCoordinates(int x, int y) {
       coordinates.x = x;
       coordinates.y = y;

@@ -40,6 +40,9 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Setter
    private boolean blocking;
 
+   @Getter
+   private ObjectLayer layer;
+
    public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
       super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
       this.entitySetManager = entitySetManager;
@@ -124,12 +127,12 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    public void onAdd(ObjectLayer layer) {
-      // Do nothing
+      this.layer = layer;
    }
 
    @Override
    public void onRemove(ObjectLayer layer) {
-      // Do nothing
+      this.layer = null;
    }
 
    @Override

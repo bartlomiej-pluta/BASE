@@ -68,6 +68,13 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void addEntity(Entity entity) {
+      var layer = (DefaultObjectLayer) entity.getLayer();
+
+      if (layer != null) {
+         layer.entities.remove(entity);
+      }
+
+      entity.setStepSize(stepSize.x(), stepSize.y());
       entitiesToAdd.add(entity);
    }
 
@@ -153,7 +160,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       if(!entitiesToAdd.isEmpty()) {
          for (var entity : entitiesToAdd) {
             entity.onAdd(this);
-            entity.setStepSize(stepSize.x(), stepSize.y());
             entities.add(entity);
          }
 
