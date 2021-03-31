@@ -27,7 +27,7 @@ import static java.lang.Integer.compare;
 public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Getter
-   private final List<Entity> entities;
+   private final ArrayList<Entity> entities = new ArrayList<>();
 
    private final List<InteractiveEntity> interactiveEntities = new ArrayList<>();
 
@@ -38,35 +38,29 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    private final List<MovementRule> movementRules = new ArrayList<>();
 
-   private final List<Entity> entitiesToAdd = new LinkedList<>();
-   private final List<MovementRule> movementRulesToAdd = new LinkedList<>();
-   private final List<Entity> entitiesToRemove = new LinkedList<>();
-   private final List<MovementRule> movementRulesToRemove = new LinkedList<>();
-
    private final int rows;
    private final int columns;
 
-   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, List<Entity> entities, PassageAbility[][] passageMap) {
+   public DefaultObjectLayer(@NonNull GameMap map, int rows, int columns, PassageAbility[][] passageMap) {
       super(map);
       this.rows = rows;
       this.columns = columns;
-      this.entities = entities;
       this.passageMap = passageMap;
    }
 
    @Override
    public void registerMovementRule(MovementRule rule) {
-      movementRulesToAdd.add(rule);
+      movementRules.add(rule);
    }
 
    @Override
    public void unregisterMovementRule(MovementRule rule) {
-      movementRulesToRemove.add(rule);
+      movementRules.remove(rule);
    }
 
    @Override
    public void unregisterRules() {
-      movementRulesToRemove.addAll(movementRules);
+      movementRules.clear();
    }
 
    @Override
@@ -77,18 +71,30 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          layer.entities.remove(entity);
       }
 
+      if (entity instanceof InteractiveEntity) {
+         interactiveEntities.add((InteractiveEntity) entity);
+      }
+
       entity.setStepSize(stepSize.x(), stepSize.y());
-      entitiesToAdd.add(entity);
+      entities.add(entity);
+
+      entity.onAdd(this);
    }
 
    @Override
    public void removeEntity(Entity entity) {
-      entitiesToRemove.add(entity);
+      entities.remove(entity);
+
+      if (entity instanceof InteractiveEntity) {
+         interactiveEntities.remove(entity);
+      }
+
+      entity.onRemove(this);
    }
 
    @Override
    public void clearEntities() {
-      entitiesToRemove.addAll(entities);
+      entities.clear();
    }
 
    @Override
@@ -132,52 +138,12 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       movements.add(movement);
    }
 
+   @SuppressWarnings("ForLoopReplaceableByForEach")
    @Override
    public void update(float dt) {
-      // Insert entities requested to be added
-      if (!entitiesToAdd.isEmpty()) {
-         for (var entity : entitiesToAdd) {
-            entity.onAdd(this);
-            if (entity instanceof InteractiveEntity) {
-               interactiveEntities.add((InteractiveEntity) entity);
-            }
-
-            entities.add(entity);
-         }
-
-         entitiesToAdd.clear();
-      }
-
-      // Insert rules requested to be added
-      if (!movementRulesToAdd.isEmpty()) {
-         movementRules.addAll(movementRulesToAdd);
-         movementRulesToAdd.clear();
-      }
-
-      // Remove entities requested to be removed
-      if (!entitiesToRemove.isEmpty()) {
-         for (var entity : entitiesToRemove) {
-            entities.remove(entity);
-            if (entity instanceof InteractiveEntity) {
-               interactiveEntities.remove(entity);
-            }
-
-            entity.onRemove(this);
-         }
-
-         entitiesToRemove.clear();
-      }
-
-      // Remove rules requested to be unregistered
-      if (!movementRulesToRemove.isEmpty()) {
-         movementRules.removeAll(movementRulesToRemove);
-         movementRulesToRemove.clear();
-      }
-
       // Update BaseLayer (animations etc.)
       super.update(dt);
 
-      // Update movements
       while (!movements.isEmpty()) {
          var movement = movements.poll();
          var from = movement.getFrom();
@@ -185,7 +151,13 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          if (isTileReachable(to)) {
             movement.perform();
 
-            for (var rule : movementRules) {
+            // Disclaimer
+            // For the sake of an easy adding and removing
+            // rules from the rule.update() method inside
+            // the loop, the loop itself has been implemented
+            // as plain old C-style for loop.
+            for (int i = 0; i < movementRules.size(); ++i) {
+               var rule = movementRules.get(i);
                if (((from.equals(rule.from())) || (to.equals(rule.to())))) {
                   rule.invoke(movement);
                }
@@ -193,8 +165,13 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          }
       }
 
-      // Update entities
-      for (var entity : entities) {
+      // Disclaimer
+      // For the sake of an easy adding and removing
+      // entities from the entity.update() method inside
+      // the loop, the loop itself has been implemented
+      // as plain old C-style for loop.
+      for (int i = 0; i < entities.size(); ++i) {
+         var entity = entities.get(i);
          entity.update(dt);
 
          if (entity instanceof NPC) {

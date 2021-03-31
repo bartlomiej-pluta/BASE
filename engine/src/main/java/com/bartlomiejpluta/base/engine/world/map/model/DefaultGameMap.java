@@ -130,7 +130,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
          Arrays.fill(passageMap[i], 0, columns, PassageAbility.ALLOW);
       }
 
-      var layer = new DefaultObjectLayer(this, rows, columns, new ArrayList<>(), passageMap);
+      var layer = new DefaultObjectLayer(this, rows, columns, passageMap);
 
       layers.add(layer);
 

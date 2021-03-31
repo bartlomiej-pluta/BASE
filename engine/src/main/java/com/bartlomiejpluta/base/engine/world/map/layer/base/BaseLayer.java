@@ -10,9 +10,7 @@ import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.NonNull;
 import org.joml.Vector2fc;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.ArrayList;
 
 public abstract class BaseLayer implements Layer, Updatable {
 
@@ -22,9 +20,7 @@ public abstract class BaseLayer implements Layer, Updatable {
    @NonNull
    protected final Vector2fc stepSize;
 
-   protected final Queue<Animation> animations = new LinkedList<>();
-
-   private final List<Animation> animationsToAdd = new LinkedList<>();
+   protected final ArrayList<Animation> animations = new ArrayList<>();
 
    public BaseLayer(@NonNull GameMap map) {
       this.map = map;
@@ -33,7 +29,9 @@ public abstract class BaseLayer implements Layer, Updatable {
 
    @Override
    public void pushAnimation(Animation animation) {
-      animationsToAdd.add(animation);
+      animations.add(animation);
+      animation.setStepSize(stepSize.x(), stepSize.y());
+      animation.onAdd(this);
    }
 
    @Override
@@ -43,22 +41,18 @@ public abstract class BaseLayer implements Layer, Updatable {
 
    @Override
    public void update(float dt) {
-      if(!animationsToAdd.isEmpty()) {
-         for(var animation : animationsToAdd) {
-            animations.add(animation);
-            animation.setStepSize(stepSize.x(), stepSize.y());
-            animation.onAdd(this);
-         }
 
-         animationsToAdd.clear();
-      }
-
-      for (var iterator = animations.iterator(); iterator.hasNext(); ) {
-         var animation = iterator.next();
+      // Disclaimer
+      // For the sake of an easy adding and removing
+      // animations from the animation.update() method inside
+      // the loop, the loop itself has been implemented
+      // as plain old C-style for loop.
+      for (int i = 0; i < animations.size(); ++i) {
+         var animation = animations.get(i);
          animation.update(dt);
 
          if (animation.finished()) {
-            iterator.remove();
+            animations.remove(animation);
             animation.onFinish(this);
          }
       }
