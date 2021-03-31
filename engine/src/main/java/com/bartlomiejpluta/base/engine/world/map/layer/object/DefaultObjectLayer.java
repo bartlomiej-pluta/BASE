@@ -8,7 +8,6 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.move.Movement;
-import com.bartlomiejpluta.base.api.rule.MovementRule;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
@@ -36,8 +35,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    private final Queue<Movement> movements = new LinkedList<>();
 
-   private final List<MovementRule> movementRules = new ArrayList<>();
-
    private final int rows;
    private final int columns;
 
@@ -46,21 +43,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       this.rows = rows;
       this.columns = columns;
       this.passageMap = passageMap;
-   }
-
-   @Override
-   public void registerMovementRule(MovementRule rule) {
-      movementRules.add(rule);
-   }
-
-   @Override
-   public void unregisterMovementRule(MovementRule rule) {
-      movementRules.remove(rule);
-   }
-
-   @Override
-   public void unregisterRules() {
-      movementRules.clear();
    }
 
    @Override
@@ -150,18 +132,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          var to = movement.getTo();
          if (isTileReachable(to)) {
             movement.perform();
-
-            // Disclaimer
-            // For the sake of an easy adding and removing
-            // rules from the rule.update() method inside
-            // the loop, the loop itself has been implemented
-            // as plain old C-style for loop.
-            for (int i = 0; i < movementRules.size(); ++i) {
-               var rule = movementRules.get(i);
-               if (((from.equals(rule.from())) || (to.equals(rule.to())))) {
-                  rule.invoke(movement);
-               }
-            }
          }
       }
 
