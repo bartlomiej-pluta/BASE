@@ -1,6 +1,5 @@
 package com.bartlomiejpluta.base.engine.world.movement;
 
-import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
@@ -29,8 +28,6 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    private int framesToCrossOneTile = 1;
 
    private enum PlacingMode {BY_POSITION, BY_COORDINATES}
-
-   ;
 
    private PlacingMode placingMode;
 
@@ -68,6 +65,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
          } else {
             adjustCoordinates();
             setDefaultAnimationFrame();
+            movement.onFinish();
             movementVector = null;
             movement = null;
          }
@@ -78,11 +76,6 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    private void adjustCoordinates() {
       setCoordinates(movement.getTo());
-   }
-
-   @Override
-   public Movement prepareMovement(Direction direction) {
-      return new Movement(this, direction);
    }
 
    @Override

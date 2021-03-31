@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.lib.animation;
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
+import com.bartlomiejpluta.base.api.move.AnimationMovement;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.api.screen.Screen;
@@ -147,7 +148,7 @@ public abstract class AnimationDelegate implements Animation {
 
    @Override
    public Movement prepareMovement(Direction direction) {
-      return new Movement(this, direction);
+      return new AnimationMovement(this, direction);
    }
 
    @Override

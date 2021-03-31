@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.engine.world.entity.model;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
+import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
@@ -87,6 +88,11 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    protected void setDefaultAnimationFrame() {
       material.setSpritePosition(spriteDefaultRows.get(faceDirection));
+   }
+
+   @Override
+   public Movement prepareMovement(Direction direction) {
+      return new EntityMovement(this, direction);
    }
 
    @Override

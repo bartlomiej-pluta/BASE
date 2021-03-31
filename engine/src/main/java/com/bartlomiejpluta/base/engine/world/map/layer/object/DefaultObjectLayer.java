@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.engine.world.map.layer.object;
 import com.bartlomiejpluta.base.api.ai.NPC;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.entity.InteractiveEntity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
@@ -27,6 +28,8 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Getter
    private final List<Entity> entities;
+
+   private final List<InteractiveEntity> interactiveEntities = new ArrayList<>();
 
    @Getter
    private final PassageAbility[][] passageMap;
@@ -131,35 +134,14 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void update(float dt) {
-      super.update(dt);
-
-      while (!movements.isEmpty()) {
-         var movement = movements.poll();
-         var from = movement.getFrom();
-         var to = movement.getTo();
-         if (isTileReachable(to)) {
-            movement.perform();
-
-            for(var rule : movementRules) {
-               if(((from.equals(rule.from())) || (to.equals(rule.to())))) {
-                  rule.invoke(movement);
-               }
-            }
-         }
-      }
-
-      for (var entity : entities) {
-         entity.update(dt);
-
-         if (entity instanceof NPC) {
-            ((NPC) entity).getStrategy().nextActivity(this, dt);
-         }
-      }
-
       // Insert entities requested to be added
-      if(!entitiesToAdd.isEmpty()) {
+      if (!entitiesToAdd.isEmpty()) {
          for (var entity : entitiesToAdd) {
             entity.onAdd(this);
+            if (entity instanceof InteractiveEntity) {
+               interactiveEntities.add((InteractiveEntity) entity);
+            }
+
             entities.add(entity);
          }
 
@@ -167,7 +149,7 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       }
 
       // Insert rules requested to be added
-      if(!movementRulesToAdd.isEmpty()) {
+      if (!movementRulesToAdd.isEmpty()) {
          movementRules.addAll(movementRulesToAdd);
          movementRulesToAdd.clear();
       }
@@ -176,6 +158,10 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       if (!entitiesToRemove.isEmpty()) {
          for (var entity : entitiesToRemove) {
             entities.remove(entity);
+            if (entity instanceof InteractiveEntity) {
+               interactiveEntities.remove(entity);
+            }
+
             entity.onRemove(this);
          }
 
@@ -186,6 +172,34 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
       if (!movementRulesToRemove.isEmpty()) {
          movementRules.removeAll(movementRulesToRemove);
          movementRulesToRemove.clear();
+      }
+
+      // Update BaseLayer (animations etc.)
+      super.update(dt);
+
+      // Update movements
+      while (!movements.isEmpty()) {
+         var movement = movements.poll();
+         var from = movement.getFrom();
+         var to = movement.getTo();
+         if (isTileReachable(to)) {
+            movement.perform();
+
+            for (var rule : movementRules) {
+               if (((from.equals(rule.from())) || (to.equals(rule.to())))) {
+                  rule.invoke(movement);
+               }
+            }
+         }
+      }
+
+      // Update entities
+      for (var entity : entities) {
+         entity.update(dt);
+
+         if (entity instanceof NPC) {
+            ((NPC) entity).getStrategy().nextActivity(this, dt);
+         }
       }
    }
 
@@ -203,5 +217,27 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
    private int compareObjects(Entity a, Entity b) {
       var z = compare(a.getZIndex(), b.getZIndex());
       return z == 0 ? compare(a.getPosition().y(), b.getPosition().y()) : z;
+   }
+
+   @Override
+   public void notifyEntityStepIn(Movement movement, Entity entity) {
+      var target = movement.getTo();
+
+      for (var listener : interactiveEntities) {
+         if (listener.getCoordinates().equals(target)) {
+            listener.onEntityStepIn(movement, entity);
+         }
+      }
+   }
+
+   @Override
+   public void notifyEntityStepOut(Movement movement, Entity entity) {
+      var source = movement.getFrom();
+
+      for (var listener : interactiveEntities) {
+         if (listener.getCoordinates().equals(source)) {
+            listener.onEntityStepOut(movement, entity);
+         }
+      }
    }
 }

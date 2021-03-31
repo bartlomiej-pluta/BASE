@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
+import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.object.Placeable;
@@ -41,7 +42,7 @@ public abstract class EntityDelegate implements Entity {
 
    @Override
    public Movement prepareMovement(Direction direction) {
-      return new Movement(this, direction);
+      return new EntityMovement(this, direction);
    }
 
    @Override

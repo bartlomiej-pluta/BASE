@@ -3,6 +3,9 @@ package com.bartlomiejpluta.base.engine.world.animation.model;
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.move.AnimationMovement;
+import com.bartlomiejpluta.base.api.move.Direction;
+import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
@@ -92,6 +95,11 @@ public class DefaultAnimation extends MovableSprite implements Animation {
             finish();
          }
       }
+   }
+
+   @Override
+   public Movement prepareMovement(Direction direction) {
+      return new AnimationMovement(this, direction);
    }
 
    @Override

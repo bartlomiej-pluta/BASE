@@ -30,4 +30,9 @@ public interface ObjectLayer extends Layer {
    boolean isTileReachable(Vector2ic tileCoordinates);
 
    void pushMovement(Movement movement);
+
+   // Notifiers
+   void notifyEntityStepIn(Movement movement, Entity entity);
+
+   void notifyEntityStepOut(Movement movement, Entity entity);
 }
