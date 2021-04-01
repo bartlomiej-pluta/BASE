@@ -5,6 +5,8 @@ import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.entity.EntityStepInListener;
 import com.bartlomiejpluta.base.api.entity.EntityStepOutListener;
+import com.bartlomiejpluta.base.api.input.KeyEvent;
+import com.bartlomiejpluta.base.api.input.KeyEventHandler;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
@@ -24,13 +26,14 @@ import java.util.Queue;
 import static java.lang.Float.compare;
 import static java.lang.Integer.compare;
 
-public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
+public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEventHandler {
 
    @Getter
    private final ArrayList<Entity> entities = new ArrayList<>();
 
    private final List<EntityStepInListener> stepInListeners = new ArrayList<>();
    private final List<EntityStepOutListener> stepOutListeners = new ArrayList<>();
+   private final List<KeyEventHandler> keyEventHandlers = new ArrayList<>();
 
    @Getter
    private final PassageAbility[][] passageMap;
@@ -63,6 +66,10 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          stepOutListeners.add((EntityStepOutListener) entity);
       }
 
+      if (entity instanceof KeyEventHandler) {
+         keyEventHandlers.add((KeyEventHandler) entity);
+      }
+
       entity.setStepSize(stepSize.x(), stepSize.y());
       entities.add(entity);
 
@@ -79,6 +86,10 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
       if (entity instanceof EntityStepOutListener) {
          stepOutListeners.remove(entity);
+      }
+
+      if (entity instanceof KeyEventHandler) {
+         keyEventHandlers.remove(entity);
       }
 
       entity.onRemove(this);
@@ -174,6 +185,17 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
    private int compareObjects(Entity a, Entity b) {
       var z = compare(a.getZIndex(), b.getZIndex());
       return z == 0 ? compare(a.getPosition().y(), b.getPosition().y()) : z;
+   }
+
+   @Override
+   public void handleKeyEvent(KeyEvent event) {
+      for (var handler : keyEventHandlers) {
+         if (event.isConsumed()) {
+            return;
+         }
+
+         handler.handleKeyEvent(event);
+      }
    }
 
    @Override
