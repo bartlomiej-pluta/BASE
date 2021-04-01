@@ -3,16 +3,17 @@ package com.bartlomiejpluta.base.engine.world.entity.model;
 import com.bartlomiejpluta.base.api.move.Direction;
 
 public class EntityInstantAnimation {
-   private static final int FIRST_FRAME = 0;
 
    private final DefaultEntity entity;
+   private final int firstFrame;
    private final int lastFrame;
    private final Direction faceDirectionOnFinish;
    private final Runnable onFinish;
    private boolean finished = false;
 
-   EntityInstantAnimation(DefaultEntity entity, Direction faceDirectionOnFinish, Runnable onFinish) {
+   EntityInstantAnimation(DefaultEntity entity, int firstFrame, Direction faceDirectionOnFinish, Runnable onFinish) {
       this.entity = entity;
+      this.firstFrame = firstFrame;
       this.lastFrame = entity.getMaterial().getTexture().getColumns() - 1;
       this.faceDirectionOnFinish = faceDirectionOnFinish;
       this.onFinish = onFinish;
@@ -24,7 +25,7 @@ public class EntityInstantAnimation {
          return false;
       }
 
-      if (finished && entity.currentFrame() == FIRST_FRAME) {
+      if (finished && entity.currentFrame() == firstFrame) {
          if (faceDirectionOnFinish != null) {
             entity.setFaceDirection(faceDirectionOnFinish);
          }

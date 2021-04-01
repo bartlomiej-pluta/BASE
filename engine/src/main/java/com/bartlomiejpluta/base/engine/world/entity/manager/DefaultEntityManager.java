@@ -23,6 +23,7 @@ public class DefaultEntityManager implements EntityManager {
    private final MeshManager meshManager;
    private final EntitySetManager entitySetManager;
 
+   private final int defaultSpriteColumn;
    private final Map<Direction, Integer> spriteDirectionRows;
    private final Map<Direction, Vector2fc> spriteDefaultRows;
 
@@ -35,7 +36,7 @@ public class DefaultEntityManager implements EntityManager {
 
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
 
-      var defaultSpriteColumn = configuration.getDefaultSpriteColumn();
+      defaultSpriteColumn = configuration.getDefaultSpriteColumn();
       this.spriteDefaultRows = spriteDirectionRows
             .entrySet()
             .stream()
@@ -49,7 +50,7 @@ public class DefaultEntityManager implements EntityManager {
 
    @Override
    public Entity createEntity(String entitySetUid) {
-      return new DefaultEntity(mesh, entitySetManager, spriteDirectionRows, spriteDefaultRows, entitySetUid);
+      return new DefaultEntity(mesh, entitySetManager, defaultSpriteColumn, spriteDirectionRows, spriteDefaultRows, entitySetUid);
    }
 
    @Override

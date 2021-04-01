@@ -26,6 +26,7 @@ import static java.util.Objects.requireNonNull;
 
 @EqualsAndHashCode(callSuper = true)
 public class DefaultEntity extends MovableSprite implements Entity {
+   private final int defaultSpriteColumn;
    private final EntitySetManager entitySetManager;
    private final Map<Direction, Integer> spriteDirectionRows;
    private final Map<Direction, Vector2fc> spriteDefaultRows;
@@ -50,8 +51,9 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    private final Queue<EntityInstantAnimation> instantAnimations = new LinkedList<>();
 
-   public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
+   public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, int defaultSpriteColumn, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
       super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
+      this.defaultSpriteColumn = defaultSpriteColumn;
       this.entitySetManager = entitySetManager;
       this.spriteDirectionRows = spriteDirectionRows;
       this.faceDirection = Direction.DOWN;
@@ -117,13 +119,8 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public void performInstantAnimation(Direction targetFaceDirection) {
-      instantAnimations.add(new EntityInstantAnimation(this, targetFaceDirection, null));
-   }
-
-   @Override
    public void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish) {
-      instantAnimations.add(new EntityInstantAnimation(this, targetFaceDirection, onFinish));
+      instantAnimations.add(new EntityInstantAnimation(this, defaultSpriteColumn, targetFaceDirection, onFinish));
    }
 
    @Override
