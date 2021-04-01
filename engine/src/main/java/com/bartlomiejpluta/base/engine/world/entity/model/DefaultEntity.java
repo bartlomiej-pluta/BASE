@@ -1,16 +1,13 @@
 package com.bartlomiejpluta.base.engine.world.entity.model;
 
-import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
-import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
-import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -128,14 +125,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public CompletableFuture<Void> performInstantAnimation(Direction targetFaceDirection) {
-      var animation = new EntityInstantAnimation(this, defaultSpriteColumn, targetFaceDirection);
-      instantAnimations.add(animation);
-
-      return animation.getFuture();
-   }
-
-   @Override
    public Movement prepareMovement(Direction direction) {
       return new EntityMovement(this, direction);
    }
@@ -218,13 +207,13 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
+   public void update(float dt) {
+      super.update(dt);
+
       var instantAnimation = instantAnimations.peek();
-      if (instantAnimation != null && instantAnimation.updateFrame()) {
+      if (instantAnimation != null && instantAnimation.update() == EntityInstantAnimation.State.COMPLETED) {
          instantAnimations.poll();
       }
-
-      super.render(screen, camera, shaderManager);
    }
 
    int currentFrame() {

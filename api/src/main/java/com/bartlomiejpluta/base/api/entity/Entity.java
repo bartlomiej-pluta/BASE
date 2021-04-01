@@ -38,6 +38,4 @@ public interface Entity extends Movable, Animated, Renderable, Updatable {
    void setZIndex(int zIndex);
 
    CompletableFuture<Void> performInstantAnimation();
-
-   CompletableFuture<Void> performInstantAnimation(Direction targetFaceDirection);
 }

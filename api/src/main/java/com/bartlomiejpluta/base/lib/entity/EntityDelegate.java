@@ -273,11 +273,6 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public CompletableFuture<Void> performInstantAnimation(Direction targetFaceDirection) {
-      return entity.performInstantAnimation(targetFaceDirection);
-   }
-
-   @Override
    public boolean move(Movement movement) {
       return entity.move(movement);
    }
