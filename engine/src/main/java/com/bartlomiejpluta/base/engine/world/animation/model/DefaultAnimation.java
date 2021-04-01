@@ -9,7 +9,6 @@ import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
-import com.bartlomiejpluta.base.util.math.MathUtil;
 import com.bartlomiejpluta.base.util.path.Path;
 import com.bartlomiejpluta.base.util.path.PathExecutor;
 import lombok.Getter;
@@ -27,7 +26,6 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    private final Vector2f animationScale = new Vector2f(1, 1);
    private final Vector2fc animationSpriteSize;
 
-   private int animationSpeed = 100;
    private int iteration = 0;
    private boolean updated = false;
 
@@ -36,6 +34,8 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    private Integer repeat = 1;
 
    private boolean forcedFinish = false;
+
+   private boolean enabled = true;
 
    @Getter
    private PathExecutor<Animation> pathExecutor;
@@ -54,22 +54,37 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    }
 
    @Override
-   public void setAnimationSpeed(float speed) {
-      animationSpeed = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
+   public boolean isAnimationEnabled() {
+      return enabled;
    }
 
    @Override
-   public int getAnimationSpeed() {
-      return animationSpeed;
+   public void setAnimationEnabled(boolean enabled) {
+      this.enabled = enabled;
    }
 
    @Override
-   public boolean shouldAnimate() {
-      return true;
+   public void enableAnimation() {
+      enabled = true;
    }
 
    @Override
-   public Vector2fc[] getSpriteAnimationFramesPositions() {
+   public void disableAnimation() {
+      enabled = false;
+   }
+
+   @Override
+   public void toggleAnimationEnabled() {
+      enabled = !enabled;
+   }
+
+   @Override
+   protected boolean shouldAnimate() {
+      return enabled;
+   }
+
+   @Override
+   protected Vector2fc[] getSpriteAnimationFramesPositions() {
       return frames;
    }
 

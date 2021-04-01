@@ -1,30 +1,41 @@
 package com.bartlomiejpluta.base.engine.world.animation.model;
 
+import com.bartlomiejpluta.base.api.animation.Animated;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2fc;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class AnimatedSprite extends Sprite implements Updatable {
+public abstract class AnimatedSprite extends Sprite implements Animated {
    private int time;
+
+   // The time in ms between frames
+   private int intervalInMilliseconds = 100;
    protected int currentAnimationFrame;
 
    public AnimatedSprite(Mesh mesh, Material material) {
       super(mesh, material);
    }
 
-   // Returns time in ms between frames
-   public abstract int getAnimationSpeed();
+   protected abstract boolean shouldAnimate();
 
-   public abstract boolean shouldAnimate();
+   protected abstract Vector2fc[] getSpriteAnimationFramesPositions();
 
-   public abstract Vector2fc[] getSpriteAnimationFramesPositions();
+   @Override
+   public void setAnimationSpeed(float speed) {
+      intervalInMilliseconds = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
+   }
+
+   @Override
+   public float getAnimationSpeed() {
+      return 1 / (float) intervalInMilliseconds;
+   }
 
    @Override
    public void update(float dt) {
@@ -40,8 +51,7 @@ public abstract class AnimatedSprite extends Sprite implements Updatable {
    private void animate() {
       if (shouldAnimate()) {
          var positions = getSpriteAnimationFramesPositions();
-         var delay = getAnimationSpeed();
-         currentAnimationFrame = ((time % (positions.length * delay)) / delay);
+         currentAnimationFrame = ((time % (positions.length * intervalInMilliseconds)) / intervalInMilliseconds);
          var current = positions[currentAnimationFrame];
          material.setSpritePosition(current);
       }

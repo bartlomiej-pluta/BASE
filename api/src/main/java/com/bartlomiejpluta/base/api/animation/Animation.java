@@ -6,9 +6,7 @@ import com.bartlomiejpluta.base.internal.logic.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.util.path.Path;
 
-public interface Animation extends Movable, Renderable, Updatable {
-
-   void setAnimationSpeed(float speed);
+public interface Animation extends Movable, Animated, Renderable, Updatable {
 
    Integer getRepeat();
 

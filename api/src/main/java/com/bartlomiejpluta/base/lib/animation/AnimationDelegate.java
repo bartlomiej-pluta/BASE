@@ -42,6 +42,36 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public boolean isAnimationEnabled() {
+      return animation.isAnimationEnabled();
+   }
+
+   @Override
+   public void setAnimationEnabled(boolean enabled) {
+      animation.setAnimationEnabled(enabled);
+   }
+
+   @Override
+   public void enableAnimation() {
+      animation.enableAnimation();
+   }
+
+   @Override
+   public void disableAnimation() {
+      animation.disableAnimation();
+   }
+
+   @Override
+   public void toggleAnimationEnabled() {
+      animation.toggleAnimationEnabled();
+   }
+
+   @Override
+   public float getAnimationSpeed() {
+      return animation.getAnimationSpeed();
+   }
+
+   @Override
    public void setAnimationSpeed(float speed) {
       animation.setAnimationSpeed(speed);
    }

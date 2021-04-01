@@ -8,7 +8,6 @@ import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
-import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,8 +31,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Setter
    private int zIndex = 0;
 
-   private int animationSpeed = 100;
-
    @Getter
    private Direction faceDirection;
 
@@ -43,6 +40,8 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Getter
    private ObjectLayer layer;
+
+   private boolean animationEnabled = true;
 
    public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
       super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
@@ -63,17 +62,37 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public int getAnimationSpeed() {
-      return animationSpeed;
+   public boolean isAnimationEnabled() {
+      return animationEnabled;
    }
 
    @Override
-   public boolean shouldAnimate() {
-      return isMoving();
+   public void setAnimationEnabled(boolean enabled) {
+      animationEnabled = enabled;
    }
 
    @Override
-   public Vector2fc[] getSpriteAnimationFramesPositions() {
+   public void enableAnimation() {
+      animationEnabled = true;
+   }
+
+   @Override
+   public void disableAnimation() {
+      animationEnabled = false;
+   }
+
+   @Override
+   public void toggleAnimationEnabled() {
+      animationEnabled = !animationEnabled;
+   }
+
+   @Override
+   protected boolean shouldAnimate() {
+      return animationEnabled && isMoving();
+   }
+
+   @Override
+   protected Vector2fc[] getSpriteAnimationFramesPositions() {
       var row = spriteDirectionRows.get(faceDirection);
       var frames = material.getTexture().getRows();
       var array = new Vector2f[frames];
@@ -109,11 +128,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    public void setFaceDirection(Direction direction) {
       this.faceDirection = direction;
       setDefaultAnimationFrame();
-   }
-
-   @Override
-   public void setAnimationSpeed(float speed) {
-      animationSpeed = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
    }
 
    @Override

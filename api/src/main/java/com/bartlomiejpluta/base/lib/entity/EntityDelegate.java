@@ -66,6 +66,36 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public boolean isAnimationEnabled() {
+      return entity.isAnimationEnabled();
+   }
+
+   @Override
+   public void setAnimationEnabled(boolean enabled) {
+      entity.setAnimationEnabled(enabled);
+   }
+
+   @Override
+   public void enableAnimation() {
+      entity.enableAnimation();
+   }
+
+   @Override
+   public void disableAnimation() {
+      entity.disableAnimation();
+   }
+
+   @Override
+   public void toggleAnimationEnabled() {
+      entity.toggleAnimationEnabled();
+   }
+
+   @Override
+   public float getAnimationSpeed() {
+      return entity.getAnimationSpeed();
+   }
+
+   @Override
    public void setAnimationSpeed(float speed) {
       entity.setAnimationSpeed(speed);
    }
