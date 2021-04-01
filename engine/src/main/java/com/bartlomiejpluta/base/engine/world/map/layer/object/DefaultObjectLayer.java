@@ -3,7 +3,8 @@ package com.bartlomiejpluta.base.engine.world.map.layer.object;
 import com.bartlomiejpluta.base.api.ai.NPC;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
-import com.bartlomiejpluta.base.api.entity.InteractiveEntity;
+import com.bartlomiejpluta.base.api.entity.EntityStepInListener;
+import com.bartlomiejpluta.base.api.entity.EntityStepOutListener;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
@@ -28,7 +29,8 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
    @Getter
    private final ArrayList<Entity> entities = new ArrayList<>();
 
-   private final List<InteractiveEntity> interactiveEntities = new ArrayList<>();
+   private final List<EntityStepInListener> stepInListeners = new ArrayList<>();
+   private final List<EntityStepOutListener> stepOutListeners = new ArrayList<>();
 
    @Getter
    private final PassageAbility[][] passageMap;
@@ -53,8 +55,12 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
          layer.entities.remove(entity);
       }
 
-      if (entity instanceof InteractiveEntity) {
-         interactiveEntities.add((InteractiveEntity) entity);
+      if (entity instanceof EntityStepInListener) {
+         stepInListeners.add((EntityStepInListener) entity);
+      }
+
+      if (entity instanceof EntityStepOutListener) {
+         stepOutListeners.add((EntityStepOutListener) entity);
       }
 
       entity.setStepSize(stepSize.x(), stepSize.y());
@@ -67,8 +73,12 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
    public void removeEntity(Entity entity) {
       entities.remove(entity);
 
-      if (entity instanceof InteractiveEntity) {
-         interactiveEntities.remove(entity);
+      if (entity instanceof EntityStepInListener) {
+         stepInListeners.remove(entity);
+      }
+
+      if (entity instanceof EntityStepOutListener) {
+         stepOutListeners.remove(entity);
       }
 
       entity.onRemove(this);
@@ -168,23 +178,15 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void notifyEntityStepIn(Movement movement, Entity entity) {
-      var target = movement.getTo();
-
-      for (var listener : interactiveEntities) {
-         if (listener.getCoordinates().equals(target)) {
-            listener.onEntityStepIn(movement, entity);
-         }
+      for (var listener : stepInListeners) {
+         listener.onEntityStepIn(movement, entity);
       }
    }
 
    @Override
    public void notifyEntityStepOut(Movement movement, Entity entity) {
-      var source = movement.getFrom();
-
-      for (var listener : interactiveEntities) {
-         if (listener.getCoordinates().equals(source)) {
-            listener.onEntityStepOut(movement, entity);
-         }
+      for (var listener : stepOutListeners) {
+         listener.onEntityStepOut(movement, entity);
       }
    }
 }
