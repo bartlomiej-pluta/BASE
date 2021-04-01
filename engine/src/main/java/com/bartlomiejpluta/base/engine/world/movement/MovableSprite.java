@@ -116,7 +116,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public void setPosition(float x, float y) {
-      super.setPosition(x - positionOffset.x, y - positionOffset.y);
+      super.setPosition(x + positionOffset.x, y + positionOffset.y);
       coordinates.x = (int) (x / coordinateStepSize.x);
       coordinates.y = (int) (y / coordinateStepSize.y);
       placingMode = PlacingMode.BY_POSITION;
@@ -124,10 +124,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public void setPosition(Vector2fc position) {
-      super.setPosition(position.x() - positionOffset.x, position.y() - positionOffset.y);
-      coordinates.x = (int) (position.x() / coordinateStepSize.x);
-      coordinates.y = (int) (position.y() / coordinateStepSize.y);
-      placingMode = PlacingMode.BY_POSITION;
+      setPosition(position.x(), position.y());
    }
 
    @Override
@@ -138,7 +135,10 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    public void setStepSize(float x, float y) {
       coordinateStepSize.x = x;
       coordinateStepSize.y = y;
+      adjustPosition();
+   }
 
+   private void adjustPosition() {
       switch (placingMode) {
          case BY_POSITION -> setPosition(position);
          case BY_COORDINATES -> setCoordinates(coordinates);
@@ -152,14 +152,14 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public void setPositionOffset(Vector2fc offset) {
-      this.positionOffset.x = offset.x();
-      this.positionOffset.y = offset.y();
+      setPositionOffset(offset.x(), offset.y());
    }
 
    @Override
    public void setPositionOffset(float offsetX, float offsetY) {
       this.positionOffset.x = offsetX;
       this.positionOffset.y = offsetY;
+      adjustPosition();
    }
 
    @Override
