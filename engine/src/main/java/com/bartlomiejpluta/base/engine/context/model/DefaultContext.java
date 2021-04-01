@@ -129,7 +129,7 @@ public class DefaultContext implements Context, KeyEventHandler {
    }
 
    @Override
-   public Entity createEntity(@NonNull String entitySetUid) {
+   public Entity createEntity(String entitySetUid) {
       log.info("Creating new entity with UID: [{}]", entitySetUid);
       return entityManager.createEntity(entitySetUid);
    }

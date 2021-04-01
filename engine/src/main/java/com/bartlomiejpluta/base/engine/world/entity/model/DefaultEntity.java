@@ -5,7 +5,9 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
+import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
+import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import lombok.EqualsAndHashCode;
@@ -50,22 +52,31 @@ public class DefaultEntity extends MovableSprite implements Entity {
    private final Queue<EntityInstantAnimation> instantAnimations = new LinkedList<>();
 
    public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, int defaultSpriteColumn, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
-      super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
+      super(mesh, createMaterial(entitySetManager, entitySetUid));
       this.defaultSpriteColumn = defaultSpriteColumn;
       this.entitySetManager = entitySetManager;
       this.spriteDirectionRows = spriteDirectionRows;
       this.faceDirection = Direction.DOWN;
       this.spriteDefaultRows = spriteDefaultRows;
 
-      this.entitySetSize = material.getTexture().getSpriteSize();
-      super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+      var texture = material.getTexture();
+      if (texture != null) {
+         this.entitySetSize = texture.getSpriteSize();
+         super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+      }
    }
 
    @Override
    public void changeEntitySet(String entitySetUid) {
-      this.material = entitySetManager.loadObject(requireNonNull(entitySetUid));
-      this.entitySetSize = material.getTexture().getSpriteSize();
-      super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+      this.material = createMaterial(entitySetManager, entitySetUid);
+      var texture = this.material.getTexture();
+
+      if (texture != null) {
+         this.entitySetSize = texture.getSpriteSize();
+         super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+      } else {
+         this.entitySetSize = null;
+      }
    }
 
    @Override
@@ -95,7 +106,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    protected boolean shouldAnimate() {
-      return animationEnabled && (isMoving() || !instantAnimations.isEmpty());
+      return animationEnabled && material.getTexture() != null && (isMoving() || !instantAnimations.isEmpty());
    }
 
    @Override
@@ -172,18 +183,30 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    public void setScaleX(float scaleX) {
+      if (entitySetSize == null) {
+         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+      }
+
       this.entityScale.x = scaleX;
       super.setScaleX(entitySetSize.x() * scaleX);
    }
 
    @Override
    public void setScaleY(float scaleY) {
+      if (entitySetSize == null) {
+         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+      }
+
       this.entityScale.y = scaleY;
       super.setScaleY(entitySetSize.y() * scaleY);
    }
 
    @Override
    public void setScale(float scale) {
+      if (entitySetSize == null) {
+         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+      }
+
       this.entityScale.x = scale;
       this.entityScale.y = scale;
       super.setScale(entitySetSize.x() * scale, entitySetSize.y() * scale);
@@ -191,6 +214,10 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    public void setScale(float scaleX, float scaleY) {
+      if (entitySetSize == null) {
+         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+      }
+
       this.entityScale.x = scaleX;
       this.entityScale.y = scaleY;
       super.setScale(entitySetSize.x() * scaleX, entitySetSize.y() * scaleY);
@@ -218,5 +245,9 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    int currentFrame() {
       return currentAnimationFrame;
+   }
+
+   private static Material createMaterial(EntitySetManager entitySetManager, String entitySetUid) {
+      return entitySetUid != null ? entitySetManager.loadObject(requireNonNull(entitySetUid)) : Material.colored(0, 0, 0, 0);
    }
 }
