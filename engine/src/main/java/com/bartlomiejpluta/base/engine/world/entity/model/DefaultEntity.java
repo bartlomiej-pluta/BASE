@@ -1,13 +1,16 @@
 package com.bartlomiejpluta.base.engine.world.entity.model;
 
+import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
+import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
+import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +45,8 @@ public class DefaultEntity extends MovableSprite implements Entity {
    private ObjectLayer layer;
 
    private boolean animationEnabled = true;
+
+   private EntityInstantAnimation instantAnimation;
 
    public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
       super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
@@ -88,7 +93,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    protected boolean shouldAnimate() {
-      return animationEnabled && isMoving();
+      return animationEnabled && (isMoving() || instantAnimation != null);
    }
 
    @Override
@@ -107,6 +112,11 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    protected void setDefaultAnimationFrame() {
       material.setSpritePosition(spriteDefaultRows.get(faceDirection));
+   }
+
+   @Override
+   public void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish) {
+      instantAnimation = new EntityInstantAnimation(this, targetFaceDirection, onFinish);
    }
 
    @Override
@@ -189,5 +199,18 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public float getScaleY() {
       return entityScale.y;
+   }
+
+   @Override
+   public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
+      super.render(screen, camera, shaderManager);
+
+      if (instantAnimation != null && instantAnimation.updateFrame()) {
+         instantAnimation = null;
+      }
+   }
+
+   int currentFrame() {
+      return currentAnimationFrame;
    }
 }

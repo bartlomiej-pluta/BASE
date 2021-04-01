@@ -266,6 +266,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish) {
+      entity.performInstantAnimation(targetFaceDirection, onFinish);
+   }
+
+   @Override
    public boolean move(Movement movement) {
       return entity.move(movement);
    }

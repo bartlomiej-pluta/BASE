@@ -39,7 +39,7 @@ public abstract class AnimatedSprite extends Sprite implements Animated {
 
    @Override
    public void update(float dt) {
-      time += dt * 1000;
+      time = shouldAnimate() ? time + ((int) (dt * 1000)) : 0;
    }
 
    @Override
