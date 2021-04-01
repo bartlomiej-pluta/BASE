@@ -54,10 +54,12 @@ public class GLFWInput implements Input {
    @Override
    public void addKeyEventHandler(@NonNull KeyEventHandler handler) {
       keyEventHandlers.addLast(handler);
+      handler.onKeyEventHandlerRegister();
    }
 
    @Override
    public void removeKeyEventHandler(@NonNull KeyEventHandler handler) {
       keyEventHandlers.remove(handler);
+      handler.onKeyEventHandlerUnregister();
    }
 }

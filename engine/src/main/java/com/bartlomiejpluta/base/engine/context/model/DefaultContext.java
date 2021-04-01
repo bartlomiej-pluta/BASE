@@ -16,6 +16,7 @@ import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.database.service.DatabaseService;
+import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
@@ -247,6 +248,11 @@ public class DefaultContext implements Context, KeyEventHandler {
             ((KeyEventHandler) layer).handleKeyEvent(event);
          }
       }
+   }
+
+   @Override
+   public void onKeyEventHandlerUnregister() {
+      throw new AppException("Context cannot be unregistered");
    }
 
    @Override
