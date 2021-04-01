@@ -9,7 +9,6 @@ import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
-import org.joml.Vector2ic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +25,6 @@ public class DefaultEntityManager implements EntityManager {
 
    private final Map<Direction, Integer> spriteDirectionRows;
    private final Map<Direction, Vector2fc> spriteDefaultRows;
-   private final Vector2ic entitySpriteDimension;
 
    private Mesh mesh;
 
@@ -35,7 +33,6 @@ public class DefaultEntityManager implements EntityManager {
       this.meshManager = meshManager;
       this.entitySetManager = entitySetManager;
 
-      this.entitySpriteDimension = configuration.getDimension().asVector();
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
 
       var defaultSpriteColumn = configuration.getDefaultSpriteColumn();

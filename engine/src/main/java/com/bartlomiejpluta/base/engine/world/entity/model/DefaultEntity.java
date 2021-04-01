@@ -101,7 +101,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    protected Vector2fc[] getSpriteAnimationFramesPositions() {
       var row = spriteDirectionRows.get(faceDirection);
-      var frames = material.getTexture().getRows();
+      var frames = material.getTexture().getColumns();
       var array = new Vector2f[frames];
 
       for (int column = 0; column < frames; ++column) {

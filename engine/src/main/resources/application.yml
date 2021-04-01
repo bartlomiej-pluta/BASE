@@ -6,10 +6,6 @@ app:
 
   sprite:
     entity:
-      dimension:
-        rows: 4
-        cols: 4
-
       default-sprite-column: 0
 
       sprite-direction-rows:
