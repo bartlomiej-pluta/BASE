@@ -18,7 +18,9 @@ import org.joml.Vector2f;
 import org.joml.Vector2fc;
 import org.joml.Vector2i;
 
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import static java.util.Objects.requireNonNull;
 
@@ -46,7 +48,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    private boolean animationEnabled = true;
 
-   private EntityInstantAnimation instantAnimation;
+   private final Queue<EntityInstantAnimation> instantAnimations = new LinkedList<>();
 
    public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
       super(mesh, entitySetManager.loadObject(requireNonNull(entitySetUid)));
@@ -93,7 +95,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    protected boolean shouldAnimate() {
-      return animationEnabled && (isMoving() || instantAnimation != null);
+      return animationEnabled && (isMoving() || !instantAnimations.isEmpty());
    }
 
    @Override
@@ -115,8 +117,13 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
+   public void performInstantAnimation(Direction targetFaceDirection) {
+      instantAnimations.add(new EntityInstantAnimation(this, targetFaceDirection, null));
+   }
+
+   @Override
    public void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish) {
-      instantAnimation = new EntityInstantAnimation(this, targetFaceDirection, onFinish);
+      instantAnimations.add(new EntityInstantAnimation(this, targetFaceDirection, onFinish));
    }
 
    @Override
@@ -203,11 +210,12 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
-      super.render(screen, camera, shaderManager);
-
+      var instantAnimation = instantAnimations.peek();
       if (instantAnimation != null && instantAnimation.updateFrame()) {
-         instantAnimation = null;
+         instantAnimations.poll();
       }
+
+      super.render(screen, camera, shaderManager);
    }
 
    int currentFrame() {

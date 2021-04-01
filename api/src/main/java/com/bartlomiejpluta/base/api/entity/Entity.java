@@ -35,5 +35,7 @@ public interface Entity extends Movable, Animated, Renderable, Updatable {
 
    void setZIndex(int zIndex);
 
+   void performInstantAnimation(Direction targetFaceDirection);
+
    void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish);
 }
