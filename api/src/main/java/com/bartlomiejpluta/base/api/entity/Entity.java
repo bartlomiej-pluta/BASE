@@ -7,6 +7,8 @@ import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.internal.logic.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface Entity extends Movable, Animated, Renderable, Updatable {
 
    Direction getFaceDirection();
@@ -35,5 +37,7 @@ public interface Entity extends Movable, Animated, Renderable, Updatable {
 
    void setZIndex(int zIndex);
 
-   void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish);
+   CompletableFuture<Void> performInstantAnimation();
+
+   CompletableFuture<Void> performInstantAnimation(Direction targetFaceDirection);
 }

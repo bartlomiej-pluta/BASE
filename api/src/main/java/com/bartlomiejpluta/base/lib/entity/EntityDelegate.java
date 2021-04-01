@@ -13,6 +13,8 @@ import org.joml.Matrix4fc;
 import org.joml.Vector2fc;
 import org.joml.Vector2ic;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class EntityDelegate implements Entity {
    protected final Entity entity;
 
@@ -266,8 +268,13 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
-   public void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish) {
-      entity.performInstantAnimation(targetFaceDirection, onFinish);
+   public CompletableFuture<Void> performInstantAnimation() {
+      return entity.performInstantAnimation();
+   }
+
+   @Override
+   public CompletableFuture<Void> performInstantAnimation(Direction targetFaceDirection) {
+      return entity.performInstantAnimation(targetFaceDirection);
    }
 
    @Override

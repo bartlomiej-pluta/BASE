@@ -21,6 +21,7 @@ import org.joml.Vector2i;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
 
@@ -119,8 +120,19 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public void performInstantAnimation(Direction targetFaceDirection, Runnable onFinish) {
-      instantAnimations.add(new EntityInstantAnimation(this, defaultSpriteColumn, targetFaceDirection, onFinish));
+   public CompletableFuture<Void> performInstantAnimation() {
+      var animation = new EntityInstantAnimation(this, defaultSpriteColumn);
+      instantAnimations.add(animation);
+
+      return animation.getFuture();
+   }
+
+   @Override
+   public CompletableFuture<Void> performInstantAnimation(Direction targetFaceDirection) {
+      var animation = new EntityInstantAnimation(this, defaultSpriteColumn, targetFaceDirection);
+      instantAnimations.add(animation);
+
+      return animation.getFuture();
    }
 
    @Override
