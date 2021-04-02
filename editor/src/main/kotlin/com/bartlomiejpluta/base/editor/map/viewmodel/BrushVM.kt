@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.map.viewmodel
 
 import com.bartlomiejpluta.base.editor.map.model.brush.Brush
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
+import com.bartlomiejpluta.base.editor.map.model.brush.BrushTool
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
 import tornadofx.ItemViewModel
 import tornadofx.getValue
@@ -21,9 +22,15 @@ class BrushVM : ItemViewModel<Brush>(Brush.of(arrayOf(arrayOf()))) {
    val modeProperty = bind(Brush::modeProperty)
    val mode by modeProperty
 
-   fun forEach(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) = item.forEach(consumer)
+   val toolProperty = bind(Brush::toolProperty)
+   val tool by toolProperty
+
+   fun forEach(consumer: (row: Int, column: Int, centerRow: Int, centerColumn: Int, tile: Tile?) -> Unit) =
+      item.forEach(consumer)
 
    fun withRange(range: Int) = item.withRange(range)
 
    fun withMode(mode: BrushMode) = item.withMode(mode)
+
+   fun withTool(tool: BrushTool) = item.withTool(tool)
 }

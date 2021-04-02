@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.map.view.editor
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.map.canvas.PaintingTrace
 import com.bartlomiejpluta.base.editor.map.component.MapPane
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
@@ -27,7 +28,7 @@ class MapView : View() {
 
    private val editorStateVM = find<EditorStateVM>()
 
-   private val mapPane = MapPane(mapVM, brushVM, editorStateVM) { undoRedoService.push(it, scope) }
+   private val mapPane = MapPane(mapVM, brushVM, editorStateVM, this::pushPaintingTraceToUndoRedoService)
 
    private val zoom = Scale(1.0, 1.0, 0.0, 0.0).apply {
       xProperty().bind(editorStateVM.zoomProperty)
@@ -39,6 +40,12 @@ class MapView : View() {
       brushVM.commit()
 
       subscribe<RedrawMapRequestEvent> { mapPane.render() }
+   }
+
+   private fun pushPaintingTraceToUndoRedoService(trace: PaintingTrace) {
+      if (trace.executed) {
+         undoRedoService.push(trace, scope)
+      }
    }
 
    override val root = scrollpane {

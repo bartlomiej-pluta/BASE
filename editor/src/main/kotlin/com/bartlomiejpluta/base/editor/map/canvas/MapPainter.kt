@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.brush.BrushTool
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
@@ -25,12 +26,18 @@ class MapPainter(
    private var currentTrace: PaintingTrace? = null
 
    init {
-      editorStateVM.selectedLayerProperty.addListener { _, _, layer ->
-         cursor = when (layer) {
-            is TileLayer -> TilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
-            is ObjectLayer -> ObjectPaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
+      editorStateVM.selectedLayerProperty.addListener { _, _, _ -> updateCursor() }
+      brushVM.toolProperty.addListener { _, _, _ -> updateCursor() }
+   }
+
+   private fun updateCursor() {
+      cursor = when (editorStateVM.selectedLayer) {
+         is TileLayer -> TilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
+         is ObjectLayer -> when (brushVM.tool) {
+            BrushTool.PASSAGE -> PassageAbilityPaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
             else -> null
          }
+         else -> null
       }
    }
 
@@ -58,7 +65,10 @@ class MapPainter(
       if (currentTrace == null && editorStateVM.selectedLayerIndex >= 0) {
          currentTrace = when (editorStateVM.selectedLayer) {
             is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
-            is ObjectLayer -> ObjectPaintingTrace(mapVM, "Toggle passage")
+            is ObjectLayer -> when (brushVM.tool) {
+               BrushTool.DEFAULT -> ObjectPaintingTrace(mapVM, "Update object")
+               else -> PassageAbilityPaintingTrace(mapVM, "Toggle passage")
+            }
             is ImageLayer -> ImagePositionPaintingTrace(mapVM, "Move Image Layer")
             else -> null
          }

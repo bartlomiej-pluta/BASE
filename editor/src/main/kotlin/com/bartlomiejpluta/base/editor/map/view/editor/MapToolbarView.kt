@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.map.controller.MapController
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
+import com.bartlomiejpluta.base.editor.map.model.brush.BrushTool
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
@@ -25,11 +26,9 @@ class MapToolbarView : View() {
    private val brushVM = find<BrushVM>()
    private val editorStateVM = find<EditorStateVM>()
 
-   private val brushMode = ToggleGroup().apply {
-      brushVM.itemProperty.addListener { _, _, brush ->
-         selectedValueProperty<BrushMode>().value = brush.mode
-      }
-   }
+   private val brushMode = ToggleGroup()
+
+   private val objectLayerTool = ToggleGroup()
 
    private val isTileLayerSelected = Bindings.createBooleanBinding(
       { editorStateVM.selectedLayer is TileLayer },
@@ -40,6 +39,17 @@ class MapToolbarView : View() {
       { editorStateVM.selectedLayer is ObjectLayer },
       editorStateVM.selectedLayerProperty
    )
+
+   init {
+      brushVM.itemProperty.addListener { _, _, brush ->
+         brushMode.selectedValueProperty<BrushMode>().value = brush.mode
+         objectLayerTool.selectedValueProperty<BrushTool>().value = brush.tool
+      }
+
+      editorStateVM.selectedLayerProperty.addListener { _, _, _ ->
+         brushVM.item = brushVM.withTool(BrushTool.DEFAULT)
+      }
+   }
 
    override val root = toolbar {
       button(graphic = FontIcon("fa-floppy-o")) {
@@ -62,6 +72,8 @@ class MapToolbarView : View() {
          }
       }
 
+      separator()
+
       togglebutton {
          graphic = FontIcon("fa-window-restore")
 
@@ -77,6 +89,8 @@ class MapToolbarView : View() {
             editorStateVM.showGrid = isSelected
          }
       }
+
+      separator()
 
       togglebutton(value = BrushMode.PAINTING_MODE, group = brushMode) {
          graphic = FontIcon("fa-paint-brush")
@@ -120,5 +134,31 @@ class MapToolbarView : View() {
       }
 
       this += FontIcon("fa-paint-brush").apply { iconSize = 15 }
+
+      separator {
+         visibleWhen(isObjectLayerSelected)
+      }
+
+      togglebutton(value = BrushTool.DEFAULT, group = objectLayerTool) {
+         graphic = FontIcon("fa-cube")
+
+         visibleWhen(isObjectLayerSelected)
+
+         action {
+            brushVM.item = brushVM.withTool(BrushTool.DEFAULT)
+            brushVM.commit()
+         }
+      }
+
+      togglebutton(value = BrushTool.PASSAGE, group = objectLayerTool) {
+         graphic = FontIcon("fa-minus-circle")
+
+         visibleWhen(isObjectLayerSelected)
+
+         action {
+            brushVM.item = brushVM.withTool(BrushTool.PASSAGE)
+            brushVM.commit()
+         }
+      }
    }
 }

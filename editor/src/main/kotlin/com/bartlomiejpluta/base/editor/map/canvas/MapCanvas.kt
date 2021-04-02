@@ -100,7 +100,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private fun dispatchLayerRender(gc: GraphicsContext, layer: Layer) {
       when (layer) {
          is TileLayer -> renderTileLayer(gc, layer)
-         is ObjectLayer -> renderObjectPassageMap(gc, layer)
+         is ObjectLayer -> renderObjectLayer(gc, layer)
          is ColorLayer -> renderColorLayer(gc, layer)
          is ImageLayer -> renderImageLayer(gc, layer)
       }
@@ -120,15 +120,40 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       }
    }
 
-   private fun renderObjectPassageMap(gc: GraphicsContext, objectLayer: ObjectLayer) {
+   private fun renderObjectLayer(gc: GraphicsContext, objectLayer: ObjectLayer) {
       if (editorStateVM.selectedLayer !is ObjectLayer) {
          return
       }
 
+      renderObjectPassageMap(gc, objectLayer)
+      renderObjects(gc, objectLayer)
+   }
+
+   private fun renderObjectPassageMap(gc: GraphicsContext, objectLayer: ObjectLayer) {
       for ((row, columns) in objectLayer.passageMap.withIndex()) {
          for ((column, passage) in columns.withIndex()) {
             PassageAbilitySymbol.render(gc, column * tileWidth, row * tileHeight, tileWidth, tileHeight, passage)
          }
+      }
+   }
+
+   private fun renderObjects(gc: GraphicsContext, objectLayer: ObjectLayer) {
+      for (mapObject in objectLayer.objects) {
+         val alpha = gc.globalAlpha
+         val fill = gc.fill
+
+         gc.globalAlpha = 0.6
+         gc.fill = OBJECT_COLOR
+
+         gc.fillOval(
+            mapObject.x * tileWidth + OBJECT_MARGIN,
+            mapObject.y * tileHeight + OBJECT_MARGIN,
+            tileWidth - 2 * OBJECT_MARGIN,
+            tileHeight - 2 * OBJECT_MARGIN
+         )
+
+         gc.globalAlpha = alpha
+         gc.fill = fill
       }
    }
 
@@ -172,5 +197,8 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    companion object {
       private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
       private val BACKGROUND_COLOR2 = Color.color(0.8, 0.8, 0.8, 1.0)
+
+      private val OBJECT_COLOR = Color.WHITE
+      private const val OBJECT_MARGIN = 4
    }
 }

@@ -6,7 +6,7 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
-class ObjectPaintingCursor(
+class PassageAbilityPaintingCursor(
    private val tileWidth: Double,
    private val tileHeight: Double,
    private val editorStateVM: EditorStateVM,

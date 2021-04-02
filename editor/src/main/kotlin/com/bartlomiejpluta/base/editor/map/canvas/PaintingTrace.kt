@@ -12,4 +12,6 @@ interface PaintingTrace : Undoable {
    fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent)
 
    val supportedButtons: Array<MouseButton>
+
+   val executed: Boolean
 }

@@ -19,6 +19,9 @@ class ImagePositionPaintingTrace(val map: GameMapVM, override val commandName: S
    private var newY = 0.0
    private lateinit var layer: ImageLayer
 
+   override var executed = false
+      private set
+
    override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
       this.layerIndex = editorStateVM.selectedLayerIndex
 
@@ -44,6 +47,10 @@ class ImagePositionPaintingTrace(val map: GameMapVM, override val commandName: S
 
       layer.x = newX.toInt()
       layer.y = newY.toInt()
+
+      if (dx != 0.0 || dy != 0.0) {
+         executed = true
+      }
    }
 
    override fun commitTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
@@ -55,6 +62,10 @@ class ImagePositionPaintingTrace(val map: GameMapVM, override val commandName: S
 
       layer.x = newX.toInt()
       layer.y = newY.toInt()
+
+      if (dx != 0.0 || dy != 0.0) {
+         executed = true
+      }
    }
 
    override fun undo() {

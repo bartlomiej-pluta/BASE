@@ -28,6 +28,10 @@ class Brush {
    var mode by modeProperty
       private set
 
+   val toolProperty = SimpleObjectProperty(BrushTool.DEFAULT)
+   var tool by toolProperty
+      private set
+
    private constructor(brushArray: Array<Array<Tile>>) {
       rowsProperty.value = brushArray.size
 
@@ -81,6 +85,7 @@ class Brush {
    private fun clone() = Brush(brush, rows, columns).apply {
       this.range = this@Brush.range
       this.mode = this@Brush.mode
+      this.tool = this@Brush.tool
    }
 
    fun withRange(range: Int) = clone().apply {
@@ -89,6 +94,10 @@ class Brush {
 
    fun withMode(mode: BrushMode) = clone().apply {
       this.mode = mode
+   }
+
+   fun withTool(tool: BrushTool) = clone().apply {
+      this.tool = tool
    }
 
    companion object {
