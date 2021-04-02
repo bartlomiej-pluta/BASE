@@ -1,5 +1,11 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.code.model.Code
+import com.bartlomiejpluta.base.editor.code.model.CodeScope
+import com.bartlomiejpluta.base.editor.code.model.CodeType
+import com.bartlomiejpluta.base.editor.code.view.editor.CodeSnippetFragment
+import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
+import com.bartlomiejpluta.base.editor.file.model.DummyFileNode
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.obj.MapObject
@@ -9,6 +15,9 @@ import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import javafx.collections.ObservableList
 import javafx.scene.input.MouseButton
+import tornadofx.find
+import tornadofx.setInScope
+import tornadofx.toProperty
 
 class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) : PaintingTrace {
    private lateinit var objects: ObservableList<MapObject>
@@ -37,11 +46,46 @@ class ObjectPaintingTrace(val map: GameMapVM, override val commandName: String) 
    }
 
    private fun createOrUpdateObject() {
-      newObject = MapObject(x, y, "")
-      objects.remove(formerObject)
-      objects.add(newObject)
-      executed = true
+      showCodeDialog(formerObject?.code ?: initialCode)?.let {
+         newObject = MapObject(x, y, it)
+         objects.remove(formerObject)
+         objects.add(newObject)
+         executed = true
+      }
    }
+
+   private fun showCodeDialog(initialContent: String): String? {
+      val scope = CodeScope(1, 1)
+      val code = Code(DummyFileNode(), CodeType.JAVA.toProperty(), initialContent)
+      val vm = CodeVM(code)
+      setInScope(vm, scope)
+
+      var content: String? = null
+
+      find<CodeSnippetFragment>(scope).apply {
+         title = "Define object"
+
+         onComplete {
+            content = it
+         }
+
+         openModal(block = true)
+      }
+
+      return content
+   }
+
+   private val initialCode: String
+      get() = """
+         // In this place you can implement some logic 
+         // that will be evaluated for selected location.
+         // Following references are available:
+         // int x - the x coordinate
+         // int y - the y coordinate
+         // Runner runner - the game runner
+         // Context context - the game context
+         // Handler handler - current map handler
+      """.trimIndent()
 
    private fun moveObject(newX: Int, newY: Int) {
       if (newY >= map.rows || newX >= map.columns || newY < 0 || newX < 0) {
