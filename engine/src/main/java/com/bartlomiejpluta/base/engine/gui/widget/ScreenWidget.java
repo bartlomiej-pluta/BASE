@@ -234,7 +234,7 @@ public class ScreenWidget implements Widget {
 
    @Override
    public void handleKeyEvent(KeyEvent event) {
-      root.handleKeyEvent(event);
+      throw new UnsupportedOperationException();
    }
 
    @Override

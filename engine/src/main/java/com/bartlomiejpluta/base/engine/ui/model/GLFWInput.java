@@ -23,7 +23,6 @@ public class GLFWInput implements Input {
       this.windowHandle = screen.getID();
    }
 
-   @SuppressWarnings("ForLoopReplaceableByForEach")
    public GLFWInput init() {
       log.info("Registering key callback");
       glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
@@ -34,7 +33,8 @@ public class GLFWInput implements Input {
          }
 
          // Use iterator to support removal from loop inside
-         for (var iterator = keyEventHandlers.iterator(); iterator.hasNext(); ) {
+         // We need also to iterate in FILO order (a stack-based model)
+         for (var iterator = keyEventHandlers.descendingIterator(); iterator.hasNext(); ) {
             if (event.isConsumed()) {
                return;
             }

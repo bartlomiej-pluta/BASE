@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.gui;
 
+import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.lib.gui.BaseWidget;
@@ -10,15 +12,18 @@ import java.util.LinkedList;
 import static java.util.Objects.requireNonNull;
 
 public final class WindowManager extends BaseWidget {
+   private final Input input;
    private final Deque<Window> windows = new LinkedList<>();
 
    private DisplayMode displayMode;
 
-   public WindowManager() {
-      this(DisplayMode.DISPLAY_STACK);
+   public WindowManager(Context context) {
+      this(context, DisplayMode.DISPLAY_STACK);
    }
 
-   public WindowManager(DisplayMode displayMode) {
+   public WindowManager(Context context, DisplayMode displayMode) {
+      this.input = context.getInput();
+
       super.setSizeMode(SizeMode.RELATIVE, SizeMode.RELATIVE);
       super.setSize(1f, 1f);
       this.displayMode = displayMode;
@@ -56,6 +61,10 @@ public final class WindowManager extends BaseWidget {
    public void open(Window window) {
       requireNonNull(window, "Window cannot be null");
 
+      if (windows.isEmpty()) {
+         input.addKeyEventHandler(this);
+      }
+
       windows.addLast(window);
       window.setParent(this);
       window.onOpen(this);
@@ -77,6 +86,10 @@ public final class WindowManager extends BaseWidget {
       var window = windows.removeLast();
       window.setParent(null);
       window.onClose(this);
+
+      if (windows.isEmpty()) {
+         input.removeKeyEventHandler(this);
+      }
    }
 
    public int size() {
