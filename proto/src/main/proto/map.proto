@@ -29,11 +29,18 @@ message TileLayer {
 
 message ObjectLayer {
   repeated PassageAbility passageMap = 1;
+  repeated MapObject objects = 2;
 }
 
 enum PassageAbility {
   ALLOW = 0;
   BLOCK = 1;
+}
+
+message MapObject {
+  required uint32 x = 1;
+  required uint32 y = 2;
+  required string code = 3;
 }
 
 message ColorLayer {

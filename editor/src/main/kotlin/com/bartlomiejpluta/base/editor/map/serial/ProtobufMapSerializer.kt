@@ -40,6 +40,15 @@ class ProtobufMapSerializer : MapSerializer {
                   }
                )
             }
+            .also { proto ->
+               layer.objects.map {
+                  proto.addObjects(GameMapProto.MapObject.newBuilder().apply {
+                     x = it.x
+                     y = it.y
+                     code = it.code
+                  })
+               }
+            }
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }
 
