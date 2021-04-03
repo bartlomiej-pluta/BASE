@@ -2,12 +2,14 @@ package com.bartlomiejpluta.base.engine.world.map.manager;
 
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;
+import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import com.bartlomiejpluta.base.engine.world.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.engine.world.map.serial.MapDeserializer;
+import com.bartlomiejpluta.base.internal.map.MapInitializer;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.String.format;
 
 @Slf4j
 @Component
@@ -84,6 +88,19 @@ public class DefaultMapManager implements MapManager {
          handlers.put(uid, handler);
 
          handler.onCreate(context, map);
+
+         var layers = map.getLayers();
+         for (var layer : layers) {
+            if (layer instanceof ObjectLayer) {
+               var packageName = "com.bartlomiejpluta.base.generated.map";
+               var purifiedUid = uid.replace("-", "_");
+               var layerIndex = layers.indexOf(layer);
+               var className = format("%s.MapInitializer_%s$$Layer%d", packageName, purifiedUid, layerIndex);
+               var initializerClass = classLoader.<MapInitializer>loadClass(className);
+               var initializer = initializerClass.getConstructor().newInstance();
+               initializer.run(context, handler);
+            }
+         }
       }
 
       return handler;
