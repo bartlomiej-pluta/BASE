@@ -7,6 +7,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -16,6 +18,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class GLFWScreen implements Screen {
+   private static final int REFRESH_RATE = 60;
    private final String title;
    private long windowHandle = -1;
 
@@ -59,7 +62,7 @@ public class GLFWScreen implements Screen {
 
       glfwDefaultWindowHints(); // optional, the current window hints are already the default
       glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
-      glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
+      glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
       glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
       glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -95,9 +98,6 @@ public class GLFWScreen implements Screen {
       // Enable V-Sync
       // glfwSwapInterval(1);
 
-      // Make the window visible
-      glfwShowWindow(windowHandle);
-
       GL.createCapabilities();
 
       // Support for transparencies
@@ -106,6 +106,72 @@ public class GLFWScreen implements Screen {
 
       // Set the clear color
       clear(0.0f, 0.0f, 0.0f, 0.0f);
+   }
+
+   @Override
+   public Vector2ic getCurrentResolution() {
+      var monitor = glfwGetPrimaryMonitor();
+      var video = glfwGetVideoMode(monitor);
+
+      if (video == null) {
+         throw new AppException("Failed to obtain GLFW video mode");
+      }
+
+      return new Vector2i(video.width(), video.height());
+   }
+
+   @Override
+   public void setFullscreenMode() {
+      var monitor = glfwGetPrimaryMonitor();
+      var video = glfwGetVideoMode(monitor);
+
+      if (video == null) {
+         throw new AppException("Failed to obtain GLFW video mode");
+      }
+
+      glfwSetWindowMonitor(windowHandle, monitor, 0, 0, video.width(), video.height(), video.refreshRate());
+   }
+
+   @Override
+   public void setFullscreenMode(int width, int height) {
+      var monitor = glfwGetPrimaryMonitor();
+      var video = glfwGetVideoMode(monitor);
+
+      if (video == null) {
+         throw new AppException("Failed to obtain GLFW video mode");
+      }
+
+      glfwSetWindowMonitor(windowHandle, monitor, 0, 0, width, height, video.refreshRate());
+   }
+
+   @Override
+   public void setWindowMode(int xPos, int yPos, int width, int height) {
+      glfwSetWindowMonitor(windowHandle, NULL, xPos, yPos, width, height, REFRESH_RATE);
+   }
+
+   @Override
+   public void setPosition(int x, int y) {
+      glfwSetWindowPos(windowHandle, x, y);
+   }
+
+   @Override
+   public void setSize(int width, int height) {
+      glfwSetWindowSize(windowHandle, width, height);
+   }
+
+   @Override
+   public void setResizable(boolean resizable) {
+      glfwSetWindowAttrib(windowHandle, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+   }
+
+   @Override
+   public void show() {
+      glfwShowWindow(windowHandle);
+   }
+
+   @Override
+   public void hide() {
+      glfwHideWindow(windowHandle);
    }
 
    @Override
