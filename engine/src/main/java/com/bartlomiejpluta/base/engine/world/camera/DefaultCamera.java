@@ -34,6 +34,7 @@ public class DefaultCamera extends Model implements Camera {
 
       viewMatrix
             .identity()
+            .scaleXY(scaleX, scaleY)
             .translate(-position.x, -position.y, 0);
 
       projectionViewMatrix
