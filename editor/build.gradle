@@ -36,18 +36,23 @@ dependencies {
     implementation project(":proto")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    // GUI
     implementation "no.tornado:tornadofx:${tornadoFxVersion}"
     implementation platform("org.kordamp.ikonli:ikonli-bom:${ikonliVersion}")
     implementation 'org.kordamp.ikonli:ikonli-javafx'
     implementation 'org.kordamp.ikonli:ikonli-fontawesome-pack'
-    implementation "org.fxmisc.richtext:richtextfx:${richtextfxVersion}"
-    implementation "org.codehaus.janino:janino:${janinoVersion}"
-    implementation "org.codehaus.janino:commons-compiler:${janinoVersion}"
 
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
     implementation "org.slf4j:jul-to-slf4j:${slf4jVersion}"
+
+    // Code
+    implementation "org.fxmisc.richtext:richtextfx:${richtextfxVersion}"
+    implementation "org.codehaus.janino:janino:${janinoVersion}"
+    implementation "org.codehaus.janino:commons-compiler:${janinoVersion}"
+    implementation "com.squareup:javapoet:${javaPoetVersion}"
 
     // Database
     implementation "com.h2database:h2:${h2Version}"
