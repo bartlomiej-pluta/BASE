@@ -14,7 +14,7 @@ class CodeSnippetFragment : Fragment("Enter code") {
    }
 
    override val root = borderpane {
-      setPrefSize(640.0, 480.0)
+      setPrefSize(800.0, 600.0)
 
       center = editor.root
 

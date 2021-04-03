@@ -6,18 +6,20 @@ import com.bartlomiejpluta.base.editor.map.canvas.PaintingTrace
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import javafx.event.EventHandler
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseEvent
 
 class MapPane(
+   projectContext: ProjectContext,
    private val mapVM: GameMapVM,
    brushVM: BrushVM,
    editorStateVM: EditorStateVM,
    paintingCallback: (PaintingTrace) -> Unit
 ) : Canvas(), EventHandler<MouseEvent> {
-   private val painter = MapPainter(mapVM, brushVM, editorStateVM, paintingCallback)
+   private val painter = MapPainter(projectContext, mapVM, brushVM, editorStateVM, paintingCallback)
    private val mapCanvas = MapCanvas(mapVM, editorStateVM, painter)
 
    init {

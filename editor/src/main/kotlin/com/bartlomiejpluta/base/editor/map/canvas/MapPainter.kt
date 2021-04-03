@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
@@ -14,6 +15,7 @@ import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseEvent
 
 class MapPainter(
+   private val projectContext: ProjectContext,
    private val mapVM: GameMapVM,
    private val brushVM: BrushVM,
    private val editorStateVM: EditorStateVM,
@@ -66,7 +68,7 @@ class MapPainter(
          currentTrace = when (editorStateVM.selectedLayer) {
             is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
             is ObjectLayer -> when (brushVM.tool) {
-               BrushTool.DEFAULT -> ObjectPaintingTrace(mapVM, "Update object")
+               BrushTool.DEFAULT -> ObjectPaintingTrace(projectContext, mapVM, "Update object")
                else -> PassageAbilityPaintingTrace(mapVM, "Toggle passage")
             }
             is ImageLayer -> ImagePositionPaintingTrace(mapVM, "Move Image Layer")
