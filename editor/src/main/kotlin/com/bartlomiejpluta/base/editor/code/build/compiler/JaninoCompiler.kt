@@ -17,8 +17,8 @@ import java.io.File
 class JaninoCompiler : Compiler {
    private val compilerFactory = CompilerFactory()
 
-   override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File, classPath: Array<File>) = try {
-      tryToCompile(sourceDirectory, targetDirectory, classPath)
+   override fun compile(sourceDirectories: Array<FileSystemNode>, targetDirectory: File, classPath: Array<File>) = try {
+      tryToCompile(sourceDirectories, targetDirectory, classPath)
 
       /* Because Janino parser does not provide error handler for parsers:
       *
@@ -38,8 +38,8 @@ class JaninoCompiler : Compiler {
       throw BuildException(Severity.ERROR, TAG, location, message, e)
    }
 
-   private fun tryToCompile(sourceDirectory: FileSystemNode, targetDirectory: File, classPath: Array<File>) {
-      val compilationUnits = sourceDirectory.allChildren
+   private fun tryToCompile(sourceDirectories: Array<FileSystemNode>, targetDirectory: File, classPath: Array<File>) {
+      val compilationUnits = sourceDirectories.flatMap(FileSystemNode::allChildren)
          .filter { it.type == FileType.FILE }
          .map(::FileNodeResourceAdapter)
          .toTypedArray()

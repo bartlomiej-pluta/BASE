@@ -4,5 +4,5 @@ import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import java.io.File
 
 interface Compiler {
-   fun compile(sourceDirectory: FileSystemNode, targetDirectory: File, classPath: Array<File> = emptyArray())
+   fun compile(sourceDirectories: Array<FileSystemNode>, targetDirectory: File, classPath: Array<File> = emptyArray())
 }

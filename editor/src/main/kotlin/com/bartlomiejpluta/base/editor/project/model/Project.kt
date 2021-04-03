@@ -104,6 +104,10 @@ class Project {
    var buildOutDirectory by buildOutDirectoryProperty
       private set
 
+   val buildGeneratedCodeDirectoryProperty = SimpleObjectProperty<File>()
+   var buildGeneratedCodeDirectory by buildGeneratedCodeDirectoryProperty
+      private set
+
    val buildDatabaseDumpFileProperty =
       createObjectBinding({ File(buildDatabaseDumpDirectory, DATABASE_DUMP_FILE) }, buildDatabaseDumpDirectoryProperty)
    val buildDatabaseDumpFile by buildDatabaseDumpFileProperty
@@ -129,6 +133,7 @@ class Project {
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
             buildDependenciesDirectory = File(it, BUILD_DEPENDENCIES_DIR)
+            buildGeneratedCodeDirectory = File(it, BUILD_GENERATED_DIR)
             buildDatabaseDumpDirectory = File(it, BUILD_DATABASE_DUMP_DIR)
             buildOutDirectory = File(it, BUILD_OUT_DIR)
          }
@@ -176,6 +181,7 @@ class Project {
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"
       const val BUILD_OUT_DIR = "$BUILD_DIR/out"
       const val BUILD_DEPENDENCIES_DIR = "$BUILD_DIR/dependencies"
+      const val BUILD_GENERATED_DIR = "$BUILD_DIR/generated"
       const val BUILD_DATABASE_DUMP_DIR = "$BUILD_DIR/db"
    }
 }

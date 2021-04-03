@@ -4,12 +4,14 @@ import com.bartlomiejpluta.base.editor.code.build.compiler.Compiler
 import com.bartlomiejpluta.base.editor.code.build.database.DatabaseAssembler
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.game.GameEngineProvider
+import com.bartlomiejpluta.base.editor.code.build.generator.CodeGenerator
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
 import com.bartlomiejpluta.base.editor.code.build.project.ProjectAssembler
 import com.bartlomiejpluta.base.editor.code.dependency.DependenciesProvider
 import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.ClearBuildLogsEvent
+import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
 import javafx.beans.property.SimpleObjectProperty
@@ -23,6 +25,9 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
    @Autowired
    private lateinit var dependenciesProvider: DependenciesProvider
+
+   @Autowired
+   private lateinit var generators: List<CodeGenerator>
 
    @Autowired
    private lateinit var compiler: Compiler
@@ -92,8 +97,15 @@ class DefaultBuildPipelineService : BuildPipelineService {
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Providing compile-time dependencies...", tag = TAG))
       val dependencies = dependenciesProvider.provideDependenciesTo(project.buildDependenciesDirectory)
 
+      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Generating sources...", tag = TAG))
+      generators.forEach(CodeGenerator::generate)
+
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Compiling sources...", tag = TAG))
-      compiler.compile(project.codeFSNode, project.buildClassesDirectory, dependencies.toTypedArray())
+      compiler.compile(
+         arrayOf(project.codeFSNode, FileSystemNode(project.buildGeneratedCodeDirectory)),
+         project.buildClassesDirectory,
+         dependencies.toTypedArray()
+      )
 
       eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
       engineProvider.provideBaseGameEngine(outputFile)

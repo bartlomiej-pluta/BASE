@@ -20,14 +20,14 @@ import javax.tools.ToolProvider
 class JDKCompiler : Compiler {
    private val compiler = ToolProvider.getSystemJavaCompiler()
 
-   override fun compile(sourceDirectory: FileSystemNode, targetDirectory: File, classPath: Array<File>) {
+   override fun compile(sourceDirectories: Array<FileSystemNode>, targetDirectory: File, classPath: Array<File>) {
       val classpath = classPath.joinToString(";") { it.absolutePath }
       val options = listOf("-g", "-d", targetDirectory.absolutePath, "-classpath", classpath)
 
       val collector = DiagnosticCollector<JavaFileObject>()
 
       val manager = compiler.getStandardFileManager(collector, null, null)
-      val sources = sourceDirectory.allChildren
+      val sources = sourceDirectories.flatMap(FileSystemNode::allChildren)
          .filter { it.type == FileType.FILE }
          .mapNotNull { it as? FileSystemNode }
          .map { it.file }
