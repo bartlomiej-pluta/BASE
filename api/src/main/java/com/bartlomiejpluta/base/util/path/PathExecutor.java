@@ -10,7 +10,7 @@ import static java.util.Collections.emptyList;
 public class PathExecutor<T extends Movable> {
    private final T movable;
 
-   private List<PathSegment<T>> path = emptyList();
+   private List<? extends PathSegment<T>> path = emptyList();
    private Integer repeat;
 
    private int current = 0;

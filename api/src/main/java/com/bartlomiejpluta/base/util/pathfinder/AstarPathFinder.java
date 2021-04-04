@@ -3,8 +3,7 @@ package com.bartlomiejpluta.base.util.pathfinder;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movable;
-import com.bartlomiejpluta.base.util.path.MoveSegment;
-import com.bartlomiejpluta.base.util.path.Path;
+import com.bartlomiejpluta.base.util.path.MovementPath;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -43,23 +42,27 @@ public class AstarPathFinder implements PathFinder {
    }
 
    @Override
-   public <T extends Movable> Path<T> findPath(ObjectLayer layer, T start, Vector2ic end) {
+   public <T extends Movable> MovementPath<T> findPath(ObjectLayer layer, T start, Vector2ic end) {
       return astar(layer, start.getCoordinates(), end, this::recreatePath);
    }
 
-   private <T extends Movable> Path<T> recreatePath(Node node) {
+   private <T extends Movable> MovementPath<T> recreatePath(Node node) {
       if (node == null) {
-         return new Path<>();
+         return new MovementPath<>();
       }
 
-      var path = new Path<T>();
+      var path = new MovementPath<T>();
       var current = node;
 
       while (current.parent != null) {
-         path.addFirst(new MoveSegment<>(Direction.ofVector(
-               current.position.x() - current.parent.position.x(),
-               current.position.y() - current.parent.position.y()
-         )));
+         var currentX = current.position.x();
+         var currentY = current.position.y();
+
+         path.addFirst(Direction.ofVector(
+               currentX - current.parent.position.x(),
+               currentY - current.parent.position.y()
+         ), currentX, currentY);
+
          current = current.parent;
       }
 

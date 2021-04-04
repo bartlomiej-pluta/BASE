@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movable;
+import com.bartlomiejpluta.base.util.path.BasePath;
 import com.bartlomiejpluta.base.util.path.Path;
 import org.joml.Vector2fc;
 import org.joml.Vector2i;
@@ -16,10 +17,10 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
 public class BulletAnimationRunner implements AnimationRunner {
-   private static final Path<Animation> UP = new Path<Animation>().move(Direction.UP);
-   private static final Path<Animation> DOWN = new Path<Animation>().move(Direction.DOWN);
-   private static final Path<Animation> LEFT = new Path<Animation>().move(Direction.LEFT);
-   private static final Path<Animation> RIGHT = new Path<Animation>().move(Direction.RIGHT);
+   private static final Path<Animation> UP = new BasePath<Animation>().move(Direction.UP);
+   private static final Path<Animation> DOWN = new BasePath<Animation>().move(Direction.DOWN);
+   private static final Path<Animation> LEFT = new BasePath<Animation>().move(Direction.LEFT);
+   private static final Path<Animation> RIGHT = new BasePath<Animation>().move(Direction.RIGHT);
 
    private final String animationUid;
 
