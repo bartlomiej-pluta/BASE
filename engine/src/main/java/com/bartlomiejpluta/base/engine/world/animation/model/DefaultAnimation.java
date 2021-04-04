@@ -38,7 +38,7 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    private boolean enabled = true;
 
    @Getter
-   private PathExecutor<Animation> pathExecutor;
+   private PathExecutor<Animation> pathExecutor = new PathExecutor<>(this);
    private boolean finishOnEnd;
    private boolean finishOnFail;
    private Layer layer;
@@ -95,7 +95,7 @@ public class DefaultAnimation extends MovableSprite implements Animation {
 
    @Override
    public void followPath(Path<Animation> path, Integer repeat, boolean finishOnEnd, boolean finishOnFail) {
-      pathExecutor = new PathExecutor<>(this, repeat, path);
+      pathExecutor.setPath(path).setRepeat(repeat);
       this.finishOnEnd = finishOnEnd;
       this.finishOnFail = finishOnFail;
    }
@@ -104,7 +104,7 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    public void update(float dt) {
       super.update(dt);
 
-      if (pathExecutor != null && isObjectLayer) {
+      if (isObjectLayer) {
          var pathProgress = pathExecutor.execute((ObjectLayer) layer, dt);
          if ((pathProgress == DONE && finishOnEnd) || (pathProgress == SEGMENT_FAILED && finishOnFail)) {
             finish();

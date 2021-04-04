@@ -9,8 +9,18 @@ import com.bartlomiejpluta.base.util.path.PathExecutor;
 public class FollowPathAI<T extends NPC> implements AI {
    private final PathExecutor<T> executor;
 
-   public FollowPathAI(T npc, Integer repeat, Path<T> path) {
-      this.executor = new PathExecutor<>(npc, repeat, path);
+   public FollowPathAI(T npc) {
+      this.executor = new PathExecutor<>(npc);
+   }
+
+   public FollowPathAI<T> setPath(Path<T> path) {
+      executor.setPath(path);
+      return this;
+   }
+
+   public FollowPathAI<T> setRepeat(Integer repeat) {
+      executor.setRepeat(repeat);
+      return this;
    }
 
    @Override

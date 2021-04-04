@@ -4,21 +4,35 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Movable;
 
 import java.util.List;
-import java.util.Objects;
+
+import static java.util.Collections.emptyList;
 
 public class PathExecutor<T extends Movable> {
-   protected final List<PathSegment<T>> path;
    private final T movable;
-   private final Integer repeat;
+
+   private List<PathSegment<T>> path = emptyList();
+   private Integer repeat;
 
    private int current = 0;
    private int iteration = 0;
    private boolean updated = false;
 
-   public PathExecutor(T movable, Integer repeat, Path<T> path) {
+   public PathExecutor(T movable) {
       this.movable = movable;
+   }
+
+   public PathExecutor<T> setPath(Path<T> path) {
+      this.path = path != null ? path.getPath() : emptyList();
+      this.current = 0;
+      this.iteration = 0;
+      return this;
+   }
+
+   public PathExecutor<T> setRepeat(Integer repeat) {
       this.repeat = repeat;
-      this.path = Objects.requireNonNull(path).getPath();
+      this.current = 0;
+      this.iteration = 0;
+      return this;
    }
 
    public PathProgress execute(ObjectLayer layer, float dt) {
