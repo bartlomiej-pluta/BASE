@@ -30,12 +30,12 @@ public class FollowEntityAI implements AI {
       var distance = npc.manhattanDistance(target);
 
       if (!npc.isMoving() && 1 < distance && distance < range && accumulator >= recalculateInterval) {
-         var path = pathFinder.findPath(layer, npc.getCoordinates(), target.getCoordinates());
+         var path = pathFinder.findSequence(layer, npc.getCoordinates(), target.getCoordinates());
 
          if (!path.isEmpty()) {
             accumulator = recalculateInterval;
 
-            var node = path.getLast().sub(npc.getCoordinates(), new Vector2i());
+            var node = path.getFirst().sub(npc.getCoordinates(), new Vector2i());
             var direction = Direction.ofVector(node);
             var movement = npc.prepareMovement(direction);
             layer.pushMovement(movement);

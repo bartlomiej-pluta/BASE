@@ -1,10 +1,14 @@
 package com.bartlomiejpluta.base.util.pathfinder;
 
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.move.Movable;
+import com.bartlomiejpluta.base.util.path.Path;
 import org.joml.Vector2ic;
 
 import java.util.LinkedList;
 
 public interface PathFinder {
-   LinkedList<Vector2ic> findPath(ObjectLayer layer, Vector2ic start, Vector2ic end);
+   <T extends Movable> Path<T> findPath(ObjectLayer layer, T start, Vector2ic end);
+
+   LinkedList<Vector2ic> findSequence(ObjectLayer layer, Vector2ic start, Vector2ic end);
 }

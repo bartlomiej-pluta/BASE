@@ -18,6 +18,11 @@ public class Path<T extends Movable> {
       return this;
    }
 
+   public Path<T> addFirst(PathSegment<T> segment) {
+      path.add(0, segment);
+      return this;
+   }
+
    public Path<T> move(Direction direction) {
       path.add(new MoveSegment<>(direction));
       return this;

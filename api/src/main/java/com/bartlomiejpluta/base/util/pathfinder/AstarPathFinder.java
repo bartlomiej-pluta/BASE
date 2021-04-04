@@ -1,6 +1,10 @@
 package com.bartlomiejpluta.base.util.pathfinder;
 
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.move.Direction;
+import com.bartlomiejpluta.base.api.move.Movable;
+import com.bartlomiejpluta.base.util.path.MoveSegment;
+import com.bartlomiejpluta.base.util.path.Path;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -13,6 +17,7 @@ import java.util.function.Function;
 import static java.lang.Math.abs;
 
 public class AstarPathFinder implements PathFinder {
+   private static final LinkedList<Vector2ic> EMPTY_LINKED_LIST = new LinkedList<>();
 
    /*
     * We are interested in following adjacent
@@ -38,7 +43,51 @@ public class AstarPathFinder implements PathFinder {
    }
 
    @Override
-   public LinkedList<Vector2ic> findPath(ObjectLayer layer, Vector2ic start, Vector2ic end) {
+   public <T extends Movable> Path<T> findPath(ObjectLayer layer, T start, Vector2ic end) {
+      return astar(layer, start.getCoordinates(), end, this::recreatePath);
+   }
+
+   private <T extends Movable> Path<T> recreatePath(Node node) {
+      if (node == null) {
+         return new Path<>();
+      }
+
+      var path = new Path<T>();
+      var current = node;
+
+      while (current.parent != null) {
+         path.addFirst(new MoveSegment<>(Direction.ofVector(
+               current.position.x() - current.parent.position.x(),
+               current.position.y() - current.parent.position.y()
+         )));
+         current = current.parent;
+      }
+
+      return path;
+   }
+
+   @Override
+   public LinkedList<Vector2ic> findSequence(ObjectLayer layer, Vector2ic start, Vector2ic end) {
+      return astar(layer, start, end, this::recreateSequence);
+   }
+
+   private LinkedList<Vector2ic> recreateSequence(Node node) {
+      if (node == null) {
+         return EMPTY_LINKED_LIST;
+      }
+
+      var list = new LinkedList<Vector2ic>();
+      var current = node;
+
+      while (current.parent != null) {
+         list.addFirst(current.position);
+         current = current.parent;
+      }
+
+      return list;
+   }
+
+   private <P> P astar(ObjectLayer layer, Vector2ic start, Vector2ic end, Function<Node, P> pathProducer) {
       var columns = layer.getMap().getColumns();
       var rows = layer.getMap().getRows();
 
@@ -65,7 +114,7 @@ public class AstarPathFinder implements PathFinder {
          // It determines the maximum algorithm depth
          // It's not the part of model A* algorithm.
          if (closed.size() > maxNodes) {
-            return new LinkedList<>();
+            return pathProducer.apply(null);
          }
 
          // We are retrieving the node with the **smallest** f score
@@ -78,7 +127,7 @@ public class AstarPathFinder implements PathFinder {
          // If we found the node with f score and it is
          // actually an end node, we have most likely found a best path
          if (current.equals(endNode)) {
-            return recreatePath(current);
+            return pathProducer.apply(current);
          }
 
          adjacent:
@@ -156,23 +205,11 @@ public class AstarPathFinder implements PathFinder {
 
       // If open list is empty and we didn't reach the end node
       // it means that the path probably does not exist at all
-      return new LinkedList<>();
+      return pathProducer.apply(null);
    }
 
    private float manhattanDistance(Vector2ic a, Vector2ic b) {
       return (abs(a.x() - b.x()) + abs(a.y() - b.y()));
-   }
-
-   private LinkedList<Vector2ic> recreatePath(Node node) {
-      var current = node;
-      var list = new LinkedList<Vector2ic>();
-
-      while (current.parent != null) {
-         list.add(current.position);
-         current = current.parent;
-      }
-
-      return list;
    }
 
    private static class Node implements Comparable<Node> {
