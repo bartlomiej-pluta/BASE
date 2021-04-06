@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
-import com.bartlomiejpluta.base.api.input.KeyEvent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -92,13 +92,16 @@ public abstract class BaseContainer extends BaseComponent {
    }
 
    @Override
-   public void handleKeyEvent(KeyEvent event) {
+   public <E extends Event> void handleEvent(E event) {
+      // Populate event downstream
       for (var child : children) {
          if (event.isConsumed()) {
             return;
          }
 
-         child.handleKeyEvent(event);
+         child.handleEvent(event);
       }
+
+      eventHandler.handleEvent(event);
    }
 }

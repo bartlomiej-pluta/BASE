@@ -5,18 +5,17 @@ import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
-import com.bartlomiejpluta.base.api.input.KeyEventHandler;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.core.engine.GameEngine;
 import com.bartlomiejpluta.base.engine.database.service.DatabaseService;
-import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
@@ -42,7 +41,7 @@ import java.util.List;
 
 @Slf4j
 @Builder
-public class DefaultContext implements Context, KeyEventHandler {
+public class DefaultContext implements Context {
 
    @NonNull
    private final GameEngine engine;
@@ -106,9 +105,21 @@ public class DefaultContext implements Context, KeyEventHandler {
       this.input = input;
       this.camera = camera;
 
-      input.addKeyEventHandler(this);
+      input.addKeyEventHandler(this::populateKeyEventToObjectLayers);
 
       gameRunner.init(this);
+   }
+
+   private void populateKeyEventToObjectLayers(KeyEvent event) {
+      if (map == null || event.isConsumed()) {
+         return;
+      }
+
+      for (var layer : map.getLayers()) {
+         if (layer instanceof Reactive) {
+            ((Reactive) layer).handleEvent(event);
+         }
+      }
    }
 
    @SneakyThrows
@@ -235,24 +246,6 @@ public class DefaultContext implements Context, KeyEventHandler {
       if (mapHandler != null) {
          mapHandler.input(input);
       }
-   }
-
-   @Override
-   public void handleKeyEvent(KeyEvent event) {
-      if (map == null || event.isConsumed()) {
-         return;
-      }
-
-      for (var layer : map.getLayers()) {
-         if (layer instanceof KeyEventHandler) {
-            ((KeyEventHandler) layer).handleKeyEvent(event);
-         }
-      }
-   }
-
-   @Override
-   public void onKeyEventHandlerUnregister() {
-      throw new AppException("Context cannot be unregistered");
    }
 
    @Override

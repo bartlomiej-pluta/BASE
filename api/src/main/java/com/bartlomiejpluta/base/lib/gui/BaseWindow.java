@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.gui.*;
-import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 
 import static java.util.Objects.requireNonNull;
@@ -59,8 +59,10 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    }
 
    @Override
-   public void handleKeyEvent(KeyEvent event) {
-      content.handleKeyEvent(event);
+   public <E extends Event> void handleEvent(E event) {
+      if (content != null) {
+         content.handleEvent(event);
+      }
    }
 
    @Override

@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.engine.ui.event;
 
+import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.input.Key;
 import com.bartlomiejpluta.base.api.input.KeyAction;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
@@ -18,6 +20,11 @@ public class GLFWKeyEvent implements KeyEvent {
    private final Key key;
    private final KeyAction action;
    private boolean consumed;
+
+   @Override
+   public EventType<? extends Event> getType() {
+      return KeyEvent.TYPE;
+   }
 
    @Override
    public void consume() {

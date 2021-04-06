@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.input.Key;
 import com.bartlomiejpluta.base.api.input.KeyAction;
@@ -14,6 +15,7 @@ public class HOptionChoice extends HScrollableLayout {
 
    public HOptionChoice(Context context, GUI gui) {
       super(context, gui);
+      addEventListener(KeyEvent.TYPE, this::switchOption);
    }
 
    @Override
@@ -26,16 +28,18 @@ public class HOptionChoice extends HScrollableLayout {
    }
 
    @Override
-   public void handleKeyEvent(KeyEvent event) {
-      if (children.isEmpty()) {
-         return;
+   public <E extends Event> void handleEvent(E event) {
+      if (selected < children.size()) {
+         children.get(selected).handleEvent(event);
       }
 
-      // First we want to propagate it down tree
-      children.get(selected).handleKeyEvent(event);
+      if (!event.isConsumed()) {
+         eventHandler.handleEvent(event);
+      }
+   }
 
-      // If event is still not consumed, we try to consume it right here
-      if (event.isConsumed()) {
+   private void switchOption(KeyEvent event) {
+      if (children.isEmpty()) {
          return;
       }
 

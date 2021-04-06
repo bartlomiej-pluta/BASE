@@ -12,6 +12,7 @@ import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
+import com.bartlomiejpluta.base.lib.event.EventHandler;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,9 @@ import org.joml.Vector2f;
 import org.joml.Vector2fc;
 import org.joml.Vector2i;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -34,7 +37,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
    private final Vector2f entityScale = new Vector2f(1, 1);
    private Vector2fc entitySetSize;
 
-   private final Map<EventType<?>, List<Consumer<? extends Event>>> listeners = new HashMap<>();
+   private final EventHandler eventHandler = new EventHandler();
 
    @Getter
    @Setter
@@ -236,40 +239,19 @@ public class DefaultEntity extends MovableSprite implements Entity {
       return entityScale.y;
    }
 
-   @SuppressWarnings("unchecked")
    @Override
    public <E extends Event> void handleEvent(E event) {
-      var list = listeners.get(event.getType());
-      if (list != null) {
-         for (var listener : list) {
-            ((Consumer<E>) listener).accept(event);
-         }
-      }
+      eventHandler.handleEvent(event);
    }
 
    @Override
    public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
-      var list = this.listeners.get(type);
-
-      if (list != null) {
-         list.add(listener);
-      } else {
-         list = new ArrayList<>();
-         list.add(listener);
-         listeners.put(type, list);
-      }
+      eventHandler.addListener(type, listener);
    }
 
    @Override
    public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
-      var list = this.listeners.get(type);
-
-      if (list != null) {
-         list.remove(listener);
-         if (list.isEmpty()) {
-            this.listeners.remove(type);
-         }
-      }
+      eventHandler.removeListener(type, listener);
    }
 
    @Override

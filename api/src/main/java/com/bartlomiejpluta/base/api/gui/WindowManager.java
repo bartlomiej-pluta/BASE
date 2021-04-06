@@ -62,12 +62,19 @@ public final class WindowManager extends BaseWidget {
       requireNonNull(window, "Window cannot be null");
 
       if (windows.isEmpty()) {
-         input.addKeyEventHandler(this);
+         input.addKeyEventHandler(this::forwardKeyEventToTopWindow);
       }
 
       windows.addLast(window);
       window.setParent(this);
       window.onOpen(this);
+   }
+
+   private void forwardKeyEventToTopWindow(KeyEvent event) {
+      var topWindow = windows.peekLast();
+      if (topWindow != null) {
+         topWindow.handleEvent(event);
+      }
    }
 
    public void closeAll() {
@@ -88,7 +95,7 @@ public final class WindowManager extends BaseWidget {
       window.onClose(this);
 
       if (windows.isEmpty()) {
-         input.removeKeyEventHandler(this);
+         input.removeKeyEventHandler(this::forwardKeyEventToTopWindow);
       }
    }
 
@@ -111,14 +118,6 @@ public final class WindowManager extends BaseWidget {
                drawWindow(screen, topWindow, gui);
             }
          }
-      }
-   }
-
-   @Override
-   public void handleKeyEvent(KeyEvent event) {
-      var topWindow = windows.peekLast();
-      if (topWindow != null) {
-         topWindow.handleKeyEvent(event);
       }
    }
 

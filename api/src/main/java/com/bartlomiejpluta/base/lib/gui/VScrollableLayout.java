@@ -18,6 +18,7 @@ public class VScrollableLayout extends VLayout {
 
    public VScrollableLayout(Context context, GUI gui) {
       super(context, gui);
+      addEventListener(KeyEvent.TYPE, this::scroll);
    }
 
    public float getActualScroll() {
@@ -83,10 +84,7 @@ public class VScrollableLayout extends VLayout {
       super.setHeightMode(mode);
    }
 
-   @Override
-   public void handleKeyEvent(KeyEvent event) {
-      super.handleKeyEvent(event);
-
+   private void scroll(KeyEvent event) {
       if (event.isConsumed()) {
          return;
       }

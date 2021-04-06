@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.gui.widget;
 
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.gui.SizeMode;
 import com.bartlomiejpluta.base.api.gui.Widget;
-import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -233,7 +233,7 @@ public class ScreenWidget implements Widget {
    }
 
    @Override
-   public void handleKeyEvent(KeyEvent event) {
+   public <E extends Event> void handleEvent(E event) {
       throw new UnsupportedOperationException();
    }
 

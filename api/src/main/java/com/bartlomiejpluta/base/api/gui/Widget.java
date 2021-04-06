@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.api.gui;
 
-import com.bartlomiejpluta.base.api.input.KeyEventHandler;
+import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.screen.Screen;
 
-public interface Widget extends KeyEventHandler {
+public interface Widget extends Reactive {
    Widget getParent();
 
    void setParent(Widget parent);

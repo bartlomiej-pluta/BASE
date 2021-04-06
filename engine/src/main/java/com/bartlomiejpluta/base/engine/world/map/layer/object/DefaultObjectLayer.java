@@ -4,8 +4,7 @@ import com.bartlomiejpluta.base.api.ai.NPC;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
-import com.bartlomiejpluta.base.api.input.KeyEvent;
-import com.bartlomiejpluta.base.api.input.KeyEventHandler;
+import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
@@ -24,7 +23,7 @@ import java.util.Queue;
 import static java.lang.Float.compare;
 import static java.lang.Integer.compare;
 
-public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEventHandler {
+public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, Reactive {
 
    @Getter
    private final ArrayList<Entity> entities = new ArrayList<>();
@@ -156,14 +155,9 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEve
       return z == 0 ? compare(a.getPosition().y(), b.getPosition().y()) : z;
    }
 
-   @Override
-   public void handleKeyEvent(KeyEvent event) {
-
-   }
-
    @SuppressWarnings("ForLoopReplaceableByForEach")
    @Override
-   public void fireEvent(Event event) {
+   public <E extends Event> void handleEvent(E event) {
       // Disclaimer
       // For the sake of an easy adding and removing
       // entities from the entity.update() method inside

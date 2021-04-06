@@ -1,8 +1,12 @@
 package com.bartlomiejpluta.base.lib.gui;
 
+import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.SizeMode;
 import com.bartlomiejpluta.base.api.gui.Widget;
-import com.bartlomiejpluta.base.api.input.KeyEvent;
+import com.bartlomiejpluta.base.lib.event.EventHandler;
+
+import java.util.function.Consumer;
 
 public abstract class BaseWidget implements Widget {
    protected Widget parent;
@@ -25,6 +29,8 @@ public abstract class BaseWidget implements Widget {
    protected float paddingRight;
    protected float paddingBottom;
    protected float paddingLeft;
+
+   protected final EventHandler eventHandler = new EventHandler();
 
    protected abstract float getContentWidth();
 
@@ -277,7 +283,15 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void handleKeyEvent(KeyEvent event) {
-      // Designed to be overridden if needed so
+   public <E extends Event> void handleEvent(E event) {
+      eventHandler.handleEvent(event);
+   }
+
+   protected <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.addListener(type, listener);
+   }
+
+   protected <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.removeListener(type, listener);
    }
 }

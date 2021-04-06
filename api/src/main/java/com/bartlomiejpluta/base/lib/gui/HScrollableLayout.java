@@ -18,6 +18,7 @@ public class HScrollableLayout extends HLayout {
 
    public HScrollableLayout(Context context, GUI gui) {
       super(context, gui);
+      addEventListener(KeyEvent.TYPE, this::handleKeyEvent);
    }
 
    public float getActualScroll() {
@@ -83,10 +84,7 @@ public class HScrollableLayout extends HLayout {
       super.setHeightMode(mode);
    }
 
-   @Override
-   public void handleKeyEvent(KeyEvent event) {
-      super.handleKeyEvent(event);
-
+   private void handleKeyEvent(KeyEvent event) {
       if (event.isConsumed()) {
          return;
       }

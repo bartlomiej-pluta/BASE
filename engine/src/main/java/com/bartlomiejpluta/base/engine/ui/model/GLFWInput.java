@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.engine.ui.model;
 
 import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.input.Key;
-import com.bartlomiejpluta.base.api.input.KeyEventHandler;
+import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.ui.event.GLFWKeyEvent;
 import lombok.NonNull;
@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 import static com.bartlomiejpluta.base.engine.ui.event.GLFWKeyEvent.glfwCode;
 import static org.lwjgl.glfw.GLFW.*;
@@ -17,7 +18,7 @@ import static org.lwjgl.glfw.GLFW.*;
 @Slf4j
 public class GLFWInput implements Input {
    private final long windowHandle;
-   private final Deque<KeyEventHandler> keyEventHandlers = new LinkedList<>();
+   private final Deque<Consumer<KeyEvent>> keyEventHandlers = new LinkedList<>();
 
    public GLFWInput(@NonNull Screen screen) {
       this.windowHandle = screen.getID();
@@ -39,7 +40,7 @@ public class GLFWInput implements Input {
                return;
             }
 
-            iterator.next().handleKeyEvent(event);
+            iterator.next().accept(event);
          }
       });
 
@@ -52,14 +53,12 @@ public class GLFWInput implements Input {
    }
 
    @Override
-   public void addKeyEventHandler(@NonNull KeyEventHandler handler) {
+   public void addKeyEventHandler(@NonNull Consumer<KeyEvent> handler) {
       keyEventHandlers.addLast(handler);
-      handler.onKeyEventHandlerRegister();
    }
 
    @Override
-   public void removeKeyEventHandler(@NonNull KeyEventHandler handler) {
+   public void removeKeyEventHandler(@NonNull Consumer<KeyEvent> handler) {
       keyEventHandlers.remove(handler);
-      handler.onKeyEventHandlerUnregister();
    }
 }
