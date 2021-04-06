@@ -3,8 +3,7 @@ package com.bartlomiejpluta.base.engine.world.map.layer.object;
 import com.bartlomiejpluta.base.api.ai.NPC;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
-import com.bartlomiejpluta.base.api.entity.EntityStepInListener;
-import com.bartlomiejpluta.base.api.entity.EntityStepOutListener;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.input.KeyEventHandler;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
@@ -20,7 +19,6 @@ import org.joml.Vector2ic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import static java.lang.Float.compare;
@@ -30,10 +28,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEve
 
    @Getter
    private final ArrayList<Entity> entities = new ArrayList<>();
-
-   private final List<EntityStepInListener> stepInListeners = new ArrayList<>();
-   private final List<EntityStepOutListener> stepOutListeners = new ArrayList<>();
-   private final List<KeyEventHandler> keyEventHandlers = new ArrayList<>();
 
    @Getter
    private final PassageAbility[][] passageMap;
@@ -58,18 +52,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEve
          layer.entities.remove(entity);
       }
 
-      if (entity instanceof EntityStepInListener) {
-         stepInListeners.add((EntityStepInListener) entity);
-      }
-
-      if (entity instanceof EntityStepOutListener) {
-         stepOutListeners.add((EntityStepOutListener) entity);
-      }
-
-      if (entity instanceof KeyEventHandler) {
-         keyEventHandlers.add((KeyEventHandler) entity);
-      }
-
       entity.setStepSize(stepSize.x(), stepSize.y());
       entities.add(entity);
 
@@ -79,18 +61,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEve
    @Override
    public void removeEntity(Entity entity) {
       entities.remove(entity);
-
-      if (entity instanceof EntityStepInListener) {
-         stepInListeners.remove(entity);
-      }
-
-      if (entity instanceof EntityStepOutListener) {
-         stepOutListeners.remove(entity);
-      }
-
-      if (entity instanceof KeyEventHandler) {
-         keyEventHandlers.remove(entity);
-      }
 
       entity.onRemove(this);
    }
@@ -149,7 +119,6 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEve
 
       while (!movements.isEmpty()) {
          var movement = movements.poll();
-         var from = movement.getFrom();
          var to = movement.getTo();
          if (isTileReachable(to)) {
             movement.perform();
@@ -189,26 +158,19 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, KeyEve
 
    @Override
    public void handleKeyEvent(KeyEvent event) {
-      for (var handler : keyEventHandlers) {
-         if (event.isConsumed()) {
-            return;
-         }
 
-         handler.handleKeyEvent(event);
-      }
    }
 
+   @SuppressWarnings("ForLoopReplaceableByForEach")
    @Override
-   public void notifyEntityStepIn(Movement movement, Entity entity) {
-      for (var listener : stepInListeners) {
-         listener.onEntityStepIn(movement, entity);
-      }
-   }
-
-   @Override
-   public void notifyEntityStepOut(Movement movement, Entity entity) {
-      for (var listener : stepOutListeners) {
-         listener.onEntityStepOut(movement, entity);
+   public void fireEvent(Event event) {
+      // Disclaimer
+      // For the sake of an easy adding and removing
+      // entities from the entity.update() method inside
+      // the loop, the loop itself has been implemented
+      // as plain old C-style for loop.
+      for (int i = 0; i < entities.size(); ++i) {
+         entities.get(i).handleEvent(event);
       }
    }
 }

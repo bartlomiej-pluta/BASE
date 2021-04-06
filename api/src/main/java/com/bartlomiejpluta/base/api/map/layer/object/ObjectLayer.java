@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.api.map.layer.object;
 
 import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.move.Movement;
 import org.joml.Vector2ic;
@@ -24,8 +25,5 @@ public interface ObjectLayer extends Layer {
 
    void pushMovement(Movement movement);
 
-   // Notifiers
-   void notifyEntityStepIn(Movement movement, Entity entity);
-
-   void notifyEntityStepOut(Movement movement, Entity entity);
+   void fireEvent(Event event);
 }

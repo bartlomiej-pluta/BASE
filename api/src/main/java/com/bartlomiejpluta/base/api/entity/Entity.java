@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.api.entity;
 
 import com.bartlomiejpluta.base.api.animation.Animated;
+import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movable;
@@ -9,7 +10,7 @@ import com.bartlomiejpluta.base.internal.render.Renderable;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface Entity extends Movable, Animated, Renderable, Updatable {
+public interface Entity extends Reactive, Movable, Animated, Renderable, Updatable {
 
    Direction getFaceDirection();
 
