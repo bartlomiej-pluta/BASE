@@ -1,12 +1,12 @@
 package com.bartlomiejpluta.base.util.path;
 
-import com.bartlomiejpluta.base.api.ai.NPC;
+import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 
 import static java.util.Objects.requireNonNull;
 
-public class TurnSegment<T extends NPC> implements PathSegment<T> {
+public class TurnSegment<T extends Entity> implements PathSegment<T> {
    private final Direction direction;
 
    public TurnSegment(Direction direction) {
@@ -14,8 +14,8 @@ public class TurnSegment<T extends NPC> implements PathSegment<T> {
    }
 
    @Override
-   public PathProgress perform(T npc, ObjectLayer layer, float dt) {
-      npc.setFaceDirection(direction);
+   public PathProgress perform(T entity, ObjectLayer layer, float dt) {
+      entity.setFaceDirection(direction);
       return PathProgress.SEGMENT_DONE;
    }
 }
