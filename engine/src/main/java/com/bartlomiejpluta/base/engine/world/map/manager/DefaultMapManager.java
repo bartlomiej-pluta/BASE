@@ -98,7 +98,7 @@ public class DefaultMapManager implements MapManager {
                var className = format("%s.MapInitializer_%s$$Layer%d", packageName, purifiedUid, layerIndex);
                var initializerClass = classLoader.<MapInitializer>loadClass(className);
                var initializer = initializerClass.getConstructor().newInstance();
-               initializer.run(context, handler);
+               initializer.run(context, handler, map, (ObjectLayer) layer);
             }
          }
       }

@@ -16,6 +16,8 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 import javax.annotation.processing.Generated
 import javax.lang.model.element.Modifier
+import com.bartlomiejpluta.base.api.map.layer.`object`.ObjectLayer as EngineObjectLayer
+import com.bartlomiejpluta.base.api.map.model.GameMap as EngineGameMap
 
 @Component
 class MapObjectsCodeGenerator : CodeGenerator {
@@ -65,6 +67,8 @@ class MapObjectsCodeGenerator : CodeGenerator {
             .addParameter(Context::class.java, "context", Modifier.FINAL)
             .addParameter(runner, "runner", Modifier.FINAL)
             .addParameter(handler, "handler", Modifier.FINAL)
+            .addParameter(EngineGameMap::class.java, "map", Modifier.FINAL)
+            .addParameter(EngineObjectLayer::class.java, "layer", Modifier.FINAL)
             .addParameter(TypeName.INT, "x", Modifier.FINAL)
             .addParameter(TypeName.INT, "y", Modifier.FINAL)
             .addCode(it.code)
@@ -77,11 +81,13 @@ class MapObjectsCodeGenerator : CodeGenerator {
          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
          .addParameter(Context::class.java, "context", Modifier.FINAL)
          .addParameter(MapHandler::class.java, "handler", Modifier.FINAL)
+         .addParameter(EngineGameMap::class.java, "map", Modifier.FINAL)
+         .addParameter(EngineObjectLayer::class.java, "layer", Modifier.FINAL)
          .addStatement("var customRunner = (\$T) context.getGameRunner()", runner)
          .addStatement("var customHandler = (\$T) handler", handler)
 
       layer.objects.forEach {
-         runMethod.addStatement("_${it.x}x${it.y}(context, customRunner, customHandler, ${it.x}, ${it.y})")
+         runMethod.addStatement("_${it.x}x${it.y}(context, customRunner, customHandler, map, layer, ${it.x}, ${it.y})")
       }
 
       generatedClass

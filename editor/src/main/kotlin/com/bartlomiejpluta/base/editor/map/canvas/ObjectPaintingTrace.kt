@@ -86,6 +86,8 @@ class ObjectPaintingTrace(
           *  Following final parameters are available to use:
           *  x: int - the x coordinate of tile the object has been created on
           *  y: int - the y coordinate of tile the object has been created on 
+          *  layer: ObjectLayer - current object layer
+          *  map: GameMap - current map
           *  handler: ${className(map.handler)} - current map handler
           *  runner: ${className(projectContext.project?.runner)} - the game runner of the project
           *  context: Context - the game context
