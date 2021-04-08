@@ -98,6 +98,9 @@ public class DefaultContext implements Context {
 
    private final List<Sound> sounds = new LinkedList<>();
 
+   @Getter
+   private boolean paused;
+
    @SneakyThrows
    @Override
    public void init(@NonNull Screen screen, @NonNull Input input, @NonNull Camera camera) {
@@ -220,23 +223,31 @@ public class DefaultContext implements Context {
    }
 
    @Override
-   public boolean isPaused() {
-      return engine.isPaused();
+   public void setPaused(boolean paused) {
+      this.paused = paused;
+
+      sounds.forEach(this.paused ? Sound::pause : Sound::play);
    }
 
    @Override
    public void pause() {
-      engine.pause();
+      this.paused = true;
+      sounds.forEach(Sound::pause);
    }
 
    @Override
    public void resume() {
-      engine.resume();
+      this.paused = false;
+      sounds.forEach(Sound::play);
    }
 
    @Override
    public boolean togglePause() {
-      return engine.togglePaused();
+      this.paused = !this.paused;
+
+      sounds.forEach(this.paused ? Sound::pause : Sound::play);
+
+      return this.paused;
    }
 
    @Override
@@ -252,17 +263,19 @@ public class DefaultContext implements Context {
    public void update(float dt) {
       gameRunner.update(dt);
 
-      if (mapHandler != null) {
-         mapHandler.update(this, map, dt);
-      }
+      if (!paused) {
+         if (mapHandler != null) {
+            mapHandler.update(this, map, dt);
+         }
 
-      if (map != null) {
-         map.update(dt);
+         if (map != null) {
+            map.update(dt);
+         }
       }
 
       for (var iterator = sounds.iterator(); iterator.hasNext(); ) {
          var sound = iterator.next();
-         if (!sound.isPlaying()) {
+         if (sound.isStopped()) {
             iterator.remove();
             soundManager.disposeSound(sound);
          }

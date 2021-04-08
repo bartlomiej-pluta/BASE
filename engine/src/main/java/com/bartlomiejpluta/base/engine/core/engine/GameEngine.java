@@ -7,13 +7,5 @@ public interface GameEngine {
 
    void stop();
 
-   void pause();
-
-   void resume();
-
    boolean isRunning();
-
-   boolean isPaused();
-
-   boolean togglePaused();
 }

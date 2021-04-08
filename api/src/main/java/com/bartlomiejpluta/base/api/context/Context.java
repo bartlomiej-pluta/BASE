@@ -62,6 +62,8 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    boolean isPaused();
 
+   void setPaused(boolean paused);
+
    void pause();
 
    void resume();

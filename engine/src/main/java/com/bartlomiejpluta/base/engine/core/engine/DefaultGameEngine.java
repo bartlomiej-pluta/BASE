@@ -39,9 +39,6 @@ public class DefaultGameEngine implements GameEngine {
    @Getter
    private boolean running = false;
 
-   @Getter
-   private boolean paused = true;
-
    private void run() {
       try {
          init();
@@ -76,13 +73,9 @@ public class DefaultGameEngine implements GameEngine {
 
          input();
 
-         if (!paused) {
-            while (accumulator >= step) {
-               update(dt);
-               accumulator -= step;
-            }
-         } else {
-            accumulator = 0;
+         while (accumulator >= step) {
+            update(dt);
+            accumulator -= step;
          }
 
          render();
@@ -127,27 +120,6 @@ public class DefaultGameEngine implements GameEngine {
    public void stop() {
       log.info("Stopping the engine");
       running = false;
-   }
-
-   @Override
-   public void pause() {
-      log.info("Pausing the engine");
-      paused = true;
-   }
-
-   @Override
-   public void resume() {
-      log.info("Resuming the engine");
-      paused = false;
-   }
-
-   @Override
-   public boolean togglePaused() {
-      paused = !paused;
-
-      log.info("{} the engine", paused ? "Pausing" : "Resuming");
-
-      return paused;
    }
 
    // TODO
