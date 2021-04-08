@@ -60,6 +60,16 @@ public class AudioSource implements Sound, Disposable {
    }
 
    @Override
+   public boolean isPaused() {
+      return alGetSourcei(id, AL_SOURCE_STATE) == AL_PAUSED;
+   }
+
+   @Override
+   public boolean isStopped() {
+      return alGetSourcei(id, AL_SOURCE_STATE) == AL_STOPPED;
+   }
+
+   @Override
    public void setRepeat(boolean repeat) {
       alSourcei(id, AL_LOOPING, repeat ? AL_TRUE : AL_FALSE);
    }

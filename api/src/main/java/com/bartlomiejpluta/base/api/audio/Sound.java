@@ -9,6 +9,10 @@ public interface Sound {
 
    boolean isPlaying();
 
+   boolean isPaused();
+
+   boolean isStopped();
+
    void setGain(float gain);
 
    void setRepeat(boolean repeat);
