@@ -4,12 +4,13 @@ import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.context.GamePauseEvent;
 import com.bartlomiejpluta.base.api.entity.Entity;
-import com.bartlomiejpluta.base.api.event.Reactive;
+import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
-import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
@@ -26,6 +27,7 @@ import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
+import com.bartlomiejpluta.base.lib.event.EventHandler;
 import com.bartlomiejpluta.base.util.lambda.UncheckedConsumer;
 import com.bartlomiejpluta.base.util.lambda.UncheckedFunction;
 import lombok.Builder;
@@ -38,6 +40,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Slf4j
 @Builder
@@ -94,12 +97,13 @@ public class DefaultContext implements Context {
    private DefaultGameMap map;
    private MapHandler mapHandler;
 
-   private final List<GUI> guis = new LinkedList<>();
-
-   private final List<Sound> sounds = new LinkedList<>();
-
    @Getter
    private boolean paused;
+
+   private final List<GUI> guis = new LinkedList<>();
+   private final List<Sound> sounds = new LinkedList<>();
+
+   private final EventHandler eventHandler = new EventHandler();
 
    @SneakyThrows
    @Override
@@ -108,21 +112,19 @@ public class DefaultContext implements Context {
       this.input = input;
       this.camera = camera;
 
-      input.addKeyEventHandler(this::populateKeyEventToObjectLayers);
+      input.addKeyEventHandler(this::populateEvent);
 
       gameRunner.init(this);
    }
 
-   private void populateKeyEventToObjectLayers(KeyEvent event) {
+   private void populateEvent(Event event) {
+      eventHandler.handleEvent(event);
+
       if (map == null || event.isConsumed()) {
          return;
       }
 
-      for (var layer : map.getLayers()) {
-         if (layer instanceof Reactive) {
-            ((Reactive) layer).handleEvent(event);
-         }
-      }
+      map.handleEvent(event);
    }
 
    @SneakyThrows
@@ -225,29 +227,42 @@ public class DefaultContext implements Context {
    @Override
    public void setPaused(boolean paused) {
       this.paused = paused;
-
       sounds.forEach(this.paused ? Sound::pause : Sound::play);
+      populateEvent(new GamePauseEvent(this.paused));
+
    }
 
    @Override
    public void pause() {
       this.paused = true;
       sounds.forEach(Sound::pause);
+      populateEvent(new GamePauseEvent(true));
    }
 
    @Override
    public void resume() {
       this.paused = false;
       sounds.forEach(Sound::play);
+      populateEvent(new GamePauseEvent(false));
    }
 
    @Override
    public boolean togglePause() {
       this.paused = !this.paused;
-
       sounds.forEach(this.paused ? Sound::pause : Sound::play);
+      populateEvent(new GamePauseEvent(this.paused));
 
       return this.paused;
+   }
+
+   @Override
+   public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.addListener(type, listener);
+   }
+
+   @Override
+   public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.removeListener(type, listener);
    }
 
    @Override

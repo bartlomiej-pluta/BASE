@@ -1,12 +1,13 @@
 package com.bartlomiejpluta.base.api.map.model;
 
+import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.map.layer.color.ColorLayer;
 import com.bartlomiejpluta.base.api.map.layer.image.ImageLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.tile.TileLayer;
 import org.joml.Vector2fc;
 
-public interface GameMap {
+public interface GameMap extends Reactive {
    float getWidth();
 
    float getHeight();

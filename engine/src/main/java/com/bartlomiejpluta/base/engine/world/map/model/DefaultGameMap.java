@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.map.model;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.map.layer.color.ColorLayer;
@@ -101,6 +102,17 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Override
    public ObjectLayer getObjectLayer(int layerIndex) {
       return (ObjectLayer) layers.get(layerIndex);
+   }
+
+   @Override
+   public <E extends Event> void handleEvent(E event) {
+      for (var layer : layers) {
+         if (event.isConsumed()) {
+            return;
+         }
+
+         layer.handleEvent(event);
+      }
    }
 
    public TileLayer createTileLayer() {

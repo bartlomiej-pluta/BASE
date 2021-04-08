@@ -4,7 +4,6 @@ import com.bartlomiejpluta.base.api.ai.NPC;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
-import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
@@ -23,7 +22,7 @@ import java.util.Queue;
 import static java.lang.Float.compare;
 import static java.lang.Integer.compare;
 
-public class DefaultObjectLayer extends BaseLayer implements ObjectLayer, Reactive {
+public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Getter
    private final ArrayList<Entity> entities = new ArrayList<>();

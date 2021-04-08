@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.map.layer.base;
 
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.screen.Screen;
@@ -63,5 +64,10 @@ public abstract class BaseLayer implements Layer, Updatable {
       for (var animation : animations) {
          animation.render(screen, camera, shaderManager);
       }
+   }
+
+   @Override
+   public <E extends Event> void handleEvent(E event) {
+      // do nothing
    }
 }

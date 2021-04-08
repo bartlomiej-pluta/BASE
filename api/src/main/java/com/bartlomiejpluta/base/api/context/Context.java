@@ -4,6 +4,8 @@ import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
@@ -18,6 +20,7 @@ import com.bartlomiejpluta.base.util.lambda.UncheckedFunction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 public interface Context extends Updatable, Renderable, Disposable {
    GameRunner getGameRunner();
@@ -69,6 +72,10 @@ public interface Context extends Updatable, Renderable, Disposable {
    void resume();
 
    boolean togglePause();
+
+   <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener);
+
+   <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener);
 
    void init(Screen screen, Input input, Camera camera);
 
