@@ -287,6 +287,11 @@ public abstract class BaseWidget implements Widget {
       eventHandler.handleEvent(event);
    }
 
+   @Override
+   public void update(float dt) {
+      // do nothing
+   }
+
    protected <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
       eventHandler.addListener(type, listener);
    }

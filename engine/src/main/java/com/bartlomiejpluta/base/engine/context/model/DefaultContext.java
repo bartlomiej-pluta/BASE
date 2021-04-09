@@ -288,6 +288,10 @@ public class DefaultContext implements Context {
          }
       }
 
+      for (var gui : guis) {
+         gui.update(dt);
+      }
+
       for (var iterator = sounds.iterator(); iterator.hasNext(); ) {
          var sound = iterator.next();
          if (sound.isStopped()) {

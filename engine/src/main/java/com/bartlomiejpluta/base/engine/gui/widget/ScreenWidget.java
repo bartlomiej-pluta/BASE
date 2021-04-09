@@ -238,6 +238,13 @@ public class ScreenWidget implements Widget {
    }
 
    @Override
+   public void update(float dt) {
+      if (root != null) {
+         root.update(dt);
+      }
+   }
+
+   @Override
    public void draw(Screen screen, GUI gui) {
       if (root != null) {
          root.draw(screen, gui);

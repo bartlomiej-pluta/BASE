@@ -5,6 +5,8 @@ import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.lib.gui.BaseWidget;
+import lombok.NonNull;
+import lombok.Setter;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -15,18 +17,25 @@ public final class WindowManager extends BaseWidget {
    private final Input input;
    private final Deque<Window> windows = new LinkedList<>();
 
+   @NonNull
+   @Setter
    private DisplayMode displayMode;
 
+   @NonNull
+   @Setter
+   private UpdateMode updateMode;
+
    public WindowManager(Context context) {
-      this(context, DisplayMode.DISPLAY_STACK);
+      this(context, DisplayMode.DISPLAY_STACK, UpdateMode.UPDATE_ALL);
    }
 
-   public WindowManager(Context context, DisplayMode displayMode) {
+   public WindowManager(Context context, DisplayMode displayMode, UpdateMode updateMode) {
       this.input = context.getInput();
 
       super.setSizeMode(SizeMode.RELATIVE, SizeMode.RELATIVE);
       super.setSize(1f, 1f);
       this.displayMode = displayMode;
+      this.updateMode = updateMode;
    }
 
    @Override
@@ -54,10 +63,6 @@ public final class WindowManager extends BaseWidget {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
-   public void setDisplayMode(DisplayMode mode) {
-      this.displayMode = requireNonNull(mode);
-   }
-
    public void open(Window window) {
       requireNonNull(window, "Window cannot be null");
 
@@ -78,7 +83,6 @@ public final class WindowManager extends BaseWidget {
    }
 
    public void closeAll() {
-
       // Use iterator to support removal from loop inside
       for (var iterator = windows.iterator(); iterator.hasNext(); ) {
          close();
@@ -101,6 +105,24 @@ public final class WindowManager extends BaseWidget {
 
    public int size() {
       return windows.size();
+   }
+
+   @Override
+   public void update(float dt) {
+      switch (updateMode) {
+         case UPDATE_ALL -> {
+            for (var window : windows) {
+               window.update(dt);
+            }
+         }
+
+         case UPDATE_TOP -> {
+            var topWindow = windows.peekLast();
+            if (topWindow != null) {
+               topWindow.update(dt);
+            }
+         }
+      }
    }
 
    @Override

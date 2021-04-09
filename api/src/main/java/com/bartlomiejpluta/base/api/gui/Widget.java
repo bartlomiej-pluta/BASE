@@ -2,8 +2,9 @@ package com.bartlomiejpluta.base.api.gui;
 
 import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.internal.logic.Updatable;
 
-public interface Widget extends Reactive {
+public interface Widget extends Updatable, Reactive {
    Widget getParent();
 
    void setParent(Widget parent);

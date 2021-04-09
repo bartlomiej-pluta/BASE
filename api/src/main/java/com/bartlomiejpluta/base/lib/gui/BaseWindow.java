@@ -66,6 +66,13 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    }
 
    @Override
+   public void update(float dt) {
+      if (content != null) {
+         content.update(dt);
+      }
+   }
+
+   @Override
    public void onOpen(WindowManager manager) {
       this.manager = manager;
    }

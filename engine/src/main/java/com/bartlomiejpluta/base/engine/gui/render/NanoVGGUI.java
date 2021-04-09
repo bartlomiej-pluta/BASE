@@ -57,6 +57,11 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public void update(float dt) {
+      screenWidget.update(dt);
+   }
+
+   @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       if (!visible) {
          return;

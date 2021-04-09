@@ -104,4 +104,11 @@ public abstract class BaseContainer extends BaseComponent {
 
       eventHandler.handleEvent(event);
    }
+
+   @Override
+   public void update(float dt) {
+      for (var child : children) {
+         child.update(dt);
+      }
+   }
 }
