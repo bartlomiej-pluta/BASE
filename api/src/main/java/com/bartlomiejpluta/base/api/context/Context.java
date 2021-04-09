@@ -47,8 +47,6 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    GUI newGUI();
 
-   void disposeGUI(GUI gui);
-
    Sound createSound(String soundUid);
 
    void withDatabase(UncheckedConsumer<Connection, SQLException> consumer);
