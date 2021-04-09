@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -100,7 +101,7 @@ public class DefaultContext implements Context {
    @Getter
    private boolean paused;
 
-   private final List<GUI> guis = new LinkedList<>();
+   private final List<GUI> guis = new ArrayList<>();
    private final List<Sound> sounds = new LinkedList<>();
 
    private final EventHandler eventHandler = new EventHandler();
@@ -168,6 +169,12 @@ public class DefaultContext implements Context {
       guis.add(gui);
       gui.init(screen);
       return gui;
+   }
+
+   @Override
+   public void disposeGUI(GUI gui) {
+      guis.remove(gui);
+      gui.dispose();
    }
 
    @Override
@@ -274,6 +281,7 @@ public class DefaultContext implements Context {
       }
    }
 
+   @SuppressWarnings("ForLoopReplaceableByForEach")
    @Override
    public void update(float dt) {
       gameRunner.update(dt);
@@ -288,8 +296,8 @@ public class DefaultContext implements Context {
          }
       }
 
-      for (var gui : guis) {
-         gui.update(dt);
+      for (int i = 0; i < guis.size(); ++i) {
+         guis.get(i).update(dt);
       }
 
       for (var iterator = sounds.iterator(); iterator.hasNext(); ) {
@@ -301,14 +309,15 @@ public class DefaultContext implements Context {
       }
    }
 
+   @SuppressWarnings("ForLoopReplaceableByForEach")
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       if (map != null) {
          map.render(screen, camera, shaderManager);
       }
 
-      for (var gui : guis) {
-         gui.render(screen, camera, shaderManager);
+      for (int i = 0; i < guis.size(); ++i) {
+         guis.get(i).render(screen, camera, shaderManager);
       }
 
       if (mapHandler != null) {
