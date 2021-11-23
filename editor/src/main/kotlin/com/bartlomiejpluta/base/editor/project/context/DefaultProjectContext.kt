@@ -39,6 +39,7 @@ import tornadofx.setValue
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.util.*
 
 @Component
 class DefaultProjectContext : ProjectContext {
@@ -102,7 +103,11 @@ class DefaultProjectContext : ProjectContext {
             it.maps += asset
 
             save()
-            javaClassService.createClassFile(map.handler, it.codeFSNode, "map_handler.ftl")
+
+            javaClassService.createClassFile(map.handler, it.codeFSNode, "map_handler.ftl") { model ->
+               model["mapUid"] = uid
+            }
+
             File(it.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
          }
       }
@@ -250,7 +255,7 @@ class DefaultProjectContext : ProjectContext {
    override fun loadScript(fileNode: FileNode, execute: ((String) -> Unit)?, saveable: Boolean): Code {
       val typeProperty = SimpleObjectProperty<CodeType>().apply {
          bind(createObjectBinding({
-            when (fileNode.extension.toLowerCase()) {
+            when (fileNode.extension.lowercase(Locale.getDefault())) {
                "java" -> CodeType.JAVA
                "xml" -> CodeType.XML
                "sql" -> CodeType.SQL

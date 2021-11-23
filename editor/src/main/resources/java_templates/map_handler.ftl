@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.screen.Screen;
 
 public class ${className} implements MapHandler {
+   public static final String UID = "${mapUid}";
 
    @Override
    public void onCreate(Context context, GameMap map) {

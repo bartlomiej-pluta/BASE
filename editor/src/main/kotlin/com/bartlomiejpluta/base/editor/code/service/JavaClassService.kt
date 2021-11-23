@@ -30,7 +30,12 @@ class JavaClassService {
    fun ofPath(path: String): String = ofPath(Path.of(path))
    fun ofPath(path: Path): String = path.joinToString(".")
 
-   fun createClassFile(name: String, directory: FileSystemNode, classTemplate: String) {
+   fun createClassFile(
+      name: String,
+      directory: FileSystemNode,
+      classTemplate: String,
+      inflate: (MutableMap<String, String>) -> Unit = {}
+   ) {
       projectContext.project?.let { project ->
          val template = config.getTemplate(classTemplate)
 
@@ -42,7 +47,7 @@ class JavaClassService {
 
          project.codeFSNode.createNode(classFile.toRelativeString(project.codeFSNode.file))
 
-         val model = mapOf("className" to className, "package" to classPackage)
+         val model = mutableMapOf("className" to className, "package" to classPackage).apply(inflate).toMap()
          template.process(model, classFile.writer())
       }
    }
