@@ -6,13 +6,23 @@ import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.screen.Screen;
 
 public interface MapHandler {
-   void onCreate(Context context, GameMap map);
+   default void onCreate(Context context, GameMap map) {
+      // do nothing
+   }
 
-   void onOpen(Context context, GameMap map);
+   default void onOpen(Context context, GameMap map) {
+      // do nothing
+   }
 
-   void input(Input input);
+   default void input(Input input) {
+      // do nothing
+   }
 
-   void update(Context context, GameMap map, float dt);
+   default void update(Context context, GameMap map, float dt) {
+      // do nothing
+   }
 
-   void postRender(Screen screen);
+   default void postRender(Screen screen) {
+      // do nothing
+   }
 }

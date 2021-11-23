@@ -5,9 +5,20 @@ import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.internal.gc.Disposable;
 
 public interface GameRunner extends Disposable {
-   void init(Context context);
+   default void init(Context context) {
+      // do nothing
+   }
 
-   void input(Input input);
+   default void input(Input input) {
+      // do nothing
+   }
 
-   void update(float dt);
+   default void update(float dt) {
+      // do nothing
+   }
+
+   @Override
+   default void dispose() {
+      // do nothing
+   }
 }
