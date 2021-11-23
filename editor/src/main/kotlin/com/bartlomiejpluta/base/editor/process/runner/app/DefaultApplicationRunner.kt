@@ -1,8 +1,6 @@
 package com.bartlomiejpluta.base.editor.process.runner.app
 
 import com.bartlomiejpluta.base.editor.code.build.pipeline.BuildPipelineService
-import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
-import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.ClearProcessLogsEvent
 import com.bartlomiejpluta.base.editor.process.runner.jar.JarRunner
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -10,8 +8,14 @@ import com.bartlomiejpluta.base.editor.project.model.Project
 import javafx.beans.property.SimpleObjectProperty
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import tornadofx.*
 import tornadofx.FX.Companion.eventbus
+import tornadofx.getValue
+import tornadofx.runAsync
+import tornadofx.setValue
+import tornadofx.toProperty
+import java.io.IOException
+import java.io.OutputStream
+import java.io.PrintStream
 
 @Component
 class DefaultApplicationRunner : ApplicationRunner {
@@ -25,11 +29,24 @@ class DefaultApplicationRunner : ApplicationRunner {
    @Autowired
    private lateinit var jarRunner: JarRunner
 
-   override val isRunningProperty = false.toProperty()
-   private var isRunning by isRunningProperty
+   private lateinit var stdout: OutputStream
+   private lateinit var stderr: OutputStream
+   private lateinit var out: PrintStream
+   private lateinit var err: PrintStream
 
+   override val isRunningProperty = false.toProperty()
+
+   private var isRunning by isRunningProperty
    override val processProperty = SimpleObjectProperty<Process>()
+
    private var process by processProperty
+
+   override fun initStreams(stdout: OutputStream, stderr: OutputStream) {
+      this.stdout = stdout
+      this.stderr = stderr
+      this.out = PrintStream(stdout)
+      this.err = PrintStream(stderr)
+   }
 
    override fun run() {
       projectContext.project?.let { project ->
@@ -65,19 +82,16 @@ class DefaultApplicationRunner : ApplicationRunner {
       process = builder.start()
 
       runAsync {
-         process.inputStream.bufferedReader().forEachLine {
-            eventbus.fire(AppendProcessLogsEvent(Severity.INFO, it))
-         }
-      }
-
-      runAsync {
-         process.errorStream.bufferedReader().forEachLine {
-            eventbus.fire(AppendProcessLogsEvent(Severity.ERROR, it))
+         try {
+            process.inputStream.transferTo(stdout)
+            process.errorStream.transferTo(stderr)
+         } catch (e: IOException) {
+            // Ignore stream termination exception
          }
       }
 
       process.onExit().thenApply {
-         eventbus.fire(AppendProcessLogsEvent(Severity.INFO, "\nProcess exited with code ${it.exitValue()}"))
+         out.println("\nProcess exited with code ${it.exitValue()}")
          process = null
          isRunning = false
       }

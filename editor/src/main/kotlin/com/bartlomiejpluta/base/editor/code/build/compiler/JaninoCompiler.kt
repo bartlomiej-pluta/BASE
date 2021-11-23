@@ -2,23 +2,26 @@ package com.bartlomiejpluta.base.editor.code.build.compiler
 
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.model.FileNodeResourceAdapter
-import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
-import com.bartlomiejpluta.base.editor.common.logs.model.Location
-import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.file.model.FileType
 import org.codehaus.commons.compiler.CompileException
 import org.codehaus.janino.CompilerFactory
 import org.springframework.stereotype.Component
-import tornadofx.FX.Companion.eventbus
 import java.io.File
+import java.io.PrintStream
 
 @Component
 class JaninoCompiler : Compiler {
    private val compilerFactory = CompilerFactory()
 
-   override fun compile(sourceDirectories: Array<FileSystemNode>, targetDirectory: File, classPath: Array<File>) = try {
-      tryToCompile(sourceDirectories, targetDirectory, classPath)
+   override fun compile(
+      sourceDirectories: Array<FileSystemNode>,
+      targetDirectory: File,
+      classPath: Array<File>,
+      stdout: PrintStream,
+      stderr: PrintStream
+   ) = try {
+      tryToCompile(sourceDirectories, targetDirectory, classPath, stdout)
 
       /* Because Janino parser does not provide error handler for parsers:
       *
@@ -31,14 +34,16 @@ class JaninoCompiler : Compiler {
       * as BuildException
       */
    } catch (e: CompileException) {
-      val locationIndex = e.location?.toString()?.length?.plus(2) ?: 0
-      val message = e.message?.substring(locationIndex)
-      val location = Location(e.location.fileName, e.location.lineNumber.toLong(), e.location.columnNumber.toLong())
-
-      throw BuildException(Severity.ERROR, TAG, location, message, e)
+      stderr.println("[$TAG] ${e.message}")
+      throw BuildException()
    }
 
-   private fun tryToCompile(sourceDirectories: Array<FileSystemNode>, targetDirectory: File, classPath: Array<File>) {
+   private fun tryToCompile(
+      sourceDirectories: Array<FileSystemNode>,
+      targetDirectory: File,
+      classPath: Array<File>,
+      stdout: PrintStream
+   ) {
       val compilationUnits = sourceDirectories.flatMap(FileSystemNode::allChildren)
          .filter { it.type == FileType.FILE }
          .map(::FileNodeResourceAdapter)
@@ -50,8 +55,7 @@ class JaninoCompiler : Compiler {
          setClassPath(classPath)
 
          setWarningHandler { handle, message, loc ->
-            val location = Location(loc.fileName, loc.lineNumber.toLong(), loc.columnNumber.toLong())
-            eventbus.fire(AppendBuildLogsEvent(Severity.WARNING, "$message ($handle)", location, TAG))
+            stdout.println("[$TAG] $message:$loc ($handle)")
          }
 
          compile(compilationUnits)

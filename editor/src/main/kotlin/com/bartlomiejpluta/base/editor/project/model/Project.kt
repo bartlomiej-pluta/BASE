@@ -176,7 +176,7 @@ class Project {
       const val FONTS_DIR = "fonts"
       const val WIDGETS_DIR = "widgets"
       const val AUDIO_DIR = "audio"
-      const val CODE_DIR = "code"
+      const val CODE_DIR = "src/main/java"
       const val BUILD_DIR = "build"
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"
       const val BUILD_OUT_DIR = "$BUILD_DIR/out"

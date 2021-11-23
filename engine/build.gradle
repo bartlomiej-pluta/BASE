@@ -42,7 +42,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
  bootJar {

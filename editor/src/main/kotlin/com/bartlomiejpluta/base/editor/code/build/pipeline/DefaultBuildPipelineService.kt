@@ -8,8 +8,6 @@ import com.bartlomiejpluta.base.editor.code.build.generator.CodeGenerator
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
 import com.bartlomiejpluta.base.editor.code.build.project.ProjectAssembler
 import com.bartlomiejpluta.base.editor.code.dependency.DependenciesProvider
-import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
-import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
 import com.bartlomiejpluta.base.editor.event.ClearBuildLogsEvent
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -19,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import tornadofx.*
 import tornadofx.FX.Companion.eventbus
+import java.io.OutputStream
+import java.io.PrintStream
 
 @Component
 class DefaultBuildPipelineService : BuildPipelineService {
@@ -50,6 +50,18 @@ class DefaultBuildPipelineService : BuildPipelineService {
    private val latchProperty = SimpleObjectProperty<Latch?>()
    private var latch by latchProperty
 
+   private lateinit var stdout: OutputStream
+   private lateinit var stderr: OutputStream
+   private lateinit var out: PrintStream
+   private lateinit var err: PrintStream
+
+   override fun initStreams(stdout: OutputStream, stderr: OutputStream) {
+      this.stdout = stdout
+      this.stderr = stderr
+      this.out = PrintStream(stdout)
+      this.err = PrintStream(stderr)
+   }
+
    override val isRunningProperty = false.toProperty()
    private var isRunning by isRunningProperty
 
@@ -70,18 +82,18 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
       latch = Latch()
 
+      val startTime = System.currentTimeMillis()
+
       try {
          projectContext.project?.let(this@DefaultBuildPipelineService::runPipeline)
+         out.println("Build completed")
          return@runAsync true
       } catch (e: BuildException) {
-         e.severity?.let {
-            val event = AppendBuildLogsEvent(it, e.message, e.location, e.tag)
-            eventbus.fire(event)
-         }
-
-         eventbus.fire(AppendBuildLogsEvent(Severity.ERROR, "Build failed", tag = TAG))
+         err.println("Build failed")
       } finally {
          latch?.release()
+         val buildingTime = (System.currentTimeMillis() - startTime) / 1000.0
+         out.println("Finished in [${buildingTime}s]")
       }
 
       false
@@ -92,35 +104,33 @@ class DefaultBuildPipelineService : BuildPipelineService {
       prepareBuildDirectory(project)
 
       val outputFile = project.buildOutputJarFile
-      val startTime = System.currentTimeMillis()
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Providing compile-time dependencies...", tag = TAG))
+      out.println("Providing compile-time dependencies...")
       val dependencies = dependenciesProvider.provideDependenciesTo(project.buildDependenciesDirectory)
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Generating sources...", tag = TAG))
+      out.println("Generating sources...")
       generators.forEach(CodeGenerator::generate)
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Compiling sources...", tag = TAG))
+      out.println("Compiling sources...")
       compiler.compile(
          arrayOf(project.codeFSNode, FileSystemNode(project.buildGeneratedCodeDirectory)),
          project.buildClassesDirectory,
-         dependencies.toTypedArray()
+         dependencies.toTypedArray(),
+         out,
+         err
       )
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling game engine...", tag = TAG))
-      engineProvider.provideBaseGameEngine(outputFile)
+      out.println("Assembling game engine...")
+      engineProvider.provideBaseGameEngine(outputFile, out, err)
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling compiled classes...", tag = TAG))
+      out.println("Linking compilation units...")
       packager.pack(project.buildClassesDirectory, outputFile, "BOOT-INF/classes")
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling project assets...", tag = TAG))
-      projectAssembler.assembly(project, outputFile)
+      out.println("Assembling project assets...")
+      projectAssembler.assembly(project, outputFile, out, err)
 
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Assembling database...", tag = TAG))
-      databaseAssembler.assembly(project, outputFile)
-
-      val buildingTime = (System.currentTimeMillis() - startTime) / 1000.0
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Build done [${buildingTime}s]", tag = TAG))
+      out.println("Assembling database...")
+      databaseAssembler.assembly(project, outputFile, out, err)
    }
 
    private fun prepareBuildDirectory(project: Project) {
@@ -129,14 +139,11 @@ class DefaultBuildPipelineService : BuildPipelineService {
       project.buildClassesDirectory.mkdirs()
       project.buildOutDirectory.mkdirs()
       project.buildDependenciesDirectory.mkdirs()
+      project.buildGeneratedCodeDirectory.mkdirs()
    }
 
    override fun clean() {
       projectContext.project?.apply { buildDirectory.deleteRecursively() }
-      eventbus.fire(AppendBuildLogsEvent(Severity.INFO, "Cleaning done", tag = TAG))
-   }
-
-   companion object {
-      private const val TAG = "Build"
+      out.println("Cleaning done")
    }
 }

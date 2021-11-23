@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.editor.code.build.game
 
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
-import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import org.springframework.stereotype.Component
 import java.io.File
+import java.io.PrintStream
 
 /* TODO
  * There is an idea to have a different GameEngine providers for different OS (Windows, Mac OS X, Linux etc.)
@@ -17,18 +17,19 @@ import java.io.File
 @Component
 class DefaultGameEngineProvider : GameEngineProvider {
 
-   override fun provideBaseGameEngine(targetJar: File) {
+   override fun provideBaseGameEngine(targetJar: File, stdout: PrintStream, stderr: PrintStream) {
       try {
          tryToProvide(targetJar)
       } catch (e: Exception) {
-         throw BuildException(Severity.ERROR, TAG, e.message, e)
+         stderr.println("[$TAG] ${e.message}")
+         throw BuildException()
       }
    }
 
    private fun tryToProvide(targetJar: File) {
       javaClass.getResourceAsStream(GAME_ENGINE_JAR).use { ris ->
          targetJar.outputStream().use { fos ->
-            ris.copyTo(fos)
+            ris?.copyTo(fos)
          }
       }
    }

@@ -1,6 +1,6 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.jetbrains.kotlin.jvm' version "$kotlinJvmVersion"
+    id 'org.openjfx.javafxplugin' version "$javaFxPluginVersion"
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
     id 'idea'
@@ -24,11 +24,11 @@ javafx {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "14"
+    kotlinOptions.jvmTarget = "17"
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "14"
+    kotlinOptions.jvmTarget = "17"
 }
 
 dependencies {

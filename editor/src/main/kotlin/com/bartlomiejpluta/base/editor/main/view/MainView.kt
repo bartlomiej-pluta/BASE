@@ -8,8 +8,6 @@ import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.database.view.list.TablesListView
 import com.bartlomiejpluta.base.editor.database.view.query.QueryResultFragment
 import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
-import com.bartlomiejpluta.base.editor.event.AppendBuildLogsEvent
-import com.bartlomiejpluta.base.editor.event.AppendProcessLogsEvent
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.main.component.EditorTab
 import com.bartlomiejpluta.base.editor.main.controller.MainController
@@ -92,14 +90,6 @@ class MainView : View("BASE Game Editor") {
                project.nameProperty, project.sourceDirectoryProperty
             )
          }.let { titleProperty.bind(it) }
-      }
-
-      subscribe<AppendBuildLogsEvent> {
-         buildLogItem.expanded = true
-      }
-
-      subscribe<AppendProcessLogsEvent> {
-         processLogItem.expanded = true
       }
 
       subscribe<SelectMainViewTabEvent> { event ->

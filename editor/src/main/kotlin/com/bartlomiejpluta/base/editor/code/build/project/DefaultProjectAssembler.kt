@@ -2,11 +2,11 @@ package com.bartlomiejpluta.base.editor.code.build.project
 
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
 import com.bartlomiejpluta.base.editor.code.build.packager.JarPackager
-import com.bartlomiejpluta.base.editor.common.logs.enumeration.Severity
 import com.bartlomiejpluta.base.editor.project.model.Project
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.io.File
+import java.io.PrintStream
 
 @Component
 class DefaultProjectAssembler : ProjectAssembler {
@@ -14,11 +14,12 @@ class DefaultProjectAssembler : ProjectAssembler {
    @Autowired
    private lateinit var packager: JarPackager
 
-   override fun assembly(project: Project, targetJar: File) {
+   override fun assembly(project: Project, targetJar: File, stdout: PrintStream, stderr: PrintStream) {
       try {
          tryToAssembly(project, targetJar)
       } catch (e: Exception) {
-         throw BuildException(Severity.ERROR, TAG, e.message, e)
+         stderr.println("[$TAG] ${e.message}")
+         throw BuildException()
       }
    }
 
