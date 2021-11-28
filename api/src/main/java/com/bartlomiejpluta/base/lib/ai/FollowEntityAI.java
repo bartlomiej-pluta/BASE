@@ -9,7 +9,6 @@ import com.bartlomiejpluta.base.util.path.MovementPath;
 import com.bartlomiejpluta.base.util.path.PathExecutor;
 import com.bartlomiejpluta.base.util.pathfinder.PathFinder;
 import lombok.NonNull;
-import lombok.Setter;
 
 public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements AI {
 
@@ -17,12 +16,6 @@ public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements
    private final PathExecutor<N> executor;
    private final N npc;
    private final T target;
-
-   @Setter
-   private AI idleAI;
-
-   @Setter
-   private int range = 20;
 
    private MovementPath<N> path = null;
 
@@ -54,9 +47,9 @@ public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements
 
          if (distance == 1) {
             npc.setFaceDirection(npc.getDirectionTowards(target));
-            interact(npc, target);
-         } else if (distance < range) {
-            follow(npc, target);
+            interact(npc, target, layer, dt);
+         } else if (sees(npc, target, layer, distance)) {
+            follow(npc, target, layer, dt);
 
             if (path == null) {
                path = finder.findPath(layer, npc, target.getCoordinates());
@@ -65,18 +58,16 @@ public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements
 
             executor.execute(layer, dt);
          } else {
-            idle(npc, target);
-
-            if (idleAI != null) {
-               idleAI.nextActivity(layer, dt);
-            }
+            idle(npc, target, layer, dt);
          }
       }
    }
 
-   protected abstract void interact(N npc, T target);
+   protected abstract boolean sees(N npc, T target, ObjectLayer layer, int distance);
 
-   protected abstract void follow(N npc, T target);
+   protected abstract void interact(N npc, T target, ObjectLayer layer, float dt);
 
-   protected abstract void idle(N npc, T target);
+   protected abstract void follow(N npc, T target, ObjectLayer layer, float dt);
+
+   protected abstract void idle(N npc, T target, ObjectLayer layer, float dt);
 }
