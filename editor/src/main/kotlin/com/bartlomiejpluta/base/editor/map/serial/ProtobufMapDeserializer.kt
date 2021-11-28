@@ -10,6 +10,7 @@ import com.bartlomiejpluta.base.editor.tileset.model.Tile
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import com.bartlomiejpluta.base.proto.GameMapProto
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import java.io.InputStream
 
@@ -17,7 +18,11 @@ import java.io.InputStream
 class ProtobufMapDeserializer : MapDeserializer {
 
    @Autowired
-   private lateinit var projectContext: ProjectContext
+   private lateinit var appContext: ApplicationContext
+
+   private val projectContext: ProjectContext by lazy {
+      appContext.getBean(ProjectContext::class.java)
+   }
 
    override fun deserialize(input: InputStream): GameMap {
       val proto = GameMapProto.GameMap.parseFrom(input)

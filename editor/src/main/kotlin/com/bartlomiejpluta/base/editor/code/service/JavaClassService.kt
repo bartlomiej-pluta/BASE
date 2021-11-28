@@ -6,6 +6,7 @@ import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import freemarker.template.Version
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import java.io.File
 import java.nio.file.Path
@@ -15,7 +16,11 @@ import java.util.*
 class JavaClassService {
 
    @Autowired
-   private lateinit var projectContext: ProjectContext
+   private lateinit var appContext: ApplicationContext
+
+   private val projectContext: ProjectContext by lazy {
+      appContext.getBean(ProjectContext::class.java)
+   }
 
    private val config = Configuration(Version(2, 3, 20)).apply {
       defaultEncoding = "UTF-8"
