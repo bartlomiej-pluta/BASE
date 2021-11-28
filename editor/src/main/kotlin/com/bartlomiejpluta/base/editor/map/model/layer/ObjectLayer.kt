@@ -11,7 +11,7 @@ class ObjectLayer(
    name: String,
    rows: Int,
    columns: Int,
-   objects: List<MapObject> = emptyList(),
+   objects: List<MapObject> = mutableListOf(),
    passageMap: Array<Array<PassageAbility>> = Array(rows) { Array(columns) { PassageAbility.ALLOW } }
 ) : Layer {
    var passageMap = passageMap
