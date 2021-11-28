@@ -28,6 +28,7 @@ interface ProjectContext {
    fun createNewProject(project: Project)
 
    fun importMap(name: String, map: GameMap)
+   fun importMapFromFile(name: String, handler: String, file: File, tileSet: TileSet): GameMap
    fun loadMap(uid: String): GameMap
    fun saveMap(map: GameMap)
 

@@ -35,6 +35,21 @@ class ProtobufMapDeserializer : MapDeserializer {
       return map
    }
 
+   override fun deserialize(input: InputStream, tileSet: TileSet): GameMap {
+      val proto = GameMapProto.GameMap.parseFrom(input)
+      val map = GameMap(tileSet)
+      map.uid = proto.uid
+      map.rows = proto.rows
+      map.columns = proto.columns
+      map.handler = proto.handler
+
+      proto.layersList
+         .filter { it.hasTileLayer() || it.hasObjectLayer() || it.hasColorLayer() }
+         .forEach { map.layers.add(deserializeLayer(map.rows, map.columns, tileSet, it)) }
+
+      return map
+   }
+
    private fun deserializeLayer(rows: Int, columns: Int, tileSet: TileSet, proto: GameMapProto.Layer): Layer {
       return when {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, tileSet, proto)

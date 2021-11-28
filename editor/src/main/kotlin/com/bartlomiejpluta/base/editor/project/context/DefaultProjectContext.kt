@@ -113,6 +113,26 @@ class DefaultProjectContext : ProjectContext {
       }
    }
 
+   override fun importMapFromFile(name: String, handler: String, file: File, tileSet: TileSet) =
+      project?.let { project ->
+         val map = file.inputStream().use { mapDeserializer.deserialize(it, tileSet) }
+         UID.next(project.maps.map(Asset::uid)).let { uid ->
+            val asset = GameMapAsset(project, uid, name)
+            map.uid = uid
+            project.maps += asset
+
+            save()
+
+            javaClassService.createClassFile(handler, project.codeFSNode, "map_handler.ftl") { model ->
+               model["mapUid"] = uid
+            }
+
+            File(project.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
+
+            map
+         }
+      } ?: throw IllegalStateException("There is no open project in the context")
+
    override fun loadMap(uid: String) = project?.let {
       val asset = it.maps.firstOrNull { map -> map.uid == uid }
          ?: throw IllegalStateException("The map with uid [$uid] does not exist ")

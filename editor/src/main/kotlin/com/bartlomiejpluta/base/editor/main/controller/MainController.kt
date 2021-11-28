@@ -23,6 +23,7 @@ import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.view.wizard.MapCreationWizard
+import com.bartlomiejpluta.base.editor.map.view.wizard.MapImportWizard
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
@@ -35,6 +36,7 @@ import javafx.scene.control.TextInputDialog
 import javafx.stage.FileChooser
 import org.springframework.stereotype.Component
 import tornadofx.*
+import java.io.File
 import kotlin.collections.set
 
 @Component
@@ -71,6 +73,21 @@ class MainController : Controller() {
                handler = vm.handler
             }
             projectContext.importMap(vm.name, map)
+            openItems[scope] = GameMapVM(map)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
+   fun importMap() {
+      val scope = UndoableScope()
+      val vm = GameMapBuilderVM()
+      setInScope(vm, scope)
+      find<MapImportWizard>(scope).apply {
+         onComplete {
+            val tileSet = projectContext.loadTileSet(vm.tileSetAsset.uid)
+            val map = projectContext.importMapFromFile(vm.name, vm.handler, File(vm.file), tileSet)
             openItems[scope] = GameMapVM(map)
          }
 
@@ -262,6 +279,7 @@ class MainController : Controller() {
       }
    }
 
+
    fun closeScript(fsNode: FileNode) {
       openItems.entries.firstOrNull { (_, item) -> item is CodeVM && item.fileNode.absolutePath == fsNode.absolutePath }?.key?.let {
          openItems.remove(it)
@@ -273,7 +291,6 @@ class MainController : Controller() {
          }
       }
    }
-
 
    fun clearResources() {
       openItems.clear()

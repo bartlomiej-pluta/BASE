@@ -40,6 +40,12 @@ class MainMenuView : View() {
          }
 
          menu("Import") {
+            item("Map...") {
+               action {
+                  mainController.importMap()
+               }
+            }
+
             item("Tile Set...") {
                action {
                   mainController.importTileSet()

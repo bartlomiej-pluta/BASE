@@ -18,6 +18,7 @@ class AssetsListView : View() {
 
    private val maps = AssetCategory("Maps").apply {
       menuitem("New Map...") { mainController.createEmptyMap() }
+      menuitem("Import Map...") { mainController.importMap() }
    }
 
    private val tileSets = AssetCategory("Tile Sets").apply {

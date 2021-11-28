@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.getValue
 import tornadofx.setValue
+import java.io.File
 
 class GameMapBuilder {
    val tileSetAssetProperty = SimpleObjectProperty<TileSetAsset>()
@@ -22,4 +23,7 @@ class GameMapBuilder {
 
    val handlerProperty = SimpleStringProperty()
    var handler by handlerProperty
+
+   val fileProperty = SimpleStringProperty("")
+   var file by fileProperty
 }
