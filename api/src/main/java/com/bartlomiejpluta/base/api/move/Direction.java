@@ -3,6 +3,8 @@ package com.bartlomiejpluta.base.api.move;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
+import java.util.Map;
+
 import static java.lang.Math.PI;
 import static org.joml.Math.atan2;
 
@@ -11,6 +13,13 @@ public enum Direction {
    UP(0, -1, 90),
    LEFT(-1, 0, 180),
    DOWN(0, 1, 270);
+
+   private static final Map<Direction, Direction[]> PERPENDICULARS = Map.of(
+           Direction.UP, new Direction[] { Direction.LEFT, Direction.RIGHT },
+           Direction.DOWN, new Direction[] { Direction.LEFT, Direction.RIGHT },
+           Direction.LEFT, new Direction[] { Direction.UP, Direction.DOWN },
+           Direction.RIGHT, new Direction[] { Direction.UP, Direction.DOWN }
+   );
 
    public final int x;
    public final int y;
@@ -31,6 +40,10 @@ public enum Direction {
          case DOWN -> UP;
          case LEFT -> RIGHT;
       };
+   }
+
+   public Direction[] perpendiculars() {
+      return PERPENDICULARS.get(this);
    }
 
    public static Direction ofVector(Vector2ic vector) {

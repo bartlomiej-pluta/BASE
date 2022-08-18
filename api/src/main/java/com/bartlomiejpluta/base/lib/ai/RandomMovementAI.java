@@ -7,15 +7,15 @@ import com.bartlomiejpluta.base.api.move.Direction;
 
 import java.util.Random;
 
-public class RandomMovementAI implements AI {
+public class RandomMovementAI<N extends NPC> implements AI {
    private final Random random = new Random();
-   private final NPC npc;
+   private final N npc;
 
    private final float intervalSeconds;
    private float accumulator = 0.0f;
    private float threshold = 0.0f;
 
-   public RandomMovementAI(NPC npc, float intervalSeconds) {
+   public RandomMovementAI(N npc, float intervalSeconds) {
       this.npc = npc;
       this.intervalSeconds = intervalSeconds;
    }
