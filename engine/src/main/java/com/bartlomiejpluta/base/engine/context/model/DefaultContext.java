@@ -112,12 +112,13 @@ public class DefaultContext implements Context {
       this.input = input;
       this.camera = camera;
 
-      input.addKeyEventHandler(this::populateEvent);
+      input.addKeyEventHandler(this::fireEvent);
 
       gameRunner.init(this);
    }
 
-   private void populateEvent(Event event) {
+   @Override
+   public <E extends Event> void fireEvent(E event) {
       eventHandler.handleEvent(event);
 
       if (map == null || event.isConsumed()) {
@@ -228,7 +229,7 @@ public class DefaultContext implements Context {
    public void setPaused(boolean paused) {
       this.paused = paused;
       sounds.forEach(this.paused ? Sound::pause : Sound::play);
-      populateEvent(new GamePauseEvent(this.paused));
+      fireEvent(new GamePauseEvent(this.paused));
 
    }
 
@@ -236,21 +237,21 @@ public class DefaultContext implements Context {
    public void pause() {
       this.paused = true;
       sounds.forEach(Sound::pause);
-      populateEvent(new GamePauseEvent(true));
+      fireEvent(new GamePauseEvent(true));
    }
 
    @Override
    public void resume() {
       this.paused = false;
       sounds.forEach(Sound::play);
-      populateEvent(new GamePauseEvent(false));
+      fireEvent(new GamePauseEvent(false));
    }
 
    @Override
    public boolean togglePause() {
       this.paused = !this.paused;
       sounds.forEach(this.paused ? Sound::pause : Sound::play);
-      populateEvent(new GamePauseEvent(this.paused));
+      fireEvent(new GamePauseEvent(this.paused));
 
       return this.paused;
    }

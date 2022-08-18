@@ -73,6 +73,8 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    boolean togglePause();
 
+   <E extends Event> void fireEvent(E event);
+
    <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener);
 
    <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener);
