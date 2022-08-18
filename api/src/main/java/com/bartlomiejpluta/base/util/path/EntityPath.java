@@ -37,6 +37,11 @@ public class EntityPath<T extends Entity> implements Path<T> {
       return this;
    }
 
+   public EntityPath<T> turn(Direction direction, int newAnimationFrame) {
+      path.add(new TurnSegment<>(direction, newAnimationFrame));
+      return this;
+   }
+
    public EntityPath<T> wait(float seconds) {
       path.add(new WaitSegment<>(seconds));
       return this;

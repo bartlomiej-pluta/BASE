@@ -16,4 +16,6 @@ public interface Animated extends Updatable {
    float getAnimationSpeed();
 
    void setAnimationSpeed(float speed);
+
+   void setAnimationFrame(int frame);
 }

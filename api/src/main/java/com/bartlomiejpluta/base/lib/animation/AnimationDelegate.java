@@ -67,6 +67,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public void setAnimationFrame(int frame) {
+      animation.setAnimationFrame(frame);
+   }
+
+   @Override
    public float getAnimationSpeed() {
       return animation.getAnimationSpeed();
    }

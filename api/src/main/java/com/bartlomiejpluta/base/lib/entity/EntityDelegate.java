@@ -96,6 +96,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public void setAnimationFrame(int frame) {
+      entity.setAnimationFrame(frame);
+   }
+
+   @Override
    public float getAnimationSpeed() {
       return entity.getAnimationSpeed();
    }

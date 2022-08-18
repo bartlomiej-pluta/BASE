@@ -35,6 +35,14 @@ public abstract class AnimatedSprite extends Sprite implements Animated {
    }
 
    @Override
+   public void setAnimationFrame(int frame) {
+      var positions = getSpriteAnimationFramesPositions();
+      currentAnimationFrame = frame % positions.length;
+      var current = positions[currentAnimationFrame];
+      material.setSpritePosition(current);
+   }
+
+   @Override
    public void update(float dt) {
       if (shouldAnimate()) {
          time += dt * 1000;
