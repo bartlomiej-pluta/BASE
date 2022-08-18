@@ -9,12 +9,12 @@ import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.util.path.BasePath;
 import com.bartlomiejpluta.base.util.path.Path;
+import lombok.NonNull;
 import org.joml.Vector2fc;
 import org.joml.Vector2i;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import static java.util.Objects.requireNonNull;
 
 public class BulletAnimationRunner implements AnimationRunner {
    private static final Path<Animation> UP = new BasePath<Animation>().move(Direction.UP);
@@ -33,16 +33,32 @@ public class BulletAnimationRunner implements AnimationRunner {
    private float rotation = 0f;
    private Direction direction;
    private Path<Animation> path;
-   private Consumer<Entity> onHit;
+   private BiConsumer<Movable, Entity> onHit;
+   private BiConsumer<Movable, Animation> onMiss;
    private float offsetX = 0;
    private float offsetY = 0;
 
-   public BulletAnimationRunner(String animationUid) {
+   public BulletAnimationRunner(@NonNull String animationUid) {
       this.animationUid = animationUid;
    }
 
-   public BulletAnimationRunner onHit(Consumer<Entity> runnable) {
-      this.onHit = requireNonNull(runnable);
+   public BulletAnimationRunner onHit(@NonNull BiConsumer<Movable, Entity> action) {
+      this.onHit = action;
+      return this;
+   }
+
+   public BulletAnimationRunner onHit(@NonNull Consumer<Entity> action) {
+      this.onHit = (m, e) -> action.accept(e);
+      return this;
+   }
+
+   public BulletAnimationRunner onMiss(@NonNull BiConsumer<Movable, Animation> action) {
+      this.onMiss = action;
+      return this;
+   }
+
+   public BulletAnimationRunner onMiss(@NonNull Consumer<Animation> action) {
+      this.onMiss = (m, a) -> action.accept(a);
       return this;
    }
 
@@ -97,7 +113,7 @@ public class BulletAnimationRunner implements AnimationRunner {
       return this;
    }
 
-   public BulletAnimationRunner direction(Direction direction) {
+   public BulletAnimationRunner direction(@NonNull Direction direction) {
       this.direction = direction;
       this.path = switch (direction) {
          case UP -> UP;
@@ -111,7 +127,7 @@ public class BulletAnimationRunner implements AnimationRunner {
 
    @Override
    public void run(Context context, Layer layer, Vector2fc origin) {
-      var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, onHit);
+      var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, null, onHit, onMiss);
 
       animation.setPosition(origin);
       animation.setScale(scale);
@@ -128,7 +144,7 @@ public class BulletAnimationRunner implements AnimationRunner {
 
    @Override
    public void run(Context context, Layer layer, Movable origin) {
-      var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, onHit);
+      var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, origin, onHit, onMiss);
 
       animation.setCoordinates(origin.getCoordinates());
       animation.setScale(scale);
@@ -145,27 +161,35 @@ public class BulletAnimationRunner implements AnimationRunner {
 
    private static class BulletAnimation extends DelayedAnimation {
       private final Direction direction;
-      private final Consumer<Entity> action;
+      private final Movable movable;
+      private final BiConsumer<Movable, Entity> onHit;
+      private final BiConsumer<Movable, Animation> onMiss;
 
-      public BulletAnimation(Animation animation, int delay, Direction direction, Consumer<Entity> action) {
+      public BulletAnimation(Animation animation, int delay, Direction direction, Movable movable, BiConsumer<Movable, Entity> onHit, BiConsumer<Movable, Animation> onMiss) {
          super(animation, delay);
          this.direction = direction;
-         this.action = action;
+         this.movable = movable;
+         this.onHit = onHit;
+         this.onMiss = onMiss;
       }
 
       @Override
       public void onFinish(Layer layer) {
-         if (action != null) {
+         if (onHit != null) {
             var target = getCoordinates().add(direction.vector, new Vector2i());
             if (layer instanceof ObjectLayer) {
                for (var entity : ((ObjectLayer) layer).getEntities()) {
                   var movement = entity.getMovement();
                   if ((entity.getCoordinates().equals(target) || movement != null && movement.getTo().equals(target)) && entity.isBlocking()) {
-                     action.accept(entity);
+                     onHit.accept(movable, entity);
                      return;
                   }
                }
             }
+         }
+
+         if (onMiss != null) {
+            onMiss.accept(movable, this);
          }
       }
    }
