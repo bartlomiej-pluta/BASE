@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.animation.model.AnimatedSprite;
 import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.util.math.Distance;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -164,11 +165,11 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public int chebyshevDistance(Vector2ic coordinates) {
-      return max(abs(this.coordinates.x - coordinates.x()), abs(this.coordinates.y - coordinates.y()));
+      return Distance.chebyshev(this.coordinates, coordinates);
    }
 
    @Override
    public int manhattanDistance(Vector2ic coordinates) {
-      return abs(this.coordinates.x - coordinates.x()) + abs(this.coordinates.y - coordinates.y());
+      return Distance.manhattan(this.coordinates, coordinates);
    }
 }
