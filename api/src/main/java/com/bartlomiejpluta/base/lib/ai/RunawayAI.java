@@ -5,18 +5,19 @@ import com.bartlomiejpluta.base.api.ai.NPC;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.Random;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RunawayAI<N extends NPC, T extends Entity> implements AI {
    @NonNull
    private final N npc;
 
-   @NonNull
-   private final T character;
+   @Setter(onParam = @__(@NonNull))
+   private T danger;
 
    private final Random random = new Random();
 
@@ -26,7 +27,7 @@ public class RunawayAI<N extends NPC, T extends Entity> implements AI {
          return;
       }
 
-      var direction = npc.getDirectionTowards(character).opposite();
+      var direction = npc.getDirectionTowards(danger).opposite();
       if (tryToMove(layer, direction)) {
          return;
       }

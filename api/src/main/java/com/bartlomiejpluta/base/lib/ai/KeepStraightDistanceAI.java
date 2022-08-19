@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.util.path.MovementPath;
 import com.bartlomiejpluta.base.util.path.PathExecutor;
 import com.bartlomiejpluta.base.util.pathfinder.PathFinder;
 import lombok.NonNull;
+import lombok.Setter;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -16,7 +17,9 @@ import java.util.ArrayList;
 
 public abstract class KeepStraightDistanceAI<N extends NPC, T extends Entity> implements AI {
    private final N npc;
-   private final T target;
+   @Setter(onParam = @__(@NonNull))
+   private T target;
+
    private final PathFinder finder;
    private final PathExecutor<N> executor;
    private final int minRange;
@@ -131,7 +134,7 @@ public abstract class KeepStraightDistanceAI<N extends NPC, T extends Entity> im
          // we abandon finding another path and start to interact
          for (var position : consideredPositions) {
             if (npc.getCoordinates().equals(position)) {
-               npc.setFaceDirection(npc.getDirectionTowards(this.target));
+               npc.setFaceDirection(npc.getDirectionTowards(target));
                interact(npc, target, layer, dt);
                return;
             }
