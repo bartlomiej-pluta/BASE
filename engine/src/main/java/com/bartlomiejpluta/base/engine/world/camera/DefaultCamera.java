@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.camera;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.engine.world.object.Model;
@@ -23,6 +24,13 @@ public class DefaultCamera extends Model implements Camera {
    @Override
    public boolean insideFrustum(float x, float y, float radius) {
       return frustum.testSphere(x, y, 0.0f, radius);
+   }
+
+   @Override
+   public boolean insideFrustum(Context context, float x, float y) {
+      var map = context.getMap();
+      var stepSize = map.getStepSize();
+      return insideFrustum(stepSize.x() * x, stepSize.y() * y, stepSize.get(stepSize.maxComponent()));
    }
 
    @Override
