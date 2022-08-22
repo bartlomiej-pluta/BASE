@@ -35,7 +35,7 @@ public class DefaultCharacterSetManager implements CharacterSetManager {
          throw new AppException("The character set asset with UID: [%s] does not exist", uid);
       }
 
-      var source = configuration.projectFile("entsets", asset.getSource());
+      var source = configuration.projectFile("charsets", asset.getSource());
       var texture = textureManager.loadTexture(source, asset.getRows(), asset.getColumns());
 
       return Material.textured(texture);

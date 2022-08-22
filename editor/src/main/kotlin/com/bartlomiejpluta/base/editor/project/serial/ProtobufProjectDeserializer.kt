@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
-import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
@@ -26,7 +26,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
          maps.addAll(proto.mapsList.map { deserializeMap(this, it) })
          tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(this, it) })
          images.addAll(proto.imagesList.map { deserializeImage(this, it) })
-         entitySets.addAll(proto.entitySetsList.map { deserializeEntitySet(this, it) })
+         characterSets.addAll(proto.entitySetsList.map { deserializeCharacterSet(this, it) })
          animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
          iconSets.addAll(proto.iconSetsList.map { deserializeIconSet(this, it) })
          fonts.addAll(proto.fontsList.map { deserializeFont(this, it) })
@@ -57,13 +57,13 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = image.name
    )
 
-   private fun deserializeEntitySet(project: Project, entitySetAsset: ProjectProto.EntitySetAsset) = EntitySet(
+   private fun deserializeCharacterSet(project: Project, characterSetAsset: ProjectProto.EntitySetAsset) = CharacterSet(
       project = project,
-      uid = entitySetAsset.uid,
-      source = entitySetAsset.source,
-      name = entitySetAsset.name,
-      rows = entitySetAsset.rows,
-      columns = entitySetAsset.columns
+      uid = characterSetAsset.uid,
+      source = characterSetAsset.source,
+      name = characterSetAsset.name,
+      rows = characterSetAsset.rows,
+      columns = characterSetAsset.columns
    )
 
    private fun deserializeAnimation(project: Project, animationAsset: ProjectProto.AnimationAsset) = AnimationAsset(

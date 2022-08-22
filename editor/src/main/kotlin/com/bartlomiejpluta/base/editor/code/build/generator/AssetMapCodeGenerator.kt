@@ -22,7 +22,7 @@ class AssetMapCodeGenerator : CodeGenerator {
       listOf(
          generateAssetClass("maps", project.maps),
          generateAssetClass("tilesets", project.tileSets),
-         generateAssetClass("entsets", project.entitySets),
+         generateAssetClass("charsets", project.characterSets),
          generateAssetClass("images", project.images),
          generateAssetClass("animations", project.animations),
          generateAssetClass("iconsets", project.iconSets),

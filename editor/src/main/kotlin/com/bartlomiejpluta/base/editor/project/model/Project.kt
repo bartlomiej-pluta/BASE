@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.editor.project.model
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.database.source.DataSource
-import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -38,14 +38,14 @@ class Project {
    val maps = observableListOf<GameMapAsset>()
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
-   val entitySets = observableListOf<EntitySet>()
+   val characterSets = observableListOf<CharacterSet>()
    val animations = observableListOf<AnimationAsset>()
    val iconSets = observableListOf<IconSetAsset>()
    val fonts = observableListOf<FontAsset>()
    val widgets = observableListOf<WidgetAsset>()
    val sounds = observableListOf<SoundAsset>()
 
-   val assetLists = listOf(maps, tileSets, images, entitySets, animations, iconSets, fonts, widgets, sounds)
+   val assetLists = listOf(maps, tileSets, images, characterSets, animations, iconSets, fonts, widgets, sounds)
 
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
@@ -59,8 +59,8 @@ class Project {
    var imagesDirectory by imagesDirectoryProperty
       private set
 
-   val entitySetsDirectoryProperty = SimpleObjectProperty<File>()
-   var entitySetsDirectory by entitySetsDirectoryProperty
+   val characterSetsDirectoryProperty = SimpleObjectProperty<File>()
+   var characterSetsDirectory by characterSetsDirectoryProperty
       private set
 
    val animationsDirectoryProperty = SimpleObjectProperty<File>()
@@ -130,7 +130,7 @@ class Project {
             mapsDirectory = File(it, MAPS_DIR)
             tileSetsDirectory = File(it, TILE_SETS_DIR)
             imagesDirectory = File(it, IMAGES_DIR)
-            entitySetsDirectory = File(it, ENTITY_SETS_DIR)
+            characterSetsDirectory = File(it, CHARACTER_SETS_DIR)
             animationsDirectory = File(it, ANIMATIONS_DIR)
             iconSetsDirectory = File(it, ICONSETS_DIR)
             fontsDirectory = File(it, FONTS_DIR)
@@ -161,7 +161,7 @@ class Project {
       mapsDirectory?.mkdirs()
       tileSetsDirectory?.mkdirs()
       imagesDirectory?.mkdirs()
-      entitySetsDirectory?.mkdirs()
+      characterSetsDirectory?.mkdirs()
       animationsDirectory?.mkdirs()
       iconSetsDirectory?.mkdirs()
       fontsDirectory?.mkdirs()
@@ -179,7 +179,7 @@ class Project {
       const val MAPS_DIR = "maps"
       const val TILE_SETS_DIR = "tilesets"
       const val IMAGES_DIR = "images"
-      const val ENTITY_SETS_DIR = "entsets"
+      const val CHARACTER_SETS_DIR = "charsets"
       const val ANIMATIONS_DIR = "animations"
       const val ICONSETS_DIR = "iconsets"
       const val FONTS_DIR = "fonts"

@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.editor.entityset.asset
+package com.bartlomiejpluta.base.editor.characterset.asset
 
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
@@ -7,7 +7,7 @@ import tornadofx.getValue
 import tornadofx.setValue
 import java.io.File
 
-class EntitySetAssetData {
+class CharacterSetAssetData {
    val nameProperty = SimpleStringProperty()
    var name by nameProperty
 

@@ -27,7 +27,7 @@ class DefaultProjectAssembler : ProjectAssembler {
       packager.pack(project.mapsDirectory, targetJar, "BOOT-INF/classes/project/maps")
       packager.pack(project.tileSetsDirectory, targetJar, "BOOT-INF/classes/project/tilesets")
       packager.pack(project.imagesDirectory, targetJar, "BOOT-INF/classes/project/images")
-      packager.pack(project.entitySetsDirectory, targetJar, "BOOT-INF/classes/project/entsets")
+      packager.pack(project.characterSetsDirectory, targetJar, "BOOT-INF/classes/project/charsets")
       packager.pack(project.animationsDirectory, targetJar, "BOOT-INF/classes/project/animations")
       packager.pack(project.fontsDirectory, targetJar, "BOOT-INF/classes/project/fonts")
       packager.pack(project.widgetsDirectory, targetJar, "BOOT-INF/classes/project/widgets")

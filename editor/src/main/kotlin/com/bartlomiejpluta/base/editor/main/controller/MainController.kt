@@ -10,8 +10,8 @@ import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.database.model.data.Query
 import com.bartlomiejpluta.base.editor.database.viewmodel.QueryVM
-import com.bartlomiejpluta.base.editor.entityset.view.importing.ImportEntitySetFragment
-import com.bartlomiejpluta.base.editor.entityset.viewmodel.EntitySetAssetDataVM
+import com.bartlomiejpluta.base.editor.characterset.view.importing.ImportCharacterSetFragment
+import com.bartlomiejpluta.base.editor.characterset.viewmodel.CharacterSetAssetDataVM
 import com.bartlomiejpluta.base.editor.event.SelectMainViewTabEvent
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.file.model.ScriptAssetFileNode
@@ -203,14 +203,14 @@ class MainController : Controller() {
       }
    }
 
-   fun importEntitySet() {
-      val vm = EntitySetAssetDataVM()
+   fun importCharacterSet() {
+      val vm = CharacterSetAssetDataVM()
       val scope = Scope()
       setInScope(vm, scope)
 
-      find<ImportEntitySetFragment>(scope).apply {
+      find<ImportCharacterSetFragment>(scope).apply {
          onComplete {
-            projectContext.importEntitySet(it)
+            projectContext.importCharacterSet(it)
          }
 
          openModal(block = true, resizable = false)

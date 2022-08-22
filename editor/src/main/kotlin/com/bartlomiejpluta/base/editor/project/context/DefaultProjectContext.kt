@@ -8,8 +8,8 @@ import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.service.JavaClassService
-import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
-import com.bartlomiejpluta.base.editor.entityset.asset.EntitySetAssetData
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
@@ -200,13 +200,13 @@ class DefaultProjectContext : ProjectContext {
       File(it.imagesDirectory, asset.source).inputStream().use { fis -> Image(fis) }
    } ?: throw IllegalStateException("There is no open project in the context")
 
-   override fun importEntitySet(data: EntitySetAssetData) {
+   override fun importCharacterSet(data: CharacterSetAssetData) {
       project?.let {
-         UID.next(it.entitySets.map(Asset::uid)).let { uid ->
+         UID.next(it.characterSets.map(Asset::uid)).let { uid ->
             val source = "$uid.${data.file.extension}"
-            val targetFile = File(it.entitySetsDirectory, source)
+            val targetFile = File(it.characterSetsDirectory, source)
             data.file.copyTo(targetFile)
-            it.entitySets += EntitySet(it, uid, source, data.name, data.rows, data.columns)
+            it.characterSets += CharacterSet(it, uid, source, data.name, data.rows, data.columns)
 
             save()
          }
