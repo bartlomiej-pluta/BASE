@@ -22,6 +22,27 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
             else -> file.inputStream().use { imagePreview.value = Image(it) }
          }
       }
+
+      dataVM.tileWidthProperty.addListener { _, _, width ->
+         dataVM.columns = (imagePreview.value?.width?.toInt() ?: 1) / width.toInt()
+      }
+
+      dataVM.tileHeightProperty.addListener { _, _, height ->
+         dataVM.rows = (imagePreview.value?.height?.toInt() ?: 1) / height.toInt()
+      }
+
+      dataVM.columnsProperty.addListener { _, _, columns ->
+         dataVM.tileWidth = (imagePreview.value?.width?.toInt() ?: 1) / columns.toInt()
+      }
+
+      dataVM.rowsProperty.addListener { _, _, rows ->
+         dataVM.tileHeight = (imagePreview.value?.height?.toInt() ?: 1) / rows.toInt()
+      }
+
+      imagePreview.addListener { _, _, _ ->
+         dataVM.columns = 1
+         dataVM.rows = 1
+      }
    }
 
    fun onComplete(consumer: (TileSetAssetData) -> Unit) {
@@ -69,6 +90,7 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
                }
 
                field("Tile Set Rows") {
+                  enableWhen(imagePreview.isNotNull)
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.rowsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
@@ -76,7 +98,24 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
                }
 
                field("Tile Set Columns") {
+                  enableWhen(imagePreview.isNotNull)
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.columnsProperty, editable = true) {
+                     required()
+                     editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)
+                  }
+               }
+
+               field("Tile width") {
+                  enableWhen(imagePreview.isNotNull)
+                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.tileWidthProperty, editable = true) {
+                     required()
+                     editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
+                  }
+               }
+
+               field("Tile height") {
+                  enableWhen(imagePreview.isNotNull)
+                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.tileHeightProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)
                   }

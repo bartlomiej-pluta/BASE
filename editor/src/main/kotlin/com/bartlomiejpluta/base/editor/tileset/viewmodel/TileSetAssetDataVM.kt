@@ -15,6 +15,12 @@ class TileSetAssetDataVM : ItemViewModel<TileSetAssetData>(TileSetAssetData()) {
    val columnsProperty = bind(TileSetAssetData::columnsProperty)
    var columns by columnsProperty
 
+   val tileWidthProperty = bind(TileSetAssetData::tileWidthProperty)
+   var tileWidth by tileWidthProperty
+
+   val tileHeightProperty = bind(TileSetAssetData::tileHeightProperty)
+   var tileHeight by tileHeightProperty
+
    val fileProperty = bind(TileSetAssetData::fileProperty)
    var file by fileProperty
 }
