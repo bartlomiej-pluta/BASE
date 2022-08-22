@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
+import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.map.layer.base.BaseLayer;
@@ -93,10 +94,12 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
                return false;
             }
 
-            // The tile is empty, however another entity is moving on it
-            var otherMovement = entity.getMovement();
-            if (otherMovement != null && otherMovement.getTo().equals(tileCoordinates)) {
-               return false;
+            if (entity instanceof Movable) {
+               // The tile is empty, however another entity is moving on it
+               var otherMovement = ((Movable) entity).getMovement();
+               if (otherMovement != null && otherMovement.getTo().equals(tileCoordinates)) {
+                  return false;
+               }
             }
          }
       }
@@ -140,16 +143,16 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
-      entities.sort(this::compareObjects);
+      entities.sort(this::compareEntities);
 
-      for (var object : entities) {
-         object.render(screen, camera, shaderManager);
+      for (var entity : entities) {
+         entity.render(screen, camera, shaderManager);
       }
 
       super.render(screen, camera, shaderManager);
    }
 
-   private int compareObjects(Entity a, Entity b) {
+   private int compareEntities(Entity a, Entity b) {
       var z = compare(a.getZIndex(), b.getZIndex());
       return z == 0 ? compare(a.getPosition().y(), b.getPosition().y()) : z;
    }

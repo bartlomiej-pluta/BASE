@@ -1,12 +1,13 @@
-package com.bartlomiejpluta.base.lib.entity;
+package com.bartlomiejpluta.base.lib.character;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
+import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.move.CharacterMovement;
 import com.bartlomiejpluta.base.api.move.Direction;
-import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.object.Placeable;
@@ -18,300 +19,300 @@ import org.joml.Vector2ic;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public abstract class EntityDelegate implements Entity {
-   protected final Entity entity;
+public abstract class CharacterDelegate implements Character {
+   protected final Character character;
 
-   protected EntityDelegate(Entity entity) {
-      this.entity = entity;
+   protected CharacterDelegate(Character character) {
+      this.character = character;
    }
 
    @Override
    public void setStepSize(float x, float y) {
-      entity.setStepSize(x, y);
+      character.setStepSize(x, y);
    }
 
    @Override
    public Vector2ic getCoordinates() {
-      return entity.getCoordinates();
+      return character.getCoordinates();
    }
 
    @Override
    public void setCoordinates(Vector2ic coordinates) {
-      entity.setCoordinates(coordinates);
+      character.setCoordinates(coordinates);
    }
 
    @Override
    public void setCoordinates(int x, int y) {
-      entity.setCoordinates(x, y);
+      character.setCoordinates(x, y);
    }
 
    @Override
    public Movement prepareMovement(Direction direction) {
-      return new EntityMovement(this, direction);
+      return new CharacterMovement(this, direction);
    }
 
    @Override
    public Movement getMovement() {
-      return entity.getMovement();
+      return character.getMovement();
    }
 
    @Override
    public Direction getFaceDirection() {
-      return entity.getFaceDirection();
+      return character.getFaceDirection();
    }
 
    @Override
    public void setFaceDirection(Direction direction) {
-      entity.setFaceDirection(direction);
+      character.setFaceDirection(direction);
    }
 
    @Override
    public void setSpeed(float speed) {
-      entity.setSpeed(speed);
+      character.setSpeed(speed);
    }
 
    @Override
    public boolean isAnimationEnabled() {
-      return entity.isAnimationEnabled();
+      return character.isAnimationEnabled();
    }
 
    @Override
    public void setAnimationEnabled(boolean enabled) {
-      entity.setAnimationEnabled(enabled);
+      character.setAnimationEnabled(enabled);
    }
 
    @Override
    public void enableAnimation() {
-      entity.enableAnimation();
+      character.enableAnimation();
    }
 
    @Override
    public void disableAnimation() {
-      entity.disableAnimation();
+      character.disableAnimation();
    }
 
    @Override
    public void toggleAnimationEnabled() {
-      entity.toggleAnimationEnabled();
+      character.toggleAnimationEnabled();
    }
 
    @Override
    public void setAnimationFrame(int frame) {
-      entity.setAnimationFrame(frame);
+      character.setAnimationFrame(frame);
    }
 
    @Override
    public float getAnimationSpeed() {
-      return entity.getAnimationSpeed();
+      return character.getAnimationSpeed();
    }
 
    @Override
    public void setAnimationSpeed(float speed) {
-      entity.setAnimationSpeed(speed);
+      character.setAnimationSpeed(speed);
    }
 
    @Override
    public boolean isMoving() {
-      return entity.isMoving();
+      return character.isMoving();
    }
 
    @Override
    public Vector2fc getPositionOffset() {
-      return entity.getPositionOffset();
+      return character.getPositionOffset();
    }
 
    @Override
    public void setPositionOffset(Vector2fc offset) {
-      entity.setPositionOffset(offset);
+      character.setPositionOffset(offset);
    }
 
    @Override
    public void setPositionOffset(float offsetX, float offsetY) {
-      entity.setPositionOffset(offsetX, offsetY);
+      character.setPositionOffset(offsetX, offsetY);
    }
 
    @Override
-   public int chebyshevDistance(Entity other) {
-      return entity.chebyshevDistance(other);
+   public int chebyshevDistance(Locationable other) {
+      return character.chebyshevDistance(other);
    }
 
    @Override
-   public int manhattanDistance(Entity other) {
-      return entity.manhattanDistance(other);
+   public int manhattanDistance(Locationable other) {
+      return character.manhattanDistance(other);
    }
 
    @Override
-   public Direction getDirectionTowards(Entity target) {
-      return entity.getDirectionTowards(target);
+   public Direction getDirectionTowards(Locationable target) {
+      return character.getDirectionTowards(target);
    }
 
    @Override
    public Vector2fc getPosition() {
-      return entity.getPosition();
-   }
-
-   @Override
-   public void setPosition(float x, float y) {
-      entity.setPosition(x, y);
+      return character.getPosition();
    }
 
    @Override
    public void setPosition(Vector2fc position) {
-      entity.setPosition(position);
+      character.setPosition(position);
+   }
+
+   @Override
+   public void setPosition(float x, float y) {
+      character.setPosition(x, y);
    }
 
    @Override
    public void movePosition(float x, float y) {
-      entity.movePosition(x, y);
+      character.movePosition(x, y);
    }
 
    @Override
    public void movePosition(Vector2fc position) {
-      entity.movePosition(position);
+      character.movePosition(position);
    }
 
    @Override
    public float getRotation() {
-      return entity.getRotation();
+      return character.getRotation();
    }
 
    @Override
    public void setRotation(float rotation) {
-      entity.setRotation(rotation);
+      character.setRotation(rotation);
    }
 
    @Override
    public void moveRotation(float rotation) {
-      entity.moveRotation(rotation);
+      character.moveRotation(rotation);
    }
 
    @Override
    public float getScaleX() {
-      return entity.getScaleX();
+      return character.getScaleX();
    }
 
    @Override
    public void setScaleX(float scale) {
-      entity.setScaleX(scale);
+      character.setScaleX(scale);
    }
 
    @Override
    public float getScaleY() {
-      return entity.getScaleY();
+      return character.getScaleY();
    }
 
    @Override
    public void setScaleY(float scale) {
-      entity.setScaleY(scale);
+      character.setScaleY(scale);
    }
 
    @Override
    public void setScale(float scale) {
-      entity.setScale(scale);
+      character.setScale(scale);
    }
 
    @Override
    public void setScale(float scaleX, float scaleY) {
-      entity.setScale(scaleX, scaleY);
+      character.setScale(scaleX, scaleY);
    }
 
    @Override
    public float euclideanDistance(Placeable other) {
-      return entity.euclideanDistance(other);
+      return character.euclideanDistance(other);
    }
 
    @Override
    public int chebyshevDistance(Vector2ic coordinates) {
-      return entity.chebyshevDistance(coordinates);
+      return character.chebyshevDistance(coordinates);
    }
 
    @Override
    public int manhattanDistance(Vector2ic coordinates) {
-      return entity.manhattanDistance(coordinates);
+      return character.manhattanDistance(coordinates);
    }
 
    @Override
    public Matrix4fc getModelMatrix() {
-      return entity.getModelMatrix();
+      return character.getModelMatrix();
    }
 
    @Override
    public ObjectLayer getLayer() {
-      return entity.getLayer();
+      return character.getLayer();
    }
 
    @Override
    public void onAdd(ObjectLayer layer) {
-      entity.onAdd(layer);
+      character.onAdd(layer);
    }
 
    @Override
    public void onRemove(ObjectLayer layer) {
-      entity.onRemove(layer);
+      character.onRemove(layer);
    }
 
    @Override
    public boolean isBlocking() {
-      return entity.isBlocking();
+      return character.isBlocking();
    }
 
    @Override
    public void setBlocking(boolean blocking) {
-      entity.setBlocking(blocking);
+      character.setBlocking(blocking);
    }
 
    @Override
-   public void changeEntitySet(String entitySetUid) {
-      entity.changeEntitySet(entitySetUid);
+   public void changeCharacterSet(String characterSetUid) {
+      character.changeCharacterSet(characterSetUid);
    }
 
    @Override
    public int getZIndex() {
-      return entity.getZIndex();
+      return character.getZIndex();
    }
 
    @Override
    public void setZIndex(int zIndex) {
-      entity.setZIndex(zIndex);
+      character.setZIndex(zIndex);
    }
 
    @Override
    public <E extends Event> void handleEvent(E event) {
-      entity.handleEvent(event);
+      character.handleEvent(event);
    }
 
    @Override
    public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
-      entity.addEventListener(type, listener);
+      character.addEventListener(type, listener);
    }
 
    @Override
    public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
-      entity.removeEventListener(type, listener);
+      character.removeEventListener(type, listener);
    }
 
    @Override
    public CompletableFuture<Void> performInstantAnimation() {
-      return entity.performInstantAnimation();
+      return character.performInstantAnimation();
    }
 
    @Override
    public boolean move(Movement movement) {
-      return entity.move(movement);
+      return character.move(movement);
    }
 
    @Override
    public void abortMove() {
-      entity.abortMove();
+      character.abortMove();
    }
 
    @Override
    public void update(float dt) {
-      entity.update(dt);
+      character.update(dt);
    }
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
-      entity.render(screen, camera, shaderManager);
+      character.render(screen, camera, shaderManager);
    }
 }

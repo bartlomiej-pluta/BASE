@@ -3,9 +3,9 @@ package com.bartlomiejpluta.base.engine.context.model;
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.context.GamePauseEvent;
-import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.GUI;
@@ -22,7 +22,7 @@ import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
 import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
-import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
+import com.bartlomiejpluta.base.engine.world.character.manager.CharacterManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
@@ -50,7 +50,7 @@ public class DefaultContext implements Context {
    private final GameEngine engine;
 
    @NonNull
-   private final EntityManager entityManager;
+   private final CharacterManager characterManager;
 
    @NonNull
    private final AnimationManager animationManager;
@@ -146,9 +146,9 @@ public class DefaultContext implements Context {
    }
 
    @Override
-   public Entity createEntity(String entitySetUid) {
-      log.info("Creating new entity with UID: [{}]", entitySetUid);
-      return entityManager.createEntity(entitySetUid);
+   public Character createCharacter(String characterSetUid) {
+      log.info("Creating new character with UID: [{}]", characterSetUid);
+      return characterManager.createCharacter(characterSetUid);
    }
 
    @Override

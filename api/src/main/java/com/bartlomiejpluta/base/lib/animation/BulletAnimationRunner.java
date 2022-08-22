@@ -179,7 +179,7 @@ public class BulletAnimationRunner implements AnimationRunner {
             var target = getCoordinates().add(direction.vector, new Vector2i());
             if (layer instanceof ObjectLayer) {
                for (var entity : ((ObjectLayer) layer).getEntities()) {
-                  var movement = entity.getMovement();
+                  var movement = (entity instanceof Movable) ? ((Movable) entity).getMovement() : null;
                   if ((entity.getCoordinates().equals(target) || movement != null && movement.getTo().equals(target)) && entity.isBlocking()) {
                      onHit.accept(movable, entity);
                      return;

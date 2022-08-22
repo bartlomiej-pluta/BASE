@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.lib.ai;
 
 import com.bartlomiejpluta.base.api.ai.AI;
 import com.bartlomiejpluta.base.api.ai.NPC;
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.util.Random;
 
 @AllArgsConstructor
-public class RunawayAI<N extends NPC, T extends Entity> implements AI {
+public class RunawayAI<N extends NPC, T extends Locationable> implements AI {
    @NonNull
    private final N npc;
 

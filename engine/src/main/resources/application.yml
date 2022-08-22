@@ -5,7 +5,7 @@ app:
     database-script-file: /database/data.sql
 
   sprite:
-    entity:
+    character:
       default-sprite-column: 0
 
       sprite-direction-rows:

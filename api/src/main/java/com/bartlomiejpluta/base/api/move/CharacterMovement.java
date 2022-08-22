@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.api.move;
 
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.character.Character;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,13 +9,13 @@ import org.joml.Vector2ic;
 
 @Getter
 @EqualsAndHashCode
-public final class EntityMovement implements Movement {
-   private final Entity object;
+public final class CharacterMovement implements Movement {
+   private final Character object;
    private final Direction direction;
    private final Vector2ic from;
    private final Vector2ic to;
 
-   public EntityMovement(@NonNull Entity object, @NonNull Direction direction) {
+   public CharacterMovement(@NonNull Character object, @NonNull Direction direction) {
       this.object = object;
       this.direction = direction;
 

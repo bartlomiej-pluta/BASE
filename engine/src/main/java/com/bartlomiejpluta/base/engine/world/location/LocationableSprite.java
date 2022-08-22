@@ -1,9 +1,9 @@
 package com.bartlomiejpluta.base.engine.world.location;
 
 import com.bartlomiejpluta.base.api.location.Locationable;
+import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
 import com.bartlomiejpluta.base.util.math.Distance;
 import lombok.EqualsAndHashCode;
@@ -89,6 +89,11 @@ public abstract class LocationableSprite extends Sprite implements Locationable 
    }
 
    @Override
+   public Direction getDirectionTowards(Locationable target) {
+      return Direction.ofVector(target.getCoordinates().sub(getCoordinates(), new Vector2i()));
+   }
+
+   @Override
    public int chebyshevDistance(Vector2ic coordinates) {
       return Distance.chebyshev(this.coordinates, coordinates);
    }
@@ -96,5 +101,15 @@ public abstract class LocationableSprite extends Sprite implements Locationable 
    @Override
    public int manhattanDistance(Vector2ic coordinates) {
       return Distance.manhattan(this.coordinates, coordinates);
+   }
+
+   @Override
+   public int chebyshevDistance(Locationable other) {
+      return Distance.chebyshev(this.coordinates, other.getCoordinates());
+   }
+
+   @Override
+   public int manhattanDistance(Locationable other) {
+      return Distance.manhattan(this.coordinates, other.getCoordinates());
    }
 }

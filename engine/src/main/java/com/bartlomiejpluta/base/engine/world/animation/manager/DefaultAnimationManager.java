@@ -46,7 +46,7 @@ public class DefaultAnimationManager implements AnimationManager {
       var asset = assets.get(uid);
 
       if (asset == null) {
-         throw new AppException("The entity set asset with UID: [%s] does not exist", uid);
+         throw new AppException("The animation asset with UID: [%s] does not exist", uid);
       }
 
       var animationFrames = frames.computeIfAbsent(asset.framesSignature(),

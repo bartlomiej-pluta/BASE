@@ -1,8 +1,8 @@
 package com.bartlomiejpluta.base.util.world;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.context.Context;
-import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
@@ -22,11 +22,11 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 
-public class EntitySpawner implements Updatable {
+public class CharacterSpawner implements Updatable {
    private static final int MAX_REPOSITION_ATTEMPTS = 10;
    private final Random random = new Random();
-   private final List<Entity> spawnedEntities = new LinkedList<>();
-   private final List<Supplier<Entity>> spawners = new ArrayList<>();
+   private final List<Character> spawnedEntities = new LinkedList<>();
+   private final List<Supplier<Character>> spawners = new ArrayList<>();
    private final Vector2ic origin;
    private final Context context;
    private final Camera camera;
@@ -36,12 +36,12 @@ public class EntitySpawner implements Updatable {
    private int range = 4;
    private float spawnChance = 50;
    private DiceRoller countRoller = DiceRoller.of("1d4");
-   private EventType<? extends Event> entityRemoveEvent;
+   private EventType<? extends Event> characterRemoveEvent;
    private float accumulator = 10000f;
    private boolean spawnOutsideViewport = false;
    private float threshold;
 
-   public EntitySpawner(int x, int y, @NonNull Context context, @NonNull GameMap map, @NonNull ObjectLayer layer) {
+   public CharacterSpawner(int x, int y, @NonNull Context context, @NonNull GameMap map, @NonNull ObjectLayer layer) {
       this.origin = new Vector2i(x, y);
       this.context = context;
       this.camera = context.getCamera();
@@ -50,43 +50,43 @@ public class EntitySpawner implements Updatable {
       drawThreshold();
    }
 
-   public EntitySpawner interval(@NonNull String interval) {
+   public CharacterSpawner interval(@NonNull String interval) {
       this.interval = DiceRoller.of(interval);
       drawThreshold();
       return this;
    }
 
-   public EntitySpawner range(int range) {
+   public CharacterSpawner range(int range) {
       this.range = range;
       return this;
    }
 
-   public EntitySpawner spawnChance(float change) {
+   public CharacterSpawner spawnChance(float change) {
       this.spawnChance = change;
       return this;
    }
 
-   public EntitySpawner count(String dices) {
+   public CharacterSpawner count(String dices) {
       this.countRoller = DiceRoller.of(dices);
       return this;
    }
 
-   public EntitySpawner trackEntities(@NonNull EventType<? extends Event> entityRemoveEvent) {
-      this.entityRemoveEvent = entityRemoveEvent;
+   public CharacterSpawner trackEntities(@NonNull EventType<? extends Event> characterRemoveEvent) {
+      this.characterRemoveEvent = characterRemoveEvent;
       return this;
    }
 
-   public EntitySpawner spawnOutsideViewport() {
+   public CharacterSpawner spawnOutsideViewport() {
       this.spawnOutsideViewport = true;
       return this;
    }
 
-   public EntitySpawner spawnOnCreate() {
+   public CharacterSpawner spawnOnCreate() {
       this.threshold = 0;
       return this;
    }
 
-   public EntitySpawner spawn(@NonNull Supplier<Entity> spawner) {
+   public CharacterSpawner spawn(@NonNull Supplier<Character> spawner) {
       this.spawners.add(spawner);
       return this;
    }
@@ -151,19 +151,19 @@ public class EntitySpawner implements Updatable {
             break;
          }
 
-         // Draw the entity spawner
+         // Draw the character spawner
          var spawner = spawners.get(random.nextInt(spawners.size()));
 
-         // Create the entity and push it onto the map layer
-         var entity = spawner.get();
-         entity.setCoordinates(coordinates);
-         layer.addEntity(entity);
+         // Create the character and push it onto the map layer
+         var character = spawner.get();
+         character.setCoordinates(coordinates);
+         layer.addEntity(character);
 
          // If we want to keep the number of spawned entities per spawner almost constant
-         // we need to know when the entity should be removed (i.e. it has been killed by player).
-         if (entityRemoveEvent != null) {
-            spawnedEntities.add(entity);
-            entity.addEventListener(entityRemoveEvent, e -> spawnedEntities.remove(entity));
+         // we need to know when the character should be removed (i.e. it has been killed by player).
+         if (characterRemoveEvent != null) {
+            spawnedEntities.add(character);
+            character.addEventListener(characterRemoveEvent, e -> spawnedEntities.remove(character));
          }
       }
    }

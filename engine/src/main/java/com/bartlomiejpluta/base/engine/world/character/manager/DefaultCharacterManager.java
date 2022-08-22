@@ -1,11 +1,11 @@
-package com.bartlomiejpluta.base.engine.world.entity.manager;
+package com.bartlomiejpluta.base.engine.world.character.manager;
 
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
-import com.bartlomiejpluta.base.engine.world.entity.config.EntitySpriteConfiguration;
-import com.bartlomiejpluta.base.engine.world.entity.model.DefaultEntity;
+import com.bartlomiejpluta.base.engine.world.character.config.CharacterSpriteConfiguration;
+import com.bartlomiejpluta.base.engine.world.character.model.DefaultCharacter;
 import lombok.extern.slf4j.Slf4j;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
@@ -19,9 +19,9 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @Slf4j
 @Component
-public class DefaultEntityManager implements EntityManager {
+public class DefaultCharacterManager implements CharacterManager {
    private final MeshManager meshManager;
-   private final EntitySetManager entitySetManager;
+   private final CharacterSetManager characterSetManager;
 
    private final int defaultSpriteColumn;
    private final Map<Direction, Integer> spriteDirectionRows;
@@ -30,17 +30,17 @@ public class DefaultEntityManager implements EntityManager {
    private Mesh mesh;
 
    @Autowired
-   public DefaultEntityManager(MeshManager meshManager, EntitySetManager entitySetManager, EntitySpriteConfiguration configuration) {
+   public DefaultCharacterManager(MeshManager meshManager, CharacterSetManager characterSetManager, CharacterSpriteConfiguration configuration) {
       this.meshManager = meshManager;
-      this.entitySetManager = entitySetManager;
+      this.characterSetManager = characterSetManager;
 
       this.spriteDirectionRows = configuration.getSpriteDirectionRows();
 
       defaultSpriteColumn = configuration.getDefaultSpriteColumn();
       this.spriteDefaultRows = spriteDirectionRows
-            .entrySet()
-            .stream()
-            .collect(toUnmodifiableMap(Entry::getKey, entry -> new Vector2f(defaultSpriteColumn, entry.getValue())));
+              .entrySet()
+              .stream()
+              .collect(toUnmodifiableMap(Entry::getKey, entry -> new Vector2f(defaultSpriteColumn, entry.getValue())));
    }
 
    @Override
@@ -49,8 +49,8 @@ public class DefaultEntityManager implements EntityManager {
    }
 
    @Override
-   public Entity createEntity(String entitySetUid) {
-      return new DefaultEntity(mesh, entitySetManager, defaultSpriteColumn, spriteDirectionRows, spriteDefaultRows, entitySetUid);
+   public Character createCharacter(String characterSetUid) {
+      return new DefaultCharacter(mesh, characterSetManager, defaultSpriteColumn, spriteDirectionRows, spriteDefaultRows, characterSetUid);
    }
 
    @Override

@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
-import com.bartlomiejpluta.base.engine.world.entity.asset.EntitySetAsset;
+import com.bartlomiejpluta.base.engine.world.character.asset.CharacterSetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.engine.world.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.engine.world.tileset.asset.TileSetAsset;
@@ -24,12 +24,12 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
       var proto = ProjectProto.Project.parseFrom(input);
 
       return Project.builder()
-            .name(proto.getName())
-            .runner(proto.getRunner())
-            .tileSetAssets(proto.getTileSetsList().stream().map(this::parseTileSetAsset).collect(toList()))
-            .mapAssets(proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList()))
-            .imageAssets(proto.getImagesList().stream().map(this::parseImageAsset).collect(toList()))
-            .entitySetAssets(proto.getEntitySetsList().stream().map(this::parseEntitySetAsset).collect(toList()))
+              .name(proto.getName())
+              .runner(proto.getRunner())
+              .tileSetAssets(proto.getTileSetsList().stream().map(this::parseTileSetAsset).collect(toList()))
+              .mapAssets(proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList()))
+              .imageAssets(proto.getImagesList().stream().map(this::parseImageAsset).collect(toList()))
+              .characterSetAssets(proto.getEntitySetsList().stream().map(this::parseEntitySetAsset).collect(toList()))
             .animationAssets(proto.getAnimationsList().stream().map(this::parseAnimationAsset).collect(toList()))
             .fontAssets(proto.getFontsList().stream().map(this::parseFontAsset).collect(toList()))
             .widgetDefinitionAssets(proto.getWidgetsList().stream().map(this::parseWidgetAsset).collect(toList()))
@@ -49,8 +49,8 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
       return new ImageAsset(proto.getUid(), proto.getSource());
    }
 
-   private EntitySetAsset parseEntitySetAsset(ProjectProto.EntitySetAsset proto) {
-      return new EntitySetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
+   private CharacterSetAsset parseEntitySetAsset(ProjectProto.EntitySetAsset proto) {
+      return new CharacterSetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
    }
 
    private FontAsset parseFontAsset(ProjectProto.FontAsset proto) {

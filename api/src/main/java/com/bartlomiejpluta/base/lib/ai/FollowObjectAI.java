@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.lib.ai;
 
 import com.bartlomiejpluta.base.api.ai.AI;
 import com.bartlomiejpluta.base.api.ai.NPC;
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.MoveEvent;
 import com.bartlomiejpluta.base.util.path.MovementPath;
@@ -11,7 +11,7 @@ import com.bartlomiejpluta.base.util.pathfinder.PathFinder;
 import lombok.NonNull;
 import lombok.Setter;
 
-public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements AI {
+public abstract class FollowObjectAI<N extends NPC, T extends Locationable> implements AI {
 
    private final PathFinder finder;
    private final PathExecutor<N> executor;
@@ -22,7 +22,7 @@ public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements
 
    private MovementPath<N> path = null;
 
-   protected FollowEntityAI(@NonNull PathFinder finder, @NonNull N npc, @NonNull T target) {
+   protected FollowObjectAI(@NonNull PathFinder finder, @NonNull N npc, @NonNull T target) {
       this.finder = finder;
       this.npc = npc;
       this.target = target;
@@ -37,7 +37,7 @@ public abstract class FollowEntityAI<N extends NPC, T extends Entity> implements
       var movable = event.getMovable();
 
       // Refresh only when target has been displaced
-      // or another entity is blocking current path
+      // or another object is blocking current path
       if (movable == target || (path != null && path.contains(movable))) {
          path = null;
       }

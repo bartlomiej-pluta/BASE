@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.lib.animation;
 
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.camera.Camera;
+import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.move.AnimationMovement;
 import com.bartlomiejpluta.base.api.move.Direction;
@@ -197,6 +198,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public Direction getDirectionTowards(Locationable target) {
+      return animation.getDirectionTowards(target);
+   }
+
+   @Override
    public int chebyshevDistance(Vector2ic coordinates) {
       return animation.chebyshevDistance(coordinates);
    }
@@ -204,6 +210,16 @@ public abstract class AnimationDelegate implements Animation {
    @Override
    public int manhattanDistance(Vector2ic coordinates) {
       return animation.manhattanDistance(coordinates);
+   }
+
+   @Override
+   public int chebyshevDistance(Locationable other) {
+      return animation.chebyshevDistance(other);
+   }
+
+   @Override
+   public int manhattanDistance(Locationable other) {
+      return animation.manhattanDistance(other);
    }
 
    @Override

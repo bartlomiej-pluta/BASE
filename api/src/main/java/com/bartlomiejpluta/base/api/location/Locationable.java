@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.api.location;
 
+import com.bartlomiejpluta.base.api.move.Direction;
 import com.bartlomiejpluta.base.internal.object.Placeable;
 import org.joml.Vector2fc;
 import org.joml.Vector2ic;
@@ -19,7 +20,13 @@ public interface Locationable extends Placeable {
 
    void setPositionOffset(float offsetX, float offsetY);
 
+   Direction getDirectionTowards(Locationable target);
+
    int chebyshevDistance(Vector2ic coordinates);
 
    int manhattanDistance(Vector2ic coordinates);
+
+   int chebyshevDistance(Locationable other);
+
+   int manhattanDistance(Locationable other);
 }

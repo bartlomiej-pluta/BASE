@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.world.entity.config;
+package com.bartlomiejpluta.base.engine.world.character.config;
 
 import com.bartlomiejpluta.base.api.move.Direction;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.Map;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "app.sprite.entity")
-public class EntitySpriteConfiguration {
+@ConfigurationProperties(prefix = "app.sprite.character")
+public class CharacterSpriteConfiguration {
    private int defaultSpriteColumn;
    private Map<Direction, Integer> spriteDirectionRows;
 }

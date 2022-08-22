@@ -1,16 +1,16 @@
-package com.bartlomiejpluta.base.engine.world.entity.model;
+package com.bartlomiejpluta.base.engine.world.character.model;
 
-import com.bartlomiejpluta.base.api.entity.Entity;
+import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
+import com.bartlomiejpluta.base.api.move.CharacterMovement;
 import com.bartlomiejpluta.base.api.move.Direction;
-import com.bartlomiejpluta.base.api.move.EntityMovement;
 import com.bartlomiejpluta.base.api.move.Movement;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.error.AppException;
-import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
+import com.bartlomiejpluta.base.engine.world.character.manager.CharacterSetManager;
 import com.bartlomiejpluta.base.engine.world.movement.MovableSprite;
 import com.bartlomiejpluta.base.lib.event.EventHandler;
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
-import org.joml.Vector2i;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -29,9 +28,9 @@ import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
 @EqualsAndHashCode(callSuper = true)
-public class DefaultEntity extends MovableSprite implements Entity {
+public class DefaultCharacter extends MovableSprite implements Character {
    private final int defaultSpriteColumn;
-   private final EntitySetManager entitySetManager;
+   private final CharacterSetManager characterSetManager;
    private final Map<Direction, Integer> spriteDirectionRows;
    private final Map<Direction, Vector2fc> spriteDefaultRows;
    private final Vector2f entityScale = new Vector2f(1, 1);
@@ -55,12 +54,12 @@ public class DefaultEntity extends MovableSprite implements Entity {
 
    private boolean animationEnabled = true;
 
-   private final Queue<EntityInstantAnimation> instantAnimations = new LinkedList<>();
+   private final Queue<CharacterInstantAnimation> instantAnimations = new LinkedList<>();
 
-   public DefaultEntity(Mesh mesh, EntitySetManager entitySetManager, int defaultSpriteColumn, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
-      super(mesh, createMaterial(entitySetManager, entitySetUid));
+   public DefaultCharacter(Mesh mesh, CharacterSetManager characterSetManager, int defaultSpriteColumn, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
+      super(mesh, createMaterial(characterSetManager, entitySetUid));
       this.defaultSpriteColumn = defaultSpriteColumn;
-      this.entitySetManager = entitySetManager;
+      this.characterSetManager = characterSetManager;
       this.spriteDirectionRows = spriteDirectionRows;
       this.faceDirection = Direction.DOWN;
       this.spriteDefaultRows = spriteDefaultRows;
@@ -72,17 +71,8 @@ public class DefaultEntity extends MovableSprite implements Entity {
       }
    }
 
-   @Override
-   public void changeEntitySet(String entitySetUid) {
-      this.material = createMaterial(entitySetManager, entitySetUid);
-      var texture = this.material.getTexture();
-
-      if (texture != null) {
-         this.entitySetSize = texture.getSpriteSize();
-         super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
-      } else {
-         this.entitySetSize = null;
-      }
+   private static Material createMaterial(CharacterSetManager characterSetManager, String entitySetUid) {
+      return entitySetUid != null ? characterSetManager.loadObject(requireNonNull(entitySetUid)) : Material.colored(0, 0, 0, 0);
    }
 
    @Override
@@ -134,16 +124,24 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public CompletableFuture<Void> performInstantAnimation() {
-      var animation = new EntityInstantAnimation(this, defaultSpriteColumn);
-      instantAnimations.add(animation);
+   public void changeCharacterSet(String entitySetUid) {
+      this.material = createMaterial(characterSetManager, entitySetUid);
+      var texture = this.material.getTexture();
 
-      return animation.getFuture();
+      if (texture != null) {
+         this.entitySetSize = texture.getSpriteSize();
+         super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+      } else {
+         this.entitySetSize = null;
+      }
    }
 
    @Override
-   public Movement prepareMovement(Direction direction) {
-      return new EntityMovement(this, direction);
+   public CompletableFuture<Void> performInstantAnimation() {
+      var animation = new CharacterInstantAnimation(this, defaultSpriteColumn);
+      instantAnimations.add(animation);
+
+      return animation.getFuture();
    }
 
    @Override
@@ -163,21 +161,6 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public int chebyshevDistance(Entity other) {
-      return chebyshevDistance(other.getCoordinates());
-   }
-
-   @Override
-   public int manhattanDistance(Entity other) {
-      return manhattanDistance(other.getCoordinates());
-   }
-
-   @Override
-   public Direction getDirectionTowards(Entity target) {
-      return Direction.ofVector(target.getCoordinates().sub(getCoordinates(), new Vector2i()));
-   }
-
-   @Override
    public void onAdd(ObjectLayer layer) {
       this.layer = layer;
    }
@@ -188,9 +171,14 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
+   public Movement prepareMovement(Direction direction) {
+      return new CharacterMovement(this, direction);
+   }
+
+   @Override
    public void setScaleX(float scaleX) {
       if (entitySetSize == null) {
-         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+         throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
       this.entityScale.x = scaleX;
@@ -200,7 +188,7 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public void setScaleY(float scaleY) {
       if (entitySetSize == null) {
-         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+         throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
       this.entityScale.y = scaleY;
@@ -210,23 +198,12 @@ public class DefaultEntity extends MovableSprite implements Entity {
    @Override
    public void setScale(float scale) {
       if (entitySetSize == null) {
-         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
+         throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
       this.entityScale.x = scale;
       this.entityScale.y = scale;
       super.setScale(entitySetSize.x() * scale, entitySetSize.y() * scale);
-   }
-
-   @Override
-   public void setScale(float scaleX, float scaleY) {
-      if (entitySetSize == null) {
-         throw new AppException("Cannot change Entity scale if no Entity Set is provided");
-      }
-
-      this.entityScale.x = scaleX;
-      this.entityScale.y = scaleY;
-      super.setScale(entitySetSize.x() * scaleX, entitySetSize.y() * scaleY);
    }
 
    @Override
@@ -255,20 +232,27 @@ public class DefaultEntity extends MovableSprite implements Entity {
    }
 
    @Override
-   public void update(float dt) {
-      super.update(dt);
-
-      var instantAnimation = instantAnimations.peek();
-      if (instantAnimation != null && instantAnimation.update() == EntityInstantAnimation.State.COMPLETED) {
-         instantAnimations.poll();
+   public void setScale(float scaleX, float scaleY) {
+      if (entitySetSize == null) {
+         throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
+
+      this.entityScale.x = scaleX;
+      this.entityScale.y = scaleY;
+      super.setScale(entitySetSize.x() * scaleX, entitySetSize.y() * scaleY);
    }
 
    int currentFrame() {
       return currentAnimationFrame;
    }
 
-   private static Material createMaterial(EntitySetManager entitySetManager, String entitySetUid) {
-      return entitySetUid != null ? entitySetManager.loadObject(requireNonNull(entitySetUid)) : Material.colored(0, 0, 0, 0);
+   @Override
+   public void update(float dt) {
+      super.update(dt);
+
+      var instantAnimation = instantAnimations.peek();
+      if (instantAnimation != null && instantAnimation.update() == CharacterInstantAnimation.State.COMPLETED) {
+         instantAnimations.poll();
+      }
    }
 }

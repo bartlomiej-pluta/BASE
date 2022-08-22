@@ -14,8 +14,8 @@ import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
-import com.bartlomiejpluta.base.engine.world.entity.manager.EntityManager;
-import com.bartlomiejpluta.base.engine.world.entity.manager.EntitySetManager;
+import com.bartlomiejpluta.base.engine.world.character.manager.CharacterManager;
+import com.bartlomiejpluta.base.engine.world.character.manager.CharacterSetManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
@@ -35,9 +35,9 @@ public class DefaultContextManager implements ContextManager {
    private final TileSetManager tileSetManager;
    private final MapManager mapManager;
    private final ImageManager imageManager;
-   private final EntitySetManager entitySetManager;
+   private final CharacterSetManager characterSetManager;
    private final FontManager fontManager;
-   private final EntityManager entityManager;
+   private final CharacterManager characterManager;
    private final AnimationManager animationManager;
    private final ClassLoader classLoader;
    private final Inflater inflater;
@@ -56,7 +56,7 @@ public class DefaultContextManager implements ContextManager {
       project.getTileSetAssets().forEach(tileSetManager::registerAsset);
       project.getMapAssets().forEach(mapManager::registerAsset);
       project.getImageAssets().forEach(imageManager::registerAsset);
-      project.getEntitySetAssets().forEach(entitySetManager::registerAsset);
+      project.getCharacterSetAssets().forEach(characterSetManager::registerAsset);
       project.getAnimationAssets().forEach(animationManager::registerAsset);
       project.getFontAssets().forEach(fontManager::registerAsset);
       project.getWidgetDefinitionAssets().forEach(widgetDefinitionManager::registerAsset);
@@ -68,8 +68,8 @@ public class DefaultContextManager implements ContextManager {
 
       log.info("Building context up");
       var context = DefaultContext.builder()
-            .engine(engine)
-            .entityManager(entityManager)
+              .engine(engine)
+              .characterManager(characterManager)
             .animationManager(animationManager)
             .imageManager(imageManager)
             .mapManager(mapManager)
