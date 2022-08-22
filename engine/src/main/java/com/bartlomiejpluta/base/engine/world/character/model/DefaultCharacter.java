@@ -33,8 +33,8 @@ public class DefaultCharacter extends MovableSprite implements Character {
    private final CharacterSetManager characterSetManager;
    private final Map<Direction, Integer> spriteDirectionRows;
    private final Map<Direction, Vector2fc> spriteDefaultRows;
-   private final Vector2f entityScale = new Vector2f(1, 1);
-   private Vector2fc entitySetSize;
+   private final Vector2f characterScale = new Vector2f(1, 1);
+   private Vector2fc characterSetSize;
 
    private final EventHandler eventHandler = new EventHandler();
 
@@ -56,8 +56,8 @@ public class DefaultCharacter extends MovableSprite implements Character {
 
    private final Queue<CharacterInstantAnimation> instantAnimations = new LinkedList<>();
 
-   public DefaultCharacter(Mesh mesh, CharacterSetManager characterSetManager, int defaultSpriteColumn, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String entitySetUid) {
-      super(mesh, createMaterial(characterSetManager, entitySetUid));
+   public DefaultCharacter(Mesh mesh, CharacterSetManager characterSetManager, int defaultSpriteColumn, Map<Direction, Integer> spriteDirectionRows, Map<Direction, Vector2fc> spriteDefaultRows, String characterSetUid) {
+      super(mesh, createMaterial(characterSetManager, characterSetUid));
       this.defaultSpriteColumn = defaultSpriteColumn;
       this.characterSetManager = characterSetManager;
       this.spriteDirectionRows = spriteDirectionRows;
@@ -66,13 +66,13 @@ public class DefaultCharacter extends MovableSprite implements Character {
 
       var texture = material.getTexture();
       if (texture != null) {
-         this.entitySetSize = texture.getSpriteSize();
-         super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+         this.characterSetSize = texture.getSpriteSize();
+         super.setScale(characterSetSize.x() * characterScale.x, characterSetSize.y() * characterScale.y);
       }
    }
 
-   private static Material createMaterial(CharacterSetManager characterSetManager, String entitySetUid) {
-      return entitySetUid != null ? characterSetManager.loadObject(requireNonNull(entitySetUid)) : Material.colored(0, 0, 0, 0);
+   private static Material createMaterial(CharacterSetManager characterSetManager, String characterSetUid) {
+      return characterSetUid != null ? characterSetManager.loadObject(requireNonNull(characterSetUid)) : Material.colored(0, 0, 0, 0);
    }
 
    @Override
@@ -124,15 +124,15 @@ public class DefaultCharacter extends MovableSprite implements Character {
    }
 
    @Override
-   public void changeCharacterSet(String entitySetUid) {
-      this.material = createMaterial(characterSetManager, entitySetUid);
+   public void changeCharacterSet(String characterSetUid) {
+      this.material = createMaterial(characterSetManager, characterSetUid);
       var texture = this.material.getTexture();
 
       if (texture != null) {
-         this.entitySetSize = texture.getSpriteSize();
-         super.setScale(entitySetSize.x() * entityScale.x, entitySetSize.y() * entityScale.y);
+         this.characterSetSize = texture.getSpriteSize();
+         super.setScale(characterSetSize.x() * characterScale.x, characterSetSize.y() * characterScale.y);
       } else {
-         this.entitySetSize = null;
+         this.characterSetSize = null;
       }
    }
 
@@ -177,43 +177,43 @@ public class DefaultCharacter extends MovableSprite implements Character {
 
    @Override
    public void setScaleX(float scaleX) {
-      if (entitySetSize == null) {
+      if (characterSetSize == null) {
          throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
-      this.entityScale.x = scaleX;
-      super.setScaleX(entitySetSize.x() * scaleX);
+      this.characterScale.x = scaleX;
+      super.setScaleX(characterSetSize.x() * scaleX);
    }
 
    @Override
    public void setScaleY(float scaleY) {
-      if (entitySetSize == null) {
+      if (characterSetSize == null) {
          throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
-      this.entityScale.y = scaleY;
-      super.setScaleY(entitySetSize.y() * scaleY);
+      this.characterScale.y = scaleY;
+      super.setScaleY(characterSetSize.y() * scaleY);
    }
 
    @Override
    public void setScale(float scale) {
-      if (entitySetSize == null) {
+      if (characterSetSize == null) {
          throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
-      this.entityScale.x = scale;
-      this.entityScale.y = scale;
-      super.setScale(entitySetSize.x() * scale, entitySetSize.y() * scale);
+      this.characterScale.x = scale;
+      this.characterScale.y = scale;
+      super.setScale(characterSetSize.x() * scale, characterSetSize.y() * scale);
    }
 
    @Override
    public float getScaleX() {
-      return entityScale.x;
+      return characterScale.x;
    }
 
    @Override
    public float getScaleY() {
-      return entityScale.y;
+      return characterScale.y;
    }
 
    @Override
@@ -233,13 +233,13 @@ public class DefaultCharacter extends MovableSprite implements Character {
 
    @Override
    public void setScale(float scaleX, float scaleY) {
-      if (entitySetSize == null) {
+      if (characterSetSize == null) {
          throw new AppException("Cannot change Character scale if no Character Set is provided");
       }
 
-      this.entityScale.x = scaleX;
-      this.entityScale.y = scaleY;
-      super.setScale(entitySetSize.x() * scaleX, entitySetSize.y() * scaleY);
+      this.characterScale.x = scaleX;
+      this.characterScale.y = scaleY;
+      super.setScale(characterSetSize.x() * scaleX, characterSetSize.y() * scaleY);
    }
 
    int currentFrame() {
