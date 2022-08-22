@@ -26,27 +26,55 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
 
    override fun generate() {
       projectContext.project?.let { project ->
-         databaseService.database.tables.forEach {
-            handleTable(project, it)
-         }
+         handleTables(project, databaseService.database.tables)
       }
    }
 
-   private fun handleTable(project: Project, table: SchemaTable) {
-      val model = generateModel(project, table)
-      generateDAO(project, table, model)
+   private fun handleTables(project: Project, tables: List<SchemaTable>) {
+      tables.forEach {
+         handleTable(project, it)
+      }
+
+      generateRootDAO(tables, project)
    }
 
-   private fun generateModel(project: Project, table: SchemaTable): ClassName {
-      val className = ClassName.get(MODEL_PACKAGE, "${snakeToPascalCase(table.name)}Model")
-
-      val builderAnnotation = AnnotationSpec
-         .builder(ClassName.get("lombok", "Builder"))
+   private fun generateRootDAO(tables: List<SchemaTable>, project: Project) {
+      val generatedAnnotation = AnnotationSpec.builder(Generated::class.java).addMember("value", "\$S", GENERATOR_NAME)
+         .addMember("date", "\$S", DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
+         .addMember("comments", "\$S", "Collective Data Access Object")
          .build()
 
-      val dataAnnotation = AnnotationSpec
-         .builder(ClassName.get("lombok", "Data"))
+      val generatedClass = TypeSpec.classBuilder(ClassName.get(DAO_PACKAGE, "dao"))
+         .addAnnotation(generatedAnnotation)
+         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+         .apply {
+            tables.forEach { table ->
+               val type = generateDaoClassName(table)
+               addField(
+                  FieldSpec.builder(type, table.name.lowercase(), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                     .initializer("new \$T()", type)
+                     .build()
+               )
+            }
+         }
          .build()
+
+      JavaFile
+         .builder("DB", generatedClass)
+         .build()
+         .writeTo(project.buildGeneratedCodeDirectory)
+   }
+
+   private fun generateDaoClassName(table: SchemaTable) =
+      ClassName.get(DAO_PACKAGE, snakeToPascalCase(table.name) + "DAO")
+
+   private fun handleTable(project: Project, table: SchemaTable) {
+      generateModel(project, table)
+      generateTableDAO(project, table)
+   }
+
+   private fun generateModel(project: Project, table: SchemaTable) {
+      val className = generateModelClassName(table)
 
       val generatedAnnotation = AnnotationSpec.builder(Generated::class.java).addMember("value", "\$S", GENERATOR_NAME)
          .addMember("date", "\$S", DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
@@ -54,8 +82,8 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
          .build()
 
       val generatedClass = TypeSpec.classBuilder(className)
-         .addAnnotation(dataAnnotation)
-         .addAnnotation(builderAnnotation)
+         .addAnnotation(DATA_ANNOTATION)
+         .addAnnotation(BUILDER_ANNOTATION)
          .addAnnotation(generatedAnnotation)
          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
 
@@ -67,21 +95,19 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
          .builder(MODEL_PACKAGE, generatedClass.build())
          .build()
          .writeTo(project.buildGeneratedCodeDirectory)
-
-      return className
    }
 
-   private fun generateDAO(project: Project, table: SchemaTable, model: ClassName) {
-      val packageName = "com.bartlomiejpluta.base.generated.db.dao"
-      val className = ClassName.get(packageName, "${snakeToPascalCase(table.name)}DAO")
+   private fun generateModelClassName(table: SchemaTable) =
+      ClassName.get(MODEL_PACKAGE, "${snakeToPascalCase(table.name)}Model")
+
+   private fun generateTableDAO(project: Project, table: SchemaTable) {
+      val className = generateDaoClassName(table)
+
+      val model = generateModelClassName(table)
 
       val generatedAnnotation = AnnotationSpec.builder(Generated::class.java).addMember("value", "\$S", GENERATOR_NAME)
          .addMember("date", "\$S", DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
          .addMember("comments", "\$S", "Data Access Object generated for '${table.name}' database table")
-         .build()
-
-      val requiredArgsConstructorAnnotation = AnnotationSpec
-         .builder(ClassName.get("lombok", "RequiredArgsConstructor"))
          .build()
 
       val primaryKeys = table.columns.filter { it.primary }
@@ -98,21 +124,46 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
 
       val generatedClass = TypeSpec.classBuilder(className)
          .addAnnotation(generatedAnnotation)
-         .addAnnotation(requiredArgsConstructorAnnotation)
          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-         .addField(
-            ClassName.get("com.bartlomiejpluta.base.api.context", "Context"),
-            "context",
-            Modifier.PRIVATE,
-            Modifier.FINAL
+         .addMethod(MethodSpec.constructorBuilder().build())
+         .addMethod(
+            MethodSpec.methodBuilder("findAll")
+               .returns(ParameterizedTypeName.get(ClassName.get(List::class.java), model))
+               .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+               .addStatement("var list = new \$T<\$T>()", LinkedList::class.java, model)
+               .beginControlFlow("\$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+               .apply {
+                  val sql = "SELECT * FROM `${table.name}`"
+                  addStatement("var statement = db.prepareStatement(\"$sql\")")
+               }
+               .addStatement("var result = statement.executeQuery()")
+               .beginControlFlow("while(result.next())")
+               .addStatement("var model = ${model.simpleName()}.builder()")
+               .apply {
+                  table.columns.forEach { column ->
+                     addStatement("model.${snakeToCamelCase(column.name)}(result.${dbToGetMethod(column)}(\"${column.name}\"))")
+                  }
+               }
+               .addStatement("list.add(model.build())")
+               .endControlFlow()
+               .endControlFlow(")")
+               .addStatement("return list")
+               .build()
          )
          .addMethod(
             MethodSpec.methodBuilder("find")
-               .addParameter(dbToJavaType(primaryKey), "id")
+               .addParameter(
+                  ParameterSpec.builder(dbToJavaType(primaryKey), "id")
+                     .addAnnotation(ClassName.get("lombok", "NonNull"))
+                     .build()
+               )
                .returns(model)
                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-               .beginControlFlow("return context.withDatabase(db ->")
-               .addStatement("var statement = db.prepareStatement(\"SELECT * FROM `${table.name}` WHERE `${primaryKey.name}` = ?\")")
+               .beginControlFlow("return \$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+               .apply {
+                  val sql = "SELECT * FROM `${table.name}` WHERE `${primaryKey.name}` = ?"
+                  addStatement("var statement = db.prepareStatement(\"$sql\")")
+               }
                .addStatement("statement.${dbToBindMethod(primaryKey)}(1, id)")
                .addStatement("var result = statement.executeQuery()")
                .beginControlFlow("if(result.next())")
@@ -128,13 +179,110 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                .endControlFlow(")")
                .build()
          )
+         .addMethod(
+            MethodSpec.methodBuilder("save")
+               .addParameter(
+                  ParameterSpec.builder(model, "model")
+                     .addAnnotation(ClassName.get("lombok", "NonNull"))
+                     .build()
+               )
+               .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+               .beginControlFlow("\$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+               .apply {
+                  val columns = table.columns.joinToString(", ") { "`${it.name}`" }
+                  val values = table.columns.joinToString(", ") { "?" }
+                  val sql = "MERGE INTO `${table.name}` ($columns) KEY(${primaryKey.name}) VALUES ($values)"
+                  addStatement("var statement = db.prepareStatement(\"$sql\")")
+                  table.columns.forEachIndexed { index, column ->
+                     val getterPrefix = if (column.type == ColumnType.BOOLEAN) "is" else "get"
+                     addStatement(
+                        "statement.${dbToBindMethod(column)}(${index + 1}, model.${getterPrefix}${
+                           snakeToPascalCase(
+                              column.name
+                           )
+                        }())"
+                     )
+                  }
+               }
+               .addStatement("statement.execute()")
+               .endControlFlow(")")
+               .build()
+         )
+         .addMethod(
+            MethodSpec.methodBuilder("insert")
+               .addParameter(
+                  ParameterSpec.builder(model, "model")
+                     .addAnnotation(ClassName.get("lombok", "NonNull"))
+                     .build()
+               )
+               .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+               .beginControlFlow("\$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+               .apply {
+                  val columns = table.columns.joinToString(", ") { "`${it.name}`" }
+                  val values = table.columns.joinToString(", ") { "?" }
+                  val sql = "INSERT INTO `${table.name}` ($columns) VALUES ($values)"
+                  addStatement("var statement = db.prepareStatement(\"$sql\")")
+                  table.columns.forEachIndexed { index, column ->
+                     val getterPrefix = if (column.type == ColumnType.BOOLEAN) "is" else "get"
+                     addStatement(
+                        "statement.${dbToBindMethod(column)}(${index + 1}, model.${getterPrefix}${
+                           snakeToPascalCase(
+                              column.name
+                           )
+                        }())"
+                     )
+                  }
+               }
+               .addStatement("statement.execute()")
+               .endControlFlow(")")
+               .build()
+         )
+         .addMethod(
+            MethodSpec.methodBuilder("update")
+               .addParameter(
+                  ParameterSpec.builder(model, "model")
+                     .addAnnotation(ClassName.get("lombok", "NonNull"))
+                     .build()
+               )
+               .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+               .beginControlFlow("\$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+               .apply {
+                  val fields = table.columns
+                     .filter { it != primaryKey }
+                     .joinToString(", ") { "`${it.name}`=?" }
+                  val sql = "UPDATE `${table.name}` SET $fields WHERE `${primaryKey.name}`=?"
+                  addStatement("var statement = db.prepareStatement(\"$sql\")")
+                  table.columns
+                     .filter { it != primaryKey }
+                     .forEachIndexed { index, column ->
+                        val getterPrefix = if (column.type == ColumnType.BOOLEAN) "is" else "get"
+                        addStatement(
+                           "statement.${dbToBindMethod(column)}(${index + 1}, model.${getterPrefix}${
+                              snakeToPascalCase(
+                                 column.name
+                              )
+                           }())"
+                        )
+                     }
+                  val getterPrefix = if (primaryKey.type == ColumnType.BOOLEAN) "is" else "get"
+                  addStatement(
+                     "statement.${dbToBindMethod(primaryKey)}(${table.columns.size}, model.${getterPrefix}${
+                        snakeToPascalCase(
+                           primaryKey.name
+                        )
+                     }())"
+                  )
+               }
+               .addStatement("statement.execute()")
+               .endControlFlow(")")
+               .build()
+         )
          .build()
 
       JavaFile
          .builder(DAO_PACKAGE, generatedClass)
          .build()
          .writeTo(project.buildGeneratedCodeDirectory)
-
    }
 
    private fun snakeToPascalCase(snake: String) = snake
@@ -183,7 +331,12 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
 
    companion object {
       private val GENERATOR_NAME = DataAccessObjectCodeGenerator::class.java.canonicalName
-      private const val MODEL_PACKAGE = "com.bartlomiejpluta.base.generated.db.model"
-      private const val DAO_PACKAGE = "com.bartlomiejpluta.base.generated.db.dao"
+      private const val MODEL_PACKAGE = "DB.model"
+      private const val DAO_PACKAGE = "DB"
+
+      private val BUILDER_ANNOTATION = ClassName.get("lombok", "Builder")
+      private val DATA_ANNOTATION = ClassName.get("lombok", "Data")
+      private val CONTEXT_HOLDER = ClassName.get("com.bartlomiejpluta.base.api.context", "ContextHolder")
+
    }
 }
