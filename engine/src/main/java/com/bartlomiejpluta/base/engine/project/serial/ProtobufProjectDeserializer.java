@@ -29,7 +29,7 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
               .tileSetAssets(proto.getTileSetsList().stream().map(this::parseTileSetAsset).collect(toList()))
               .mapAssets(proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList()))
               .imageAssets(proto.getImagesList().stream().map(this::parseImageAsset).collect(toList()))
-              .characterSetAssets(proto.getEntitySetsList().stream().map(this::parseEntitySetAsset).collect(toList()))
+              .characterSetAssets(proto.getCharacterSetsList().stream().map(this::parseCharacterSetAsset).collect(toList()))
             .animationAssets(proto.getAnimationsList().stream().map(this::parseAnimationAsset).collect(toList()))
             .fontAssets(proto.getFontsList().stream().map(this::parseFontAsset).collect(toList()))
             .widgetDefinitionAssets(proto.getWidgetsList().stream().map(this::parseWidgetAsset).collect(toList()))
@@ -49,7 +49,7 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
       return new ImageAsset(proto.getUid(), proto.getSource());
    }
 
-   private CharacterSetAsset parseEntitySetAsset(ProjectProto.EntitySetAsset proto) {
+   private CharacterSetAsset parseCharacterSetAsset(ProjectProto.CharacterSetAsset proto) {
       return new CharacterSetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
    }
 

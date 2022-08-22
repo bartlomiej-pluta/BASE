@@ -24,7 +24,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllMaps(item.maps.map(this::serializeMap))
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
       proto.addAllImages(item.images.map(this::serializeImage))
-      proto.addAllEntitySets(item.characterSets.map(this::serializeCharacterSet))
+      proto.addAllCharacterSets(item.characterSets.map(this::serializeCharacterSet))
       proto.addAllAnimations(item.animations.map(this::serializeAnimation))
       proto.addAllIconSets(item.iconSets.map(this::serializeIconSet))
       proto.addAllFonts(item.fonts.map(this::serializeFont))
@@ -53,7 +53,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(image.name)
       .build()
 
-   private fun serializeCharacterSet(characterSet: CharacterSet) = ProjectProto.EntitySetAsset.newBuilder()
+   private fun serializeCharacterSet(characterSet: CharacterSet) = ProjectProto.CharacterSetAsset.newBuilder()
       .setUid(characterSet.uid)
       .setSource(characterSet.source)
       .setName(characterSet.name)

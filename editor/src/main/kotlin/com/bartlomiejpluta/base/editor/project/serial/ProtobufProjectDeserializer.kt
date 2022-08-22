@@ -26,7 +26,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
          maps.addAll(proto.mapsList.map { deserializeMap(this, it) })
          tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(this, it) })
          images.addAll(proto.imagesList.map { deserializeImage(this, it) })
-         characterSets.addAll(proto.entitySetsList.map { deserializeCharacterSet(this, it) })
+         characterSets.addAll(proto.characterSetsList.map { deserializeCharacterSet(this, it) })
          animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
          iconSets.addAll(proto.iconSetsList.map { deserializeIconSet(this, it) })
          fonts.addAll(proto.fontsList.map { deserializeFont(this, it) })
@@ -57,7 +57,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = image.name
    )
 
-   private fun deserializeCharacterSet(project: Project, characterSetAsset: ProjectProto.EntitySetAsset) = CharacterSet(
+   private fun deserializeCharacterSet(project: Project, characterSetAsset: ProjectProto.CharacterSetAsset) = CharacterSet(
       project = project,
       uid = characterSetAsset.uid,
       source = characterSetAsset.source,
