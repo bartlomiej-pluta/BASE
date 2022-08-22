@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
+import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -27,6 +28,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
          images.addAll(proto.imagesList.map { deserializeImage(this, it) })
          entitySets.addAll(proto.entitySetsList.map { deserializeEntitySet(this, it) })
          animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
+         iconSets.addAll(proto.iconSetsList.map { deserializeIconSet(this, it) })
          fonts.addAll(proto.fontsList.map { deserializeFont(this, it) })
          widgets.addAll(proto.widgetsList.map { deserializeWidget(this, it) })
          sounds.addAll(proto.soundsList.map { deserializeSound(this, it) })
@@ -71,6 +73,15 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = animationAsset.name,
       rows = animationAsset.rows,
       columns = animationAsset.columns
+   )
+
+   private fun deserializeIconSet(project: Project, iconSetAsset: ProjectProto.IconSetAsset) = IconSetAsset(
+      project = project,
+      uid = iconSetAsset.uid,
+      source = iconSetAsset.source,
+      name = iconSetAsset.name,
+      rows = iconSetAsset.rows,
+      columns = iconSetAsset.columns
    )
 
    private fun deserializeFont(project: Project, fontAsset: ProjectProto.FontAsset) = FontAsset(

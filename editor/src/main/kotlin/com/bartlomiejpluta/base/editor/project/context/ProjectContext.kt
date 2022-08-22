@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
+import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAssetData
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
@@ -43,12 +44,13 @@ interface ProjectContext {
 
    fun importAnimation(data: AnimationAssetData)
 
+   fun importIconSet(data: IconSetAssetData)
+
    fun importFont(data: FontAssetData)
 
    fun createWidget(data: WidgetAssetData): WidgetAsset
 
    fun importSound(data: SoundAssetData)
-
    fun deleteAsset(asset: Asset)
    fun loadScript(fileNode: FileNode, execute: ((String) -> Unit)?, saveable: Boolean): Code
    fun saveScript(code: Code)

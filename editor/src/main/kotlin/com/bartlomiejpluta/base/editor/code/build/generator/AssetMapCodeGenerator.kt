@@ -25,6 +25,7 @@ class AssetMapCodeGenerator : CodeGenerator {
          generateAssetClass("entsets", project.entitySets),
          generateAssetClass("images", project.images),
          generateAssetClass("animations", project.animations),
+         generateAssetClass("iconsets", project.iconSets),
          generateAssetClass("fonts", project.fonts),
          generateAssetClass("widgets", project.widgets),
          generateAssetClass("sounds", project.sounds)

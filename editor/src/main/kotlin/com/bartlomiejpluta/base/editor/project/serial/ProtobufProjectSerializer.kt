@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
+import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.project.model.Project
@@ -25,6 +26,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllImages(item.images.map(this::serializeImage))
       proto.addAllEntitySets(item.entitySets.map(this::serializeEntitySet))
       proto.addAllAnimations(item.animations.map(this::serializeAnimation))
+      proto.addAllIconSets(item.iconSets.map(this::serializeIconSet))
       proto.addAllFonts(item.fonts.map(this::serializeFont))
       proto.addAllWidgets(item.widgets.map(this::serializeWidget))
       proto.addAllSounds(item.sounds.map(this::serializeSound))
@@ -65,6 +67,14 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(animation.name)
       .setRows(animation.rows)
       .setColumns(animation.columns)
+      .build()
+
+   private fun serializeIconSet(iconSet: IconSetAsset) = ProjectProto.IconSetAsset.newBuilder()
+      .setUid(iconSet.uid)
+      .setSource(iconSet.source)
+      .setName(iconSet.name)
+      .setRows(iconSet.rows)
+      .setColumns(iconSet.columns)
       .build()
 
    private fun serializeFont(font: FontAsset) = ProjectProto.FontAsset.newBuilder()

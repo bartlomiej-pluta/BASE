@@ -18,6 +18,8 @@ import com.bartlomiejpluta.base.editor.file.model.ScriptAssetFileNode
 import com.bartlomiejpluta.base.editor.gui.font.view.importing.ImportFontFragment
 import com.bartlomiejpluta.base.editor.gui.font.viewmodel.FontAssetDataVM
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
+import com.bartlomiejpluta.base.editor.iconset.view.importing.ImportIconSetFragment
+import com.bartlomiejpluta.base.editor.iconset.viewmodel.IconSetAssetDataVM
 import com.bartlomiejpluta.base.editor.image.view.importing.ImportImageFragment
 import com.bartlomiejpluta.base.editor.image.viewmodel.ImageAssetDataVM
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -229,6 +231,20 @@ class MainController : Controller() {
       }
    }
 
+   fun importIconSet() {
+      val vm = IconSetAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportIconSetFragment>(scope).apply {
+         onComplete {
+            projectContext.importIconSet(it)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
    fun importFont() {
       val vm = FontAssetDataVM()
       val scope = Scope()
@@ -269,6 +285,7 @@ class MainController : Controller() {
       }
    }
 
+
    fun closeAsset(asset: Asset) {
       when (asset) {
          is GameMapAsset -> openItems.entries.firstOrNull { (_, item) -> item is GameMapVM && item.uid == asset.uid }?.key?.let {
@@ -278,7 +295,6 @@ class MainController : Controller() {
          is ScriptAssetFileNode -> closeScript(asset)
       }
    }
-
 
    fun closeScript(fsNode: FileNode) {
       openItems.entries.firstOrNull { (_, item) -> item is CodeVM && item.fileNode.absolutePath == fsNode.absolutePath }?.key?.let {

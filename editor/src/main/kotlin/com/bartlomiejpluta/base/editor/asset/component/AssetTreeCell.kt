@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.entityset.asset.EntitySet
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
+import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
@@ -75,6 +76,7 @@ class AssetTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAs
          is ImageAsset -> FontIcon("fa-image")
          is EntitySet -> FontIcon("fa-male")
          is AnimationAsset -> FontIcon("fa-film")
+         is IconSetAsset -> FontIcon("fa-file-image-o")
          is FontAsset -> FontIcon("fa-font")
          is WidgetAsset -> FontIcon("fa-tachometer")
          is SoundAsset -> FontIcon("fa-music")

@@ -15,6 +15,8 @@ import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAssetData
+import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
+import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAssetData
 import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -218,6 +220,19 @@ class DefaultProjectContext : ProjectContext {
             val targetFile = File(it.animationsDirectory, source)
             data.file.copyTo(targetFile)
             it.animations += AnimationAsset(it, uid, source, data.name, data.rows, data.columns)
+
+            save()
+         }
+      }
+   }
+
+   override fun importIconSet(data: IconSetAssetData) {
+      project?.let {
+         UID.next(it.iconSets.map(Asset::uid)).let { uid ->
+            val source = "$uid.${data.file.extension}"
+            val targetFile = File(it.iconSetsDirectory, source)
+            data.file.copyTo(targetFile)
+            it.iconSets += IconSetAsset(it, uid, source, data.name, data.rows, data.columns)
 
             save()
          }
