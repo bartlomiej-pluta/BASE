@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.context.manager;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.context.ContextHolder;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.engine.audio.manager.SoundManager;
 import com.bartlomiejpluta.base.engine.context.model.DefaultContext;
@@ -66,7 +67,7 @@ public class DefaultContextManager implements ContextManager {
       var gameRunner = runnerClass.getConstructor().newInstance();
 
       log.info("Building context up");
-      return DefaultContext.builder()
+      var context = DefaultContext.builder()
             .engine(engine)
             .entityManager(entityManager)
             .animationManager(animationManager)
@@ -80,5 +81,9 @@ public class DefaultContextManager implements ContextManager {
             .gameRunner(gameRunner)
             .projectName(project.getName())
             .build();
+
+      ContextHolder.INSTANCE.setContext(context);
+
+      return context;
    }
 }
