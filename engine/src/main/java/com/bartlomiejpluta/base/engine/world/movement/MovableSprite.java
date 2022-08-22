@@ -20,29 +20,15 @@ import static java.lang.Math.max;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class MovableSprite extends AnimatedSprite implements Movable, Updatable {
-   private final Vector2f coordinateStepSize = new Vector2f(0, 0);
-
-   private final Vector2i coordinates = new Vector2i(0, 0);
-   private final Vector2f positionOffset = new Vector2f(0, 0);
    private int moveTime = 0;
    private Vector2f movementVector;
    private int framesToCrossOneTile = 1;
-
-   private enum PlacingMode {BY_POSITION, BY_COORDINATES}
-
-   private PlacingMode placingMode;
 
    @Getter
    private Movement movement;
 
    public MovableSprite(Mesh mesh, Material material) {
       super(mesh, material);
-      setCoordinates(0, 0);
-   }
-
-   @Override
-   public Vector2ic getCoordinates() {
-      return coordinates;
    }
 
    @Override
@@ -53,24 +39,6 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    @Override
    public void setSpeed(float speed) {
       framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
-   }
-
-   @Override
-   public void update(float dt) {
-      super.update(dt);
-
-      if (movement != null) {
-         if (moveTime > 0) {
-            --moveTime;
-            movePosition(movementVector);
-         } else {
-            adjustCoordinates();
-            setDefaultAnimationFrame();
-            movement.onFinish();
-            movementVector = null;
-            movement = null;
-         }
-      }
    }
 
    protected abstract void setDefaultAnimationFrame();
@@ -108,68 +76,20 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
    }
 
    @Override
-   public void setCoordinates(int x, int y) {
-      coordinates.x = x;
-      coordinates.y = y;
-      super.setPosition((x + 0.5f) * coordinateStepSize.x + positionOffset.x, (y + 0.5f) * coordinateStepSize.y + positionOffset.y);
-      placingMode = PlacingMode.BY_COORDINATES;
-   }
+   public void update(float dt) {
+      super.update(dt);
 
-   @Override
-   public void setPosition(float x, float y) {
-      super.setPosition(x + positionOffset.x, y + positionOffset.y);
-      coordinates.x = (int) (x / coordinateStepSize.x);
-      coordinates.y = (int) (y / coordinateStepSize.y);
-      placingMode = PlacingMode.BY_POSITION;
-   }
-
-   @Override
-   public void setPosition(Vector2fc position) {
-      setPosition(position.x(), position.y());
-   }
-
-   @Override
-   public void setCoordinates(Vector2ic coordinates) {
-      setCoordinates(coordinates.x(), coordinates.y());
-   }
-
-   public void setStepSize(float x, float y) {
-      coordinateStepSize.x = x;
-      coordinateStepSize.y = y;
-      adjustPosition();
-   }
-
-   private void adjustPosition() {
-      switch (placingMode) {
-         case BY_POSITION -> setPosition(position);
-         case BY_COORDINATES -> setCoordinates(coordinates);
+      if (movement != null) {
+         if (moveTime > 0) {
+            --moveTime;
+            movePosition(movementVector);
+         } else {
+            adjustCoordinates();
+            setDefaultAnimationFrame();
+            movement.onFinish();
+            movementVector = null;
+            movement = null;
+         }
       }
-   }
-
-   @Override
-   public Vector2fc getPositionOffset() {
-      return positionOffset;
-   }
-
-   @Override
-   public void setPositionOffset(Vector2fc offset) {
-      setPositionOffset(offset.x(), offset.y());
-   }
-
-   @Override
-   public void setPositionOffset(float offsetX, float offsetY) {
-      this.positionOffset.x = offsetX;
-      this.positionOffset.y = offsetY;
-      adjustPosition();
-   }
-
-   @Override
-   public int chebyshevDistance(Vector2ic coordinates) {
-      return Distance.chebyshev(this.coordinates, coordinates);
-   }
-
-   @Override
-   public int manhattanDistance(Vector2ic coordinates) {
-      return Distance.manhattan(this.coordinates, coordinates);
    }
 }
