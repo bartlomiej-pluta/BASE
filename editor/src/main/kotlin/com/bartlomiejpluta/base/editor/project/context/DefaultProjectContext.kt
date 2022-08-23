@@ -5,11 +5,11 @@ import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.service.JavaClassService
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
@@ -108,6 +108,14 @@ class DefaultProjectContext : ProjectContext {
 
             javaClassService.createClassFile(map.handler, it.codeFSNode, "map_handler.ftl") { model ->
                model["mapUid"] = uid
+               model["mapName"] = name
+               model["mapCode"] = name.split("\\s+".toRegex()).joinToString("") { part ->
+                  part.replaceFirstChar { c ->
+                     if (c.isLowerCase()) c.titlecase(Locale.getDefault())
+                     else c.toString()
+                  }
+               }
+               model["map_code"] = name.split("\\s+".toRegex()).joinToString("_") { part -> part.lowercase() }
             }
 
             File(it.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }

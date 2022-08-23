@@ -13,6 +13,7 @@ import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import javafx.collections.ObservableList
 import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
 import javafx.scene.control.cell.TextFieldListCell
@@ -35,7 +36,7 @@ class MapLayersView : View() {
       isEditable = true
 
       setCellFactory {
-         LayerListViewItem { layer, name ->
+         LayerListViewItem(mapVM.layers) { layer, name ->
             RenameLayerCommand(layer, name).let {
                it.execute()
                undoRedoService.push(it, scope)
@@ -150,6 +151,7 @@ class MapLayersView : View() {
 
    private class LayerListViewItemConverter(
       private val cell: ListCell<Layer>,
+      private val layers: ObservableList<Layer>,
       private val onUpdate: (layer: Layer, name: String) -> Unit
    ) : StringConverter<Layer>() {
       override fun toString(layer: Layer?) = layer?.name ?: ""
@@ -160,15 +162,17 @@ class MapLayersView : View() {
       // so that the Command object has access to the actual as well as the new value of layer name.
       // That's why we are running the submission logic in the converter.
       override fun fromString(string: String?): Layer = cell.item.apply {
-         string?.takeIf { it != name }?.let {
-            onUpdate(this, it)
-         }
+         string
+            ?.takeIf { str -> str != name }
+            ?.takeIf { str -> layers.none { it.name == str }}
+            ?.let { onUpdate(this, it) }
       }
    }
 
-   private class LayerListViewItem(onUpdate: (layer: Layer, name: String) -> Unit) : TextFieldListCell<Layer>() {
+   private class LayerListViewItem(layers: ObservableList<Layer>, onUpdate: (layer: Layer, name: String) -> Unit) :
+      TextFieldListCell<Layer>() {
       init {
-         converter = LayerListViewItemConverter(this, onUpdate)
+         converter = LayerListViewItemConverter(this, layers, onUpdate)
       }
 
       override fun updateItem(item: Layer?, empty: Boolean) {
