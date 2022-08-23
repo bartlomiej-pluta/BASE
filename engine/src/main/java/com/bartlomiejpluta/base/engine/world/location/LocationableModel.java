@@ -2,9 +2,7 @@ package com.bartlomiejpluta.base.engine.world.location;
 
 import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.move.Direction;
-import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
-import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.base.engine.world.object.Sprite;
+import com.bartlomiejpluta.base.engine.world.object.Model;
 import com.bartlomiejpluta.base.util.math.Distance;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2f;
@@ -13,22 +11,24 @@ import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class LocationableSprite extends Sprite implements Locationable {
-   private enum PlacingMode {BY_POSITION, BY_COORDINATES}
-
-   private PlacingMode placingMode;
+public abstract class LocationableModel extends Model implements Locationable {
    protected final Vector2f coordinateStepSize = new Vector2f(0, 0);
    protected final Vector2i coordinates = new Vector2i(0, 0);
    protected final Vector2f positionOffset = new Vector2f(0, 0);
+   private PlacingMode placingMode;
 
-   public LocationableSprite(Mesh mesh, Material material) {
-      super(mesh, material);
+   public LocationableModel() {
       setCoordinates(0, 0);
    }
 
    @Override
    public Vector2ic getCoordinates() {
       return coordinates;
+   }
+
+   @Override
+   public void setCoordinates(Vector2ic coordinates) {
+      setCoordinates(coordinates.x(), coordinates.y());
    }
 
    @Override
@@ -51,11 +51,6 @@ public abstract class LocationableSprite extends Sprite implements Locationable 
    @Override
    public void setPosition(Vector2fc position) {
       setPosition(position.x(), position.y());
-   }
-
-   @Override
-   public void setCoordinates(Vector2ic coordinates) {
-      setCoordinates(coordinates.x(), coordinates.y());
    }
 
    public void setStepSize(float x, float y) {
@@ -112,4 +107,6 @@ public abstract class LocationableSprite extends Sprite implements Locationable 
    public int manhattanDistance(Locationable other) {
       return Distance.manhattan(this.coordinates, other.getCoordinates());
    }
+
+   private enum PlacingMode {BY_POSITION, BY_COORDINATES}
 }

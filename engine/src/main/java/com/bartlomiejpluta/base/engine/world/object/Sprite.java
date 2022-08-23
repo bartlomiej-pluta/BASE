@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
+import com.bartlomiejpluta.base.engine.world.location.LocationableModel;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class Sprite extends Model implements Renderable {
+public abstract class Sprite extends LocationableModel implements Renderable {
    private final float farthestVertexDistance;
 
    protected final Mesh mesh;

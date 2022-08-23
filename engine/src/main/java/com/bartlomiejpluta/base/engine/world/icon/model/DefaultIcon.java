@@ -6,14 +6,14 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.world.icon.manager.IconSetManager;
-import com.bartlomiejpluta.base.engine.world.location.LocationableSprite;
+import com.bartlomiejpluta.base.engine.world.object.Sprite;
 import com.bartlomiejpluta.base.lib.event.EventHandler;
 import lombok.Getter;
 import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
 
-public class DefaultIcon extends LocationableSprite implements Icon {
+public class DefaultIcon extends Sprite implements Icon {
    private final EventHandler eventHandler = new EventHandler();
    private final IconSetManager iconSetManager;
    private final Vector2f iconScale = new Vector2f(1, 1);

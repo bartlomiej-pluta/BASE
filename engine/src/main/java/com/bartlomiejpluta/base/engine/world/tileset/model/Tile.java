@@ -16,7 +16,7 @@ public class Tile extends Sprite {
    private final Vector2f tileScale = new Vector2f(1, 1);
    private final Vector2fc tileSpriteSize;
 
-   public Tile setCoordinates(int row, int column) {
+   public Tile setLocation(int row, int column) {
       var stepSize = material.getTexture().getSpriteSize();
       setPosition(column * stepSize.x(), row * stepSize.y());
       return this;

@@ -26,7 +26,7 @@ public class DefaultTileLayer extends BaseLayer implements TileLayer {
    @Override
    public void setTile(int row, int column, int tileId) {
       var tile = tileSet.tileById(tileId);
-      tile.setCoordinates(row, column);
+      tile.setLocation(row, column);
       layer[row][column] = tile;
 
    }
@@ -34,7 +34,7 @@ public class DefaultTileLayer extends BaseLayer implements TileLayer {
    @Override
    public void setTile(int row, int column, int tileSetRow, int tileSetColumn) {
       var tile = tileSet.tileAt(tileSetRow, tileSetColumn);
-      tile.setCoordinates(row, column);
+      tile.setLocation(row, column);
       layer[row][column] = tile;
    }
 

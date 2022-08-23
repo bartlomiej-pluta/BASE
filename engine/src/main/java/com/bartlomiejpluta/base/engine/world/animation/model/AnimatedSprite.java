@@ -4,14 +4,13 @@ import com.bartlomiejpluta.base.api.animation.Animated;
 import com.bartlomiejpluta.base.engine.core.engine.DefaultGameEngine;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
-import com.bartlomiejpluta.base.engine.world.location.LocationableSprite;
 import com.bartlomiejpluta.base.engine.world.object.Sprite;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
 import org.joml.Vector2fc;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class AnimatedSprite extends LocationableSprite implements Animated {
+public abstract class AnimatedSprite extends Sprite implements Animated {
    private int time;
 
    // The time in ms between frames
