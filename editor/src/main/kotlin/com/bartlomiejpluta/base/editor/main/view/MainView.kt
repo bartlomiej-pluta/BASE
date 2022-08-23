@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.main.view
 
+import com.bartlomiejpluta.base.editor.asset.component.GraphicAssetPreviewFragment
 import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
+import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.code.view.build.BuildLogsView
 import com.bartlomiejpluta.base.editor.code.view.editor.CodeEditorFragment
 import com.bartlomiejpluta.base.editor.code.view.list.ScriptFilesView
@@ -170,6 +172,18 @@ class MainView : View("BASE Game Editor") {
             textProperty().bind(vm.nameProperty)
 
             setOnClosed { mainController.openItems.remove(scope) }
+         }
+      }
+
+      is GraphicAssetVM -> {
+         setInScope(vm, scope)
+
+         EditorTab(find<GraphicAssetPreviewFragment>(scope), FontIcon("fa-file-image-o")).apply {
+            textProperty().bind(vm.nameProperty)
+
+            setOnClosed {
+               mainController.openItems.remove(scope)
+            }
          }
       }
 

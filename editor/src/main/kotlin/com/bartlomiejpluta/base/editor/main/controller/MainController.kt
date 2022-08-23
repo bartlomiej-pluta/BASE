@@ -3,6 +3,8 @@ package com.bartlomiejpluta.base.editor.main.controller
 import com.bartlomiejpluta.base.editor.animation.view.importing.ImportAnimationFragment
 import com.bartlomiejpluta.base.editor.animation.viewmodel.AnimationAssetDataVM
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.asset.model.GraphicAsset
+import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.audio.view.importing.ImportSoundFragment
 import com.bartlomiejpluta.base.editor.audio.viewmodel.SoundAssetDataVM
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
@@ -144,6 +146,17 @@ class MainController : Controller() {
 
       openItem<Query, QueryVM, Scope>(findQuery, updateViewModel = updateModel) {
          val vm = QueryVM(query)
+         val scope = Scope()
+         setInScope(vm, scope)
+
+         scope to vm
+      }
+   }
+
+   fun openGraphicAsset(asset: GraphicAsset) {
+      val findItem = { a: GraphicAssetVM -> a.fileProperty.value.absolutePath == asset.file.absolutePath }
+      openItem<GraphicAsset, GraphicAssetVM, Scope>(findItem) {
+         val vm = GraphicAssetVM(asset)
          val scope = Scope()
          setInScope(vm, scope)
 

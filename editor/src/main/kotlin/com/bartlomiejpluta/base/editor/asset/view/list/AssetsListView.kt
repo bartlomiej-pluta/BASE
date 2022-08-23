@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.asset.view.list
 import com.bartlomiejpluta.base.editor.asset.component.AssetTreeCell
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
+import com.bartlomiejpluta.base.editor.asset.model.GraphicAsset
 import com.bartlomiejpluta.base.editor.file.model.ScriptAssetFileNode
 import com.bartlomiejpluta.base.editor.main.controller.MainController
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
@@ -106,6 +107,7 @@ class AssetsListView : View() {
             when (val item = selectionModel?.selectedItem?.value) {
                is GameMapAsset -> mainController.openMap(item.uid)
                is ScriptAssetFileNode -> mainController.openScript(item)
+               is GraphicAsset -> mainController.openGraphicAsset(item)
             }
          }
 
