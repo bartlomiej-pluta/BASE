@@ -54,8 +54,8 @@ public class DefaultGameEngine implements GameEngine {
       chrono.init();
 
       initializables.stream()
-            .peek(i -> log.info("Initializing {}", i.getClass().getSimpleName()))
-            .forEach(Initializable::init);
+              .peek(i -> log.info("Initializing {}", i.getClass().getSimpleName()))
+              .forEach(Initializable::init);
 
       logic.init(screen, context);
    }
@@ -122,16 +122,7 @@ public class DefaultGameEngine implements GameEngine {
       running = false;
    }
 
-   // TODO
-   // It is supposed to be moved to the Context so that
-   // user will be able to choose default window size,
-   // as well as further possibility to resize the window
-   // or forcing fullscreen mode.
-   // Until it's not implemented yet, the window width and height
-   // are hardcoded right here.
-   //
-   // The same applies for target UPS (updates per second) parameter.
    private static final int WINDOW_WIDTH = 640;
    private static final int WINDOW_HEIGHT = 480;
-   private static final int TARGET_UPS = 60;
+   public static final int TARGET_UPS = 60;
 }

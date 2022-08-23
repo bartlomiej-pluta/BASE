@@ -13,8 +13,8 @@ public class SimpleAnimationRunner implements AnimationRunner {
    private Integer repeat = 1;
    private float scale = 1.0f;
    private int delay = 0;
-   private float animationSpeed = 0.05f;
-   private float speed = 0.05f;
+   private float animationSpeed = 3f;
+   private float speed = 3f;
    private float rotation = 0f;
    private Path<Animation> path;
    private Integer repeatPath;

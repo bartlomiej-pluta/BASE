@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.animation.model;
 
 import com.bartlomiejpluta.base.api.animation.Animated;
+import com.bartlomiejpluta.base.engine.core.engine.DefaultGameEngine;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.location.LocationableSprite;
@@ -27,7 +28,7 @@ public abstract class AnimatedSprite extends LocationableSprite implements Anima
 
    @Override
    public void setAnimationSpeed(float speed) {
-      intervalInMilliseconds = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
+      intervalInMilliseconds = (int) (1 / MathUtil.clamp(speed / DefaultGameEngine.TARGET_UPS, Float.MIN_VALUE, 1.0));
    }
 
    @Override

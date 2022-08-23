@@ -29,7 +29,7 @@ public class RandomAnimationsRunner implements AnimationRunner {
    private float delay = 0f;
    private RealDistribution delayDistribution;
 
-   private float animationSpeed = 0.05f;
+   private float animationSpeed = 3f;
    private RealDistribution animationSpeedDistribution;
 
    private float rotation = 0f;

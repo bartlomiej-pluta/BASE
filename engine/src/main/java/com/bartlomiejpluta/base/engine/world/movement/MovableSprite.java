@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.engine.world.movement;
 
 import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.api.move.Movement;
+import com.bartlomiejpluta.base.engine.core.engine.DefaultGameEngine;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.animation.model.AnimatedSprite;
@@ -38,7 +39,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
    @Override
    public void setSpeed(float speed) {
-      framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed, Float.MIN_VALUE, 1.0));
+      framesToCrossOneTile = (int) (1 / MathUtil.clamp(speed / DefaultGameEngine.TARGET_UPS, Float.MIN_VALUE, 1.0));
    }
 
    protected abstract void setDefaultAnimationFrame();
@@ -81,7 +82,7 @@ public abstract class MovableSprite extends AnimatedSprite implements Movable, U
 
       if (movement != null) {
          if (moveTime > 0) {
-            --moveTime;
+            moveTime -= dt;
             movePosition(movementVector);
          } else {
             adjustCoordinates();
