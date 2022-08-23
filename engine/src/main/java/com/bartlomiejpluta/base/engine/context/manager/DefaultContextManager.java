@@ -16,6 +16,8 @@ import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
 import com.bartlomiejpluta.base.engine.world.character.manager.CharacterManager;
 import com.bartlomiejpluta.base.engine.world.character.manager.CharacterSetManager;
+import com.bartlomiejpluta.base.engine.world.icon.manager.IconManager;
+import com.bartlomiejpluta.base.engine.world.icon.manager.IconSetManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
@@ -37,8 +39,10 @@ public class DefaultContextManager implements ContextManager {
    private final ImageManager imageManager;
    private final CharacterSetManager characterSetManager;
    private final FontManager fontManager;
+   private final IconSetManager iconSetManager;
    private final CharacterManager characterManager;
    private final AnimationManager animationManager;
+   private final IconManager iconManager;
    private final ClassLoader classLoader;
    private final Inflater inflater;
    private final WidgetDefinitionManager widgetDefinitionManager;
@@ -58,6 +62,7 @@ public class DefaultContextManager implements ContextManager {
       project.getImageAssets().forEach(imageManager::registerAsset);
       project.getCharacterSetAssets().forEach(characterSetManager::registerAsset);
       project.getAnimationAssets().forEach(animationManager::registerAsset);
+      project.getIconSetAssets().forEach(iconSetManager::registerAsset);
       project.getFontAssets().forEach(fontManager::registerAsset);
       project.getWidgetDefinitionAssets().forEach(widgetDefinitionManager::registerAsset);
       project.getSoundAssets().forEach(soundManager::registerAsset);
@@ -70,17 +75,18 @@ public class DefaultContextManager implements ContextManager {
       var context = DefaultContext.builder()
               .engine(engine)
               .characterManager(characterManager)
-            .animationManager(animationManager)
-            .imageManager(imageManager)
-            .mapManager(mapManager)
-            .fontManager(fontManager)
-            .inflater(inflater)
-            .widgetDefinitionManager(widgetDefinitionManager)
-            .soundManager(soundManager)
-            .databaseService(databaseService)
-            .gameRunner(gameRunner)
-            .projectName(project.getName())
-            .build();
+              .animationManager(animationManager)
+              .iconManager(iconManager)
+              .imageManager(imageManager)
+              .mapManager(mapManager)
+              .fontManager(fontManager)
+              .inflater(inflater)
+              .widgetDefinitionManager(widgetDefinitionManager)
+              .soundManager(soundManager)
+              .databaseService(databaseService)
+              .gameRunner(gameRunner)
+              .projectName(project.getName())
+              .build();
 
       ContextHolder.INSTANCE.setContext(context);
 

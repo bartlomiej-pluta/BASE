@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
 import com.bartlomiejpluta.base.engine.world.character.asset.CharacterSetAsset;
+import com.bartlomiejpluta.base.engine.world.icon.asset.IconSetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
 import com.bartlomiejpluta.base.engine.world.map.asset.GameMapAsset;
 import com.bartlomiejpluta.base.engine.world.tileset.asset.TileSetAsset;
@@ -30,11 +31,12 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
               .mapAssets(proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList()))
               .imageAssets(proto.getImagesList().stream().map(this::parseImageAsset).collect(toList()))
               .characterSetAssets(proto.getCharacterSetsList().stream().map(this::parseCharacterSetAsset).collect(toList()))
-            .animationAssets(proto.getAnimationsList().stream().map(this::parseAnimationAsset).collect(toList()))
-            .fontAssets(proto.getFontsList().stream().map(this::parseFontAsset).collect(toList()))
-            .widgetDefinitionAssets(proto.getWidgetsList().stream().map(this::parseWidgetAsset).collect(toList()))
-            .soundAssets(proto.getSoundsList().stream().map(this::parseSoundAsset).collect(toList()))
-            .build();
+              .animationAssets(proto.getAnimationsList().stream().map(this::parseAnimationAsset).collect(toList()))
+              .iconSetAssets(proto.getIconSetsList().stream().map(this::parseIconSetAsset).collect(toList()))
+              .fontAssets(proto.getFontsList().stream().map(this::parseFontAsset).collect(toList()))
+              .widgetDefinitionAssets(proto.getWidgetsList().stream().map(this::parseWidgetAsset).collect(toList()))
+              .soundAssets(proto.getSoundsList().stream().map(this::parseSoundAsset).collect(toList()))
+              .build();
    }
 
    private TileSetAsset parseTileSetAsset(ProjectProto.TileSetAsset proto) {
@@ -63,6 +65,10 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
 
    private AnimationAsset parseAnimationAsset(ProjectProto.AnimationAsset proto) {
       return new AnimationAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
+   }
+
+   private IconSetAsset parseIconSetAsset(ProjectProto.IconSetAsset proto) {
+      return new IconSetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
    }
 
    private SoundAsset parseSoundAsset(ProjectProto.SoundAsset proto) {

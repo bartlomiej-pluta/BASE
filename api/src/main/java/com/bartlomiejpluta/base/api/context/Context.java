@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.GUI;
+import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
@@ -42,6 +43,8 @@ public interface Context extends Updatable, Renderable, Disposable {
    Character createCharacter(String characterSetUid);
 
    Animation createAnimation(String animationUid);
+
+   Icon createIcon(String iconSetUid, int row, int column);
 
    Image getImage(String imageUid);
 

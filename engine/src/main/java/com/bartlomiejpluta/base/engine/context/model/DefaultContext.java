@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.api.context.GamePauseEvent;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.GUI;
+import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;
@@ -23,6 +24,7 @@ import com.bartlomiejpluta.base.engine.gui.render.NanoVGGUI;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
 import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
 import com.bartlomiejpluta.base.engine.world.character.manager.CharacterManager;
+import com.bartlomiejpluta.base.engine.world.icon.manager.IconManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
@@ -54,6 +56,9 @@ public class DefaultContext implements Context {
 
    @NonNull
    private final AnimationManager animationManager;
+
+   @NonNull
+   private final IconManager iconManager;
 
    @NonNull
    private final ImageManager imageManager;
@@ -146,14 +151,18 @@ public class DefaultContext implements Context {
    }
 
    @Override
-   public Character createCharacter(String characterSetUid) {
-      log.info("Creating new character with UID: [{}]", characterSetUid);
+   public Character createCharacter(@NonNull String characterSetUid) {
       return characterManager.createCharacter(characterSetUid);
    }
 
    @Override
-   public Animation createAnimation(String animationUid) {
+   public Animation createAnimation(@NonNull String animationUid) {
       return animationManager.loadObject(animationUid);
+   }
+
+   @Override
+   public Icon createIcon(@NonNull String iconSetUid, int row, int column) {
+      return iconManager.createIcon(iconSetUid, row, column);
    }
 
    @Override
