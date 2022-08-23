@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.editor.project.model
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.database.source.DataSource
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -38,7 +38,7 @@ class Project {
    val maps = observableListOf<GameMapAsset>()
    val tileSets = observableListOf<TileSetAsset>()
    val images = observableListOf<ImageAsset>()
-   val characterSets = observableListOf<CharacterSet>()
+   val characterSets = observableListOf<CharacterSetAsset>()
    val animations = observableListOf<AnimationAsset>()
    val iconSets = observableListOf<IconSetAsset>()
    val fonts = observableListOf<FontAsset>()

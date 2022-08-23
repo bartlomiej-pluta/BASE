@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
@@ -57,7 +57,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = image.name
    )
 
-   private fun deserializeCharacterSet(project: Project, characterSetAsset: ProjectProto.CharacterSetAsset) = CharacterSet(
+   private fun deserializeCharacterSet(project: Project, characterSetAsset: ProjectProto.CharacterSetAsset) = CharacterSetAsset(
       project = project,
       uid = characterSetAsset.uid,
       source = characterSetAsset.source,

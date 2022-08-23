@@ -2,7 +2,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
 import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAsset
@@ -53,7 +53,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(image.name)
       .build()
 
-   private fun serializeCharacterSet(characterSet: CharacterSet) = ProjectProto.CharacterSetAsset.newBuilder()
+   private fun serializeCharacterSet(characterSet: CharacterSetAsset) = ProjectProto.CharacterSetAsset.newBuilder()
       .setUid(characterSet.uid)
       .setSource(characterSet.source)
       .setName(characterSet.name)

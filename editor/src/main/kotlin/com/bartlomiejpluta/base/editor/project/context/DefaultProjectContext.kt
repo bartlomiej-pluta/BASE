@@ -8,7 +8,7 @@ import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.code.model.CodeType
 import com.bartlomiejpluta.base.editor.code.service.JavaClassService
-import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSet
+import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
@@ -206,7 +206,7 @@ class DefaultProjectContext : ProjectContext {
             val source = "$uid.${data.file.extension}"
             val targetFile = File(it.characterSetsDirectory, source)
             data.file.copyTo(targetFile)
-            it.characterSets += CharacterSet(it, uid, source, data.name, data.rows, data.columns)
+            it.characterSets += CharacterSetAsset(it, uid, source, data.name, data.rows, data.columns)
 
             save()
          }
