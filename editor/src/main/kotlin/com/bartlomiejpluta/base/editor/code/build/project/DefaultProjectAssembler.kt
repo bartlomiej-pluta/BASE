@@ -29,6 +29,7 @@ class DefaultProjectAssembler : ProjectAssembler {
       packager.pack(project.imagesDirectory, targetJar, "BOOT-INF/classes/project/images")
       packager.pack(project.characterSetsDirectory, targetJar, "BOOT-INF/classes/project/charsets")
       packager.pack(project.animationsDirectory, targetJar, "BOOT-INF/classes/project/animations")
+      packager.pack(project.iconSetsDirectory, targetJar, "BOOT-INF/classes/project/iconsets")
       packager.pack(project.fontsDirectory, targetJar, "BOOT-INF/classes/project/fonts")
       packager.pack(project.widgetsDirectory, targetJar, "BOOT-INF/classes/project/widgets")
       packager.pack(project.audioDirectory, targetJar, "BOOT-INF/classes/project/audio")
