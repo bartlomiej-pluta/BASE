@@ -3,17 +3,15 @@ package com.bartlomiejpluta.base.util.world;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.character.Character;
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.context.ContextHolder;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
-import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.api.map.model.GameMap;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.lib.entity.EntityDelegate;
 import com.bartlomiejpluta.base.util.math.Distance;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import com.bartlomiejpluta.base.util.random.DiceRoller;
 import lombok.NonNull;
 import org.joml.Vector2i;
-import org.joml.Vector2ic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,16 +20,13 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 
-public class CharacterSpawner implements Updatable {
+public class CharacterSpawner extends EntityDelegate {
    private static final int MAX_REPOSITION_ATTEMPTS = 10;
    private final Random random = new Random();
    private final List<Character> spawnedEntities = new LinkedList<>();
    private final List<Supplier<Character>> spawners = new ArrayList<>();
-   private final Vector2ic origin;
    private final Context context;
    private final Camera camera;
-   private final GameMap map;
-   private final ObjectLayer layer;
    private DiceRoller interval = DiceRoller.of("90d2");
    private int range = 4;
    private float spawnChance = 50;
@@ -41,12 +36,10 @@ public class CharacterSpawner implements Updatable {
    private boolean spawnOutsideViewport = false;
    private float threshold;
 
-   public CharacterSpawner(int x, int y, @NonNull Context context, @NonNull GameMap map, @NonNull ObjectLayer layer) {
-      this.origin = new Vector2i(x, y);
-      this.context = context;
+   public CharacterSpawner() {
+      super(ContextHolder.INSTANCE.getContext().createAbstractEntity());
+      this.context = ContextHolder.INSTANCE.getContext();
       this.camera = context.getCamera();
-      this.map = map;
-      this.layer = layer;
       drawThreshold();
    }
 
@@ -110,6 +103,9 @@ public class CharacterSpawner implements Updatable {
          return;
       }
 
+      var layer = getLayer();
+      var map = layer.getMap();
+
       // Spawn multiple entities at the time
       var roll = countRoller.roll();
       var count = Math.max(0, roll - spawnedEntities.size());
@@ -124,8 +120,8 @@ public class CharacterSpawner implements Updatable {
             }
 
             // Draw the coordinates and make sure they are inside the current map boundaries
-            coordinates.x = MathUtil.clamp(origin.x() + random.nextInt(2 * range) - range, 0, map.getColumns() - 1);
-            coordinates.y = MathUtil.clamp(origin.y() + random.nextInt(2 * range) - range, 0, map.getRows() - 1);
+            coordinates.x = MathUtil.clamp(getCoordinates().x() + random.nextInt(2 * range) - range, 0, map.getColumns() - 1);
+            coordinates.y = MathUtil.clamp(getCoordinates().y() + random.nextInt(2 * range) - range, 0, map.getRows() - 1);
 
             // If tile is not reachable, draw the coordinates again
             if (!layer.isTileReachable(coordinates)) {
@@ -142,7 +138,7 @@ public class CharacterSpawner implements Updatable {
             }
 
             // We need also to drop the coordinates that are too far from the spawner origin
-            if (Distance.manhattan(origin, coordinates) > range) {
+            if (Distance.manhattan(getCoordinates(), coordinates) > range) {
                ++attempts;
                continue;
             }

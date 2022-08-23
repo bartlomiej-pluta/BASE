@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.audio.Sound;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.character.Character;
+import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.gui.GUI;
@@ -43,6 +44,8 @@ public interface Context extends Updatable, Renderable, Disposable {
    Character createCharacter(String characterSetUid);
 
    Animation createAnimation(String animationUid);
+
+   Entity createAbstractEntity();
 
    Icon createIcon(String iconSetUid, int row, int column);
 
