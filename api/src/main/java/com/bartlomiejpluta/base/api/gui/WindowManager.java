@@ -107,6 +107,14 @@ public final class WindowManager extends BaseWidget {
       return windows.size();
    }
 
+   public boolean isEmpty() {
+      return windows.isEmpty();
+   }
+
+   public Window top() {
+      return windows.peekLast();
+   }
+
    @Override
    public void update(float dt) {
       switch (updateMode) {

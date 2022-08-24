@@ -57,6 +57,15 @@ public class IconView extends BaseComponent {
       iconSetColumn = icon.getIconSetColumn();
    }
 
+   public void setIconSet(String iconSetUid) {
+      if (iconSetUid == null) {
+         iconSet = null;
+         return;
+      }
+
+      iconSet = gui.getIconSet(iconSetUid);
+   }
+
    public void setScale(@NonNull Float scale) {
       this.scaleX = scale;
       this.scaleY = scale;
