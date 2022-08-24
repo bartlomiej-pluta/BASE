@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.engine.gui.manager.FontManager;
 import com.bartlomiejpluta.base.engine.gui.manager.WidgetDefinitionManager;
 import com.bartlomiejpluta.base.engine.gui.widget.ScreenWidget;
 import com.bartlomiejpluta.base.engine.gui.xml.inflater.Inflater;
+import com.bartlomiejpluta.base.engine.world.icon.manager.IconSetManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class NanoVGGUI implements GUI {
    private final Context context;
    private final FontManager fontManager;
    private final ImageManager imageManager;
+   private final IconSetManager iconSetManager;
    private final Inflater inflater;
    private final WidgetDefinitionManager widgetDefinitionManager;
 
@@ -43,6 +45,7 @@ public class NanoVGGUI implements GUI {
    private final List<NanoVGPaint> paints = new LinkedList<>();
    private final Set<String> loadedFonts = new HashSet<>();
    private final Map<String, NanoVGImage> loadedImages = new HashMap<>();
+   private final Map<String, NanoVGIconSet> loadedIconSets = new HashMap<>();
 
    private boolean visible = true;
 
@@ -158,6 +161,28 @@ public class NanoVGGUI implements GUI {
       }
 
       return image;
+   }
+
+   @Override
+   public IconSet getIconSet(String iconSetUid) {
+      var iconSet = loadedIconSets.get(iconSetUid);
+
+      if (iconSet == null) {
+         log.info("Loading GUI icon set with UID: [{}] into cache under the key: [{}]", iconSetUid, iconSetUid);
+         var data = iconSetManager.loadObjectByteBuffer(iconSetUid);
+         var asset = iconSetManager.getAsset(iconSetUid);
+         var handle = nvgCreateImageMem(nvg, 0, data);
+         var width = new int[1];
+         var height = new int[1];
+         nvgImageSize(nvg, handle, width, height);
+
+         log.info("GUI icon set with UID: [{}], size {}x{} and flags [0b{}] has been loaded", iconSetUid, width[0], height[0], toBinaryString(0));
+         iconSet = new NanoVGIconSet(handle, width[0], height[0], asset.getRows(), asset.getColumns());
+
+         loadedIconSets.put(iconSetUid, iconSet);
+      }
+
+      return iconSet;
    }
 
    @Override
@@ -282,76 +307,49 @@ public class NanoVGGUI implements GUI {
 
    @Override
    public void boxGradient(float x, float y, float width, float height, float radius, float feather, Color inner, Color outer, Paint target) {
-      nvgBoxGradient(
-            nvg,
-            x,
-            y,
-            width,
-            height,
-            radius,
-            feather,
-            ((NanoVGColor) inner).getColor(),
-            ((NanoVGColor) outer).getColor(),
-            ((NanoVGPaint) target).getPaint()
-      );
+      nvgBoxGradient(nvg, x, y, width, height, radius, feather, ((NanoVGColor) inner).getColor(), ((NanoVGColor) outer).getColor(), ((NanoVGPaint) target).getPaint());
    }
 
    @Override
    public void linearGradient(float x, float y, float endX, float endY, Color start, Color end, Paint target) {
-      nvgLinearGradient(
-            nvg,
-            x,
-            y,
-            endX,
-            endY,
-            ((NanoVGColor) start).getColor(),
-            ((NanoVGColor) end).getColor(),
-            ((NanoVGPaint) target).getPaint()
-      );
+      nvgLinearGradient(nvg, x, y, endX, endY, ((NanoVGColor) start).getColor(), ((NanoVGColor) end).getColor(), ((NanoVGPaint) target).getPaint());
    }
 
    @Override
    public void radialGradient(float x, float y, float innerRadius, float outerRadius, Color start, Color end, Paint target) {
-      nvgRadialGradient(
-            nvg,
-            x,
-            y,
-            innerRadius,
-            outerRadius,
-            ((NanoVGColor) start).getColor(),
-            ((NanoVGColor) end).getColor(),
-            ((NanoVGPaint) target).getPaint()
-      );
+      nvgRadialGradient(nvg, x, y, innerRadius, outerRadius, ((NanoVGColor) start).getColor(), ((NanoVGColor) end).getColor(), ((NanoVGPaint) target).getPaint());
    }
 
    @Override
-   public void imagePattern(float x, float y, float angle, float alpha, Image image, Paint target) {
-      nvgImagePattern(
-            nvg,
-            x,
-            y,
-            image.getWidth(),
-            image.getHeight(),
-            angle,
-            ((NanoVGImage) image).getImageHandle(),
-            alpha,
-            ((NanoVGPaint) target).getPaint()
-      );
+   public Paint imagePattern(float x, float y, float angle, float alpha, Image image, Paint target) {
+      return new NanoVGPaint(nvgImagePattern(nvg, x, y, image.getWidth(), image.getHeight(), angle, ((NanoVGImage) image).getImageHandle(), alpha, ((NanoVGPaint) target).getPaint()));
    }
 
    @Override
-   public void imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target) {
-      nvgImagePattern(
-            nvg,
-            x,
-            y,
-            width,
-            height,
-            angle,
-            ((NanoVGImage) image).getImageHandle(),
-            alpha,
-            ((NanoVGPaint) target).getPaint()
-      );
+   public Paint imagePattern(float x, float y, float width, float height, float angle, float alpha, Image image, Paint target) {
+      return new NanoVGPaint(nvgImagePattern(nvg, x, y, width, height, angle, ((NanoVGImage) image).getImageHandle(), alpha, ((NanoVGPaint) target).getPaint()));
+   }
+
+   @Override
+   public void image(float x, float y, float scaleX, float scaleY, float angle, float alpha, Image image, Paint target) {
+      var width = image.getWidth() * scaleX;
+      var height = image.getHeight() * scaleY;
+      nvgBeginPath(nvg);
+      nvgRect(nvg, x, y, width, height);
+      nvgFillPaint(nvg, nvgImagePattern(nvg, x, y, width, height, angle, ((NanoVGImage) image).getImageHandle(), alpha, ((NanoVGPaint) target).getPaint()));
+      nvgFill(nvg);
+      nvgClosePath(nvg);
+   }
+
+   @Override
+   public void icon(float x, float y, float scaleX, float scaleY, float angle, float alpha, IconSet iconSet, int row, int column, Paint target) {
+      var width = iconSet.getIconWidth() * scaleX;
+      var height = iconSet.getIconHeight() * scaleY;
+      nvgBeginPath(nvg);
+      nvgRect(nvg, x, y, width, height);
+      nvgFillPaint(nvg, nvgImagePattern(nvg, x - width * column, y - height * row, width * iconSet.getColumns(), height * iconSet.getRows(), angle, ((NanoVGIconSet) iconSet).getImageHandle(), alpha, ((NanoVGPaint) target).getPaint()));
+      nvgFill(nvg);
+      nvgClosePath(nvg);
    }
 
    @Override
@@ -435,6 +433,10 @@ public class NanoVGGUI implements GUI {
       log.info("Disposing GUI images");
       loadedImages.values().stream().map(NanoVGImage::getImageHandle).forEach(h -> nvgDeleteImage(nvg, h));
       log.info("Disposed {} GUI images", loadedImages.size());
+
+      log.info("Disposing GUI icon sets");
+      loadedIconSets.values().stream().map(NanoVGIconSet::getImageHandle).forEach(h -> nvgDeleteImage(nvg, h));
+      log.info("Disposed {} GUI icon sets", loadedIconSets.size());
 
       log.info("Disposing GUI nvg");
       nvgDelete(nvg);

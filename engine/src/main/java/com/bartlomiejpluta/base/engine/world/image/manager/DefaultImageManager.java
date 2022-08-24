@@ -44,6 +44,11 @@ public class DefaultImageManager implements ImageManager {
    }
 
    @Override
+   public ImageAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public Image loadObject(String uid) {
       var asset = assets.get(uid);
 

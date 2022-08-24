@@ -77,6 +77,7 @@ public class DefaultContextManager implements ContextManager {
               .characterManager(characterManager)
               .animationManager(animationManager)
               .iconManager(iconManager)
+              .iconSetManager(iconSetManager)
               .imageManager(imageManager)
               .mapManager(mapManager)
               .fontManager(fontManager)

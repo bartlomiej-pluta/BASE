@@ -42,6 +42,11 @@ public class DefaultAnimationManager implements AnimationManager {
    }
 
    @Override
+   public AnimationAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public Animation loadObject(String uid) {
       var asset = assets.get(uid);
 

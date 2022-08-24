@@ -38,6 +38,11 @@ public class DefaultTileSetManager implements TileSetManager {
    }
 
    @Override
+   public TileSetAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public TileSet loadObject(String uid) {
       var tileset = tileSets.get(uid);
 

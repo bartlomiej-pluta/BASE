@@ -28,6 +28,11 @@ public class DefaultCharacterSetManager implements CharacterSetManager {
    }
 
    @Override
+   public CharacterSetAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public Material loadObject(String uid) {
       var asset = assets.get(uid);
 

@@ -19,6 +19,15 @@ public class DefaultIcon extends Sprite implements Icon {
    private final Vector2f iconScale = new Vector2f(1, 1);
    private Vector2fc iconSetSize;
 
+   @Getter
+   private String iconSetUid;
+
+   @Getter
+   private int iconSetRow;
+
+   @Getter
+   private int iconSetColumn;
+
    @Setter
    @Getter
    private boolean blocking;
@@ -40,6 +49,10 @@ public class DefaultIcon extends Sprite implements Icon {
          this.iconSetSize = texture.getSpriteSize();
          super.setScale(iconSetSize.x() * iconScale.x, iconSetSize.y() * iconScale.y);
       }
+
+      this.iconSetUid = iconSetUid;
+      this.iconSetRow = row;
+      this.iconSetColumn = column;
    }
 
    @Override
@@ -60,12 +73,18 @@ public class DefaultIcon extends Sprite implements Icon {
    @Override
    public void changeIcon(int row, int column) {
       material.setSpritePosition(column, row);
+      this.iconSetRow = row;
+      this.iconSetColumn = column;
    }
 
    @Override
    public void changeIcon(String iconSetUid, int row, int column) {
       this.material = iconSetManager.loadObject(iconSetUid);
       material.setSpritePosition(column, row);
+
+      this.iconSetUid = iconSetUid;
+      this.iconSetRow = row;
+      this.iconSetColumn = column;
 
       var texture = material.getTexture();
       if (texture != null) {

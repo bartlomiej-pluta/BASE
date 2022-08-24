@@ -34,6 +34,11 @@ public class DefaultSoundManager implements SoundManager {
    }
 
    @Override
+   public SoundAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public Sound loadObject(String uid) {
       if (!loadedBuffers.contains(uid)) {
          log.info("Loading [{}] sound", uid);

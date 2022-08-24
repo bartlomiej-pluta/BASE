@@ -27,6 +27,7 @@ import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
 import com.bartlomiejpluta.base.engine.world.character.manager.CharacterManager;
 import com.bartlomiejpluta.base.engine.world.entity.AbstractEntity;
 import com.bartlomiejpluta.base.engine.world.icon.manager.IconManager;
+import com.bartlomiejpluta.base.engine.world.icon.manager.IconSetManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
@@ -61,6 +62,9 @@ public class DefaultContext implements Context {
 
    @NonNull
    private final IconManager iconManager;
+
+   @NonNull
+   private final IconSetManager iconSetManager;
 
    @NonNull
    private final ImageManager imageManager;
@@ -180,7 +184,7 @@ public class DefaultContext implements Context {
    @Override
    public GUI newGUI() {
       log.info("Creating new GUI");
-      var gui = new NanoVGGUI(this, fontManager, imageManager, inflater, widgetDefinitionManager);
+      var gui = new NanoVGGUI(this, fontManager, imageManager, iconSetManager, inflater, widgetDefinitionManager);
 
       guis.add(gui);
       gui.init(screen);

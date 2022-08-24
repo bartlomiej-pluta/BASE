@@ -39,6 +39,11 @@ public class DefaultMapManager implements MapManager {
    }
 
    @Override
+   public GameMapAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public DefaultGameMap loadObject(String uid) {
       var map = maps.get(uid);
 

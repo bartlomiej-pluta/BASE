@@ -27,6 +27,11 @@ public class DefaultWidgetDefinitionManager implements WidgetDefinitionManager {
    }
 
    @Override
+   public WidgetDefinitionAsset getAsset(String uid) {
+      return assets.get(uid);
+   }
+
+   @Override
    public InputStream loadObject(String uid) {
       var asset = assets.get(uid);
 
