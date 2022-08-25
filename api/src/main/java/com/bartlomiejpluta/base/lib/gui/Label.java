@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.gui.Attribute;
 import com.bartlomiejpluta.base.api.gui.Color;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.screen.Screen;
@@ -50,8 +51,15 @@ public class Label extends BaseComponent {
       return alignment;
    }
 
-   public void setAlignment(Integer alignment) {
-      this.alignment = alignment;
+   @Attribute("alignment")
+   public void setAlignment(TextAlignment... alignment) {
+      byte b = 0;
+
+      for (var elem : alignment) {
+         b |= elem.getAlign();
+      }
+
+      this.alignment = b;
    }
 
    public float getRed() {

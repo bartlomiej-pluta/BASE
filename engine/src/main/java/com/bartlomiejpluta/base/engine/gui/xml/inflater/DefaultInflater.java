@@ -14,16 +14,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @org.springframework.stereotype.Component
 public class DefaultInflater implements Inflater {
-   private static final String[] IMPORTS = Stream.of(GUI.class, SizeMode.class, WindowPosition.class)
-         .map(Class::getCanonicalName)
-         .toArray(String[]::new);
-
    private final DocumentBuilder builder;
    private final ClassLoader loader;
 
@@ -91,11 +89,11 @@ public class DefaultInflater implements Inflater {
       }
 
       var canonicalName = name
-            .replaceAll("\\*", "")
-            .replaceAll("\\.+", ".")
-            .replaceAll("-+", "\\$");
+              .replaceAll("\\*", "")
+              .replaceAll("\\.+", ".")
+              .replaceAll("-+", "\\$");
 
-      var windowClass = loader.loadClass(canonicalName);
+      var windowClass = loader.<Window>loadClass(canonicalName);
 
       var window = (Window) windowClass.getConstructor(Context.class, GUI.class, Map.class).newInstance(context, gui, refs);
       var attributes = root.getAttributes();
@@ -109,10 +107,7 @@ public class DefaultInflater implements Inflater {
             continue;
          }
 
-         var setterName = createSetterMethodName(attribute.getLocalName());
-         var value = parseValue(attribute.getNodeValue());
-         var setter = windowClass.getMethod(setterName, value.getClass());
-         setter.invoke(window, value);
+         setAttribute(windowClass, window, attribute);
       }
 
       // Parse window content
@@ -142,6 +137,22 @@ public class DefaultInflater implements Inflater {
 
       return window;
    }
+
+   private void setAttribute(Class<? extends Widget> clazz, Widget widget, Node attribute) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+      for (var setter : clazz.getMethods()) {
+         if (setter.isAnnotationPresent(Attribute.class) && setter.getAnnotation(Attribute.class).value().equals(attribute.getLocalName()) && setter.getParameterCount() == 1) {
+            var value = parseSimpleValue(setter, attribute.getNodeValue());
+            setter.invoke(widget, value);
+            return;
+         }
+      }
+
+      var setterName = createSetterMethodName(attribute.getLocalName());
+      var value = parseValue(attribute.getNodeValue());
+      var setter = clazz.getMethod(setterName, value.getClass());
+      setter.invoke(widget, value);
+   }
+
 
    private void invokeInflatableHook(Widget widget) {
       if (widget instanceof Inflatable) {
@@ -187,11 +198,11 @@ public class DefaultInflater implements Inflater {
       }
 
       var canonicalName = name
-            .replaceAll("\\*", "")
-            .replaceAll("\\.+", ".")
-            .replaceAll("-+", "\\$");
+              .replaceAll("\\*", "")
+              .replaceAll("\\.+", ".")
+              .replaceAll("-+", "\\$");
 
-      var componentClass = loader.loadClass(canonicalName);
+      var componentClass = loader.<Component>loadClass(canonicalName);
       var component = createComponent(componentClass, node.getAttributes(), refs, context, gui);
 
       var children = node.getChildNodes();
@@ -221,7 +232,7 @@ public class DefaultInflater implements Inflater {
    }
 
    @SneakyThrows
-   private Component createComponent(Class<?> componentClass, NamedNodeMap attributes, Map<String, Component> refs, Context context, GUI gui) {
+   private Component createComponent(Class<? extends Widget> componentClass, NamedNodeMap attributes, Map<String, Component> refs, Context context, GUI gui) {
       var component = (Component) componentClass.getConstructor(Context.class, GUI.class).newInstance(context, gui);
 
       // Set attributes via setter methods
@@ -239,10 +250,7 @@ public class DefaultInflater implements Inflater {
             continue;
          }
 
-         var setterName = createSetterMethodName(attribute.getLocalName());
-         var value = parseValue(attribute.getNodeValue());
-         var setter = componentClass.getMethod(setterName, value.getClass());
-         setter.invoke(component, value);
+         setAttribute(componentClass, component, attribute);
       }
 
       return component;
@@ -252,10 +260,63 @@ public class DefaultInflater implements Inflater {
       return "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
    }
 
+   private static Object parseSimpleValue(Method method, String value) {
+      var type = method.getParameterTypes()[0];
+
+      if (type.isArray()) {
+         var arrayType = type.getComponentType();
+         var items = value.split("\\|");
+         var values = Array.newInstance(arrayType, items.length);
+         for (int i = 0; i < items.length; ++i) {
+            Array.set(values, i, parseSimpleValue(arrayType, items[i].trim()));
+         }
+
+         return values;
+      }
+
+      return parseSimpleValue(type, value);
+   }
+
+   @SuppressWarnings("unchecked")
+   private static Object parseSimpleValue(Class<?> type, String value) {
+      if (type == String.class) {
+         return value;
+      }
+
+      if (type == Short.TYPE || type == Short.class) {
+         return Short.valueOf(value);
+      }
+
+      if (type == Integer.TYPE || type == Integer.class) {
+         return Integer.valueOf(value);
+      }
+
+      if (type == Long.TYPE || type == Long.class) {
+         return Long.valueOf(value);
+      }
+
+      if (type == Boolean.TYPE || type == Boolean.class) {
+         return Boolean.valueOf(value);
+      }
+
+      if (type == Float.TYPE || type == Float.class) {
+         return Float.valueOf(value);
+      }
+
+      if (type == Double.TYPE || type == Double.class) {
+         return Double.valueOf(value);
+      }
+
+      if (type.isEnum()) {
+         return Enum.valueOf((Class<? extends Enum>) type, value.toUpperCase());
+      }
+
+      throw new AppException("Attribute of type [" + type.getCanonicalName() + "] is not supported");
+   }
+
    @SneakyThrows
-   private Object parseValue(String value) {
+   private static Object parseValue(String value) {
       var evaluator = new ExpressionEvaluator();
-      evaluator.setDefaultImports(IMPORTS);
       evaluator.cook(value);
       return evaluator.evaluate();
    }

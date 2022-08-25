@@ -58,6 +58,7 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    }
 
    @Override
+   @Attribute("windowPosition")
    public void setWindowPosition(WindowPosition windowPosition) {
       this.windowPosition = requireNonNull(windowPosition);
    }

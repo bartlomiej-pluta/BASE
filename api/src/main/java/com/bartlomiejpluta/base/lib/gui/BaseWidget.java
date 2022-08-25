@@ -2,10 +2,12 @@ package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.event.EventType;
+import com.bartlomiejpluta.base.api.gui.Attribute;
 import com.bartlomiejpluta.base.api.gui.SizeMode;
 import com.bartlomiejpluta.base.api.gui.Widget;
 import com.bartlomiejpluta.base.lib.event.EventHandler;
 
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public abstract class BaseWidget implements Widget {
@@ -39,8 +41,8 @@ public abstract class BaseWidget implements Widget {
    @Override
    public float getWidth() {
       return widthMode == SizeMode.RELATIVE
-            ? (parent != null ? width * parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight() - marginLeft - marginRight : 0)
-            : getActualWidth();
+              ? (parent != null ? width * parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight() - marginLeft - marginRight : 0)
+              : getActualWidth();
    }
 
    @Override
@@ -51,8 +53,8 @@ public abstract class BaseWidget implements Widget {
    @Override
    public float getHeight() {
       return heightMode == SizeMode.RELATIVE
-            ? (parent != null ? height * parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom() - marginTop - marginBottom : 0)
-            : getActualHeight();
+              ? (parent != null ? height * parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom() - marginTop - marginBottom : 0)
+              : getActualHeight();
    }
 
    @Override
@@ -68,6 +70,36 @@ public abstract class BaseWidget implements Widget {
    @Override
    public void setHeight(Float height) {
       this.height = height;
+   }
+
+   @Attribute("height")
+   public void setHeight(String height) {
+      var heightLowerCased = height.toLowerCase(Locale.ROOT);
+
+      if (heightLowerCased.equals("auto")) {
+         this.heightMode = SizeMode.AUTO;
+      } else if (heightLowerCased.equals("relative")) {
+         this.heightMode = SizeMode.RELATIVE;
+         this.height = 1f;
+      } else {
+         this.heightMode = SizeMode.ABSOLUTE;
+         this.height = Float.parseFloat(height);
+      }
+   }
+
+   @Attribute("width")
+   public void setWidth(String width) {
+      var widthLowerCased = width.toLowerCase(Locale.ROOT);
+
+      if (widthLowerCased.equals("auto")) {
+         this.widthMode = SizeMode.AUTO;
+      } else if (widthLowerCased.equals("relative")) {
+         this.widthMode = SizeMode.RELATIVE;
+         this.width = 1f;
+      } else {
+         this.widthMode = SizeMode.ABSOLUTE;
+         this.width = Float.parseFloat(width);
+      }
    }
 
    @Override
@@ -88,6 +120,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
+   @Attribute("widthMode")
    public void setWidthMode(SizeMode mode) {
       this.widthMode = mode;
    }
@@ -98,6 +131,7 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
+   @Attribute("heightMode")
    public void setHeightMode(SizeMode mode) {
       this.heightMode = mode;
    }
