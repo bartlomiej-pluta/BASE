@@ -11,9 +11,11 @@ import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class HOptionChoice extends HLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
@@ -23,6 +25,9 @@ public class HOptionChoice extends HLayout {
 
    @Getter
    private Component selectedComponent = null;
+
+   @Setter
+   private Consumer<Component> onSelect;
 
    public HOptionChoice(Context context, GUI gui, Map<String, Component> refs) {
       super(context, gui, refs);
@@ -40,6 +45,15 @@ public class HOptionChoice extends HLayout {
       if (!children.isEmpty()) {
          selectedComponent = children.get(selected);
          selectedComponent.focus();
+      }
+   }
+
+   public void select(int index) {
+      selected = index;
+      selectedComponent = children.get(selected);
+
+      if(onSelect != null) {
+         onSelect.accept(selectedComponent);
       }
    }
 
@@ -61,27 +75,31 @@ public class HOptionChoice extends HLayout {
       }
 
       if (event.getKey() == Key.KEY_RIGHT && ACTIONS.contains(event.getAction())) {
-         blurAll();
+         blur();
          selected = (++selected) % children.size();
          selectedComponent = children.get(selected);
          selectedComponent.focus();
+
+         if (onSelect != null) {
+            onSelect.accept(selectedComponent);
+         }
+
          event.consume();
       } else if (event.getKey() == Key.KEY_LEFT && ACTIONS.contains(event.getAction())) {
-         blurAll();
+         blur();
          var size = children.size();
          selected = (((--selected) % size) + size) % size;
          selectedComponent = children.get(selected);
          selectedComponent.focus();
+
+         if (onSelect != null) {
+            onSelect.accept(selectedComponent);
+         }
+
          event.consume();
       }
    }
-
-   private void blurAll() {
-      for (var child : children) {
-         child.blur();
-      }
-   }
-
+   
    @Override
    public void update(float dt) {
       super.update(dt);

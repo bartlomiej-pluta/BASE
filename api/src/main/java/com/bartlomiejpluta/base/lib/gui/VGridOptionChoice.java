@@ -11,9 +11,11 @@ import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class VGridOptionChoice extends VGridLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
@@ -26,6 +28,9 @@ public class VGridOptionChoice extends VGridLayout {
 
    @Getter
    private Component selectedComponent = null;
+
+   @Setter
+   private Consumer<Component> onSelect;
 
    public VGridOptionChoice(Context context, GUI gui, Map<String, Component> refs) {
       super(context, gui, refs);
@@ -56,6 +61,16 @@ public class VGridOptionChoice extends VGridLayout {
       }
    }
 
+   public void select(int row, int column) {
+      selectedRow = row;
+      selectedColumn = column;
+      selectedComponent = children.get(columns * selectedRow + selectedColumn);
+
+      if(onSelect != null) {
+         onSelect.accept(selectedComponent);
+      }
+   }
+
    @Override
    public <E extends Event> void handleEvent(E event) {
       var index = columns * selectedRow + selectedColumn;
@@ -68,20 +83,14 @@ public class VGridOptionChoice extends VGridLayout {
          eventHandler.handleEvent(event);
       }
    }
-
-   private void blurAll() {
-      for (var child : children) {
-         child.blur();
-      }
-   }
-
+   
    private void switchOption(KeyEvent event) {
       if (children.isEmpty()) {
          return;
       }
 
       if (event.getKey() == Key.KEY_DOWN && ACTIONS.contains(event.getAction())) {
-         blurAll();
+         blur();
 
          int size = 0;
          for (int i = 0; i < children.size(); ++i) {
@@ -93,9 +102,14 @@ public class VGridOptionChoice extends VGridLayout {
          selectedRow = (++selectedRow) % size;
          selectedComponent = children.get(columns * selectedRow + selectedColumn);
          selectedComponent.focus();
+
+         if(onSelect != null) {
+            onSelect.accept(selectedComponent);
+         }
+
          event.consume();
       } else if (event.getKey() == Key.KEY_UP && ACTIONS.contains(event.getAction())) {
-         blurAll();
+         blur();
 
          int size = 0;
          for (int i = 0; i < children.size(); ++i) {
@@ -107,9 +121,14 @@ public class VGridOptionChoice extends VGridLayout {
          selectedRow = ((--selectedRow) + size) % size;
          selectedComponent = children.get(columns * selectedRow + selectedColumn);
          selectedComponent.focus();
+
+         if(onSelect != null) {
+            onSelect.accept(selectedComponent);
+         }
+
          event.consume();
       } else if (event.getKey() == Key.KEY_RIGHT && ACTIONS.contains(event.getAction())) {
-         blurAll();
+         blur();
 
          int size = 0;
          for (int i = 0; i < children.size(); ++i) {
@@ -121,9 +140,14 @@ public class VGridOptionChoice extends VGridLayout {
          selectedColumn = (++selectedColumn) % size;
          selectedComponent = children.get(columns * selectedRow + selectedColumn);
          selectedComponent.focus();
+
+         if(onSelect != null) {
+            onSelect.accept(selectedComponent);
+         }
+
          event.consume();
       } else if (event.getKey() == Key.KEY_LEFT && ACTIONS.contains(event.getAction())) {
-         blurAll();
+         blur();
 
          int size = 0;
          for (int i = 0; i < children.size(); ++i) {
@@ -135,6 +159,11 @@ public class VGridOptionChoice extends VGridLayout {
          selectedColumn = ((--selectedColumn) + size) % size;
          selectedComponent = children.get(columns * selectedRow + selectedColumn);
          selectedComponent.focus();
+
+         if(onSelect != null) {
+            onSelect.accept(selectedComponent);
+         }
+
          event.consume();
       }
    }

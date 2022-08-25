@@ -84,6 +84,12 @@ public abstract class BaseContainer extends BaseComponent {
    }
 
    @Override
+   public void focus() {
+      blur();
+      super.focus();
+   }
+
+   @Override
    public void blur() {
       super.blur();
 
