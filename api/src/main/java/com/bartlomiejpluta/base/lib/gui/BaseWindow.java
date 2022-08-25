@@ -4,7 +4,12 @@ import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.gui.*;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import lombok.Getter;
+import lombok.NonNull;
 
+import java.util.Map;
+
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 public abstract class BaseWindow extends BaseWidget implements Window {
@@ -12,11 +17,16 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    protected GUI gui;
    protected WindowManager manager;
    protected Component content;
+
+   @Getter
+   private final Map<String, Component> refs;
+
    protected WindowPosition windowPosition = WindowPosition.CENTER;
 
-   protected BaseWindow(Context context, GUI gui) {
+   protected BaseWindow(Context context, GUI gui, Map<String, Component> refs) {
       this.context = context;
       this.gui = gui;
+      this.refs = refs;
    }
 
    @Override
@@ -30,6 +40,16 @@ public abstract class BaseWindow extends BaseWidget implements Window {
       if (component != null) {
          component.setParent(this);
       }
+   }
+
+   @Override
+   public Component reference(@NonNull String ref) {
+      return requireNonNull(refs.get(ref), format("Referenced component (with ref=[%s]) does not exist", ref));
+   }
+
+   @Override
+   public <T extends Component> T reference(String ref, Class<T> type) {
+      return type.cast(requireNonNull(refs.get(ref), format("Referenced component (with ref=[%s]) does not exist", ref)));
    }
 
    @Override

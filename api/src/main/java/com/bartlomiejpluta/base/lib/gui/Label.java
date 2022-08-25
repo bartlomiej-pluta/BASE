@@ -133,5 +133,6 @@ public class Label extends BaseComponent {
       gui.setFillColor(color);
       gui.fill();
       gui.putTextBox(x + paddingLeft, y + paddingTop, getWidth() - paddingLeft - paddingRight, text, bounds);
+      gui.closePath();
    }
 }

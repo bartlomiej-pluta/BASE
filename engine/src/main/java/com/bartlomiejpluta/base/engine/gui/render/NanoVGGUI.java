@@ -85,12 +85,25 @@ public class NanoVGGUI implements GUI {
    }
 
    @Override
+   public <T extends Component> T inflateComponent(String widgetUid, Class<T> type) {
+      log.info("Inflating component by widget definition with UID: [{}]", widgetUid);
+      var is = widgetDefinitionManager.loadObject(widgetUid);
+      return type.cast(inflater.inflateComponent(is, context, this));
+   }
+
+   @Override
    public Window inflateWindow(String widgetUid) {
       log.info("Inflating window by widget definition with UID: [{}]", widgetUid);
       var is = widgetDefinitionManager.loadObject(widgetUid);
       return inflater.inflateWindow(is, context, this);
    }
 
+   @Override
+   public <T extends Window> T inflateWindow(String widgetUid, Class<T> type) {
+      log.info("Inflating window by widget definition with UID: [{}]", widgetUid);
+      var is = widgetDefinitionManager.loadObject(widgetUid);
+      return type.cast(inflater.inflateWindow(is, context, this));
+   }
    @Override
    public boolean isVisible() {
       return visible;

@@ -20,7 +20,7 @@ public abstract class BaseContainer extends BaseComponent {
    }
 
    @Override
-   public Iterable<Component> getChildren() {
+   public List<Component> getChildren() {
       return readOnlyChildren;
    }
 

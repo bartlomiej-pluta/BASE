@@ -4,6 +4,8 @@ import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 
+import java.util.List;
+
 import static java.util.Collections.emptyList;
 
 public abstract class BaseComponent extends BaseWidget implements Component {
@@ -17,7 +19,7 @@ public abstract class BaseComponent extends BaseWidget implements Component {
    }
 
    @Override
-   public Iterable<Component> getChildren() {
+   public List<Component> getChildren() {
       return emptyList();
    }
 

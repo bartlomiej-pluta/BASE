@@ -1,7 +1,9 @@
 package com.bartlomiejpluta.base.api.gui;
 
+import java.util.List;
+
 public interface Component extends Widget {
-   Iterable<Component> getChildren();
+   List<Component> getChildren();
 
    void add(Component component);
 

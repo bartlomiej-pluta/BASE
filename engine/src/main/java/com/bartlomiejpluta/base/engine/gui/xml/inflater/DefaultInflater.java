@@ -97,7 +97,7 @@ public class DefaultInflater implements Inflater {
 
       var windowClass = loader.loadClass(canonicalName);
 
-      var window = (Window) windowClass.getConstructor(Context.class, GUI.class).newInstance(context, gui);
+      var window = (Window) windowClass.getConstructor(Context.class, GUI.class, Map.class).newInstance(context, gui, refs);
       var attributes = root.getAttributes();
 
       // Set attributes via setter methods

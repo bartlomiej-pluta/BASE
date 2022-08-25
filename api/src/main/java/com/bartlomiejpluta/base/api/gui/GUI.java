@@ -22,7 +22,11 @@ public interface GUI extends Renderable, Updatable, Disposable {
 
    Component inflateComponent(String widgetUid);
 
+   <T extends Component> T inflateComponent(String widgetUid, Class<T> type);
+
    Window inflateWindow(String widgetUid);
+
+   <T extends Window> T inflateWindow(String widgetUid, Class<T> type);
 
    boolean isVisible();
 
