@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.api.input.KeyAction;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.util.math.MathUtil;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.EnumSet;
@@ -17,8 +18,10 @@ public class HOptionChoice extends HLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
    private int selected = 0;
    private float scroll = 0;
-   private Component component = null;
    private float scrollSpeed = 1f;
+
+   @Getter
+   private Component selectedComponent = null;
 
    public HOptionChoice(Context context, GUI gui) {
       super(context, gui);
@@ -34,16 +37,16 @@ public class HOptionChoice extends HLayout {
       super.focus();
 
       if (!children.isEmpty()) {
-         component = children.get(selected);
-         component.focus();
+         selectedComponent = children.get(selected);
+         selectedComponent.focus();
       }
    }
 
    @Override
    public <E extends Event> void handleEvent(E event) {
       if (selected < children.size()) {
-         component = children.get(selected);
-         component.handleEvent(event);
+         selectedComponent = children.get(selected);
+         selectedComponent.handleEvent(event);
       }
 
       if (!event.isConsumed()) {
@@ -59,15 +62,15 @@ public class HOptionChoice extends HLayout {
       if (event.getKey() == Key.KEY_RIGHT && ACTIONS.contains(event.getAction())) {
          blurAll();
          selected = (++selected) % children.size();
-         component = children.get(selected);
-         component.focus();
+         selectedComponent = children.get(selected);
+         selectedComponent.focus();
          event.consume();
       } else if (event.getKey() == Key.KEY_LEFT && ACTIONS.contains(event.getAction())) {
          blurAll();
          var size = children.size();
          selected = (((--selected) % size) + size) % size;
-         component = children.get(selected);
-         component.focus();
+         selectedComponent = children.get(selected);
+         selectedComponent.focus();
          event.consume();
       }
    }
@@ -81,11 +84,11 @@ public class HOptionChoice extends HLayout {
    @Override
    public void update(float dt) {
       super.update(dt);
-      if (component != null) {
-         if (component.getX() + component.getWidth() > getWidth() + getX()) {
-            scroll += (component.getWidth() + component.getX() - (getWidth() + getX())) * scrollSpeed;
-         } else if (component.getX() < getX()) {
-            scroll += (component.getX() - getX()) * scrollSpeed;
+      if (selectedComponent != null) {
+         if (selectedComponent.getX() + selectedComponent.getWidth() > getWidth() + getX()) {
+            scroll += (selectedComponent.getWidth() + selectedComponent.getX() - (getWidth() + getX())) * scrollSpeed;
+         } else if (selectedComponent.getX() < getX()) {
+            scroll += (selectedComponent.getX() - getX()) * scrollSpeed;
          }
       }
    }

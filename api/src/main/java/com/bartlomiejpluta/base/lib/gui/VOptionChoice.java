@@ -9,6 +9,7 @@ import com.bartlomiejpluta.base.api.input.KeyAction;
 import com.bartlomiejpluta.base.api.input.KeyEvent;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.util.math.MathUtil;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.EnumSet;
@@ -17,8 +18,10 @@ public class VOptionChoice extends VLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
    private int selected = 0;
    private float scroll = 0;
-   private Component component = null;
    private float scrollSpeed = 1f;
+
+   @Getter
+   private Component selectedComponent = null;
 
    public VOptionChoice(Context context, GUI gui) {
       super(context, gui);
@@ -34,16 +37,16 @@ public class VOptionChoice extends VLayout {
       super.focus();
 
       if (!children.isEmpty()) {
-         component = children.get(selected);
-         component.focus();
+         selectedComponent = children.get(selected);
+         selectedComponent.focus();
       }
    }
 
    @Override
    public <E extends Event> void handleEvent(E event) {
       if (selected < children.size()) {
-         component = children.get(selected);
-         component.handleEvent(event);
+         selectedComponent = children.get(selected);
+         selectedComponent.handleEvent(event);
       }
 
       if (!event.isConsumed()) {
@@ -59,15 +62,15 @@ public class VOptionChoice extends VLayout {
       if (event.getKey() == Key.KEY_DOWN && ACTIONS.contains(event.getAction())) {
          blurAll();
          selected = (++selected) % children.size();
-         component = children.get(selected);
-         component.focus();
+         selectedComponent = children.get(selected);
+         selectedComponent.focus();
          event.consume();
       } else if (event.getKey() == Key.KEY_UP && ACTIONS.contains(event.getAction())) {
          blurAll();
          var size = children.size();
          selected = (((--selected) % size) + size) % size;
-         component = children.get(selected);
-         component.focus();
+         selectedComponent = children.get(selected);
+         selectedComponent.focus();
          event.consume();
       }
    }
@@ -81,11 +84,11 @@ public class VOptionChoice extends VLayout {
    @Override
    public void update(float dt) {
       super.update(dt);
-      if (component != null) {
-         if (component.getY() + component.getHeight() > getHeight() + getY()) {
-            scroll += (component.getHeight() + component.getY() - (getHeight() + getY())) * scrollSpeed;
-         } else if (component.getY() < getY()) {
-            scroll += (component.getY() - getY()) * scrollSpeed;
+      if (selectedComponent != null) {
+         if (selectedComponent.getY() + selectedComponent.getHeight() > getHeight() + getY()) {
+            scroll += (selectedComponent.getHeight() + selectedComponent.getY() - (getHeight() + getY())) * scrollSpeed;
+         } else if (selectedComponent.getY() < getY()) {
+            scroll += (selectedComponent.getY() - getY()) * scrollSpeed;
          }
       }
    }

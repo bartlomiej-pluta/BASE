@@ -8,7 +8,7 @@ import lombok.NonNull;
 public class HGridLayout extends BaseContainer {
    protected float offsetX = 0.0f;
    protected float offsetY = 0.0f;
-   private int rows = 2;
+   protected int rows = 2;
    private float[] heights = new float[rows];
 
    public HGridLayout(Context context, GUI gui) {
