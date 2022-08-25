@@ -59,7 +59,11 @@ public class DefaultObjectLayer extends BaseLayer implements ObjectLayer {
 
    @Override
    public void removeEntity(Entity entity) {
-      entities.remove(entity);
+      // Disclaimer
+      // This is a workaround for concurrent modification exception
+      // which is thrown when entity is tried to be removed
+      // in the body of for-each-entity loop
+      entities.remove(entities.indexOf(entity));
 
       entity.onRemove(this);
    }
