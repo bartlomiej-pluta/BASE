@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.api.gui.GUI;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
@@ -15,8 +16,8 @@ public abstract class BaseContainer extends BaseComponent {
    protected final List<Component> children = new LinkedList<>();
    private final List<Component> readOnlyChildren = unmodifiableList(children);
 
-   public BaseContainer(Context context, GUI gui) {
-      super(context, gui);
+   public BaseContainer(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
    }
 
    @Override

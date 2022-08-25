@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 public class HOptionChoice extends HLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
@@ -23,8 +24,8 @@ public class HOptionChoice extends HLayout {
    @Getter
    private Component selectedComponent = null;
 
-   public HOptionChoice(Context context, GUI gui) {
-      super(context, gui);
+   public HOptionChoice(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
       addEventListener(KeyEvent.TYPE, this::switchOption);
    }
 

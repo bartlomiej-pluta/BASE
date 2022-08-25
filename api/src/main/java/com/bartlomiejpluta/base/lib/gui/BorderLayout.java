@@ -6,10 +6,12 @@ import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.gui.SizeMode;
 import com.bartlomiejpluta.base.api.screen.Screen;
 
+import java.util.Map;
+
 public class BorderLayout extends BaseContainer {
 
-   public BorderLayout(Context context, GUI gui) {
-      super(context, gui);
+   public BorderLayout(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
       super.setSizeMode(SizeMode.RELATIVE, SizeMode.RELATIVE);
       super.setSize(1f, 1f);
    }
@@ -69,8 +71,8 @@ public class BorderLayout extends BaseContainer {
    }
 
    public static abstract class Slot extends ComponentWrapper {
-      protected Slot(Context context, GUI gui) {
-         super(context, gui);
+      protected Slot(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       protected abstract void setPosition(BorderLayout layout);
@@ -78,8 +80,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class Top extends Slot {
 
-      public Top(Context context, GUI gui) {
-         super(context, gui);
+      public Top(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -90,8 +92,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class TopRight extends Slot {
 
-      public TopRight(Context context, GUI gui) {
-         super(context, gui);
+      public TopRight(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -102,8 +104,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class Right extends Slot {
 
-      public Right(Context context, GUI gui) {
-         super(context, gui);
+      public Right(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -114,8 +116,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class BottomRight extends Slot {
 
-      public BottomRight(Context context, GUI gui) {
-         super(context, gui);
+      public BottomRight(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -126,8 +128,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class Bottom extends Slot {
 
-      public Bottom(Context context, GUI gui) {
-         super(context, gui);
+      public Bottom(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -138,8 +140,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class BottomLeft extends Slot {
 
-      public BottomLeft(Context context, GUI gui) {
-         super(context, gui);
+      public BottomLeft(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -150,8 +152,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class Left extends Slot {
 
-      public Left(Context context, GUI gui) {
-         super(context, gui);
+      public Left(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -162,8 +164,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class TopLeft extends Slot {
 
-      public TopLeft(Context context, GUI gui) {
-         super(context, gui);
+      public TopLeft(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override
@@ -174,8 +176,8 @@ public class BorderLayout extends BaseContainer {
 
    public static class Center extends Slot {
 
-      public Center(Context context, GUI gui) {
-         super(context, gui);
+      public Center(Context context, GUI gui, Map<String, Component> refs) {
+         super(context, gui, refs);
       }
 
       @Override

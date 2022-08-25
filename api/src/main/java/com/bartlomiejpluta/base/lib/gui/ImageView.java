@@ -1,10 +1,13 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.gui.Image;
 import com.bartlomiejpluta.base.api.gui.Paint;
 import com.bartlomiejpluta.base.api.screen.Screen;
+
+import java.util.Map;
 
 public class ImageView extends BaseComponent {
    private final Paint paint;
@@ -15,29 +18,9 @@ public class ImageView extends BaseComponent {
    private float scaleX = 1;
    private float scaleY = 1;
 
-   public ImageView(Context context, GUI gui) {
-      super(context, gui);
+   public ImageView(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
       this.paint = gui.createPaint();
-   }
-
-   public void setImage(String imageUid) {
-      this.image = gui.getImage(imageUid);
-   }
-
-   public void setAngle(float angle) {
-      this.angle = angle;
-   }
-
-   public void setOpacity(float opacity) {
-      this.opacity = opacity;
-   }
-
-   public void setScaleX(float scaleX) {
-      this.scaleX = scaleX;
-   }
-
-   public void setScaleY(float scaleY) {
-      this.scaleY = scaleY;
    }
 
    public void setScale(float scaleX, float scaleY) {
@@ -54,20 +37,40 @@ public class ImageView extends BaseComponent {
       return image;
    }
 
+   public void setImage(String imageUid) {
+      this.image = gui.getImage(imageUid);
+   }
+
    public float getAngle() {
       return angle;
+   }
+
+   public void setAngle(float angle) {
+      this.angle = angle;
    }
 
    public float getOpacity() {
       return opacity;
    }
 
+   public void setOpacity(float opacity) {
+      this.opacity = opacity;
+   }
+
    public float getScaleX() {
       return scaleX;
    }
 
+   public void setScaleX(float scaleX) {
+      this.scaleX = scaleX;
+   }
+
    public float getScaleY() {
       return scaleY;
+   }
+
+   public void setScaleY(float scaleY) {
+      this.scaleY = scaleY;
    }
 
    @Override

@@ -1,10 +1,12 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.screen.Screen;
-import lombok.Getter;
 import lombok.NonNull;
+
+import java.util.Map;
 
 public class VGridLayout extends BaseContainer {
    protected float offsetX = 0.0f;
@@ -12,8 +14,8 @@ public class VGridLayout extends BaseContainer {
    protected int columns = 2;
    private float[] widths = new float[columns];
 
-   public VGridLayout(Context context, GUI gui) {
-      super(context, gui);
+   public VGridLayout(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
    }
 
    public void setColumns(@NonNull Integer columns) {

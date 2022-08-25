@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.gui.IconSet;
 import com.bartlomiejpluta.base.api.gui.Paint;
@@ -8,6 +9,8 @@ import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import lombok.NonNull;
 import lombok.Setter;
+
+import java.util.Map;
 
 public class IconView extends BaseComponent {
    private final GUI gui;
@@ -40,8 +43,8 @@ public class IconView extends BaseComponent {
    private Integer iconSetColumn = 0;
 
 
-   public IconView(Context context, GUI gui) {
-      super(context, gui);
+   public IconView(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
       this.gui = gui;
       this.paint = gui.createPaint();
    }

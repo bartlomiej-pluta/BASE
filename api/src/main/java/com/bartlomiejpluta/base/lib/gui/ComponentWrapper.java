@@ -5,13 +5,15 @@ import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.screen.Screen;
 
+import java.util.Map;
+
 import static java.util.Objects.requireNonNull;
 
 public abstract class ComponentWrapper extends BaseComponent {
    protected Component component;
 
-   protected ComponentWrapper(Context context, GUI gui) {
-      super(context, gui);
+   protected ComponentWrapper(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
    }
 
    @Override

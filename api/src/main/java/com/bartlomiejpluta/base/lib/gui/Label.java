@@ -3,22 +3,24 @@ package com.bartlomiejpluta.base.lib.gui;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.gui.Attribute;
 import com.bartlomiejpluta.base.api.gui.Color;
+import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.screen.Screen;
+
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
 public class Label extends BaseComponent {
+   private final float[] bounds = new float[4];
    private String text = "";
    private String font;
    private float fontSize;
    private int alignment = GUI.ALIGN_LEFT;
-   private Color color;
+   private final Color color;
 
-   private final float[] bounds = new float[4];
-
-   public Label(Context context, GUI gui) {
-      super(context, gui);
+   public Label(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
       this.color = gui.createColor();
       this.color.setRGBA(0xFFFFFFFF);
    }

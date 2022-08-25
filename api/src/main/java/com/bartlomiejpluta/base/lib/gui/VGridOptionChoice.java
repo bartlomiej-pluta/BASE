@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 public class VGridOptionChoice extends VGridLayout {
    private static final EnumSet<KeyAction> ACTIONS = EnumSet.of(KeyAction.PRESS, KeyAction.REPEAT);
@@ -26,8 +27,8 @@ public class VGridOptionChoice extends VGridLayout {
    @Getter
    private Component selectedComponent = null;
 
-   public VGridOptionChoice(Context context, GUI gui) {
-      super(context, gui);
+   public VGridOptionChoice(Context context, GUI gui, Map<String, Component> refs) {
+      super(context, gui, refs);
       addEventListener(KeyEvent.TYPE, this::switchOption);
    }
 

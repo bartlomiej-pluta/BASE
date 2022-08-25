@@ -13,14 +13,12 @@ import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 public abstract class BaseWindow extends BaseWidget implements Window {
+   @Getter
+   private final Map<String, Component> refs;
    protected Context context;
    protected GUI gui;
    protected WindowManager manager;
    protected Component content;
-
-   @Getter
-   private final Map<String, Component> refs;
-
    protected WindowPosition windowPosition = WindowPosition.CENTER;
 
    protected BaseWindow(Context context, GUI gui, Map<String, Component> refs) {

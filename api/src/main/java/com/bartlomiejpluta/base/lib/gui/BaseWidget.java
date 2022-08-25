@@ -11,6 +11,8 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public abstract class BaseWidget implements Widget {
+   protected final EventHandler eventHandler = new EventHandler();
+
    protected Widget parent;
 
    protected SizeMode widthMode = SizeMode.AUTO;
@@ -32,7 +34,6 @@ public abstract class BaseWidget implements Widget {
    protected float paddingBottom;
    protected float paddingLeft;
 
-   protected final EventHandler eventHandler = new EventHandler();
 
    protected abstract float getContentWidth();
 
@@ -46,6 +47,26 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
+   public void setWidth(Float width) {
+      this.width = width;
+   }
+
+   @Attribute("width")
+   public void setWidth(String width) {
+      var widthLowerCased = width.toLowerCase(Locale.ROOT);
+
+      if (widthLowerCased.equals("auto")) {
+         this.widthMode = SizeMode.AUTO;
+      } else if (widthLowerCased.equals("relative")) {
+         this.widthMode = SizeMode.RELATIVE;
+         this.width = 1f;
+      } else {
+         this.widthMode = SizeMode.ABSOLUTE;
+         this.width = Float.parseFloat(width);
+      }
+   }
+
+   @Override
    public float getActualWidth() {
       return paddingLeft + (widthMode == SizeMode.ABSOLUTE ? width : getContentWidth()) + paddingRight;
    }
@@ -55,16 +76,6 @@ public abstract class BaseWidget implements Widget {
       return heightMode == SizeMode.RELATIVE
               ? (parent != null ? height * parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom() - marginTop - marginBottom : 0)
               : getActualHeight();
-   }
-
-   @Override
-   public float getActualHeight() {
-      return paddingTop + (heightMode == SizeMode.ABSOLUTE ? height : getContentHeight()) + paddingBottom;
-   }
-
-   @Override
-   public void setWidth(Float width) {
-      this.width = width;
    }
 
    @Override
@@ -87,19 +98,9 @@ public abstract class BaseWidget implements Widget {
       }
    }
 
-   @Attribute("width")
-   public void setWidth(String width) {
-      var widthLowerCased = width.toLowerCase(Locale.ROOT);
-
-      if (widthLowerCased.equals("auto")) {
-         this.widthMode = SizeMode.AUTO;
-      } else if (widthLowerCased.equals("relative")) {
-         this.widthMode = SizeMode.RELATIVE;
-         this.width = 1f;
-      } else {
-         this.widthMode = SizeMode.ABSOLUTE;
-         this.width = Float.parseFloat(width);
-      }
+   @Override
+   public float getActualHeight() {
+      return paddingTop + (heightMode == SizeMode.ABSOLUTE ? height : getContentHeight()) + paddingBottom;
    }
 
    @Override
@@ -152,13 +153,13 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public float getY() {
-      return y;
+   public void setX(Float x) {
+      this.x = x;
    }
 
    @Override
-   public void setX(Float x) {
-      this.x = x;
+   public float getY() {
+      return y;
    }
 
    @Override
@@ -205,28 +206,13 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setMarginTop(Float margin) {
-      this.marginTop = margin;
-   }
-
-   @Override
-   public void setMarginRight(Float margin) {
-      this.marginRight = margin;
-   }
-
-   @Override
-   public void setMarginBottom(Float margin) {
-      this.marginBottom = margin;
-   }
-
-   @Override
-   public void setMarginLeft(Float margin) {
-      this.marginLeft = margin;
-   }
-
-   @Override
    public float getMarginTop() {
       return marginTop;
+   }
+
+   @Override
+   public void setMarginTop(Float margin) {
+      this.marginTop = margin;
    }
 
    @Override
@@ -235,13 +221,28 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
+   public void setMarginRight(Float margin) {
+      this.marginRight = margin;
+   }
+
+   @Override
    public float getMarginBottom() {
       return marginBottom;
    }
 
    @Override
+   public void setMarginBottom(Float margin) {
+      this.marginBottom = margin;
+   }
+
+   @Override
    public float getMarginLeft() {
       return marginLeft;
+   }
+
+   @Override
+   public void setMarginLeft(Float margin) {
+      this.marginLeft = margin;
    }
 
    @Override
@@ -277,28 +278,13 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
-   public void setPaddingTop(Float padding) {
-      this.paddingTop = padding;
-   }
-
-   @Override
-   public void setPaddingRight(Float padding) {
-      this.paddingRight = padding;
-   }
-
-   @Override
-   public void setPaddingBottom(Float padding) {
-      this.paddingBottom = padding;
-   }
-
-   @Override
-   public void setPaddingLeft(Float padding) {
-      this.paddingLeft = padding;
-   }
-
-   @Override
    public float getPaddingTop() {
       return paddingTop;
+   }
+
+   @Override
+   public void setPaddingTop(Float padding) {
+      this.paddingTop = padding;
    }
 
    @Override
@@ -307,13 +293,28 @@ public abstract class BaseWidget implements Widget {
    }
 
    @Override
+   public void setPaddingRight(Float padding) {
+      this.paddingRight = padding;
+   }
+
+   @Override
    public float getPaddingBottom() {
       return paddingBottom;
    }
 
    @Override
+   public void setPaddingBottom(Float padding) {
+      this.paddingBottom = padding;
+   }
+
+   @Override
    public float getPaddingLeft() {
       return paddingLeft;
+   }
+
+   @Override
+   public void setPaddingLeft(Float padding) {
+      this.paddingLeft = padding;
    }
 
    @Override

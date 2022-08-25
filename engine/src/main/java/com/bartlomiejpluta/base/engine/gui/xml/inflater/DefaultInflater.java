@@ -233,7 +233,7 @@ public class DefaultInflater implements Inflater {
 
    @SneakyThrows
    private Component createComponent(Class<? extends Widget> componentClass, NamedNodeMap attributes, Map<String, Component> refs, Context context, GUI gui) {
-      var component = (Component) componentClass.getConstructor(Context.class, GUI.class).newInstance(context, gui);
+      var component = (Component) componentClass.getConstructor(Context.class, GUI.class, Map.class).newInstance(context, gui, refs);
 
       // Set attributes via setter methods
       for (int i = 0; i < attributes.getLength(); ++i) {
