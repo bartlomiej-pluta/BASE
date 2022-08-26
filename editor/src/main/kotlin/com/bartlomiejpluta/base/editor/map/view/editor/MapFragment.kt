@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.view.editor
 
+import com.bartlomiejpluta.base.editor.autotile.view.editor.AutoTileView
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
@@ -8,6 +9,7 @@ import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.REDO_S
 import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.SAVE_SHORTCUT
 import com.bartlomiejpluta.base.editor.main.component.EditorTab.Companion.UNDO_SHORTCUT
 import com.bartlomiejpluta.base.editor.map.controller.MapController
+import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -29,6 +31,7 @@ class MapFragment : EditorFragment() {
    private val mapView = find<MapView>()
    private val layersView = find<MapLayersView>()
    private val tileSetView = find<TileSetView>()
+   private val autoTileView = find<AutoTileView>()
    private val toolbarView = find<MapToolbarView>()
    private val statusBarView = find<MapStatusBarView>()
    private val layerParameters = find<MapLayerParameters>()
@@ -36,6 +39,11 @@ class MapFragment : EditorFragment() {
 
    private val isTileLayerSelected = Bindings.createBooleanBinding(
       { editorStateVM.selectedLayer is TileLayer },
+      editorStateVM.selectedLayerProperty
+   )
+
+   private val isAutoTileLayerSelected = Bindings.createBooleanBinding(
+      { editorStateVM.selectedLayer is AutoTileLayer },
       editorStateVM.selectedLayerProperty
    )
 
@@ -55,6 +63,14 @@ class MapFragment : EditorFragment() {
             enableWhen(isTileLayerSelected)
 
             this += tileSetView.root.apply {
+               maxHeightProperty().bind(this@item.heightProperty())
+            }
+         }
+
+         item("Auto Tile", expanded = false) {
+            enableWhen(isAutoTileLayerSelected)
+
+            this += autoTileView.root.apply {
                maxHeightProperty().bind(this@item.heightProperty())
             }
          }

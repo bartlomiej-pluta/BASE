@@ -70,39 +70,6 @@ class TileSetCanvas(private val editorStateVM: EditorStateVM, private val select
       gc.strokeLine(0.0, 0.0, 0.0, h)
    }
 
-//   private fun createGrid(gc: GraphicsContext, chunkWidth: Int, chunkHeight: Int): WritableImage {
-//      val grid = WritableImage(gc.canvas.width.toInt(), gc.canvas.height.toInt())
-//
-//      val writer = grid.pixelWriter
-//      val color = Color.BLACK
-//      for (x in 0 until grid.width.toInt()) {
-//         for (y in 0 until grid.height.toInt()) {
-//            if (x % chunkWidth == 0) {
-//               writer.setColor(x, y, color)
-//            }
-//
-//            if (y % chunkHeight == 0) {
-//               writer.setColor(x, y, color)
-//            }
-//         }
-//      }
-//
-//      val lastX = grid.width.toInt() - 1
-//      val lastY = grid.height.toInt() - 1
-//
-//      for (x in 0 until grid.width.toInt()) {
-//         writer.setColor(x, 0, color)
-//         writer.setColor(x, lastY, color)
-//      }
-//
-//      for (y in 0 until grid.height.toInt()) {
-//         writer.setColor(0, y, color)
-//         writer.setColor(lastX, y, color)
-//      }
-//
-//      return grid
-//   }
-
    override fun handleMouseInput(event: MapMouseEvent) {
       mouseRow = event.row
       mouseColumn = event.column
