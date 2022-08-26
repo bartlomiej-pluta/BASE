@@ -28,6 +28,7 @@ class AssetMapCodeGenerator : CodeGenerator {
       listOf(
          generateMapAssetClass("maps", project.maps),
          generateAssetClass("tilesets", project.tileSets),
+         generateAssetClass("autotiles", project.autoTiles),
          generateAssetClass("charsets", project.characterSets),
          generateAssetClass("images", project.images),
          generateAssetClass("animations", project.animations),

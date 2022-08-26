@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -23,6 +24,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.runner = item.runner
       proto.addAllMaps(item.maps.map(this::serializeMap))
       proto.addAllTileSets(item.tileSets.map(this::serializeTileSet))
+      proto.addAllAutoTiles(item.autoTiles.map(this::serializeAutoTile))
       proto.addAllImages(item.images.map(this::serializeImage))
       proto.addAllCharacterSets(item.characterSets.map(this::serializeCharacterSet))
       proto.addAllAnimations(item.animations.map(this::serializeAnimation))
@@ -45,6 +47,12 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setName(tileSet.name)
       .setRows(tileSet.rows)
       .setColumns(tileSet.columns)
+      .build()
+
+   private fun serializeAutoTile(autoTile: AutoTileAsset) = ProjectProto.AutoTileSetAsset.newBuilder()
+      .setUid(autoTile.uid)
+      .setSource(autoTile.source)
+      .setName(autoTile.name)
       .build()
 
    private fun serializeImage(image: ImageAsset) = ProjectProto.ImageAsset.newBuilder()

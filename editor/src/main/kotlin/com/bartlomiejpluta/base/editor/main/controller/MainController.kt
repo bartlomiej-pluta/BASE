@@ -8,6 +8,8 @@ import com.bartlomiejpluta.base.editor.asset.view.select.SelectGraphicAssetFragm
 import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.audio.view.importing.ImportSoundFragment
 import com.bartlomiejpluta.base.editor.audio.viewmodel.SoundAssetDataVM
+import com.bartlomiejpluta.base.editor.autotile.view.importing.ImportAutoTileFragment
+import com.bartlomiejpluta.base.editor.autotile.viewmodel.AutoTileAssetDataVM
 import com.bartlomiejpluta.base.editor.characterset.view.importing.ImportCharacterSetFragment
 import com.bartlomiejpluta.base.editor.characterset.viewmodel.CharacterSetAssetDataVM
 import com.bartlomiejpluta.base.editor.code.model.CodeScope
@@ -216,6 +218,20 @@ class MainController : Controller() {
       }
    }
 
+   fun importAutoTile() {
+      val vm = AutoTileAssetDataVM()
+      val scope = Scope()
+      setInScope(vm, scope)
+
+      find<ImportAutoTileFragment>(scope).apply {
+         onComplete {
+            projectContext.importAutoTile(it)
+         }
+
+         openModal(block = true, resizable = false)
+      }
+   }
+
    fun importImage() {
       val vm = ImageAssetDataVM()
       val scope = Scope()
@@ -294,6 +310,7 @@ class MainController : Controller() {
       }.showAndWait().map(::WidgetAssetData).map(projectContext::createWidget).ifPresent(this::openScript)
    }
 
+
    fun importSound() {
       val vm = SoundAssetDataVM()
       val scope = Scope()
@@ -307,7 +324,6 @@ class MainController : Controller() {
          openModal(block = true, resizable = true)
       }
    }
-
 
    fun closeAsset(asset: Asset) {
       when (asset) {

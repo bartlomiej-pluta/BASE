@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.asset.model.AssetCategory
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -73,6 +74,7 @@ class AssetTreeCell(renameAsset: (asset: Asset, name: String) -> Asset, deleteAs
          is AssetCategory -> FontIcon("fa-folder")
          is GameMapAsset -> FontIcon("fa-map")
          is TileSetAsset -> FontIcon("fa-th")
+         is AutoTileAsset -> FontIcon("fa-th-large")
          is ImageAsset -> FontIcon("fa-image")
          is CharacterSetAsset -> FontIcon("fa-male")
          is AnimationAsset -> FontIcon("fa-film")

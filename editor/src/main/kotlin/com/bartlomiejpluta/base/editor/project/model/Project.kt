@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.model
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.database.source.DataSource
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
@@ -37,6 +38,7 @@ class Project {
 
    val maps = observableListOf<GameMapAsset>()
    val tileSets = observableListOf<TileSetAsset>()
+   val autoTiles = observableListOf<AutoTileAsset>()
    val images = observableListOf<ImageAsset>()
    val characterSets = observableListOf<CharacterSetAsset>()
    val animations = observableListOf<AnimationAsset>()
@@ -45,7 +47,7 @@ class Project {
    val widgets = observableListOf<WidgetAsset>()
    val sounds = observableListOf<SoundAsset>()
 
-   val assetLists = listOf(maps, tileSets, images, characterSets, animations, iconSets, fonts, widgets, sounds)
+   val assetLists = listOf(maps, tileSets, autoTiles, images, characterSets, animations, iconSets, fonts, widgets, sounds)
 
    val mapsDirectoryProperty = SimpleObjectProperty<File>()
    var mapsDirectory by mapsDirectoryProperty
@@ -53,6 +55,10 @@ class Project {
 
    val tileSetsDirectoryProperty = SimpleObjectProperty<File>()
    var tileSetsDirectory by tileSetsDirectoryProperty
+      private set
+
+   val autoTilesDirectoryProperty = SimpleObjectProperty<File>()
+   var autoTilesDirectory by autoTilesDirectoryProperty
       private set
 
    val imagesDirectoryProperty = SimpleObjectProperty<File>()
@@ -129,6 +135,7 @@ class Project {
          dir?.let {
             mapsDirectory = File(it, MAPS_DIR)
             tileSetsDirectory = File(it, TILE_SETS_DIR)
+            autoTilesDirectory = File(it, AUTO_TILES)
             imagesDirectory = File(it, IMAGES_DIR)
             characterSetsDirectory = File(it, CHARACTER_SETS_DIR)
             animationsDirectory = File(it, ANIMATIONS_DIR)
@@ -160,6 +167,7 @@ class Project {
       sourceDirectory?.mkdirs()
       mapsDirectory?.mkdirs()
       tileSetsDirectory?.mkdirs()
+      autoTilesDirectory?.mkdirs()
       imagesDirectory?.mkdirs()
       characterSetsDirectory?.mkdirs()
       animationsDirectory?.mkdirs()
@@ -178,6 +186,7 @@ class Project {
 
       const val MAPS_DIR = "maps"
       const val TILE_SETS_DIR = "tilesets"
+      const val AUTO_TILES = "autotiles"
       const val IMAGES_DIR = "images"
       const val CHARACTER_SETS_DIR = "charsets"
       const val ANIMATIONS_DIR = "animations"

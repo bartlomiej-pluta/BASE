@@ -5,6 +5,8 @@ import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
@@ -171,6 +173,19 @@ class DefaultProjectContext : ProjectContext {
             val targetFile = File(it.tileSetsDirectory, source)
             data.file.copyTo(targetFile)
             it.tileSets += TileSetAsset(it, uid, source, data.name, data.rows, data.columns)
+
+            save()
+         }
+      }
+   }
+
+   override fun importAutoTile(data: AutoTileAssetData) {
+      project?.let {
+         UID.next(it.autoTiles.map(Asset::uid)).let { uid ->
+            val source = "$uid.${data.file.extension}"
+            val targetFile = File(it.autoTilesDirectory, source)
+            data.file.copyTo(targetFile)
+            it.autoTiles += AutoTileAsset(it, uid, source, data.name)
 
             save()
          }

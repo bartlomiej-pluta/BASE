@@ -26,6 +26,10 @@ class AssetsListView : View() {
       menuitem("Import Tile Set...") { mainController.importTileSet() }
    }
 
+   private val autoTiles = AssetCategory("Auto Tiles").apply {
+      menuitem("Import Auto Tile...") { mainController.importAutoTile() }
+   }
+
    private val images = AssetCategory("Images").apply {
       menuitem("Import Image...") { mainController.importImage() }
    }
@@ -58,6 +62,7 @@ class AssetsListView : View() {
       name = "Project", items = observableListOf(
          maps,
          tileSets,
+         autoTiles,
          images,
          characterSet,
          animations,
@@ -74,6 +79,7 @@ class AssetsListView : View() {
             rootItem.nameProperty.bind(it.nameProperty)
             bindContent(maps.items, it.maps)
             bindContent(tileSets.items, it.tileSets)
+            bindContent(autoTiles.items, it.autoTiles)
             bindContent(images.items, it.images)
             bindContent(characterSet.items, it.characterSets)
             bindContent(animations.items, it.animations)

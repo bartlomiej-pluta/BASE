@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -25,6 +26,7 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
          runner = proto.runner
          maps.addAll(proto.mapsList.map { deserializeMap(this, it) })
          tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(this, it) })
+         autoTiles.addAll(proto.autoTilesList.map { deserializeAutoTile(this, it) })
          images.addAll(proto.imagesList.map { deserializeImage(this, it) })
          characterSets.addAll(proto.characterSetsList.map { deserializeCharacterSet(this, it) })
          animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
@@ -48,6 +50,13 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       name = tileSet.name,
       rows = tileSet.rows,
       columns = tileSet.columns
+   )
+
+   private fun deserializeAutoTile(project: Project, autoTile: ProjectProto.AutoTileSetAsset) = AutoTileAsset(
+      project = project,
+      uid = autoTile.uid,
+      source = autoTile.source,
+      name = autoTile.name
    )
 
    private fun deserializeImage(project: Project, image: ProjectProto.ImageAsset) = ImageAsset(

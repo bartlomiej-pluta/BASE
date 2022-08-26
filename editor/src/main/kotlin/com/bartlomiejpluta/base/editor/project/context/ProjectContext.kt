@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.project.context
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.file.model.FileNode
@@ -36,9 +37,11 @@ interface ProjectContext {
 
    fun importTileSet(data: TileSetAssetData)
    fun loadTileSet(uid: String): TileSet
-   fun findTileSetAsset(uid: String): TileSetAsset
+   fun importAutoTile(data: AutoTileAssetData)
 
+   fun findTileSetAsset(uid: String): TileSetAsset
    fun importImage(data: ImageAssetData)
+
    fun findImageAsset(uid: String): ImageAsset
 
    fun loadImage(uid: String): Image
@@ -50,7 +53,6 @@ interface ProjectContext {
    fun importIconSet(data: IconSetAssetData)
 
    fun importFont(data: FontAssetData)
-
    fun createWidget(data: WidgetAssetData): WidgetAsset
    fun importSound(data: SoundAssetData)
    fun deleteAsset(asset: Asset)

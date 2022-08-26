@@ -26,6 +26,7 @@ class DefaultProjectAssembler : ProjectAssembler {
    private fun tryToAssembly(project: Project, targetJar: File) {
       packager.pack(project.mapsDirectory, targetJar, "BOOT-INF/classes/project/maps")
       packager.pack(project.tileSetsDirectory, targetJar, "BOOT-INF/classes/project/tilesets")
+      packager.pack(project.autoTilesDirectory, targetJar, "BOOT-INF/classes/project/autotiles")
       packager.pack(project.imagesDirectory, targetJar, "BOOT-INF/classes/project/images")
       packager.pack(project.characterSetsDirectory, targetJar, "BOOT-INF/classes/project/charsets")
       packager.pack(project.animationsDirectory, targetJar, "BOOT-INF/classes/project/animations")
