@@ -26,8 +26,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    @Override
    protected DefaultGameMap parse(InputStream input) throws Exception {
       var proto = GameMapProto.GameMap.parseFrom(input);
-      var tileSet = tileSetManager.loadObject(proto.getTileSetUID());
-      var map = new DefaultGameMap(tileSet, proto.getRows(), proto.getColumns(), proto.getHandler());
+      var map = new DefaultGameMap(proto.getTileWidth(), proto.getTileHeight(), proto.getRows(), proto.getColumns(), proto.getHandler());
 
       proto.getLayersList().forEach(layer -> deserializeLayer(map, layer));
 
@@ -49,7 +48,7 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    }
 
    private void deserializeTileLayer(DefaultGameMap map, GameMapProto.Layer proto) {
-      var layer = map.createTileLayer();
+      var layer = map.createTileLayer(tileSetManager.loadObject(proto.getTileLayer().getTilesetUID()));
       var columns = map.getColumns();
       var tiles = proto.getTileLayer().getTilesList();
 
@@ -80,11 +79,11 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    private void deserializeColorLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       var protoColorLayer = proto.getColorLayer();
       map.createColorLayer(
-            meshManager,
-            protoColorLayer.getRed() / 100.0f,
-            protoColorLayer.getGreen() / 100.0f,
-            protoColorLayer.getBlue() / 100.0f,
-            protoColorLayer.getAlpha() / 100.0f
+              meshManager,
+              protoColorLayer.getRed() / 100.0f,
+              protoColorLayer.getGreen() / 100.0f,
+              protoColorLayer.getBlue() / 100.0f,
+              protoColorLayer.getAlpha() / 100.0f
       );
    }
 
@@ -99,14 +98,14 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       };
 
       map.createImageLayer(
-            image,
-            protoImageLayer.getOpacity() / 100.0f,
-            protoImageLayer.getX(),
-            protoImageLayer.getY(),
-            (float) protoImageLayer.getScaleX(),
-            (float) protoImageLayer.getScaleY(),
-            mode,
-            protoImageLayer.getParallax()
+              image,
+              protoImageLayer.getOpacity() / 100.0f,
+              protoImageLayer.getX(),
+              protoImageLayer.getY(),
+              (float) protoImageLayer.getScaleX(),
+              (float) protoImageLayer.getScaleY(),
+              mode,
+              protoImageLayer.getParallax()
       );
    }
 }

@@ -35,9 +35,6 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Getter
    private final List<Layer> layers = new ArrayList<>();
 
-   @NonNull
-   private final TileSet tileSet;
-
    @Getter
    private final int rows;
 
@@ -59,11 +56,10 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Getter
    private final String handler;
 
-   public DefaultGameMap(TileSet tileSet, int rows, int columns, String handler) {
-      this.tileSet = tileSet;
+   public DefaultGameMap(int tileWidth, int tileHeight, int rows, int columns, String handler) {
       this.rows = rows;
       this.columns = columns;
-      this.stepSize = new Vector2f(tileSet.getTileSet().getSpriteSize());
+      this.stepSize = new Vector2f(tileWidth, tileHeight);
       this.width = columns * stepSize.x();
       this.height = rows * stepSize.y();
       this.size = new Vector2f(columns * stepSize.x(), rows * stepSize.y());
@@ -115,7 +111,7 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       }
    }
 
-   public TileLayer createTileLayer() {
+   public TileLayer createTileLayer(@NonNull TileSet tileSet) {
       var layer = new DefaultTileLayer(this, tileSet, rows, columns);
       layers.add(layer);
 
