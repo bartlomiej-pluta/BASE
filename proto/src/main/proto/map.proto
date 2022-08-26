@@ -32,7 +32,7 @@ message TileLayer {
 
 message AutoTileLayer {
   required string autotileUID = 1;
-  repeated bool tiles = 2;
+  repeated uint32 tiles = 2;
 }
 
 message ObjectLayer {
