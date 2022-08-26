@@ -6,11 +6,14 @@ import tornadofx.getValue
 import tornadofx.setValue
 
 class GameMapBuilderVM : ItemViewModel<GameMapBuilder>(GameMapBuilder()) {
-   val tileSetAssetProperty = bind(GameMapBuilder::tileSetAssetProperty, autocommit = true)
-   var tileSetAsset by tileSetAssetProperty
-
    val nameProperty = bind(GameMapBuilder::nameProperty, autocommit = true)
    var name by nameProperty
+
+   val tileWidthProperty = bind(GameMapBuilder::tileWidthProperty, autocommit = true)
+   var tileWidth by tileWidthProperty
+
+   val tileHeightProperty = bind(GameMapBuilder::tileHeightProperty, autocommit = true)
+   var tileHeight by tileHeightProperty
 
    val rowsProperty = bind(GameMapBuilder::rowsProperty, autocommit = true)
    var rows by rowsProperty

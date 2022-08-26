@@ -123,9 +123,14 @@ class DefaultProjectContext : ProjectContext {
       }
    }
 
-   override fun importMapFromFile(name: String, handler: String, file: File, tileSet: TileSet) =
+   override fun importMapFromFile(
+      name: String,
+      handler: String,
+      file: File,
+      replaceTileSet: (String, String) -> String
+   ) =
       project?.let { project ->
-         val map = file.inputStream().use { mapDeserializer.deserialize(it, tileSet) }
+         val map = file.inputStream().use { mapDeserializer.deserialize(it, replaceTileSet) }
          UID.next(project.maps.map(Asset::uid)).let { uid ->
             val asset = GameMapAsset(project, uid, name)
             map.uid = uid
@@ -182,6 +187,11 @@ class DefaultProjectContext : ProjectContext {
          TileSet(uid, asset.name, image, asset.rows, asset.columns)
       } ?: throw IllegalStateException("There is no open project in the context")
    }
+
+   override fun findTileSetAsset(uid: String) = project?.let {
+      it.tileSets.firstOrNull { tileSets -> tileSets.uid == uid }
+         ?: throw IllegalStateException("The Tile Set with uid [$uid] does not exist ")
+   } ?: throw IllegalStateException("There is no open project in the context")
 
    override fun importImage(data: ImageAssetData) {
       project?.let {

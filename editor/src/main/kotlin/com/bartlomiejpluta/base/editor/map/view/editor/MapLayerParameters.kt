@@ -5,8 +5,10 @@ import com.bartlomiejpluta.base.editor.common.parameter.view.ParametersTableFrag
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.parameter.layer.ColorLayerParametersBinder
 import com.bartlomiejpluta.base.editor.map.parameter.layer.ImageLayerParametersBinder
+import com.bartlomiejpluta.base.editor.map.parameter.layer.TileLayerParametersBinder
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import tornadofx.View
@@ -20,6 +22,7 @@ class MapLayerParameters : View() {
    // of LayerParametersBinder<> type
    private val colorLayerParametersBinder: ColorLayerParametersBinder by di()
    private val imageLayerParametersBinder: ImageLayerParametersBinder by di()
+   private val tileLayerParametersBinder: TileLayerParametersBinder by di()
 
    private val parameters = observableListOf<Parameter<*>>()
 
@@ -29,15 +32,16 @@ class MapLayerParameters : View() {
          parameters.clear()
 
          when (layer) {
-            is ColorLayer -> colorLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
-               fire(
-                  RedrawMapRequestEvent
-               )
+            is TileLayer -> tileLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
+               fire(RedrawMapRequestEvent)
             }
+
+            is ColorLayer -> colorLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
+               fire(RedrawMapRequestEvent)
+            }
+
             is ImageLayer -> imageLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
-               fire(
-                  RedrawMapRequestEvent
-               )
+               fire(RedrawMapRequestEvent)
             }
          }
       }

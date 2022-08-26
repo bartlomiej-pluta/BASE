@@ -14,6 +14,7 @@ import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.project.model.Project
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.beans.property.ObjectProperty
@@ -29,15 +30,17 @@ interface ProjectContext {
    fun createNewProject(project: Project)
 
    fun importMap(name: String, map: GameMap)
-   fun importMapFromFile(name: String, handler: String, file: File, tileSet: TileSet): GameMap
+   fun importMapFromFile(name: String, handler: String, file: File, replaceTileSet: (String, String) -> String): GameMap
    fun loadMap(uid: String): GameMap
    fun saveMap(map: GameMap)
 
    fun importTileSet(data: TileSetAssetData)
    fun loadTileSet(uid: String): TileSet
+   fun findTileSetAsset(uid: String): TileSetAsset
 
    fun importImage(data: ImageAssetData)
    fun findImageAsset(uid: String): ImageAsset
+
    fun loadImage(uid: String): Image
 
    fun importCharacterSet(data: CharacterSetAssetData)
@@ -49,7 +52,6 @@ interface ProjectContext {
    fun importFont(data: FontAssetData)
 
    fun createWidget(data: WidgetAssetData): WidgetAsset
-
    fun importSound(data: SoundAssetData)
    fun deleteAsset(asset: Asset)
    fun loadScript(fileNode: FileNode, execute: ((String) -> Unit)?, saveable: Boolean): Code

@@ -1,13 +1,18 @@
 package com.bartlomiejpluta.base.editor.map.view.wizard
 
+import com.bartlomiejpluta.base.editor.map.model.map.GameMapBuilder
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
-import javafx.beans.binding.Bindings
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
 
-class MapImportBasicDataView : View("Basic Data") {
+class MapImportFragment : Fragment("Basic Data") {
    private val mapBuilderVM = find<GameMapBuilderVM>()
+   private var onCompleteConsumer: ((GameMapBuilder) -> Unit)? = null
+
+   fun onComplete(consumer: (GameMapBuilder) -> Unit) {
+      this.onCompleteConsumer = consumer
+   }
 
    override val complete = mapBuilderVM.valid(
       mapBuilderVM.fileProperty,
@@ -59,6 +64,26 @@ class MapImportBasicDataView : View("Basic Data") {
                required()
                trimWhitespace()
             }
+         }
+      }
+
+      buttonbar {
+         button("Create") {
+            action {
+               if (mapBuilderVM.commit()) {
+                  onCompleteConsumer?.let { it(mapBuilderVM.item) }
+                  close()
+               }
+            }
+         }
+
+         button("Reset") {
+            action { mapBuilderVM.rollback() }
+         }
+
+
+         button("Cancel") {
+            action { close() }
          }
       }
    }

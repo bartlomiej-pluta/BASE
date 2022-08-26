@@ -13,9 +13,6 @@ class GameMapVM(map: GameMap) : ItemViewModel<GameMap>(map) {
    val uidProperty = bind(GameMap::uidProperty)
    val uid by uidProperty
 
-   val tileSetProperty = bind(GameMap::tileSet)
-   val tileSet by tileSetProperty
-
    val rowsProperty = bind(GameMap::rowsProperty)
    var rows by rowsProperty
 

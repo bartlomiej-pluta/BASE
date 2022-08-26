@@ -1,37 +1,107 @@
 package com.bartlomiejpluta.base.editor.tileset.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
+import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEventHandler
 import com.bartlomiejpluta.base.editor.render.model.Renderable
-import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
+import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.image.WritableImage
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
+import kotlin.math.roundToInt
 
-class TileSetCanvas(private val gameMapVM: GameMapVM, private val selection: TileSetSelection) : Renderable, MapMouseEventHandler {
+class TileSetCanvas(private val editorStateVM: EditorStateVM, private val selection: TileSetSelection) : Renderable,
+   MapMouseEventHandler {
    private var mouseRow = -1
    private var mouseColumn = -1
 
    override fun render(gc: GraphicsContext) {
       gc.clearRect(0.0, 0.0, gc.canvas.width, gc.canvas.height)
 
-      renderTiles(gc)
-      selection.render(gc)
+      if (editorStateVM.selectedLayer is TileLayer) {
+         val tileSet = (editorStateVM.selectedLayer as TileLayer).tileSetProperty.value
+         renderBackground(gc)
+         renderTiles(gc, tileSet)
+         renderGrid(gc, tileSet)
+         selection.render(gc)
+      }
    }
 
-   private fun renderTiles(gc: GraphicsContext) {
-      gameMapVM.tileSet.forEach { row, column, tile ->
-         gc.fill = if ((row + column) % 2 == 0) BACKGROUND_COLOR1 else BACKGROUND_COLOR2
-         gc.fillRect(
-            column * tile.image.width,
-            row * tile.image.height,
-            gameMapVM.tileSet.tileWidth.toDouble(),
-            gameMapVM.tileSet.tileHeight.toDouble()
-         )
+   private fun renderBackground(gc: GraphicsContext) {
+      for (x in 0 until (gc.canvas.width / BACKGROUND_TILE_WIDTH).roundToInt()) {
+         for (y in 0 until (gc.canvas.height / BACKGROUND_TILE_HEIGHT).roundToInt()) {
+            gc.fill = when ((x + y) % 2) {
+               0 -> BACKGROUND_COLOR1
+               else -> BACKGROUND_COLOR2
+            }
+
+            gc.fillRect(x * BACKGROUND_TILE_WIDTH, y * BACKGROUND_TILE_HEIGHT, BACKGROUND_TILE_WIDTH, BACKGROUND_TILE_HEIGHT)
+         }
+      }
+   }
+
+   private fun renderTiles(gc: GraphicsContext, tileSet: TileSet) {
+      tileSet.forEach { row, column, tile ->
          gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
       }
    }
+
+   private fun renderGrid(gc: GraphicsContext, tileSet: TileSet) {
+      gc.stroke = Color.BLACK
+      gc.lineWidth = 0.5
+
+      for (x in 0 until (gc.canvas.width / tileSet.tileWidth).roundToInt()) {
+         gc.strokeLine(x.toDouble() * tileSet.tileWidth, 0.0, x.toDouble() * tileSet.tileWidth, gc.canvas.height)
+      }
+
+      for (y in 0 until (gc.canvas.height / tileSet.tileHeight).roundToInt()) {
+         gc.strokeLine(0.0, y.toDouble() * tileSet.tileHeight, gc.canvas.width, y.toDouble() * tileSet.tileHeight)
+      }
+
+      val w = gc.canvas.width - 1
+      val h = gc.canvas.height - 1
+
+      gc.strokeLine(0.0, 0.0, w, 0.0)
+      gc.strokeLine(w, 0.0, w, h)
+      gc.strokeLine(0.0, h, w, h)
+      gc.strokeLine(0.0, 0.0, 0.0, h)
+   }
+
+//   private fun createGrid(gc: GraphicsContext, chunkWidth: Int, chunkHeight: Int): WritableImage {
+//      val grid = WritableImage(gc.canvas.width.toInt(), gc.canvas.height.toInt())
+//
+//      val writer = grid.pixelWriter
+//      val color = Color.BLACK
+//      for (x in 0 until grid.width.toInt()) {
+//         for (y in 0 until grid.height.toInt()) {
+//            if (x % chunkWidth == 0) {
+//               writer.setColor(x, y, color)
+//            }
+//
+//            if (y % chunkHeight == 0) {
+//               writer.setColor(x, y, color)
+//            }
+//         }
+//      }
+//
+//      val lastX = grid.width.toInt() - 1
+//      val lastY = grid.height.toInt() - 1
+//
+//      for (x in 0 until grid.width.toInt()) {
+//         writer.setColor(x, 0, color)
+//         writer.setColor(x, lastY, color)
+//      }
+//
+//      for (y in 0 until grid.height.toInt()) {
+//         writer.setColor(0, y, color)
+//         writer.setColor(lastX, y, color)
+//      }
+//
+//      return grid
+//   }
 
    override fun handleMouseInput(event: MapMouseEvent) {
       mouseRow = event.row
@@ -63,7 +133,9 @@ class TileSetCanvas(private val gameMapVM: GameMapVM, private val selection: Til
    }
 
    companion object {
+      private const val BACKGROUND_TILE_WIDTH = 5.0
+      private const val BACKGROUND_TILE_HEIGHT = 5.0
       private val BACKGROUND_COLOR1 = Color.color(1.0, 1.0, 1.0, 1.0)
-      private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 0.95)
+      private val BACKGROUND_COLOR2 = Color.color(0.95, 0.95, 0.95, 1.0)
    }
 }

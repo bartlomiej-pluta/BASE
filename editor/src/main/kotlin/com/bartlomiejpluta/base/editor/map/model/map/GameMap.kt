@@ -10,14 +10,11 @@ import tornadofx.getValue
 import tornadofx.setValue
 
 
-class GameMap(val tileSet: TileSet) {
+class GameMap(val tileWidth: Double, val tileHeight: Double) {
    val uidProperty = SimpleStringProperty()
    var uid by uidProperty
 
    val layers = FXCollections.observableArrayList(Layer.extractor())
-
-   val tileWidth = tileSet.tileWidth.toDouble()
-   val tileHeight = tileSet.tileHeight.toDouble()
 
    val rowsProperty = SimpleIntegerProperty(INITIAL_ROWS)
    var rows by rowsProperty

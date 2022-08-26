@@ -1,12 +1,16 @@
 package com.bartlomiejpluta.base.editor.asset.view.select
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.StringProperty
 import javafx.collections.ObservableList
 import tornadofx.*
 
 class SelectGraphicAssetFragment<T : Asset> : Fragment("Select Asset") {
    val assets: ObservableList<T> by param()
+   val cancelable: BooleanProperty by param(true.toProperty())
+   val comment: StringProperty by param("".toProperty())
 
    private val asset = SimpleObjectProperty<T>()
 
@@ -22,6 +26,12 @@ class SelectGraphicAssetFragment<T : Asset> : Fragment("Select Asset") {
    }
 
    override val root = form {
+      if(comment.isNotEmpty.value) {
+         label(comment) {
+            visibleWhen(comment.isNotEmpty)
+         }
+      }
+
       fieldset {
          this += selectGraphicAssetView.root
       }
@@ -37,6 +47,7 @@ class SelectGraphicAssetFragment<T : Asset> : Fragment("Select Asset") {
          }
 
          button("Cancel") {
+            visibleWhen(cancelable)
             action { close() }
          }
       }

@@ -1,11 +1,13 @@
 package com.bartlomiejpluta.base.editor.map.view.wizard
 
+import com.bartlomiejpluta.base.editor.map.model.map.GameMapBuilder
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
 import tornadofx.*
 
-class MapCreationBasicDataView : View("Basic Data") {
+class MapCreationFragment : Fragment("Basic Data") {
    private val mapBuilderVM = find<GameMapBuilderVM>()
+   private var onCompleteConsumer: ((GameMapBuilder) -> Unit)? = null
 
    override val complete = mapBuilderVM.valid(
       mapBuilderVM.nameProperty,
@@ -14,12 +16,47 @@ class MapCreationBasicDataView : View("Basic Data") {
       mapBuilderVM.handlerProperty
    )
 
+   fun onComplete(consumer: (GameMapBuilder) -> Unit) {
+      this.onCompleteConsumer = consumer
+   }
+
+
    override val root = form {
       fieldset("Map Settings") {
          field("Map name") {
             textfield(mapBuilderVM.nameProperty) {
                required()
                whenDocked { requestFocus() }
+            }
+         }
+
+         field("Tile Width") {
+            spinner(min = 1, property = mapBuilderVM.tileWidthProperty, editable = true) {
+               required()
+               editor.textFormatter = TextFieldUtil.integerFormatter(mapBuilderVM.tileWidth)
+
+               validator {
+                  if (it?.toInt()?.let { value -> value <= 0 } != false) {
+                     error("The tile width must be greater than 0")
+                  }
+
+                  null
+               }
+            }
+         }
+
+         field("Tile Height") {
+            spinner(min = 1, property = mapBuilderVM.tileHeightProperty, editable = true) {
+               required()
+               editor.textFormatter = TextFieldUtil.integerFormatter(mapBuilderVM.tileHeight)
+
+               validator {
+                  if (it?.toInt()?.let { value -> value <= 0 } != false) {
+                     error("The tile height must be greater than 0")
+                  }
+
+                  null
+               }
             }
          }
 
@@ -58,6 +95,26 @@ class MapCreationBasicDataView : View("Basic Data") {
                required()
                trimWhitespace()
             }
+         }
+      }
+
+      buttonbar {
+         button("Create") {
+            action {
+               if (mapBuilderVM.commit()) {
+                  onCompleteConsumer?.let { it(mapBuilderVM.item) }
+                  close()
+               }
+            }
+         }
+
+         button("Reset") {
+            action { mapBuilderVM.rollback() }
+         }
+
+
+         button("Cancel") {
+            action { close() }
          }
       }
    }

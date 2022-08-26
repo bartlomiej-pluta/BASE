@@ -13,6 +13,7 @@ import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import javafx.collections.ObservableList
 import javafx.scene.control.ListCell
 import javafx.scene.control.ListView
@@ -55,11 +56,21 @@ class MapLayersView : View() {
          menubutton(graphic = FontIcon("fa-plus")) {
             item("Tile Layer", graphic = FontIcon("fa-th-large")) {
                action {
-                  val layer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns)
-                  val command = CreateLayerCommand(mapVM.item, layer)
-                  command.execute()
-                  layersPane.selectionModel.select(mapVM.layers.size - 1)
-                  undoRedoService.push(command, scope)
+                  val scope = UndoableScope()
+                  find<SelectGraphicAssetFragment<TileSetAsset>>(
+                     scope,
+                     SelectGraphicAssetFragment<TileSetAsset>::assets to projectContext.project?.tileSets!!
+                  ).apply {
+                     onComplete {
+                        val layer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns, it)
+                        val command = CreateLayerCommand(mapVM.item, layer)
+                        command.execute()
+                        layersPane.selectionModel.select(mapVM.layers.size - 1)
+                        undoRedoService.push(command, scope)
+                     }
+
+                     openModal(block = true, resizable = false)
+                  }
                }
             }
 
@@ -164,7 +175,7 @@ class MapLayersView : View() {
       override fun fromString(string: String?): Layer = cell.item.apply {
          string
             ?.takeIf { str -> str != name }
-            ?.takeIf { str -> layers.none { it.name == str }}
+            ?.takeIf { str -> layers.none { it.name == str } }
             ?.let { onUpdate(this, it) }
       }
    }

@@ -47,7 +47,7 @@ class MapPane(
 
    override fun handle(event: MouseEvent?) {
       if (event != null) {
-         painter.handleMouseInput(MapMouseEvent.of(event, mapVM.tileSet))
+         painter.handleMouseInput(MapMouseEvent.of(event, mapVM))
       }
 
       mapCanvas.render(graphicsContext2D)

@@ -1,8 +1,10 @@
 package com.bartlomiejpluta.base.editor.tileset.canvas
 
 import com.bartlomiejpluta.base.editor.map.model.brush.Brush
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.render.model.Renderable
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
+import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
@@ -10,15 +12,15 @@ import kotlin.math.abs
 import kotlin.math.min
 
 
-class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: BrushVM) : Renderable {
+class TileSetSelection(private val editorStateVM: EditorStateVM, private val gameMapVM: GameMapVM, private val brushVM: BrushVM) : Renderable {
    private var startRow = 0.0
    private var startColumn = 0.0
    private var offsetRow = 0.0
    private var offsetColumn = 0.0
    private var x = 0.0
    private var y = 0.0
-   private var width = gameMapVM.tileSet.tileWidth.toDouble()
-   private var height = gameMapVM.tileSet.tileHeight.toDouble()
+   private var width = gameMapVM.tileWidth.toDouble()
+   private var height = gameMapVM.tileHeight.toDouble()
 
 
    fun begin(row: Double, column: Double) {
@@ -31,10 +33,10 @@ class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: Br
    }
 
    private fun updateRect(row: Double, column: Double) {
-      x = min(column, startColumn) * gameMapVM.tileSet.tileWidth
-      y = min(row, startRow) * gameMapVM.tileSet.tileHeight
-      width = (offsetColumn + 1) * gameMapVM.tileSet.tileWidth
-      height = (offsetRow + 1) * gameMapVM.tileSet.tileHeight
+      x = min(column, startColumn) * gameMapVM.tileWidth
+      y = min(row, startRow) * gameMapVM.tileHeight
+      width = (offsetColumn + 1) * gameMapVM.tileWidth
+      height = (offsetRow + 1) * gameMapVM.tileHeight
    }
 
    fun proceed(row: Double, column: Double) {
@@ -55,14 +57,17 @@ class TileSetSelection(private val gameMapVM: GameMapVM, private val brushVM: Br
       val rows = offsetRow.toInt() + 1
       val columns = offsetColumn.toInt() + 1
 
-      val brushArray = Array(rows) { rowIndex ->
-         Array(columns) { columnIndex ->
-            gameMapVM.tileSet.getTile(firstRow + rowIndex, firstColumn + columnIndex)
+      if (editorStateVM.selectedLayer is TileLayer) {
+         val tileSet = (editorStateVM.selectedLayer as TileLayer).tileSetProperty.value
+         val brushArray = Array(rows) { rowIndex ->
+            Array(columns) { columnIndex ->
+               tileSet.getTile(firstRow + rowIndex, firstColumn + columnIndex)
+            }
          }
-      }
 
-      brushVM.item = Brush.of(brushArray)
-      brushVM.commit()
+         brushVM.item = Brush.of(brushArray)
+         brushVM.commit()
+      }
    }
 
    override fun render(gc: GraphicsContext) {

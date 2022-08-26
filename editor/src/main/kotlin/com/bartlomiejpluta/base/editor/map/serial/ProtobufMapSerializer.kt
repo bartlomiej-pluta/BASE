@@ -16,7 +16,8 @@ class ProtobufMapSerializer : MapSerializer {
       protoMap.uid = item.uid
       protoMap.rows = item.rows
       protoMap.columns = item.columns
-      protoMap.tileSetUID = item.tileSet.uid
+      protoMap.tileWidth = item.tileWidth.toInt()
+      protoMap.tileHeight = item.tileHeight.toInt()
       protoMap.handler = item.handler
 
       item.layers.forEach { layer -> protoMap.addLayers(serializeLayer(layer)) }
@@ -28,6 +29,7 @@ class ProtobufMapSerializer : MapSerializer {
       return when (layer) {
          is TileLayer -> layer.layer.flatMap { it.asIterable() }
             .fold(GameMapProto.TileLayer.newBuilder()) { acc, tile -> acc.addTiles((tile?.id?.plus(1)) ?: 0) }
+            .setTilesetUID(layer.tileSetAsset.uid)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setTileLayer(it).build() }
 

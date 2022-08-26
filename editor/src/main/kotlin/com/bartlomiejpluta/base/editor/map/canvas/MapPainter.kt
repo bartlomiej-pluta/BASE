@@ -21,8 +21,8 @@ class MapPainter(
    private val editorStateVM: EditorStateVM,
    private val paintingCallback: (PaintingTrace) -> Unit
 ) : Renderable, MapMouseEventHandler {
-   private val tileWidth = mapVM.tileSet.tileWidth.toDouble()
-   private val tileHeight = mapVM.tileSet.tileHeight.toDouble()
+   private val tileWidth = mapVM.tileWidth.toDouble()
+   private val tileHeight = mapVM.tileHeight.toDouble()
 
    private var cursor: PaintingCursor? = null
    private var currentTrace: PaintingTrace? = null

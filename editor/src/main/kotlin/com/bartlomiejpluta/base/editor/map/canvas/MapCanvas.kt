@@ -11,7 +11,6 @@ import javafx.scene.paint.Color
 
 
 class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, private val painter: MapPainter) : Renderable {
-   var tileSet = map.tileSet
    private var tileWidth = map.tileWidth
    private var tileHeight = map.tileHeight
 
