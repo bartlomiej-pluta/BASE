@@ -63,7 +63,7 @@ public final class WindowManager extends BaseWidget {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
-   public void open(Window window) {
+   public void open(Window window, Object... args) {
       requireNonNull(window, "Window cannot be null");
 
       if (windows.isEmpty()) {
@@ -72,7 +72,7 @@ public final class WindowManager extends BaseWidget {
 
       windows.addLast(window);
       window.setParent(this);
-      window.onOpen(this);
+      window.onOpen(this, args != null ? args : new Object[] {});
    }
 
    private void forwardKeyEventToTopWindow(KeyEvent event) {

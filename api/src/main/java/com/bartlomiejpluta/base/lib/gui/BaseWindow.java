@@ -92,7 +92,7 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    }
 
    @Override
-   public void onOpen(WindowManager manager) {
+   public void onOpen(WindowManager manager, Object[] args) {
       this.manager = manager;
    }
 

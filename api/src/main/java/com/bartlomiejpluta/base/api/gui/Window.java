@@ -11,7 +11,7 @@ public interface Window extends Widget {
 
    <T extends Component> T reference(String ref, Class<T> type);
 
-   default void onOpen(WindowManager manager) {
+   default void onOpen(WindowManager manager, Object[] args) {
       // do nothing
    }
 
