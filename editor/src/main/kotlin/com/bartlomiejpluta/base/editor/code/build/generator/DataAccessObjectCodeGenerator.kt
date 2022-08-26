@@ -321,7 +321,18 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                      Modifier.PRIVATE,
                      Modifier.FINAL
                   )
-                     .initializer("new \$T<>()", LinkedList::class.java).build()
+                     .initializer("new \$T<>()", LinkedList::class.java)
+                     .build()
+               )
+               .addField(
+                  FieldSpec.builder(
+                     ParameterizedTypeName.get(ClassName.get(List::class.java), TypeName.get(String::class.java)),
+                     "ordering",
+                     Modifier.PRIVATE,
+                     Modifier.FINAL
+                  )
+                     .initializer("new \$T<>()", LinkedList::class.java)
+                     .build()
                )
                .addMethod(
                   MethodSpec.methodBuilder("where")
@@ -335,6 +346,35 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                      .build()
                )
                .addMethod(
+                  MethodSpec.methodBuilder("orderBy")
+                     .addModifiers(Modifier.PUBLIC)
+                     .addParameter(COLUMN_ENUM, "column")
+                     .addParameter(ORDERING_ENUM, "order")
+                     .returns(QUERY_BUILDER_CLASS)
+                     .addStatement("this.ordering.add(String.format(\"`%s %s\", column.column, order.getOrdering()))")
+                     .addStatement("return this")
+                     .build()
+               )
+               .addMethod(
+                  MethodSpec.methodBuilder("orderBy")
+                     .addModifiers(Modifier.PUBLIC)
+                     .addParameter(String::class.java, "function")
+                     .addParameter(ORDERING_ENUM, "order")
+                     .returns(QUERY_BUILDER_CLASS)
+                     .addStatement("this.ordering.add(String.format(\"`%s %s\", function, order.getOrdering()))")
+                     .addStatement("return this")
+                     .build()
+               )
+               .addMethod(
+                  MethodSpec.methodBuilder("orderBy")
+                     .addModifiers(Modifier.PUBLIC)
+                     .addParameter(String::class.java, "function")
+                     .returns(QUERY_BUILDER_CLASS)
+                     .addStatement("this.ordering.add(function)")
+                     .addStatement("return this")
+                     .build()
+               )
+               .addMethod(
                   MethodSpec.methodBuilder("find")
                      .addModifiers(Modifier.PUBLIC)
                      .returns(ParameterizedTypeName.get(ClassName.get(List::class.java), model))
@@ -344,9 +384,10 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                         "var filter = filters.stream().map(f -> String.format(\"`%s` %s ?\", f.column.column, f.op.getOp())).collect(\$T.joining(\" AND \"))",
                         COLLECTORS_CLASS
                      )
+                     .addStatement("var order = ordering.isEmpty() ? \"\" : \" ORDER BY \" + ordering.stream().collect(\$T.joining(\", \"))", COLLECTORS_CLASS)
                      .apply {
                         val sql = "SELECT * FROM `${table.name}` WHERE "
-                        addStatement("var statement = db.prepareStatement(\"$sql\" + filter)")
+                        addStatement("var statement = db.prepareStatement(\"$sql\" + filter + order)")
                      }
                      .addStatement("var i = 1")
                      .beginControlFlow("for (var f : filters)")
@@ -436,6 +477,7 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
 
       private val COLUMN_ENUM = ClassName.get("", "Column")
       private val RELOP_ENUM = ClassName.get("com.bartlomiejpluta.base.lib.db", "Relop")
+      private val ORDERING_ENUM = ClassName.get("com.bartlomiejpluta.base.lib.db", "Ordering")
       private val QUERY_FILTER_CLASS = ClassName.get("", "QueryFilter")
       private val QUERY_BUILDER_CLASS = ClassName.get("", "QueryBuilder")
       private val COLLECTORS_CLASS = ClassName.get("java.util.stream", "Collectors")
