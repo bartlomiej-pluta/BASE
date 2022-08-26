@@ -15,6 +15,7 @@ message Project {
   repeated AnimationAsset animations = 9;
   repeated SoundAsset sounds = 10;
   repeated IconSetAsset iconSets = 11;
+  repeated AutoTileSetAsset autoTiles = 12;
 }
 
 message GameMapAsset {
@@ -77,4 +78,10 @@ message IconSetAsset {
   required string name = 3;
   required uint32 rows = 4;
   required uint32 columns = 5;
+}
+
+message AutoTileSetAsset {
+  required string uid = 1;
+  required string source = 2;
+  required string name = 3;
 }
