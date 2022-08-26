@@ -23,11 +23,25 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
          }
       }
 
-      imagePreview.addListener { _, _, image ->
-         image?.let {
-            dataVM.tileWidth = it.width.toInt() / dataVM.columns
-            dataVM.tileHeight = it.height.toInt() / dataVM.rows
-         }
+      dataVM.tileSetWidthProperty.addListener { _, _, width ->
+         dataVM.columns = (imagePreview.value?.width?.toInt() ?: 1) / width.toInt()
+      }
+
+      dataVM.tileSetHeightProperty.addListener { _, _, height ->
+         dataVM.rows = (imagePreview.value?.height?.toInt() ?: 1) / height.toInt()
+      }
+
+      dataVM.columnsProperty.addListener { _, _, columns ->
+         dataVM.tileSetWidth = (imagePreview.value?.width?.toInt() ?: 1) / columns.toInt()
+      }
+
+      dataVM.rowsProperty.addListener { _, _, rows ->
+         dataVM.tileSetHeight = (imagePreview.value?.height?.toInt() ?: 1) / rows.toInt()
+      }
+
+      imagePreview.addListener { _, _, _ ->
+         dataVM.columns = 1
+         dataVM.rows = 1
       }
    }
 
@@ -76,7 +90,7 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
                }
 
                field("Auto Tile Rows") {
-                  enableWhen(false.toProperty())
+                  enableWhen(imagePreview.isNotNull)
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.rowsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
@@ -84,24 +98,24 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
                }
 
                field("Auto Tile Columns") {
-                  enableWhen(false.toProperty())
+                  enableWhen(imagePreview.isNotNull)
                   spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.columnsProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)
                   }
                }
 
-               field("Tile width") {
-                  enableWhen(false.toProperty())
-                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.tileWidthProperty, editable = true) {
+               field("Tile Set width") {
+                  enableWhen(imagePreview.isNotNull)
+                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.tileSetWidthProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.rows)
                   }
                }
 
-               field("Tile height") {
-                  enableWhen(false.toProperty())
-                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.tileHeightProperty, editable = true) {
+               field("Tile Set height") {
+                  enableWhen(imagePreview.isNotNull)
+                  spinner(min = 1, max = Integer.MAX_VALUE, property = dataVM.tileSetHeightProperty, editable = true) {
                      required()
                      editor.textFormatter = TextFieldUtil.integerFormatter(dataVM.columns)
                   }

@@ -14,7 +14,7 @@ class AutoTilePaintingTrace(val map: GameMapVM, override val commandName: String
    override var executed = false
       private set
 
-   private fun paint(layerIndex: Int, row: Int, column: Int, tile: Boolean) {
+   private fun paint(layerIndex: Int, row: Int, column: Int, tile: Int) {
       if (row >= map.rows || column >= map.columns || row < 0 || column < 0 || layerIndex < 0) {
          return
       }
@@ -45,9 +45,9 @@ class AutoTilePaintingTrace(val map: GameMapVM, override val commandName: String
             editorStateVM.cursorRow - centerRow + row,
             editorStateVM.cursorColumn - centerColumn + column,
             when {
-               brushVM.mode == BrushMode.ERASING_MODE -> false
-               mouseEvent.button == MouseButton.PRIMARY -> true
-               else -> false
+               brushVM.mode == BrushMode.ERASING_MODE -> 0
+               mouseEvent.button == MouseButton.PRIMARY -> 1
+               else -> 0
             }
          )
       }
@@ -60,9 +60,9 @@ class AutoTilePaintingTrace(val map: GameMapVM, override val commandName: String
             editorStateVM.cursorRow - centerRow + row,
             editorStateVM.cursorColumn - centerColumn + column,
             when {
-               brushVM.mode == BrushMode.ERASING_MODE -> false
-               mouseEvent.button == MouseButton.PRIMARY -> true
-               else -> false
+               brushVM.mode == BrushMode.ERASING_MODE -> 0
+               mouseEvent.button == MouseButton.PRIMARY -> 1
+               else -> 0
             }
          )
       }
@@ -91,8 +91,8 @@ class AutoTilePaintingTrace(val map: GameMapVM, override val commandName: String
          val layerIndex: Int,
          val row: Int,
          val column: Int,
-         val formerTile: Boolean,
-         val tile: Boolean
+         val formerTile: Int,
+         val tile: Int
       )
    }
 }

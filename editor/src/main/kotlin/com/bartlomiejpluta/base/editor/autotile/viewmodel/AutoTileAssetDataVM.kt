@@ -13,11 +13,11 @@ class AutoTileAssetDataVM : ItemViewModel<AutoTileAssetData>(AutoTileAssetData()
    val columnsProperty = bind(AutoTileAssetData::columnsProperty)
    var columns by columnsProperty
 
-   val tileWidthProperty = bind(AutoTileAssetData::tileWidthProperty)
-   var tileWidth by tileWidthProperty
+   val tileSetWidthProperty = bind(AutoTileAssetData::tileSetWidthProperty)
+   var tileSetWidth by tileSetWidthProperty
 
-   val tileHeightProperty = bind(AutoTileAssetData::tileHeightProperty)
-   var tileHeight by tileHeightProperty
+   val tileSetHeightProperty = bind(AutoTileAssetData::tileSetHeightProperty)
+   var tileSetHeight by tileSetHeightProperty
 
    val fileProperty = bind(AutoTileAssetData::fileProperty)
    var file by fileProperty

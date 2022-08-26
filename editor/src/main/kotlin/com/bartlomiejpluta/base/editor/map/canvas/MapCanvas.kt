@@ -130,7 +130,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private fun renderAutoTileLayer(gc: GraphicsContext, layer: AutoTileLayer) {
       for ((row, columns) in layer.layer.withIndex()) {
          for ((column, tile) in columns.withIndex()) {
-            if(tile) {
+            if(tile > 0) {
                renderAutoTile(gc, layer.autoTile, layer, column, row)
             }
          }

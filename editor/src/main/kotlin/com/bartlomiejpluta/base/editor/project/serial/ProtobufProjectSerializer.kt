@@ -53,6 +53,8 @@ class ProtobufProjectSerializer : ProjectSerializer {
       .setUid(autoTile.uid)
       .setSource(autoTile.source)
       .setName(autoTile.name)
+      .setRows(autoTile.rows)
+      .setColumns(autoTile.columns)
       .build()
 
    private fun serializeImage(image: ImageAsset) = ProjectProto.ImageAsset.newBuilder()

@@ -56,7 +56,9 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       project = project,
       uid = autoTile.uid,
       source = autoTile.source,
-      name = autoTile.name
+      name = autoTile.name,
+      rows = autoTile.rows,
+      columns = autoTile.columns
    )
 
    private fun deserializeImage(project: Project, image: ProjectProto.ImageAsset) = ImageAsset(

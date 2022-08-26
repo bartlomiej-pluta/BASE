@@ -14,7 +14,7 @@ class AutoTileLayer(
    rows: Int,
    columns: Int,
    autoTileAsset: AutoTileAsset,
-   layer: Array<Array<Boolean>> = Array(rows) { Array(columns) { false } }
+   layer: Array<Array<Int>> = Array(rows) { Array(columns) { 0 } }
 ) : Layer {
    var layer = layer
       private set
@@ -29,7 +29,7 @@ class AutoTileLayer(
    var autoTileAsset by autoTileAssetProperty
 
    val autoTileProperty = Bindings.createObjectBinding({
-      autoTileAsset.file.inputStream().use { fis -> AutoTile(autoTileAsset.uid, autoTileAsset.name, Image(fis)) }
+      autoTileAsset.file.inputStream().use { fis -> AutoTile(autoTileAsset.uid, autoTileAsset.name, Image(fis), autoTileAsset.rows, autoTileAsset.columns) }
    }, autoTileAssetProperty)
    val autoTile by autoTileProperty
 
@@ -41,7 +41,7 @@ class AutoTileLayer(
 
       layer = Array(rows) { row ->
          Array(columns) { column ->
-            layer.getOrNull(row)?.getOrNull(column) ?: false
+            layer.getOrNull(row)?.getOrNull(column) ?: 0
          }
       }
    }

@@ -12,17 +12,17 @@ class AutoTileAssetData {
    val nameProperty = SimpleStringProperty()
    var name by nameProperty
 
-   val rowsProperty = SimpleIntegerProperty(AutoTile.ROWS)
+   val rowsProperty = SimpleIntegerProperty(1)
    var rows by rowsProperty
 
-   val columnsProperty = SimpleIntegerProperty(AutoTile.COLUMNS)
+   val columnsProperty = SimpleIntegerProperty(1)
    var columns by columnsProperty
 
-   val tileWidthProperty = SimpleIntegerProperty(1)
-   var tileWidth by tileWidthProperty
+   val tileSetWidthProperty = SimpleIntegerProperty(1)
+   var tileWidth by tileSetWidthProperty
 
-   val tileHeightProperty = SimpleIntegerProperty(1)
-   var tileHeight by tileHeightProperty
+   val tileSetHeightProperty = SimpleIntegerProperty(1)
+   var tileHeight by tileSetHeightProperty
 
    val fileProperty = SimpleObjectProperty<File>()
    var file by fileProperty
