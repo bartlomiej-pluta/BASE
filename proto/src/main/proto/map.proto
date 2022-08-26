@@ -18,15 +18,21 @@ message Layer {
 
   oneof layer {
     TileLayer tileLayer = 2;
-    ObjectLayer objectLayer = 3;
-    ColorLayer colorLayer = 4;
-    ImageLayer imageLayer = 5;
+    AutoTileLayer autoTileLayer = 3;
+    ObjectLayer objectLayer = 4;
+    ColorLayer colorLayer = 5;
+    ImageLayer imageLayer = 6;
   }
 }
 
 message TileLayer {
   required string tilesetUID = 1;
   repeated uint32 tiles = 2;
+}
+
+message AutoTileLayer {
+  required string autotileUID = 1;
+  repeated bool tiles = 2;
 }
 
 message ObjectLayer {
