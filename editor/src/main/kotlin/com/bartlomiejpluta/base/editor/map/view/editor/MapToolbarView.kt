@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.map.controller.MapController
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushTool
+import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
@@ -35,6 +36,11 @@ class MapToolbarView : View() {
       editorStateVM.selectedLayerProperty
    )
 
+   private val isAutoTileLayerSelected = Bindings.createBooleanBinding(
+      { editorStateVM.selectedLayer is AutoTileLayer },
+      editorStateVM.selectedLayerProperty
+   )
+   
    private val isObjectLayerSelected = Bindings.createBooleanBinding(
       { editorStateVM.selectedLayer is ObjectLayer },
       editorStateVM.selectedLayerProperty
@@ -95,7 +101,7 @@ class MapToolbarView : View() {
       togglebutton(value = BrushMode.PAINTING_MODE, group = brushMode) {
          graphic = FontIcon("fa-paint-brush")
 
-         enableWhen(isTileLayerSelected.or(isObjectLayerSelected))
+         enableWhen(isTileLayerSelected.or(isAutoTileLayerSelected).or(isObjectLayerSelected))
 
          action {
             brushVM.item = brushVM.withMode(BrushMode.PAINTING_MODE)
@@ -106,7 +112,7 @@ class MapToolbarView : View() {
       togglebutton(value = BrushMode.ERASING_MODE, group = brushMode) {
          graphic = FontIcon("fa-eraser")
 
-         enableWhen(isTileLayerSelected.or(isObjectLayerSelected))
+         enableWhen(isTileLayerSelected.or(isAutoTileLayerSelected).or(isObjectLayerSelected))
 
          action {
             brushVM.item = brushVM.withMode(BrushMode.ERASING_MODE)
@@ -121,7 +127,7 @@ class MapToolbarView : View() {
          isSnapToTicks = true
          minorTickCount = 0
 
-         enableWhen(isTileLayerSelected.or(isObjectLayerSelected))
+         enableWhen(isTileLayerSelected.or(isAutoTileLayerSelected).or(isObjectLayerSelected))
 
          valueProperty().addListener { _, _, newValue ->
             brushVM.item = brushVM.withRange(newValue.toInt())

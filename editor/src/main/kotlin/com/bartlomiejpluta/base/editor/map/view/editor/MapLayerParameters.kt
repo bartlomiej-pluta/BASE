@@ -3,9 +3,11 @@ package com.bartlomiejpluta.base.editor.map.view.editor
 import com.bartlomiejpluta.base.editor.common.parameter.model.Parameter
 import com.bartlomiejpluta.base.editor.common.parameter.view.ParametersTableFragment
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
+import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ColorLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
+import com.bartlomiejpluta.base.editor.map.parameter.layer.AutoTileLayerParametersBinder
 import com.bartlomiejpluta.base.editor.map.parameter.layer.ColorLayerParametersBinder
 import com.bartlomiejpluta.base.editor.map.parameter.layer.ImageLayerParametersBinder
 import com.bartlomiejpluta.base.editor.map.parameter.layer.TileLayerParametersBinder
@@ -23,6 +25,7 @@ class MapLayerParameters : View() {
    private val colorLayerParametersBinder: ColorLayerParametersBinder by di()
    private val imageLayerParametersBinder: ImageLayerParametersBinder by di()
    private val tileLayerParametersBinder: TileLayerParametersBinder by di()
+   private val autoTileLayerParametersBinder: AutoTileLayerParametersBinder by di()
 
    private val parameters = observableListOf<Parameter<*>>()
 
@@ -33,6 +36,10 @@ class MapLayerParameters : View() {
 
          when (layer) {
             is TileLayer -> tileLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
+               fire(RedrawMapRequestEvent)
+            }
+
+            is AutoTileLayer -> autoTileLayerParametersBinder.bind(layer, parameters, projectContext.project!!) {
                fire(RedrawMapRequestEvent)
             }
 

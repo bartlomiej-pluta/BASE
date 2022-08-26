@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTile
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.file.model.FileNode
@@ -42,6 +43,7 @@ interface ProjectContext {
    fun findTileSetAsset(uid: String): TileSetAsset
 
    fun importAutoTile(data: AutoTileAssetData)
+   fun loadAutoTile(uid: String): AutoTile
    fun findAutoTileAsset(uid: String): AutoTileAsset
 
    fun importImage(data: ImageAssetData)

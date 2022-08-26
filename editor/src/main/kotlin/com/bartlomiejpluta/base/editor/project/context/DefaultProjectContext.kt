@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTile
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
 import com.bartlomiejpluta.base.editor.code.model.Code
@@ -48,6 +49,7 @@ import java.util.*
 @Component
 class DefaultProjectContext : ProjectContext {
    private val tileSetCache = mutableMapOf<String, TileSet>()
+   private val autoTileCache = mutableMapOf<String, AutoTile>()
 
    @Autowired
    private lateinit var projectSerializer: ProjectSerializer
@@ -193,6 +195,17 @@ class DefaultProjectContext : ProjectContext {
       }
    }
 
+   override fun loadAutoTile(uid: String) = autoTileCache.getOrPut(uid) {
+      project?.let {
+         val asset = it.autoTiles.firstOrNull { tileSet -> tileSet.uid == uid }
+            ?: throw IllegalStateException("The Auto Tile with uid [$uid] does not exist ")
+
+         val image = File(it.autoTilesDirectory, asset.source).inputStream().use { fis -> Image(fis) }
+
+         AutoTile(uid, asset.name, image)
+      } ?: throw IllegalStateException("There is no open project in the context")
+   }
+
    override fun loadTileSet(uid: String) = tileSetCache.getOrPut(uid) {
       project?.let {
          val asset = it.tileSets.firstOrNull { tileSet -> tileSet.uid == uid }
@@ -203,6 +216,7 @@ class DefaultProjectContext : ProjectContext {
          TileSet(uid, asset.name, image, asset.rows, asset.columns)
       } ?: throw IllegalStateException("There is no open project in the context")
    }
+
 
    override fun findTileSetAsset(uid: String) = project?.let {
       it.tileSets.firstOrNull { tileSets -> tileSets.uid == uid }

@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushTool
+import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ImageLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
@@ -35,6 +36,7 @@ class MapPainter(
    private fun updateCursor() {
       cursor = when (editorStateVM.selectedLayer) {
          is TileLayer -> TilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
+         is AutoTileLayer -> AutoTilePaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
          is ObjectLayer -> when (brushVM.tool) {
             BrushTool.PASSAGE -> PassageAbilityPaintingCursor(tileWidth, tileHeight, editorStateVM, brushVM)
             else -> null
@@ -67,6 +69,7 @@ class MapPainter(
       if (currentTrace == null && editorStateVM.selectedLayerIndex >= 0) {
          currentTrace = when (editorStateVM.selectedLayer) {
             is TileLayer -> TilePaintingTrace(mapVM, "Paint trace")
+            is AutoTileLayer -> AutoTilePaintingTrace(mapVM, "Paint trace")
             is ObjectLayer -> when (brushVM.tool) {
                BrushTool.DEFAULT -> ObjectPaintingTrace(projectContext, mapVM, "Update object")
                else -> PassageAbilityPaintingTrace(mapVM, "Toggle passage")

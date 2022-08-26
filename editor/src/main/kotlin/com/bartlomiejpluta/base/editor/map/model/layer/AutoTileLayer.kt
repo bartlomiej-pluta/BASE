@@ -1,9 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.model.layer
 
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
-import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
-import com.bartlomiejpluta.base.editor.tileset.model.Tile
-import com.bartlomiejpluta.base.editor.tileset.model.TileSet
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTile
 import javafx.beans.binding.Bindings
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.image.Image
@@ -24,11 +22,10 @@ class AutoTileLayer(
    val autoTileAssetProperty = autoTileAsset.toProperty()
    var autoTileAsset by autoTileAssetProperty
 
-//   val autoTileProperty = Bindings.createObjectBinding({
-//      autoTileAsset.file.inputStream().use { fis ->
-//         // create AutoTile
-//      }
-//   }, autoTileAssetProperty)
+   val autoTileProperty = Bindings.createObjectBinding({
+      autoTileAsset.file.inputStream().use { fis -> AutoTile(autoTileAsset.uid, autoTileAsset.name, Image(fis)) }
+   }, autoTileAssetProperty)
+   val autoTile by autoTileProperty
 
    override val nameProperty = SimpleStringProperty(name)
 

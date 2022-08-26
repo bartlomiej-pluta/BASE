@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.view.editor
 
 import com.bartlomiejpluta.base.editor.asset.view.select.SelectGraphicAssetFragment
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.command.context.UndoableScope
 import com.bartlomiejpluta.base.editor.command.model.map.CreateLayerCommand
 import com.bartlomiejpluta.base.editor.command.model.map.MoveLayerCommand
@@ -54,7 +55,7 @@ class MapLayersView : View() {
 
       bottom = toolbar {
          menubutton(graphic = FontIcon("fa-plus")) {
-            item("Tile Layer", graphic = FontIcon("fa-th-large")) {
+            item("Tile Layer", graphic = FontIcon("fa-th")) {
                action {
                   val scope = UndoableScope()
                   find<SelectGraphicAssetFragment<TileSetAsset>>(
@@ -63,6 +64,23 @@ class MapLayersView : View() {
                   ).apply {
                      onComplete {
                         val layer = TileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns, it)
+                        val command = CreateLayerCommand(mapVM.item, layer)
+                        command.execute()
+                        layersPane.selectionModel.select(mapVM.layers.size - 1)
+                        undoRedoService.push(command, scope)
+                     }
+
+                     openModal(block = true, resizable = false)
+                  }
+               }
+            }
+
+            item("Auto Tile Layer", graphic = FontIcon("fa-th-large")) {
+               action {
+                  val scope = UndoableScope()
+                  find<SelectGraphicAssetFragment<AutoTileAsset>>(scope, SelectGraphicAssetFragment<AutoTileAsset>::assets to projectContext.project?.autoTiles!!).apply {
+                     onComplete {
+                        val layer = AutoTileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns, it)
                         val command = CreateLayerCommand(mapVM.item, layer)
                         command.execute()
                         layersPane.selectionModel.select(mapVM.layers.size - 1)
@@ -198,7 +216,8 @@ class MapLayersView : View() {
          text = item.name
 
          graphic = when (item) {
-            is TileLayer -> FontIcon("fa-th-large")
+            is TileLayer -> FontIcon("fa-th")
+            is AutoTileLayer -> FontIcon("fa-th-large")
             is ObjectLayer -> FontIcon("fa-cube")
             is ColorLayer -> FontIcon("fa-paint-brush")
             is ImageLayer -> FontIcon("fa-image")
