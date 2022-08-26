@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.brush.TileBrush
 import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
@@ -40,7 +41,7 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
    }
 
    override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+      (brushVM.item as TileBrush).forEachTileOnBrush { row, column, centerRow, centerColumn, tile ->
          paint(
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,
@@ -54,7 +55,7 @@ data class TilePaintingTrace(val map: GameMapVM, override val commandName: Strin
    }
 
    override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+      (brushVM.item as TileBrush).forEachTileOnBrush { row, column, centerRow, centerColumn, tile ->
          paint(
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,

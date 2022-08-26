@@ -53,7 +53,7 @@ class MapToolbarView : View() {
       }
 
       editorStateVM.selectedLayerProperty.addListener { _, _, _ ->
-         brushVM.item = brushVM.withTool(BrushTool.DEFAULT)
+         brushVM.tool = BrushTool.DEFAULT
       }
    }
 
@@ -104,7 +104,7 @@ class MapToolbarView : View() {
          enableWhen(isTileLayerSelected.or(isAutoTileLayerSelected).or(isObjectLayerSelected))
 
          action {
-            brushVM.item = brushVM.withMode(BrushMode.PAINTING_MODE)
+            brushVM.mode = BrushMode.PAINTING_MODE
             brushVM.commit()
          }
       }
@@ -115,7 +115,7 @@ class MapToolbarView : View() {
          enableWhen(isTileLayerSelected.or(isAutoTileLayerSelected).or(isObjectLayerSelected))
 
          action {
-            brushVM.item = brushVM.withMode(BrushMode.ERASING_MODE)
+            brushVM.mode = BrushMode.ERASING_MODE
             brushVM.commit()
          }
       }
@@ -130,7 +130,7 @@ class MapToolbarView : View() {
          enableWhen(isTileLayerSelected.or(isAutoTileLayerSelected).or(isObjectLayerSelected))
 
          valueProperty().addListener { _, _, newValue ->
-            brushVM.item = brushVM.withRange(newValue.toInt())
+            brushVM.range = newValue.toInt()
             brushVM.commit()
          }
 
@@ -151,7 +151,7 @@ class MapToolbarView : View() {
          visibleWhen(isObjectLayerSelected)
 
          action {
-            brushVM.item = brushVM.withTool(BrushTool.DEFAULT)
+            brushVM.tool = BrushTool.DEFAULT
             brushVM.commit()
          }
       }
@@ -162,7 +162,7 @@ class MapToolbarView : View() {
          visibleWhen(isObjectLayerSelected)
 
          action {
-            brushVM.item = brushVM.withTool(BrushTool.PASSAGE)
+            brushVM.tool = BrushTool.PASSAGE
             brushVM.commit()
          }
       }

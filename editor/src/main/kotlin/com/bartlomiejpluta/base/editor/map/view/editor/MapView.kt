@@ -5,6 +5,11 @@ import com.bartlomiejpluta.base.editor.command.service.UndoRedoService
 import com.bartlomiejpluta.base.editor.event.RedrawMapRequestEvent
 import com.bartlomiejpluta.base.editor.map.canvas.PaintingTrace
 import com.bartlomiejpluta.base.editor.map.component.MapPane
+import com.bartlomiejpluta.base.editor.map.model.brush.*
+import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.Layer
+import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -40,10 +45,22 @@ class MapView : View() {
    }
 
    init {
-//      brushVM.item = mapVM.tileSet.baseBrush
+      brushVM.item = EmptyBrush()
       brushVM.commit()
 
+      editorStateVM.selectedLayerProperty.addListener { _, _, layer ->
+         brushVM.item = determineBrush(layer)
+         brushVM.commit()
+      }
+
       subscribe<RedrawMapRequestEvent> { mapPane.render() }
+   }
+
+   private fun determineBrush(layer: Layer?) : Brush? = when (layer) {
+      is TileLayer -> TileBrush((arrayOf(arrayOf(layer.tileSetProperty.value.tiles[0]))))
+      is AutoTileLayer -> AutoTileBrush()
+      is ObjectLayer -> PassageAbilityBrush()
+      else -> null
    }
 
    private fun pushPaintingTraceToUndoRedoService(trace: PaintingTrace) {

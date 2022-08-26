@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.autotile.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.brush.AutoTileBrush
 import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
+import com.bartlomiejpluta.base.editor.map.model.layer.TileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -21,20 +23,9 @@ class AutoTileSelection(private val editorStateVM: EditorStateVM, private val ga
       y = row * height
 
       if (editorStateVM.selectedLayer is AutoTileLayer) {
-
+         val autoTile = (editorStateVM.selectedLayer as AutoTileLayer).autoTile
+         (brushVM.item as AutoTileBrush).id = (1 + row * autoTile.columns + column).toInt() //((column % autoTile.columns).toInt()) + row.toInt() + 1
       }
-
-//      if (editorStateVM.selectedLayer is TileLayer) {
-//         val tileSet = (editorStateVM.selectedLayer as TileLayer).tileSetProperty.value
-//         val brushArray = Array(rows) { rowIndex ->
-//            Array(columns) { columnIndex ->
-//               tileSet.getTile(firstRow + rowIndex, firstColumn + columnIndex)
-//            }
-//         }
-//
-//         brushVM.item = Brush.of(brushArray)
-//         brushVM.commit()
-//      }
    }
 
    override fun render(gc: GraphicsContext) {

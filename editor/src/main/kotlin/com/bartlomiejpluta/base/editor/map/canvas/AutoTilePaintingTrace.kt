@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.brush.AutoTileBrush
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
 import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
@@ -39,14 +40,14 @@ class AutoTilePaintingTrace(val map: GameMapVM, override val commandName: String
    }
 
    override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+      brushVM.item.forEachInRange { row, column, centerRow, centerColumn ->
          paint(
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,
             editorStateVM.cursorColumn - centerColumn + column,
             when {
                brushVM.mode == BrushMode.ERASING_MODE -> 0
-               mouseEvent.button == MouseButton.PRIMARY -> 1
+               mouseEvent.button == MouseButton.PRIMARY -> (brushVM.item as AutoTileBrush).id
                else -> 0
             }
          )
@@ -54,14 +55,14 @@ class AutoTilePaintingTrace(val map: GameMapVM, override val commandName: String
    }
 
    override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+      brushVM.item.forEachInRange { row, column, centerRow, centerColumn ->
          paint(
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,
             editorStateVM.cursorColumn - centerColumn + column,
             when {
                brushVM.mode == BrushMode.ERASING_MODE -> 0
-               mouseEvent.button == MouseButton.PRIMARY -> 1
+               mouseEvent.button == MouseButton.PRIMARY -> (brushVM.item as AutoTileBrush).id
                else -> 0
             }
          )

@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.map.model.brush.TileBrush
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
@@ -14,7 +15,7 @@ class TilePaintingCursor(
 ) : PaintingCursor {
 
    override fun render(gc: GraphicsContext) {
-      brushVM.forEach { row, column, centerRow, centerColumn, tile ->
+      (brushVM.item as TileBrush).forEachTileOnBrush { row, column, centerRow, centerColumn, tile ->
          renderTile(gc, row, column, centerRow, centerColumn, tile)
       }
    }

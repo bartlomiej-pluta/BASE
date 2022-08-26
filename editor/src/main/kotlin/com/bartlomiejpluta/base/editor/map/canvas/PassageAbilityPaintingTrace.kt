@@ -40,7 +40,7 @@ class PassageAbilityPaintingTrace(val map: GameMapVM, override val commandName: 
    }
 
    override fun beginTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+      brushVM.item.forEachInRange { row, column, centerRow, centerColumn ->
          paint(
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,
@@ -55,7 +55,7 @@ class PassageAbilityPaintingTrace(val map: GameMapVM, override val commandName: 
    }
 
    override fun proceedTrace(editorStateVM: EditorStateVM, brushVM: BrushVM, mouseEvent: MapMouseEvent) {
-      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+      brushVM.item.forEachInRange { row, column, centerRow, centerColumn, ->
          paint(
             editorStateVM.selectedLayerIndex,
             editorStateVM.cursorRow - centerRow + row,

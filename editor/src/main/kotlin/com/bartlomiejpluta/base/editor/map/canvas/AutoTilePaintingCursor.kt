@@ -14,7 +14,7 @@ class AutoTilePaintingCursor(
 ) : PaintingCursor {
 
    override fun render(gc: GraphicsContext) {
-      brushVM.forEach { row, column, centerRow, centerColumn, _ ->
+      brushVM.item.forEachInRange { row, column, centerRow, centerColumn ->
          renderTile(gc, row, column, centerRow, centerColumn)
       }
    }
