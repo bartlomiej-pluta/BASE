@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class BasePath<T extends Movable> implements Path<T> {
 
@@ -39,6 +40,11 @@ public class BasePath<T extends Movable> implements Path<T> {
 
    public Path<T> run(Runnable runnable) {
       path.add(new RunSegment<>(runnable));
+      return this;
+   }
+
+   public Path<T> suspend(Predicate<T> predicate) {
+      path.add(new SuspendSegment<>(predicate));
       return this;
    }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CharacterPath<T extends Character> implements Path<T> {
 
@@ -49,6 +50,11 @@ public class CharacterPath<T extends Character> implements Path<T> {
 
    public CharacterPath<T> run(Runnable runnable) {
       path.add(new RunSegment<>(runnable));
+      return this;
+   }
+
+   public CharacterPath<T> suspend(Predicate<T> predicate) {
+      path.add(new SuspendSegment<>(predicate));
       return this;
    }
 }
