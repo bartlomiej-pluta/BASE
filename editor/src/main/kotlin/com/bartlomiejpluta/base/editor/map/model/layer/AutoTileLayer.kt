@@ -19,6 +19,12 @@ class AutoTileLayer(
    var layer = layer
       private set
 
+   var rows = rows
+      private set
+
+   var columns = columns
+      private set
+
    val autoTileAssetProperty = autoTileAsset.toProperty()
    var autoTileAsset by autoTileAssetProperty
 
@@ -30,6 +36,9 @@ class AutoTileLayer(
    override val nameProperty = SimpleStringProperty(name)
 
    override fun resize(rows: Int, columns: Int) {
+      this.rows = rows
+      this.columns = columns
+
       layer = Array(rows) { row ->
          Array(columns) { column ->
             layer.getOrNull(row)?.getOrNull(column) ?: false

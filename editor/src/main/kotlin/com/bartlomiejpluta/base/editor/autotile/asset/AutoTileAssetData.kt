@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.autotile.asset
 
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTile
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -11,10 +12,10 @@ class AutoTileAssetData {
    val nameProperty = SimpleStringProperty()
    var name by nameProperty
 
-   val rowsProperty = SimpleIntegerProperty(6)
+   val rowsProperty = SimpleIntegerProperty(AutoTile.ROWS)
    var rows by rowsProperty
 
-   val columnsProperty = SimpleIntegerProperty(4)
+   val columnsProperty = SimpleIntegerProperty(AutoTile.COLUMNS)
    var columns by columnsProperty
 
    val tileWidthProperty = SimpleIntegerProperty(1)

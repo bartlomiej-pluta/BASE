@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTile
 import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
@@ -129,31 +130,21 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private fun renderAutoTileLayer(gc: GraphicsContext, layer: AutoTileLayer) {
       for ((row, columns) in layer.layer.withIndex()) {
          for ((column, tile) in columns.withIndex()) {
-
-            if (tile) {
-               gc.fill = Color.BLACK
-               gc.fillOval(column.toDouble() * tileWidth, row.toDouble() * tileHeight, tileWidth, tileHeight)
+            if(tile) {
+               renderAutoTile(gc, layer.autoTile, layer, column, row)
             }
-
-            var i = 0;
-            var total = 0
-            for (x in max(column - 1, 0) .. min(column + 1, map.rows - 1)) {
-               for (y in max(row - 1, 0) .. min(row + 1, map.columns - 1)) {
-                  if (layer.layer[y][x]) {
-                     total += 2.0.pow(i).toInt()
-                  }
-
-                  ++i
-               }
-            }
-
-            gc.textAlign = TextAlignment.CENTER
-            gc.fill = Color.WHITE
-            gc.stroke = Color.WHITE
-            gc.globalAlpha = 1.0
-            gc.fillText(total.toString(), column.toDouble() * tileWidth + tileWidth * 0.5 , row.toDouble() * tileHeight + 20)
          }
       }
+   }
+
+   private fun renderAutoTile(gc: GraphicsContext, autoTile: AutoTile, layer: AutoTileLayer, column: Int, row: Int) {
+      val (topLeft, topRight, bottomLeft, bottomRight) = autoTile.getTile(layer, row, column)
+      val x = column * tileWidth
+      val y = row * tileHeight
+      gc.drawImage(topLeft, x, y)
+      gc.drawImage(topRight, x + tileWidth/2, y)
+      gc.drawImage(bottomLeft, x, y + tileHeight/2)
+      gc.drawImage(bottomRight, x + tileWidth/2, y + tileHeight/2)
    }
 
    private fun renderObjectLayer(gc: GraphicsContext, objectLayer: ObjectLayer) {
