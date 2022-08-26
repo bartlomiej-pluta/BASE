@@ -154,7 +154,11 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
             MethodSpec.methodBuilder("find")
                .addParameter(
                   ParameterSpec.builder(dbToJavaType(primaryKey), "id")
-                     .addAnnotation(ClassName.get("lombok", "NonNull"))
+                     .apply {
+                        if (!dbToJavaType(primaryKey).isPrimitive) {
+                           addAnnotation(ClassName.get("lombok", "NonNull"))
+                        }
+                     }
                      .build()
                )
                .returns(model)
@@ -177,6 +181,13 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                .endControlFlow()
                .addStatement("throw new RuntimeException(\"No [${model.simpleName()}] found with [${primaryKey.name}] == [\" + id + \"]\")")
                .endControlFlow(")")
+               .build()
+         )
+         .addMethod(
+            MethodSpec.methodBuilder("query")
+               .addModifiers(Modifier.PUBLIC)
+               .returns(QUERY_BUILDER_CLASS)
+               .addStatement("return new \$T()", QUERY_BUILDER_CLASS)
                .build()
          )
          .addMethod(
@@ -277,6 +288,86 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                .endControlFlow(")")
                .build()
          )
+         .addType(TypeSpec.enumBuilder(COLUMN_ENUM)
+            .addAnnotation(REQUIRED_ARGS_CONSTRUCTOR_ANNOTATION)
+            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            .apply {
+               table.columns.forEach {
+                  addEnumConstant(
+                     it.name.uppercase(),
+                     TypeSpec.anonymousClassBuilder("\$S", it.name).build()
+                  )
+               }
+            }
+            .addField(String::class.java, "column", Modifier.PRIVATE, Modifier.FINAL)
+            .build())
+         .addType(
+            TypeSpec.classBuilder(QUERY_FILTER_CLASS)
+               .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+               .addAnnotation(REQUIRED_ARGS_CONSTRUCTOR_ANNOTATION)
+               .addField(COLUMN_ENUM, "column", Modifier.PRIVATE, Modifier.FINAL)
+               .addField(RELOP_ENUM, "op", Modifier.PRIVATE, Modifier.FINAL)
+               .addField(Object::class.java, "value", Modifier.PRIVATE, Modifier.FINAL)
+               .build()
+         )
+         .addType(
+            TypeSpec.classBuilder(QUERY_BUILDER_CLASS)
+               .addAnnotation(PRIVATE_REQUIRED_ARGS_CONSTRUCTOR_ANNOTATION)
+               .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+               .addField(
+                  FieldSpec.builder(
+                     ParameterizedTypeName.get(ClassName.get(List::class.java), QUERY_FILTER_CLASS),
+                     "filters",
+                     Modifier.PRIVATE,
+                     Modifier.FINAL
+                  )
+                     .initializer("new \$T<>()", LinkedList::class.java).build()
+               )
+               .addMethod(
+                  MethodSpec.methodBuilder("where")
+                     .addModifiers(Modifier.PUBLIC)
+                     .addParameter(COLUMN_ENUM, "column")
+                     .addParameter(RELOP_ENUM, "op")
+                     .addParameter(Object::class.java, "value")
+                     .returns(QUERY_BUILDER_CLASS)
+                     .addStatement("this.filters.add(new \$T(column, op, value))", QUERY_FILTER_CLASS)
+                     .addStatement("return this")
+                     .build()
+               )
+               .addMethod(
+                  MethodSpec.methodBuilder("find")
+                     .addModifiers(Modifier.PUBLIC)
+                     .returns(ParameterizedTypeName.get(ClassName.get(List::class.java), model))
+                     .addStatement("var list = new \$T<\$T>()", LinkedList::class.java, model)
+                     .beginControlFlow("\$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+                     .addStatement(
+                        "var filter = filters.stream().map(f -> String.format(\"`%s` %s ?\", f.column.column, f.op.getOp())).collect(\$T.joining(\" AND \"))",
+                        COLLECTORS_CLASS
+                     )
+                     .apply {
+                        val sql = "SELECT * FROM `${table.name}` WHERE "
+                        addStatement("var statement = db.prepareStatement(\"$sql\" + filter)")
+                     }
+                     .addStatement("var i = 1")
+                     .beginControlFlow("for (var f : filters)")
+                     .addStatement("statement.setObject(i++, f.value)")
+                     .endControlFlow()
+                     .addStatement("var result = statement.executeQuery()")
+                     .beginControlFlow("while(result.next())")
+                     .addStatement("var model = ${model.simpleName()}.builder()")
+                     .apply {
+                        table.columns.forEach { column ->
+                           addStatement("model.${snakeToCamelCase(column.name)}(result.${dbToGetMethod(column)}(\"${column.name}\"))")
+                        }
+                     }
+                     .addStatement("list.add(model.build())")
+                     .endControlFlow()
+                     .endControlFlow(")")
+                     .addStatement("return list")
+                     .build()
+               )
+               .build()
+         )
          .build()
 
       JavaFile
@@ -336,7 +427,17 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
 
       private val BUILDER_ANNOTATION = ClassName.get("lombok", "Builder")
       private val DATA_ANNOTATION = ClassName.get("lombok", "Data")
+      private val REQUIRED_ARGS_CONSTRUCTOR_ANNOTATION = ClassName.get("lombok", "RequiredArgsConstructor")
+      private val PRIVATE_REQUIRED_ARGS_CONSTRUCTOR_ANNOTATION =
+         AnnotationSpec.builder(ClassName.get("lombok", "RequiredArgsConstructor"))
+            .addMember("access", "\$T.PRIVATE", ClassName.get("lombok", "AccessLevel"))
+            .build()
       private val CONTEXT_HOLDER = ClassName.get("com.bartlomiejpluta.base.api.context", "ContextHolder")
 
+      private val COLUMN_ENUM = ClassName.get("", "Column")
+      private val RELOP_ENUM = ClassName.get("com.bartlomiejpluta.base.lib.db", "Relop")
+      private val QUERY_FILTER_CLASS = ClassName.get("", "QueryFilter")
+      private val QUERY_BUILDER_CLASS = ClassName.get("", "QueryBuilder")
+      private val COLLECTORS_CLASS = ClassName.get("java.util.stream", "Collectors")
    }
 }
