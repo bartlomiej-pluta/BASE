@@ -3,9 +3,10 @@ package com.bartlomiejpluta.base.editor.project.context
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAssetData
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
-import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAssetData
+import com.bartlomiejpluta.base.editor.code.model.Code
 import com.bartlomiejpluta.base.editor.file.model.FileNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAssetData
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -31,15 +32,18 @@ interface ProjectContext {
    fun createNewProject(project: Project)
 
    fun importMap(name: String, map: GameMap)
-   fun importMapFromFile(name: String, handler: String, file: File, replaceTileSet: (String, String) -> String): GameMap
+   fun importMapFromFile(name: String, handler: String, file: File, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String,
+   ): GameMap
    fun loadMap(uid: String): GameMap
    fun saveMap(map: GameMap)
 
    fun importTileSet(data: TileSetAssetData)
    fun loadTileSet(uid: String): TileSet
-   fun importAutoTile(data: AutoTileAssetData)
-
    fun findTileSetAsset(uid: String): TileSetAsset
+
+   fun importAutoTile(data: AutoTileAssetData)
+   fun findAutoTileAsset(uid: String): AutoTileAsset
+
    fun importImage(data: ImageAssetData)
 
    fun findImageAsset(uid: String): ImageAsset

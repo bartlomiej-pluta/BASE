@@ -6,9 +6,7 @@ import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.map.model.obj.MapObject
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
-import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
-import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import com.bartlomiejpluta.base.proto.GameMapProto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
@@ -25,9 +23,9 @@ class ProtobufMapDeserializer : MapDeserializer {
       appContext.getBean(ProjectContext::class.java)
    }
 
-   override fun deserialize(input: InputStream) = deserialize(input) { _, uid -> uid }
+   override fun deserialize(input: InputStream) = deserialize(input, { _, uid -> uid }, { _, uid -> uid })
 
-   override fun deserialize(input: InputStream, replaceTileSet: (String, String) -> String): GameMap {
+   override fun deserialize(input: InputStream, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String): GameMap {
       val proto = GameMapProto.GameMap.parseFrom(input)
       val map = GameMap(proto.tileWidth.toDouble(), proto.tileHeight.toDouble())
       map.uid = proto.uid
@@ -36,15 +34,16 @@ class ProtobufMapDeserializer : MapDeserializer {
       map.handler = proto.handler
 
       proto.layersList
-         .filter { it.hasTileLayer() || it.hasObjectLayer() || it.hasColorLayer() }
-         .forEach { map.layers.add(deserializeLayer(map.rows, map.columns, it, replaceTileSet)) }
+         .filter { it.hasTileLayer() || it.hasAutoTileLayer() || it.hasObjectLayer() || it.hasColorLayer() }
+         .forEach { map.layers.add(deserializeLayer(map.rows, map.columns, it, replaceTileSet, replaceAutoTile)) }
 
       return map
    }
 
-   private fun deserializeLayer(rows: Int, columns: Int, proto: GameMapProto.Layer, replaceTileSet: (String, String) -> String): Layer {
+   private fun deserializeLayer(rows: Int, columns: Int, proto: GameMapProto.Layer, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String): Layer {
       return when {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, proto, replaceTileSet)
+         proto.hasAutoTileLayer() -> deserializeAutoTileLayer(rows, columns, proto, replaceAutoTile)
          proto.hasObjectLayer() -> deserializeObjectLayer(rows, columns, proto)
          proto.hasColorLayer() -> deserializeColorLayer(proto)
          proto.hasImageLayer() -> deserializeImageLayer(proto)
@@ -66,6 +65,17 @@ class ProtobufMapDeserializer : MapDeserializer {
       }
 
       return TileLayer(proto.name, rows, columns, tileSetAsset, layer)
+   }
+
+   private fun deserializeAutoTileLayer(rows: Int, columns: Int, proto: GameMapProto.Layer, replaceTileSet: (String, String) -> String): AutoTileLayer {
+      val layer: Array<Array<Boolean>> = Array(rows) { Array(columns) { false } }
+      val autoTile = projectContext.findAutoTileAsset(replaceTileSet(proto.name, proto.autoTileLayer.autotileUID))
+
+      proto.autoTileLayer.tilesList.forEachIndexed { index, tile ->
+         layer[index / columns][index % columns] = tile
+      }
+
+      return AutoTileLayer(proto.name, rows, columns, autoTile, layer)
    }
 
    private fun deserializeObjectLayer(rows: Int, columns: Int, proto: GameMapProto.Layer): Layer {

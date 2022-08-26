@@ -8,6 +8,7 @@ import com.bartlomiejpluta.base.editor.asset.view.select.SelectGraphicAssetFragm
 import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.audio.view.importing.ImportSoundFragment
 import com.bartlomiejpluta.base.editor.audio.viewmodel.SoundAssetDataVM
+import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
 import com.bartlomiejpluta.base.editor.autotile.view.importing.ImportAutoTileFragment
 import com.bartlomiejpluta.base.editor.autotile.viewmodel.AutoTileAssetDataVM
 import com.bartlomiejpluta.base.editor.characterset.view.importing.ImportCharacterSetFragment
@@ -94,31 +95,53 @@ class MainController : Controller() {
       setInScope(vm, scope)
       find<MapImportFragment>(scope).apply {
          onComplete {
-            val map = projectContext.importMapFromFile(vm.name, vm.handler, File(vm.file)) { name, uid ->
-               var newUid = ""
-
-               find<SelectGraphicAssetFragment<TileSetAsset>>(
-                  Scope(),
-                  SelectGraphicAssetFragment<TileSetAsset>::assets to projectContext.project?.tileSets!!,
-                  SelectGraphicAssetFragment<TileSetAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Tile Set asset data with UID: [$uid].\nPlease select asset you would like to apply for layer $name.\n".toProperty(),
-                  SelectGraphicAssetFragment<TileSetAsset>::cancelable to false.toProperty()
-               ).apply {
-                  title = "Select Tile Set for layer $name"
-
-                  onComplete {
-                     newUid = it.uid
-                  }
-
-                  openModal(block = true, resizable = false, stageStyle = StageStyle.UNDECORATED)
-               }
-
-               newUid
-            }
+            val map = projectContext.importMapFromFile(vm.name, vm.handler, File(vm.file), ::askForNewTileSetAsset, ::askForNewAutoTileAsset)
             openItems[scope] = GameMapVM(map)
          }
 
          openModal(block = true, resizable = false)
       }
+   }
+   private fun askForNewTileSetAsset(name: String, uid: String): String {
+      var newUid = ""
+
+      find<SelectGraphicAssetFragment<TileSetAsset>>(
+         Scope(),
+         SelectGraphicAssetFragment<TileSetAsset>::assets to projectContext.project?.tileSets!!,
+         SelectGraphicAssetFragment<TileSetAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Tile Set asset data with UID: [$uid].\nPlease select asset you would like to apply for layer $name.\n".toProperty(),
+         SelectGraphicAssetFragment<TileSetAsset>::cancelable to false.toProperty()
+      ).apply {
+         title = "Select Tile Set for layer $name"
+
+         onComplete {
+            newUid = it.uid
+         }
+
+         openModal(block = true, resizable = false, stageStyle = StageStyle.UNDECORATED)
+      }
+
+      return newUid
+   }
+
+   private fun askForNewAutoTileAsset(name: String, uid: String): String {
+      var newUid = ""
+
+      find<SelectGraphicAssetFragment<AutoTileAsset>>(
+         Scope(),
+         SelectGraphicAssetFragment<AutoTileAsset>::assets to projectContext.project?.autoTiles!!,
+         SelectGraphicAssetFragment<AutoTileAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Auto Tile asset data with UID: [$uid].\nPlease select asset you would like to apply for layer $name.\n".toProperty(),
+         SelectGraphicAssetFragment<AutoTileAsset>::cancelable to false.toProperty()
+      ).apply {
+         title = "Select Auto Tile for layer $name"
+
+         onComplete {
+            newUid = it.uid
+         }
+
+         openModal(block = true, resizable = false, stageStyle = StageStyle.UNDECORATED)
+      }
+
+      return newUid
    }
 
    fun openProject() {

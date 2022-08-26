@@ -33,6 +33,12 @@ class ProtobufMapSerializer : MapSerializer {
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setTileLayer(it).build() }
 
+         is AutoTileLayer -> layer.layer.flatMap { it.asIterable() }
+            .fold(GameMapProto.AutoTileLayer.newBuilder()) { acc, tile -> acc.addTiles(tile) }
+            .setAutotileUID(layer.autoTileAsset.uid)
+            .build()
+            .let { GameMapProto.Layer.newBuilder().setName(layer.name).setAutoTileLayer(it).build() }
+
          is ObjectLayer -> layer.passageMap.flatMap { it.asIterable() }
             .fold(GameMapProto.ObjectLayer.newBuilder()) { acc, passage ->
                acc.addPassageMap(

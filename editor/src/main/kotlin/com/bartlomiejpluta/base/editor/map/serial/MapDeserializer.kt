@@ -7,5 +7,5 @@ import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import java.io.InputStream
 
 interface MapDeserializer : Deserializer<GameMap> {
-   fun deserialize(input: InputStream, replaceTileSet: (String, String) -> String): GameMap
+   fun deserialize(input: InputStream, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String): GameMap
 }
