@@ -8,9 +8,15 @@ import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
+import javafx.scene.text.TextAlignment
+import java.lang.Integer.max
+import java.lang.Integer.min
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 
-class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, private val painter: MapPainter) : Renderable {
+class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, private val painter: MapPainter) :
+   Renderable {
    private var tileWidth = map.tileWidth
    private var tileHeight = map.tileHeight
 
@@ -82,7 +88,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderCover(gc: GraphicsContext) {
-      if(!editorStateVM.coverUnderlyingLayers) {
+      if (!editorStateVM.coverUnderlyingLayers) {
          return
       }
 
@@ -99,6 +105,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    private fun dispatchLayerRender(gc: GraphicsContext, layer: Layer) {
       when (layer) {
          is TileLayer -> renderTileLayer(gc, layer)
+         is AutoTileLayer -> renderAutoTileLayer(gc, layer)
          is ObjectLayer -> renderObjectLayer(gc, layer)
          is ColorLayer -> renderColorLayer(gc, layer)
          is ImageLayer -> renderImageLayer(gc, layer)
@@ -115,6 +122,36 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
             if (tile != null) {
                gc.drawImage(tile.image, column * tile.image.width, row * tile.image.height)
             }
+         }
+      }
+   }
+
+   private fun renderAutoTileLayer(gc: GraphicsContext, layer: AutoTileLayer) {
+      for ((row, columns) in layer.layer.withIndex()) {
+         for ((column, tile) in columns.withIndex()) {
+
+            if (tile) {
+               gc.fill = Color.BLACK
+               gc.fillOval(column.toDouble() * tileWidth, row.toDouble() * tileHeight, tileWidth, tileHeight)
+            }
+
+            var i = 0;
+            var total = 0
+            for (x in max(column - 1, 0) .. min(column + 1, map.rows - 1)) {
+               for (y in max(row - 1, 0) .. min(row + 1, map.columns - 1)) {
+                  if (layer.layer[y][x]) {
+                     total += 2.0.pow(i).toInt()
+                  }
+
+                  ++i
+               }
+            }
+
+            gc.textAlign = TextAlignment.CENTER
+            gc.fill = Color.WHITE
+            gc.stroke = Color.WHITE
+            gc.globalAlpha = 1.0
+            gc.fillText(total.toString(), column.toDouble() * tileWidth + tileWidth * 0.5 , row.toDouble() * tileHeight + 20)
          }
       }
    }
