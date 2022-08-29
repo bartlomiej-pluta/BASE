@@ -9,11 +9,6 @@ import com.bartlomiejpluta.base.editor.render.model.Renderable
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
-import javafx.scene.text.TextAlignment
-import java.lang.Integer.max
-import java.lang.Integer.min
-import kotlin.math.pow
-import kotlin.math.roundToInt
 
 
 class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, private val painter: MapPainter) :
@@ -148,11 +143,10 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderObjectLayer(gc: GraphicsContext, objectLayer: ObjectLayer) {
-      if (editorStateVM.selectedLayer !is ObjectLayer) {
-         return
+      if (editorStateVM.selectedLayer is ObjectLayer) {
+         renderObjectPassageMap(gc, objectLayer)
       }
 
-      renderObjectPassageMap(gc, objectLayer)
       renderObjects(gc, objectLayer)
    }
 
@@ -169,10 +163,19 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
          val alpha = gc.globalAlpha
          val fill = gc.fill
 
-         gc.globalAlpha = 0.6
+         gc.globalAlpha = OBJECT_FILL_ALPHA
          gc.fill = OBJECT_COLOR
 
-         gc.fillOval(
+         gc.fillRect(
+            mapObject.x * tileWidth + OBJECT_MARGIN,
+            mapObject.y * tileHeight + OBJECT_MARGIN,
+            tileWidth - 2 * OBJECT_MARGIN,
+            tileHeight - 2 * OBJECT_MARGIN
+         )
+
+         gc.globalAlpha = 1.0
+         gc.stroke = OBJECT_COLOR
+         gc.strokeRect(
             mapObject.x * tileWidth + OBJECT_MARGIN,
             mapObject.y * tileHeight + OBJECT_MARGIN,
             tileWidth - 2 * OBJECT_MARGIN,
@@ -226,6 +229,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       private val BACKGROUND_COLOR2 = Color.color(0.8, 0.8, 0.8, 1.0)
 
       private val OBJECT_COLOR = Color.WHITE
+      private const val OBJECT_FILL_ALPHA = 0.3
       private const val OBJECT_MARGIN = 4
    }
 }
