@@ -17,4 +17,10 @@ class AnimationAssetDataVM : ItemViewModel<AnimationAssetData>(AnimationAssetDat
 
    val columnsProperty = bind(AnimationAssetData::columnsProperty)
    var columns by columnsProperty
+
+   val tileSetWidthProperty = bind(AnimationAssetData::tileSetWidthProperty)
+   var tileSetWidth by tileSetWidthProperty
+
+   val tileSetHeightProperty = bind(AnimationAssetData::tileSetHeightProperty)
+   var tileSetHeight by tileSetHeightProperty
 }

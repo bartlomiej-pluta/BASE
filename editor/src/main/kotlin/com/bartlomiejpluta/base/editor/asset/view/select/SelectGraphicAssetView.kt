@@ -21,10 +21,6 @@ class SelectGraphicAssetView<T : GraphicAsset> : View() {
 
    private var assetsListView: ListView<T> by singleAssign()
 
-   private val image = createObjectBinding({
-      asset.value?.file?.inputStream()?.use { Image(it) } ?: PLACEHOLDER_IMAGE
-   }, asset)
-
    init {
       asset.addListener { _, _, item -> vm.item = item }
    }

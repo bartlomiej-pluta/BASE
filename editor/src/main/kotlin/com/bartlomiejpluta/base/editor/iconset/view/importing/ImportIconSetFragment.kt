@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.iconset.view.importing
 
+import com.bartlomiejpluta.base.editor.asset.component.GraphicAssetViewCanvas
 import com.bartlomiejpluta.base.editor.iconset.asset.IconSetAssetData
 import com.bartlomiejpluta.base.editor.iconset.viewmodel.IconSetAssetDataVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
@@ -14,6 +15,8 @@ class ImportIconSetFragment : Fragment("Import Icon Set") {
    private val imagePreview = SimpleObjectProperty<Image?>()
 
    private var onCompleteConsumer: ((IconSetAssetData) -> Unit)? = null
+
+   private val canvas = GraphicAssetViewCanvas(dataVM.rowsProperty, dataVM.columnsProperty, dataVM.fileProperty)
 
    init {
       dataVM.fileProperty.addListener { _, _, file ->
@@ -39,9 +42,11 @@ class ImportIconSetFragment : Fragment("Import Icon Set") {
          dataVM.iconHeight = (imagePreview.value?.height?.toInt() ?: 1) / rows.toInt()
       }
 
-      imagePreview.addListener { _, _, _ ->
+      imagePreview.addListener { _, _, image ->
          dataVM.columns = 1
          dataVM.rows = 1
+         dataVM.iconWidth = image?.width?.toInt() ?: 0
+         dataVM.iconHeight = image?.height?.toInt() ?: 0
       }
    }
 
@@ -58,7 +63,7 @@ class ImportIconSetFragment : Fragment("Import Icon Set") {
                scrollpane {
                   prefWidth = 300.0
                   prefHeightProperty().bind(this@form.heightProperty())
-                  imageview(imagePreview)
+                  this += canvas
                   tooltip = tooltip("Click to choose Icon Set file")
                   cursor = Cursor.HAND
 

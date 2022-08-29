@@ -14,9 +14,15 @@ class AnimationAssetData {
    val fileProperty = SimpleObjectProperty<File>()
    var file by fileProperty
 
-   val rowsProperty = SimpleIntegerProperty()
+   val rowsProperty = SimpleIntegerProperty(1)
    var rows by rowsProperty
 
-   val columnsProperty = SimpleIntegerProperty()
+   val columnsProperty = SimpleIntegerProperty(1)
    var columns by columnsProperty
+
+   val tileSetWidthProperty = SimpleIntegerProperty(1)
+   var tileWidth by tileSetWidthProperty
+
+   val tileSetHeightProperty = SimpleIntegerProperty(1)
+   var tileHeight by tileSetHeightProperty
 }

@@ -2,41 +2,57 @@ package com.bartlomiejpluta.base.editor.asset.component
 
 import com.bartlomiejpluta.base.editor.asset.model.GraphicAsset
 import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
+import javafx.beans.property.IntegerProperty
+import javafx.beans.property.Property
 import javafx.scene.canvas.Canvas
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
 import javafx.scene.text.TextAlignment
 import tornadofx.getValue
+import java.io.File
 
-class GraphicAssetViewCanvas(asset: GraphicAssetVM) : Canvas() {
+class GraphicAssetViewCanvas(val rowsProperty: IntegerProperty, val columnsProperty: IntegerProperty, val fileProperty: Property<File>) : Canvas() {
    private var image: Image? = null
 
-   val rows by asset.rowsProperty
-   val columns by asset.columnsProperty
+   val rows by rowsProperty
+   val columns by columnsProperty
 
-   var chunkWidth: Int = 1// = //(image.width / columns).toInt()
+   var chunkWidth: Int = 1
       private set
 
-   var chunkHeight: Int = 1// = (image.height / rows).toInt()
+   var chunkHeight: Int = 1
       private set
 
    var singleChunk = rows == 1 && columns == 1
       private set
 
    init {
-      asset.itemProperty.addListener { _, _, item -> updateAsset(item) }
-      updateAsset(asset.item)
+      rowsProperty.addListener { _, _, _ -> updateAsset() }
+      columnsProperty.addListener { _, _, _ -> updateAsset() }
+      fileProperty.addListener { _, _, _ -> updateAsset() }
+      updateAsset()
    }
 
-   private fun updateAsset(asset: GraphicAsset?) {
-      asset?.let {
-         image = Image(it.file.inputStream())
-         width = image!!.width + OFFSET_X
-         height = image!!.height + OFFSET_Y
+   constructor(asset: GraphicAssetVM) : this(asset.rowsProperty, asset.columnsProperty, asset.fileProperty)
+
+   private fun updateAsset() {
+      val file = fileProperty.value
+
+      if (file != null) {
+         image = Image(fileProperty.value.inputStream())
+         width = image!!.width + OFFSET_X * 2
+         height = image!!.height + OFFSET_Y * 2
          chunkWidth = (image!!.width / columns).toInt()
          chunkHeight = (image!!.height / rows).toInt()
          singleChunk = rows == 1 && columns == 1
+      } else {
+         image = null
+         width = 0.0
+         height = 0.0
+         chunkWidth = 0
+         chunkHeight = 0
+         singleChunk = true
       }
 
       render()

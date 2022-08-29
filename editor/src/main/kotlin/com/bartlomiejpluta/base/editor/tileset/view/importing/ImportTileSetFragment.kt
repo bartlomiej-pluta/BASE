@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.tileset.view.importing
 
+import com.bartlomiejpluta.base.editor.asset.component.GraphicAssetViewCanvas
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.viewmodel.TileSetAssetDataVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
@@ -14,6 +15,8 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
    private val imagePreview = SimpleObjectProperty<Image?>()
 
    private var onCompleteConsumer: ((TileSetAssetData) -> Unit)? = null
+
+   private val canvas = GraphicAssetViewCanvas(dataVM.rowsProperty, dataVM.columnsProperty, dataVM.fileProperty)
 
    init {
       dataVM.fileProperty.addListener { _, _, file ->
@@ -39,9 +42,11 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
          dataVM.tileHeight = (imagePreview.value?.height?.toInt() ?: 1) / rows.toInt()
       }
 
-      imagePreview.addListener { _, _, _ ->
+      imagePreview.addListener { _, _, image ->
          dataVM.columns = 1
          dataVM.rows = 1
+         dataVM.tileWidth = image?.width?.toInt() ?: 0
+         dataVM.tileHeight = image?.height?.toInt() ?: 0
       }
    }
 
@@ -58,7 +63,7 @@ class ImportTileSetFragment : Fragment("Import Tile Set") {
                scrollpane {
                   prefWidth = 300.0
                   prefHeightProperty().bind(this@form.heightProperty())
-                  imageview(imagePreview)
+                  this += canvas
                   tooltip = tooltip("Click to choose Tile Set file")
                   cursor = Cursor.HAND
 

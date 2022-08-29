@@ -17,4 +17,10 @@ class CharacterSetAssetDataVM : ItemViewModel<CharacterSetAssetData>(CharacterSe
 
    val columnsProperty = bind(CharacterSetAssetData::columnsProperty)
    var columns by columnsProperty
+
+   val tileSetWidthProperty = bind(CharacterSetAssetData::tileSetWidthProperty)
+   var tileSetWidth by tileSetWidthProperty
+
+   val tileSetHeightProperty = bind(CharacterSetAssetData::tileSetHeightProperty)
+   var tileSetHeight by tileSetHeightProperty
 }

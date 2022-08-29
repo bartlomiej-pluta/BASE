@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.editor.autotile.view.importing
 
+import com.bartlomiejpluta.base.editor.asset.component.GraphicAssetViewCanvas
+import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
 import com.bartlomiejpluta.base.editor.autotile.viewmodel.AutoTileAssetDataVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
@@ -14,6 +16,8 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
    private val imagePreview = SimpleObjectProperty<Image?>()
 
    private var onCompleteConsumer: ((AutoTileAssetData) -> Unit)? = null
+
+   private val canvas = GraphicAssetViewCanvas(dataVM.rowsProperty, dataVM.columnsProperty, dataVM.fileProperty)
 
    init {
       dataVM.fileProperty.addListener { _, _, file ->
@@ -39,9 +43,11 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
          dataVM.tileSetHeight = (imagePreview.value?.height?.toInt() ?: 1) / rows.toInt()
       }
 
-      imagePreview.addListener { _, _, _ ->
+      imagePreview.addListener { _, _, image ->
          dataVM.columns = 1
          dataVM.rows = 1
+         dataVM.tileSetWidth = image?.width?.toInt() ?: 0
+         dataVM.tileSetHeight = image?.height?.toInt() ?: 0
       }
    }
 
@@ -58,7 +64,7 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
                scrollpane {
                   prefWidth = 300.0
                   prefHeightProperty().bind(this@form.heightProperty())
-                  imageview(imagePreview)
+                  this += canvas
                   tooltip = tooltip("Click to choose Auto Tile file")
                   cursor = Cursor.HAND
 
