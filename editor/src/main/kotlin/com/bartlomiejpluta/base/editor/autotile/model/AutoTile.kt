@@ -69,13 +69,13 @@ class AutoTile(uid: String, name: String, image: Image, rows: Int, columns: Int)
          val bottomRightCornerTile = cropTile(tileSet, 1, 2)
 
          /*
-       * Indexes:
-       *  0 - No connected tiles
-       *  1 - Left tile is connected
-       *  2 - Right tile is connected
-       *  3 - Left and Right tiles are connected
-       *  4 - Left, Right, and Center tiles are connected.
-       */
+          * Indexes:
+          *  0 - No connected tiles
+          *  1 - Left tile is connected
+          *  2 - Right tile is connected
+          *  3 - Left and Right tiles are connected
+          *  4 - Left, Right, and Center tiles are connected.
+          */
          val (tl3, tr3, bl3, br3) = cutSubTiles(crossTile)
          val (tl0, tr2, bl1, br4) = cutSubTiles(topLeftCornerTile)
          val (tl1, tr0, bl4, br2) = cutSubTiles(topRightCornerTile)

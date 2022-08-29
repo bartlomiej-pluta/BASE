@@ -58,7 +58,7 @@ class MapView : View() {
 
    private fun determineBrush(layer: Layer?) : Brush? = when (layer) {
       is TileLayer -> TileBrush((arrayOf(arrayOf(layer.tileSetProperty.value.tiles[0]))))
-      is AutoTileLayer -> AutoTileBrush()
+      is AutoTileLayer -> AutoTileBrush(1)
       is ObjectLayer -> PassageAbilityBrush()
       else -> null
    }
