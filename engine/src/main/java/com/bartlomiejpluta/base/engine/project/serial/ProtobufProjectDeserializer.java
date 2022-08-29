@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
+import com.bartlomiejpluta.base.engine.world.autotile.asset.AutoTileSetAsset;
 import com.bartlomiejpluta.base.engine.world.character.asset.CharacterSetAsset;
 import com.bartlomiejpluta.base.engine.world.icon.asset.IconSetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
@@ -28,6 +29,7 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
               .name(proto.getName())
               .runner(proto.getRunner())
               .tileSetAssets(proto.getTileSetsList().stream().map(this::parseTileSetAsset).collect(toList()))
+              .autoTileSetAssets(proto.getAutoTilesList().stream().map(this::parseAutoTileSetAsset).collect(toList()))
               .mapAssets(proto.getMapsList().stream().map(this::parseGameMapAsset).collect(toList()))
               .imageAssets(proto.getImagesList().stream().map(this::parseImageAsset).collect(toList()))
               .characterSetAssets(proto.getCharacterSetsList().stream().map(this::parseCharacterSetAsset).collect(toList()))
@@ -37,6 +39,10 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
               .widgetDefinitionAssets(proto.getWidgetsList().stream().map(this::parseWidgetAsset).collect(toList()))
               .soundAssets(proto.getSoundsList().stream().map(this::parseSoundAsset).collect(toList()))
               .build();
+   }
+
+   private AutoTileSetAsset parseAutoTileSetAsset(ProjectProto.AutoTileSetAsset proto) {
+      return new AutoTileSetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
    }
 
    private TileSetAsset parseTileSetAsset(ProjectProto.TileSetAsset proto) {

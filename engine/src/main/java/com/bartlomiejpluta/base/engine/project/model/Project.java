@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.engine.audio.asset.SoundAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.FontAsset;
 import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
+import com.bartlomiejpluta.base.engine.world.autotile.asset.AutoTileSetAsset;
 import com.bartlomiejpluta.base.engine.world.character.asset.CharacterSetAsset;
 import com.bartlomiejpluta.base.engine.world.icon.asset.IconSetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
@@ -27,6 +28,9 @@ public class Project {
 
    @NonNull
    private final List<TileSetAsset> tileSetAssets;
+
+   @NonNull
+   private final List<AutoTileSetAsset> autoTileSetAssets;
 
    @NonNull
    private final List<GameMapAsset> mapAssets;

@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.api.map.layer.image.ImageLayerMode;
 import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
+import com.bartlomiejpluta.base.engine.world.autotile.manager.AutoTileManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.engine.world.tileset.manager.TileSetManager;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 public class ProtobufMapDeserializer extends MapDeserializer {
    private final MeshManager meshManager;
    private final TileSetManager tileSetManager;
+   private final AutoTileManager autoTileManager;
    private final ImageManager imageManager;
 
    @Override
@@ -36,6 +38,8 @@ public class ProtobufMapDeserializer extends MapDeserializer {
    private void deserializeLayer(DefaultGameMap map, GameMapProto.Layer proto) {
       if (proto.hasTileLayer()) {
          deserializeTileLayer(map, proto);
+      } else if (proto.hasAutoTileLayer()) {
+         deserializeAutoTileLayer(map, proto);
       } else if (proto.hasObjectLayer()) {
          deserializeObjectLayer(map, proto);
       } else if (proto.hasColorLayer()) {
@@ -61,6 +65,28 @@ public class ProtobufMapDeserializer extends MapDeserializer {
             layer.setTile(i / columns, i % columns, tile - 1);
          }
       }
+   }
+
+   private void deserializeAutoTileLayer(DefaultGameMap map, GameMapProto.Layer proto) {
+      var autoTileSet = autoTileManager.loadObject(proto.getAutoTileLayer().getAutotileUID());
+      var animated = proto.getAutoTileLayer().getAnimated();
+      var animationDuration = proto.getAutoTileLayer().getAnimationDuration();
+
+      var layer = map.createAutoTileLayer(autoTileSet, animated, animationDuration);
+      var columns = map.getColumns();
+      var tiles = proto.getAutoTileLayer().getTilesList();
+
+      for (var i = 0; i < tiles.size(); ++i) {
+         var tile = tiles.get(i);
+
+         if (tile == 0) {
+            layer.clearTile(i / columns, i % columns);
+         } else {
+            layer.setTile(i / columns, i % columns, tile - 1);
+         }
+      }
+
+      layer.recalculate(null);
    }
 
    private void deserializeObjectLayer(DefaultGameMap map, GameMapProto.Layer proto) {

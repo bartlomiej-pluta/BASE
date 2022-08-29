@@ -14,6 +14,7 @@ import com.bartlomiejpluta.base.engine.project.config.ProjectConfiguration;
 import com.bartlomiejpluta.base.engine.project.serial.ProjectDeserializer;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import com.bartlomiejpluta.base.engine.world.animation.manager.AnimationManager;
+import com.bartlomiejpluta.base.engine.world.autotile.manager.AutoTileManager;
 import com.bartlomiejpluta.base.engine.world.character.manager.CharacterManager;
 import com.bartlomiejpluta.base.engine.world.character.manager.CharacterSetManager;
 import com.bartlomiejpluta.base.engine.world.icon.manager.IconManager;
@@ -35,6 +36,7 @@ public class DefaultContextManager implements ContextManager {
    private final ProjectConfiguration configuration;
    private final ProjectDeserializer projectDeserializer;
    private final TileSetManager tileSetManager;
+   private final AutoTileManager autoTileManager;
    private final MapManager mapManager;
    private final ImageManager imageManager;
    private final CharacterSetManager characterSetManager;
@@ -58,6 +60,7 @@ public class DefaultContextManager implements ContextManager {
 
       log.info("Registering project assets");
       project.getTileSetAssets().forEach(tileSetManager::registerAsset);
+      project.getAutoTileSetAssets().forEach(autoTileManager::registerAsset);
       project.getMapAssets().forEach(mapManager::registerAsset);
       project.getImageAssets().forEach(imageManager::registerAsset);
       project.getCharacterSetAssets().forEach(characterSetManager::registerAsset);

@@ -13,6 +13,8 @@ import com.bartlomiejpluta.base.api.map.layer.tile.TileLayer;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
+import com.bartlomiejpluta.base.engine.world.autotile.model.AutoTileSet;
+import com.bartlomiejpluta.base.engine.world.map.layer.autotile.DefaultAutoTileLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.color.DefaultColorLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.image.DefaultImageLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.object.DefaultObjectLayer;
@@ -113,6 +115,13 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
 
    public TileLayer createTileLayer(@NonNull TileSet tileSet) {
       var layer = new DefaultTileLayer(this, tileSet, rows, columns);
+      layers.add(layer);
+
+      return layer;
+   }
+
+   public DefaultAutoTileLayer createAutoTileLayer(@NonNull AutoTileSet autoTileSet, boolean animated, double animationDuration) {
+      var layer = new DefaultAutoTileLayer(this, autoTileSet, rows, columns, animated, animationDuration);
       layers.add(layer);
 
       return layer;
