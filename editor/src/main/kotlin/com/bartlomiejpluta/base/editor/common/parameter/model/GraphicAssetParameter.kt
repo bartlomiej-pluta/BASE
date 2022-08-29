@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.common.parameter.model
 
 import com.bartlomiejpluta.base.editor.asset.model.Asset
+import com.bartlomiejpluta.base.editor.asset.model.GraphicAsset
 import com.bartlomiejpluta.base.editor.asset.view.select.SelectGraphicAssetFragment
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.ObservableList
@@ -11,7 +12,7 @@ import tornadofx.Scope
 import tornadofx.find
 import tornadofx.select
 
-class GraphicAssetParameter<T : Asset>(
+class GraphicAssetParameter<T : GraphicAsset>(
    key: String,
    initialValue: T,
    editable: Boolean = true,
