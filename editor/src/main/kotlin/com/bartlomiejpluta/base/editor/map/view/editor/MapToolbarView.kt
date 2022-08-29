@@ -48,8 +48,8 @@ class MapToolbarView : View() {
 
    init {
       brushVM.itemProperty.addListener { _, _, brush ->
-         brushMode.selectedValueProperty<BrushMode>().value = brush.mode
-         objectLayerTool.selectedValueProperty<BrushTool>().value = brush.tool
+         brushMode.selectedValueProperty<BrushMode>().value = brush?.mode ?: BrushMode.PAINTING_MODE
+         objectLayerTool.selectedValueProperty<BrushTool>().value = brush?.tool ?: BrushTool.DEFAULT
       }
 
       editorStateVM.selectedLayerProperty.addListener { _, _, _ ->
@@ -135,7 +135,7 @@ class MapToolbarView : View() {
          }
 
          brushVM.itemProperty.addListener { _, _, brush ->
-            value = brush.range.toDouble()
+            value = brush?.range?.toDouble() ?: 1.0
          }
       }
 
