@@ -25,7 +25,11 @@ class ProtobufMapDeserializer : MapDeserializer {
 
    override fun deserialize(input: InputStream) = deserialize(input, { _, uid -> uid }, { _, uid -> uid })
 
-   override fun deserialize(input: InputStream, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String): GameMap {
+   override fun deserialize(
+      input: InputStream,
+      replaceTileSet: (String, String) -> String,
+      replaceAutoTile: (String, String) -> String
+   ): GameMap {
       val proto = GameMapProto.GameMap.parseFrom(input)
       val map = GameMap(proto.tileWidth.toDouble(), proto.tileHeight.toDouble())
       map.uid = proto.uid
@@ -40,7 +44,13 @@ class ProtobufMapDeserializer : MapDeserializer {
       return map
    }
 
-   private fun deserializeLayer(rows: Int, columns: Int, proto: GameMapProto.Layer, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String): Layer {
+   private fun deserializeLayer(
+      rows: Int,
+      columns: Int,
+      proto: GameMapProto.Layer,
+      replaceTileSet: (String, String) -> String,
+      replaceAutoTile: (String, String) -> String
+   ): Layer {
       return when {
          proto.hasTileLayer() -> deserializeTileLayer(rows, columns, proto, replaceTileSet)
          proto.hasAutoTileLayer() -> deserializeAutoTileLayer(rows, columns, proto, replaceAutoTile)
@@ -52,7 +62,12 @@ class ProtobufMapDeserializer : MapDeserializer {
       }
    }
 
-   private fun deserializeTileLayer(rows: Int, columns: Int, proto: GameMapProto.Layer, replaceTileSet: (String, String) -> String): Layer {
+   private fun deserializeTileLayer(
+      rows: Int,
+      columns: Int,
+      proto: GameMapProto.Layer,
+      replaceTileSet: (String, String) -> String
+   ): Layer {
       val layer: Array<Array<Tile?>> = Array(rows) { Array(columns) { null } }
       val tileSetAsset = projectContext.findTileSetAsset(replaceTileSet(proto.name, proto.tileLayer.tilesetUID))
       val tileSet = projectContext.loadTileSet(tileSetAsset.uid)
@@ -67,7 +82,12 @@ class ProtobufMapDeserializer : MapDeserializer {
       return TileLayer(proto.name, rows, columns, tileSetAsset, layer)
    }
 
-   private fun deserializeAutoTileLayer(rows: Int, columns: Int, proto: GameMapProto.Layer, replaceTileSet: (String, String) -> String): AutoTileLayer {
+   private fun deserializeAutoTileLayer(
+      rows: Int,
+      columns: Int,
+      proto: GameMapProto.Layer,
+      replaceTileSet: (String, String) -> String
+   ): AutoTileLayer {
       val layer: Array<Array<Int>> = Array(rows) { Array(columns) { 0 } }
       val autoTile = projectContext.findAutoTileAsset(replaceTileSet(proto.name, proto.autoTileLayer.autotileUID))
 
@@ -75,7 +95,15 @@ class ProtobufMapDeserializer : MapDeserializer {
          layer[index / columns][index % columns] = tile
       }
 
-      return AutoTileLayer(proto.name, rows, columns, autoTile, layer)
+      return AutoTileLayer(
+         proto.name,
+         rows,
+         columns,
+         autoTile,
+         proto.autoTileLayer.animated,
+         proto.autoTileLayer.animationDuration,
+         layer
+      )
    }
 
    private fun deserializeObjectLayer(rows: Int, columns: Int, proto: GameMapProto.Layer): Layer {

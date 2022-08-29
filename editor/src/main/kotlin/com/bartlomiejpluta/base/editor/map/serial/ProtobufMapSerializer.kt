@@ -36,6 +36,8 @@ class ProtobufMapSerializer : MapSerializer {
          is AutoTileLayer -> layer.layer.flatMap { it.asIterable() }
             .fold(GameMapProto.AutoTileLayer.newBuilder()) { acc, tile -> acc.addTiles(tile) }
             .setAutotileUID(layer.autoTileAsset.uid)
+            .setAnimated(layer.animated)
+            .setAnimationDuration(layer.animationDuration)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setAutoTileLayer(it).build() }
 

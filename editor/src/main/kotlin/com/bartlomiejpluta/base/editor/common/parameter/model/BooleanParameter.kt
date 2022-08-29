@@ -7,8 +7,9 @@ class BooleanParameter(
    key: String,
    initialValue: Boolean = false,
    editable: Boolean = true,
+   autocommit: Boolean = true,
    onCommit: (oldValue: Boolean, newValue: Boolean, submit: () -> Unit) -> Unit = { _, _, submit -> submit() }
-) : Parameter<Boolean>(key, initialValue, editable, true, onCommit, true) {
+) : Parameter<Boolean>(key, initialValue, editable, autocommit, onCommit, true) {
    override val editor = CheckBox()
 
    override val editorValueProperty = editor.selectedProperty()

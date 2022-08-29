@@ -80,7 +80,8 @@ class MapLayersView : View() {
                   val scope = UndoableScope()
                   find<SelectGraphicAssetFragment<AutoTileAsset>>(scope, SelectGraphicAssetFragment<AutoTileAsset>::assets to projectContext.project?.autoTiles!!).apply {
                      onComplete {
-                        val layer = AutoTileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns, it)
+                        val layer =
+                           AutoTileLayer("Layer ${mapVM.layers.size + 1}", mapVM.rows, mapVM.columns, it, false, 1.0)
                         val command = CreateLayerCommand(mapVM.item, layer)
                         command.execute()
                         layersPane.selectionModel.select(mapVM.layers.size - 1)

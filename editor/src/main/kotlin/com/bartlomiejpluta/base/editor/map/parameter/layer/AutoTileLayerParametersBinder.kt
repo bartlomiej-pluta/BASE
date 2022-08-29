@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.parameter.layer
 
+import com.bartlomiejpluta.base.editor.common.parameter.model.BooleanParameter
+import com.bartlomiejpluta.base.editor.common.parameter.model.DoubleParameter
 import com.bartlomiejpluta.base.editor.common.parameter.model.GraphicAssetParameter
 import com.bartlomiejpluta.base.editor.common.parameter.model.Parameter
 import com.bartlomiejpluta.base.editor.map.model.layer.AutoTileLayer
@@ -20,8 +22,21 @@ class AutoTileLayerParametersBinder : LayerParametersBinder<AutoTileLayer> {
          submit()
       }
 
-      autoTile.bindBidirectional(layer.autoTileAssetProperty)
+      val animated = BooleanParameter("animated", layer.animated) { _, _, submit ->
+         onCommit()
+         submit()
+      }
 
-      parameters.addAll(autoTile)
+      val animationDuration =
+         DoubleParameter("animationDuration", layer.animationDuration, autocommit = true) { _, _, submit ->
+            onCommit()
+            submit()
+         }
+
+      autoTile.bindBidirectional(layer.autoTileAssetProperty)
+      animated.bindBidirectional(layer.animatedProperty)
+      animationDuration.bindBidirectional(layer.animationDurationProperty)
+
+      parameters.addAll(autoTile, animated, animationDuration)
    }
 }
