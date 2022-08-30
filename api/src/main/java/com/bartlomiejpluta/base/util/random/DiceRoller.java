@@ -29,23 +29,6 @@ public class DiceRoller {
       return Math.max(0, sum);
    }
 
-   public static DiceRoller of(String code) {
-      var intMatcher = INT_PATTERN.matcher(code);
-      if(intMatcher.matches()) {
-         return new DiceRoller(0, 0, Integer.parseInt(code));
-      }
-
-      var codeMatcher = CODE_PATTERN.matcher(code);
-      if(codeMatcher.matches()) {
-         var rolls = Integer.parseInt(codeMatcher.group(1));
-         var dice = Integer.parseInt(codeMatcher.group(2));
-         var modifier = Integer.parseInt(Optional.ofNullable(codeMatcher.group(3)).orElse("0"));
-         return new DiceRoller(rolls, dice, modifier);
-      }
-
-      throw new IllegalArgumentException("Argument is supposed to be in RPG dice code format (e.g. 2d4+2) or simple integer");
-   }
-
    public int min() {
       return Math.max(0, modifier + rolls);
    }
@@ -74,5 +57,26 @@ public class DiceRoller {
    @Override
    public String toString() {
       return format("%s (min=%d, max=%d)", code(), min(), max());
+   }
+
+   public static DiceRoller of(String code) {
+      var intMatcher = INT_PATTERN.matcher(code);
+      if(intMatcher.matches()) {
+         return new DiceRoller(0, 0, Integer.parseInt(code));
+      }
+
+      var codeMatcher = CODE_PATTERN.matcher(code);
+      if(codeMatcher.matches()) {
+         var rolls = Integer.parseInt(codeMatcher.group(1));
+         var dice = Integer.parseInt(codeMatcher.group(2));
+         var modifier = Integer.parseInt(Optional.ofNullable(codeMatcher.group(3)).orElse("0"));
+         return new DiceRoller(rolls, dice, modifier);
+      }
+
+      throw new IllegalArgumentException("Argument is supposed to be in RPG dice code format (e.g. 2d4+2) or simple integer");
+   }
+
+   public static int roll(String code) {
+      return of(code).roll();
    }
 }
