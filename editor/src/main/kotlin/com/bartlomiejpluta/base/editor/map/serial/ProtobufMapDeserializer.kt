@@ -121,7 +121,7 @@ class ProtobufMapDeserializer : MapDeserializer {
          MapObject(it.x, it.y, it.code)
       }
 
-      return ObjectLayer(proto.name, rows, columns, objects, passageMap)
+      return ObjectLayer(proto.name, rows, columns, objects, proto.objectLayer.javaImports, passageMap)
    }
 
    private fun deserializeColorLayer(proto: GameMapProto.Layer): Layer {

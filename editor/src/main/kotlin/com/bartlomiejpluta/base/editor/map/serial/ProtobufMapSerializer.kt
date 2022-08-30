@@ -60,6 +60,7 @@ class ProtobufMapSerializer : MapSerializer {
                   })
                }
             }
+            .setJavaImports(layer.javaImports)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }
 

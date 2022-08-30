@@ -11,6 +11,7 @@ import com.bartlomiejpluta.base.internal.map.MapInitializer
 import com.squareup.javapoet.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.io.File
 import java.lang.String.format
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -38,11 +39,16 @@ class MapObjectsCodeGenerator : CodeGenerator {
 
       map.layers
          .mapNotNull { it as? ObjectLayer }
-         .map { generateLayerClass(asset, map, it, runner) }
-         .forEach { it.writeTo(project.buildGeneratedCodeDirectory) }
+         .forEach { generateLayerClass(project.buildGeneratedCodeDirectory, asset, map, it, runner) }
    }
 
-   private fun generateLayerClass(asset: GameMapAsset, map: GameMap, layer: ObjectLayer, runner: ClassName): JavaFile {
+   private fun generateLayerClass(
+      directory: File,
+      asset: GameMapAsset,
+      map: GameMap,
+      layer: ObjectLayer,
+      runner: ClassName
+   ) {
       val packageName = "com.bartlomiejpluta.base.generated.map"
       val className = ClassName.get(
          packageName,
@@ -93,9 +99,30 @@ class MapObjectsCodeGenerator : CodeGenerator {
       generatedClass
          .addMethod(runMethod.build())
 
-      return JavaFile
+      val javaFile = JavaFile
          .builder(packageName, generatedClass.build())
          .build()
+
+      val rawSource = javaFile.toString()
+      val path = javaFile.toJavaFileObject().toUri().path
+      val file = File(directory, path)
+      file.parentFile.mkdirs()
+      file.printWriter().apply {
+         for (s in rawSource.lines()) {
+            println(s)
+            if (s.startsWith("package ")) {
+               println()
+               println("// User imports")
+               for (i in layer.javaImports.lines()) {
+                  println(i)
+               }
+               println("// End of user imports")
+               println()
+            }
+         }
+
+         flush()
+      }
    }
 
    private fun className(canonical: String) = ClassName.get(
