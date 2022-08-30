@@ -86,4 +86,10 @@ message AutoTileSetAsset {
   required string name = 3;
   required uint32 rows = 4;
   required uint32 columns = 5;
+  required AutoTileLayout layout = 6;
+}
+
+enum AutoTileLayout {
+  LAYOUT_2X2 = 0;
+  LAYOUT_2X3 = 1;
 }

@@ -35,6 +35,7 @@ message AutoTileLayer {
   repeated uint32 tiles = 2;
   required bool animated = 3;
   required double animationDuration = 4;
+  required bool connect = 5;
 }
 
 message ObjectLayer {
