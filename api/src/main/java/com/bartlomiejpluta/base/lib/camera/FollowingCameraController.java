@@ -32,15 +32,26 @@ public class FollowingCameraController implements CameraController {
    @Override
    public void update() {
       if (target != null) {
-         final var bottomRightConstraintX = mapSize.x() - screenSize.x() / camera.getScaleX();
-         final var bottomRightConstraintY = mapSize.y() - screenSize.y() / camera.getScaleY();
-         final var newCameraPosX = target.x() - screenSize.x() / (2f * camera.getScaleX());
-         final var newCameraPosY = target.y() - screenSize.y() / (2f * camera.getScaleY());
+         var newCameraPosX = 0.0f;
+         var newCameraPosY = 0.0f;
 
-         camera.setPosition(
-               (newCameraPosX < bottomRightConstraintX) ? (newCameraPosX > 0 ? newCameraPosX : 0) : bottomRightConstraintX,
-               (newCameraPosY < bottomRightConstraintY) ? (newCameraPosY > 0 ? newCameraPosY : 0) : bottomRightConstraintY
-         );
+         if (mapSize.x() < screenSize.x() / camera.getScaleX()) {
+            newCameraPosX = (mapSize.x() - screenSize.x() / camera.getScaleX())/2;
+         } else {
+            final var bottomRightConstraintX = mapSize.x() - screenSize.x() / camera.getScaleX();
+            newCameraPosX = target.x() - screenSize.x() / (2f * camera.getScaleX());
+            newCameraPosX = (newCameraPosX < bottomRightConstraintX) ? (newCameraPosX > 0 ? newCameraPosX : 0) : bottomRightConstraintX;
+         }
+
+         if (mapSize.y() < screenSize.y() / camera.getScaleY()) {
+            newCameraPosY = (mapSize.y() - screenSize.y() / camera.getScaleY())/2;
+         } else {
+            final var bottomRightConstraintY = mapSize.y() - screenSize.y() / camera.getScaleY();
+            newCameraPosY = target.y() - screenSize.y() / (2f * camera.getScaleY());
+            newCameraPosY = (newCameraPosY < bottomRightConstraintY) ? (newCameraPosY > 0 ? newCameraPosY : 0) : bottomRightConstraintY;
+         }
+
+         camera.setPosition(newCameraPosX, newCameraPosY);
       }
    }
 
