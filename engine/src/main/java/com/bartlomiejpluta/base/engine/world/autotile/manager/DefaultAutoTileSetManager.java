@@ -54,8 +54,8 @@ public class DefaultAutoTileSetManager implements AutoTileManager {
          }
 
          var source = configuration.projectFile("autotiles", asset.getSource());
-         var texture = textureManager.loadTexture(source, asset.getRows() * AutoTileSet.ROWS, asset.getColumns() * AutoTileSet.COLUMNS);
-         autoTile = new AutoTileSet(texture, mesh, asset.getRows(), asset.getColumns());
+         var texture = textureManager.loadTexture(source, asset.getRows() * asset.getLayout().getRows() * 2, asset.getColumns() * asset.getLayout().getColumns() * 2);
+         autoTile = new AutoTileSet(texture, mesh, asset.getRows(), asset.getColumns(), asset.getLayout());
          log.info("Loading auto tile set from assets to cache under the key: [{}]", uid);
          autoTiles.put(uid, autoTile);
       }

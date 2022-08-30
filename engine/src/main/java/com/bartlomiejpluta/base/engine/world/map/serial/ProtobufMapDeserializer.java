@@ -71,8 +71,9 @@ public class ProtobufMapDeserializer extends MapDeserializer {
       var autoTileSet = autoTileManager.loadObject(proto.getAutoTileLayer().getAutotileUID());
       var animated = proto.getAutoTileLayer().getAnimated();
       var animationDuration = proto.getAutoTileLayer().getAnimationDuration();
+      var connect = proto.getAutoTileLayer().getConnect();
 
-      var layer = map.createAutoTileLayer(autoTileSet, animated, animationDuration);
+      var layer = map.createAutoTileLayer(autoTileSet, animated, animationDuration, connect);
       var columns = map.getColumns();
       var tiles = proto.getAutoTileLayer().getTilesList();
 

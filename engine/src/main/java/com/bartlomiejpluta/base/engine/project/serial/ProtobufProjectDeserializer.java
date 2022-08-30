@@ -6,6 +6,7 @@ import com.bartlomiejpluta.base.engine.gui.asset.WidgetDefinitionAsset;
 import com.bartlomiejpluta.base.engine.project.model.Project;
 import com.bartlomiejpluta.base.engine.world.animation.asset.AnimationAsset;
 import com.bartlomiejpluta.base.engine.world.autotile.asset.AutoTileSetAsset;
+import com.bartlomiejpluta.base.engine.world.autotile.model.AutoTileLayout;
 import com.bartlomiejpluta.base.engine.world.character.asset.CharacterSetAsset;
 import com.bartlomiejpluta.base.engine.world.icon.asset.IconSetAsset;
 import com.bartlomiejpluta.base.engine.world.image.asset.ImageAsset;
@@ -42,7 +43,7 @@ public class ProtobufProjectDeserializer extends ProjectDeserializer {
    }
 
    private AutoTileSetAsset parseAutoTileSetAsset(ProjectProto.AutoTileSetAsset proto) {
-      return new AutoTileSetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns());
+      return new AutoTileSetAsset(proto.getUid(), proto.getSource(), proto.getRows(), proto.getColumns(), AutoTileLayout.valueOf(proto.getLayout().name()));
    }
 
    private TileSetAsset parseTileSetAsset(ProjectProto.TileSetAsset proto) {

@@ -120,8 +120,8 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
       return layer;
    }
 
-   public DefaultAutoTileLayer createAutoTileLayer(@NonNull AutoTileSet autoTileSet, boolean animated, double animationDuration) {
-      var layer = new DefaultAutoTileLayer(this, autoTileSet, rows, columns, animated, animationDuration);
+   public DefaultAutoTileLayer createAutoTileLayer(@NonNull AutoTileSet autoTileSet, boolean animated, double animationDuration, boolean connect) {
+      var layer = new DefaultAutoTileLayer(this, autoTileSet, rows, columns, animated, animationDuration, connect);
       layers.add(layer);
 
       return layer;
