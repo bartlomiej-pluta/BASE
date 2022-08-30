@@ -41,6 +41,7 @@ message AutoTileLayer {
 message ObjectLayer {
   repeated PassageAbility passageMap = 1;
   repeated MapObject objects = 2;
+  required string javaImports = 3;
 }
 
 enum PassageAbility {
