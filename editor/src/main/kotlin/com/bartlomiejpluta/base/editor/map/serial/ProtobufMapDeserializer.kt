@@ -102,6 +102,7 @@ class ProtobufMapDeserializer : MapDeserializer {
          autoTile,
          proto.autoTileLayer.animated,
          proto.autoTileLayer.animationDuration,
+         proto.autoTileLayer.connect,
          layer
       )
    }

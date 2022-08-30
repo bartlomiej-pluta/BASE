@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.autotile.view.importing
 import com.bartlomiejpluta.base.editor.asset.component.GraphicAssetViewCanvas
 import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTileLayout
 import com.bartlomiejpluta.base.editor.autotile.viewmodel.AutoTileAssetDataVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
 import javafx.beans.property.SimpleObjectProperty
@@ -92,6 +93,12 @@ class ImportAutoTileFragment : Fragment("Import Auto Tile") {
                   textfield(dataVM.nameProperty) {
                      required()
                      trimWhitespace()
+                  }
+               }
+
+               field("Auto Tile Layout") {
+                  combobox(values = AutoTileLayout.values().asList(), property = dataVM.layoutProperty) {
+                     required()
                   }
                }
 

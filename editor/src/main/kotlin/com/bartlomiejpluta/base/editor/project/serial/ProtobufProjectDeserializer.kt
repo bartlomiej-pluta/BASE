@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.editor.project.serial
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTileLayout
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
 import com.bartlomiejpluta.base.editor.gui.widget.asset.WidgetAsset
@@ -58,7 +59,8 @@ class ProtobufProjectDeserializer : ProjectDeserializer {
       source = autoTile.source,
       name = autoTile.name,
       rows = autoTile.rows,
-      columns = autoTile.columns
+      columns = autoTile.columns,
+      layout = AutoTileLayout.valueOf(autoTile.layout.name)
    )
 
    private fun deserializeImage(project: Project, image: ProjectProto.ImageAsset) = ImageAsset(

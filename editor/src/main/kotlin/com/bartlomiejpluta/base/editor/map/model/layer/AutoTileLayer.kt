@@ -16,6 +16,7 @@ class AutoTileLayer(
    autoTileAsset: AutoTileAsset,
    animated: Boolean,
    animationDuration: Double,
+   connect: Boolean,
    layer: Array<Array<Int>> = Array(rows) { Array(columns) { 0 } }
 ) : Layer {
    var layer = layer
@@ -36,6 +37,9 @@ class AutoTileLayer(
    val animationDurationProperty = animationDuration.toProperty()
    var animationDuration by animationDurationProperty
 
+   val connectProperty = connect.toProperty()
+   var connect by connectProperty
+
    val autoTileProperty = Bindings.createObjectBinding({
       autoTileAsset.file.inputStream().use { fis ->
          AutoTile(
@@ -43,7 +47,8 @@ class AutoTileLayer(
             autoTileAsset.name,
             Image(fis),
             autoTileAsset.rows,
-            autoTileAsset.columns
+            autoTileAsset.columns,
+            autoTileAsset.layout
          )
       }
    }, autoTileAssetProperty)

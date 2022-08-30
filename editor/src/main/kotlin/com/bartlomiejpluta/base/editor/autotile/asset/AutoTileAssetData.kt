@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.autotile.asset
 
 import com.bartlomiejpluta.base.editor.autotile.model.AutoTile
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTileLayout
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -26,4 +27,7 @@ class AutoTileAssetData {
 
    val fileProperty = SimpleObjectProperty<File>()
    var file by fileProperty
+
+   val layoutProperty = SimpleObjectProperty(AutoTileLayout.LAYOUT_2X2)
+   var layout by layoutProperty
 }

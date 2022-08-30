@@ -38,6 +38,7 @@ class ProtobufMapSerializer : MapSerializer {
             .setAutotileUID(layer.autoTileAsset.uid)
             .setAnimated(layer.animated)
             .setAnimationDuration(layer.animationDuration)
+            .setConnect(layer.connect)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setAutoTileLayer(it).build() }
 

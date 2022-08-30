@@ -133,7 +133,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
    }
 
    private fun renderAutoTile(gc: GraphicsContext, autoTile: AutoTile, layer: AutoTileLayer, column: Int, row: Int) {
-      val (topLeft, topRight, bottomLeft, bottomRight) = autoTile.getTile(layer, row, column)
+      val (topLeft, topRight, bottomLeft, bottomRight) = autoTile.getTile(layer, row, column, layer.connect)
       val x = column * tileWidth
       val y = row * tileHeight
       gc.drawImage(topLeft, x, y)

@@ -188,7 +188,7 @@ class DefaultProjectContext : ProjectContext {
             val source = "$uid.${data.file.extension}"
             val targetFile = File(it.autoTilesDirectory, source)
             data.file.copyTo(targetFile)
-            it.autoTiles += AutoTileAsset(it, uid, source, data.name, data.rows, data.columns)
+            it.autoTiles += AutoTileAsset(it, uid, source, data.name, data.rows, data.columns, data.layout)
 
             save()
          }
@@ -202,7 +202,7 @@ class DefaultProjectContext : ProjectContext {
 
          val image = File(it.autoTilesDirectory, asset.source).inputStream().use { fis -> Image(fis) }
 
-         AutoTile(uid, asset.name, image, asset.rows, asset.columns)
+         AutoTile(uid, asset.name, image, asset.rows, asset.columns, asset.layout)
       } ?: throw IllegalStateException("There is no open project in the context")
    }
 

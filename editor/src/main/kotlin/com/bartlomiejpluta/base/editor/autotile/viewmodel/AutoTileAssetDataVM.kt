@@ -1,6 +1,8 @@
 package com.bartlomiejpluta.base.editor.autotile.viewmodel
 
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAssetData
+import com.bartlomiejpluta.base.editor.autotile.model.AutoTileLayout
+import javafx.beans.property.SimpleObjectProperty
 import tornadofx.*
 
 class AutoTileAssetDataVM : ItemViewModel<AutoTileAssetData>(AutoTileAssetData()) {
@@ -21,4 +23,7 @@ class AutoTileAssetDataVM : ItemViewModel<AutoTileAssetData>(AutoTileAssetData()
 
    val fileProperty = bind(AutoTileAssetData::fileProperty)
    var file by fileProperty
+
+   val layoutProperty = bind(AutoTileAssetData::layoutProperty)
+   var layout by layoutProperty
 } 

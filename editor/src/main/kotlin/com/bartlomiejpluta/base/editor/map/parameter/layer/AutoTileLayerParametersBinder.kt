@@ -33,10 +33,16 @@ class AutoTileLayerParametersBinder : LayerParametersBinder<AutoTileLayer> {
             submit()
          }
 
+      val connect = BooleanParameter("connect", layer.connect) { _, _, submit ->
+         onCommit()
+         submit()
+      }
+
       autoTile.bindBidirectional(layer.autoTileAssetProperty)
       animated.bindBidirectional(layer.animatedProperty)
       animationDuration.bindBidirectional(layer.animationDurationProperty)
+      connect.bindBidirectional(layer.connectProperty)
 
-      parameters.addAll(autoTile, animated, animationDuration)
+      parameters.addAll(autoTile, animated, animationDuration, connect)
    }
 }
