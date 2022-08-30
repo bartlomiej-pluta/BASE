@@ -85,6 +85,46 @@ public interface Context extends Updatable, Renderable, Disposable {
 
    <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener);
 
+   void putGlobal(String key, Object value);
+
+   void putGlobal(String key, boolean value);
+
+   void putGlobal(String key, byte value);
+
+   void putGlobal(String key, short value);
+
+   void putGlobal(String key, int value);
+
+   void putGlobal(String key, long value);
+
+   void putGlobal(String key, float value);
+
+   void putGlobal(String key, double value);
+
+   void putGlobal(String key, char value);
+
+   Object getGlobal(String key);
+
+   <T> T getGlobal(String key, Class<T> type);
+
+   boolean getBooleanGlobal(String key);
+
+   byte getByteGlobal(String key);
+
+   short getShortGlobal(String key);
+
+   int getIntGlobal(String key);
+
+   long getLongGlobal(String key);
+
+   float getFloatGlobal(String key);
+
+   double getDoubleGlobal(String key);
+
+   char getCharGlobal(String key);
+
+   String getStringGlobal(String key);
+
    void init(Screen screen, Input input, Camera camera);
 
    void input(Input input);
