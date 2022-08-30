@@ -40,7 +40,7 @@ class MapToolbarView : View() {
       { editorStateVM.selectedLayer is AutoTileLayer },
       editorStateVM.selectedLayerProperty
    )
-   
+
    private val isObjectLayerSelected = Bindings.createBooleanBinding(
       { editorStateVM.selectedLayer is ObjectLayer },
       editorStateVM.selectedLayerProperty
@@ -82,18 +82,17 @@ class MapToolbarView : View() {
 
       togglebutton {
          graphic = FontIcon("fa-window-restore")
-
-         action {
-            editorStateVM.coverUnderlyingLayers = isSelected
-         }
+         editorStateVM.coverUnderlyingLayersProperty.bind(selectedProperty())
       }
 
       togglebutton {
          graphic = FontIcon("fa-th")
+         editorStateVM.showGridProperty.bind(selectedProperty())
+      }
 
-         action {
-            editorStateVM.showGrid = isSelected
-         }
+      togglebutton {
+         graphic = FontIcon("fa-clone")
+         editorStateVM.renderAllLayersProperty.bind(selectedProperty())
       }
 
       separator()

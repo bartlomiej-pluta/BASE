@@ -75,6 +75,9 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       renderUnderlyingLayers(gc)
       renderCover(gc)
       renderSelectedLayer(gc)
+      if (editorStateVM.renderAllLayers) {
+         renderOverlappingLayers(gc)
+      }
       renderGrid(gc)
       painter.render(gc)
    }
@@ -94,6 +97,12 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
 
    private fun renderUnderlyingLayers(gc: GraphicsContext) {
       for (layer in map.layers.dropLast(if (editorStateVM.selectedLayerIndex < 0) 0 else map.layers.size - editorStateVM.selectedLayerIndex)) {
+         dispatchLayerRender(gc, layer)
+      }
+   }
+
+   private fun renderOverlappingLayers(gc: GraphicsContext) {
+      for (layer in map.layers.drop(editorStateVM.selectedLayerIndex + 1)) {
          dispatchLayerRender(gc, layer)
       }
    }

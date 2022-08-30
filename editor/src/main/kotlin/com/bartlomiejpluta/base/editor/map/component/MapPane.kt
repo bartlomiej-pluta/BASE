@@ -37,6 +37,7 @@ class MapPane(
       editorStateVM.showGridProperty.addListener { _, _, _ -> render() }
       editorStateVM.selectedLayerIndexProperty.addListener { _, _, _ -> render() }
       editorStateVM.coverUnderlyingLayersProperty.addListener { _, _, _ -> render() }
+      editorStateVM.renderAllLayersProperty.addListener { _, _, _ -> render() }
 
       render()
    }
