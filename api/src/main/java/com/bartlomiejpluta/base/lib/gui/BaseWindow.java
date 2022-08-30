@@ -82,6 +82,10 @@ public abstract class BaseWindow extends BaseWidget implements Window {
       if (content != null) {
          content.handleEvent(event);
       }
+
+      if(!event.isConsumed()) {
+         super.handleEvent(event);
+      }
    }
 
    @Override
@@ -94,10 +98,12 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    @Override
    public void onOpen(WindowManager manager, Object[] args) {
       this.manager = manager;
+      content.focus();
    }
 
    @Override
    public void onClose(WindowManager manager) {
       this.manager = null;
+      content.blur();
    }
 }

@@ -98,6 +98,12 @@ public abstract class BaseContainer extends BaseComponent {
       }
    }
 
+   protected void blurChildren() {
+      for (var child : children) {
+         child.blur();
+      }
+   }
+
    @Override
    public <E extends Event> void handleEvent(E event) {
       // Populate event downstream

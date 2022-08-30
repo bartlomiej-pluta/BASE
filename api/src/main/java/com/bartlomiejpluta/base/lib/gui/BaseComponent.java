@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.event.Event;
 import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 
@@ -44,6 +45,15 @@ public abstract class BaseComponent extends BaseWidget implements Component {
    @Override
    public void focus() {
       focused = true;
+   }
+
+   @Override
+   public <E extends Event> void handleEvent(E event) {
+      if(!focused) {
+         return;
+      }
+
+      super.handleEvent(event);
    }
 
    @Override

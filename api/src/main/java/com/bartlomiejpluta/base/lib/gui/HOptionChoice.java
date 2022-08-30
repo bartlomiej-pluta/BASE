@@ -59,6 +59,10 @@ public class HOptionChoice extends HLayout {
 
    @Override
    public <E extends Event> void handleEvent(E event) {
+      if(!focused) {
+         return;
+      }
+
       if (selected < children.size()) {
          selectedComponent = children.get(selected);
          selectedComponent.handleEvent(event);
@@ -75,31 +79,37 @@ public class HOptionChoice extends HLayout {
       }
 
       if (event.getKey() == Key.KEY_RIGHT && ACTIONS.contains(event.getAction())) {
-         blur();
-         selected = (++selected) % children.size();
-         selectedComponent = children.get(selected);
-         selectedComponent.focus();
-
-         if (onSelect != null) {
-            onSelect.accept(selectedComponent);
-         }
-
+         selectNext();
          event.consume();
       } else if (event.getKey() == Key.KEY_LEFT && ACTIONS.contains(event.getAction())) {
-         blur();
-         var size = children.size();
-         selected = (((--selected) % size) + size) % size;
-         selectedComponent = children.get(selected);
-         selectedComponent.focus();
-
-         if (onSelect != null) {
-            onSelect.accept(selectedComponent);
-         }
-
+         selectPrevious();
          event.consume();
       }
    }
-   
+
+   public void selectPrevious() {
+      blurChildren();
+      var size = children.size();
+      selected = (((--selected) % size) + size) % size;
+      selectedComponent = children.get(selected);
+      selectedComponent.focus();
+
+      if (onSelect != null) {
+         onSelect.accept(selectedComponent);
+      }
+   }
+
+   public void selectNext() {
+      blurChildren();
+      selected = (++selected) % children.size();
+      selectedComponent = children.get(selected);
+      selectedComponent.focus();
+
+      if (onSelect != null) {
+         onSelect.accept(selectedComponent);
+      }
+   }
+
    @Override
    public void update(float dt) {
       super.update(dt);

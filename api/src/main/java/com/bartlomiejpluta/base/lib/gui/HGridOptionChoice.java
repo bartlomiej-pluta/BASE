@@ -73,6 +73,10 @@ public class HGridOptionChoice extends HGridLayout {
 
    @Override
    public <E extends Event> void handleEvent(E event) {
+      if(!focused) {
+         return;
+      }
+
       var index = rows * selectedColumn + selectedRow;
       if (index < children.size()) {
          selectedComponent = children.get(index);
@@ -90,81 +94,93 @@ public class HGridOptionChoice extends HGridLayout {
       }
 
       if (event.getKey() == Key.KEY_DOWN && ACTIONS.contains(event.getAction())) {
-         blur();
-
-         int size = 0;
-         for (int i = 0; i < children.size(); ++i) {
-            if (i / rows == selectedColumn) ++size;
-         }
-
-         if (size == 0) return;
-
-         selectedRow = (++selectedRow) % size;
-         selectedComponent = children.get(rows * selectedColumn + selectedRow);
-         selectedComponent.focus();
-
-         if(onSelect != null) {
-            onSelect.accept(selectedComponent);
-         }
-
+         selectNextV();
          event.consume();
       } else if (event.getKey() == Key.KEY_UP && ACTIONS.contains(event.getAction())) {
-         blur();
-
-         int size = 0;
-         for (int i = 0; i < children.size(); ++i) {
-            if (i / rows == selectedColumn) ++size;
-         }
-
-         if (size == 0) return;
-
-         selectedRow = ((--selectedRow) + size) % size;
-         selectedComponent = children.get(rows * selectedColumn + selectedRow);
-         selectedComponent.focus();
-
-         if(onSelect != null) {
-            onSelect.accept(selectedComponent);
-         }
-
+         selectPreviousV();
          event.consume();
       } else if (event.getKey() == Key.KEY_RIGHT && ACTIONS.contains(event.getAction())) {
-         blur();
-
-         int size = 0;
-         for (int i = 0; i < children.size(); ++i) {
-            if (i % rows == selectedRow) ++size;
-         }
-
-         if (size == 0) return;
-
-         selectedColumn = (++selectedColumn) % size;
-         selectedComponent = children.get(rows * selectedColumn + selectedRow);
-         selectedComponent.focus();
-
-         if(onSelect != null) {
-            onSelect.accept(selectedComponent);
-         }
-
+         selectNextH();
          event.consume();
       } else if (event.getKey() == Key.KEY_LEFT && ACTIONS.contains(event.getAction())) {
-         blur();
-
-         int size = 0;
-         for (int i = 0; i < children.size(); ++i) {
-            if (i % rows == selectedRow) ++size;
-         }
-
-         if (size == 0) return;
-
-         selectedColumn = ((--selectedColumn) + size) % size;
-         selectedComponent = children.get(rows * selectedColumn + selectedRow);
-         selectedComponent.focus();
-
-         if(onSelect != null) {
-            onSelect.accept(selectedComponent);
-         }
-
+         selectPreviousH();
          event.consume();
+      }
+   }
+
+   public void selectPreviousH() {
+      blurChildren();
+
+      int size = 0;
+      for (int i = 0; i < children.size(); ++i) {
+         if (i % rows == selectedRow) ++size;
+      }
+
+      if (size == 0) return;
+
+      selectedColumn = ((--selectedColumn) + size) % size;
+      selectedComponent = children.get(rows * selectedColumn + selectedRow);
+      selectedComponent.focus();
+
+      if(onSelect != null) {
+         onSelect.accept(selectedComponent);
+      }
+   }
+
+   public void selectNextH() {
+      blurChildren();
+
+      int size = 0;
+      for (int i = 0; i < children.size(); ++i) {
+         if (i % rows == selectedRow) ++size;
+      }
+
+      if (size == 0) return;
+
+      selectedColumn = (++selectedColumn) % size;
+      selectedComponent = children.get(rows * selectedColumn + selectedRow);
+      selectedComponent.focus();
+
+      if(onSelect != null) {
+         onSelect.accept(selectedComponent);
+      }
+   }
+
+   public void selectPreviousV() {
+      blurChildren();
+
+      int size = 0;
+      for (int i = 0; i < children.size(); ++i) {
+         if (i / rows == selectedColumn) ++size;
+      }
+
+      if (size == 0) return;
+
+      selectedRow = ((--selectedRow) + size) % size;
+      selectedComponent = children.get(rows * selectedColumn + selectedRow);
+      selectedComponent.focus();
+
+      if(onSelect != null) {
+         onSelect.accept(selectedComponent);
+      }
+   }
+
+   public void selectNextV() {
+      blurChildren();
+
+      int size = 0;
+      for (int i = 0; i < children.size(); ++i) {
+         if (i / rows == selectedColumn) ++size;
+      }
+
+      if (size == 0) return;
+
+      selectedRow = (++selectedRow) % size;
+      selectedComponent = children.get(rows * selectedColumn + selectedRow);
+      selectedComponent.focus();
+
+      if(onSelect != null) {
+         onSelect.accept(selectedComponent);
       }
    }
 
