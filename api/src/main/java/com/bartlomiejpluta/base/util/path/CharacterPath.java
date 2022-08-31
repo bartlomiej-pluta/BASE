@@ -6,7 +6,9 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class CharacterPath<T extends Character> implements Path<T> {
 
@@ -55,6 +57,11 @@ public class CharacterPath<T extends Character> implements Path<T> {
 
    public CharacterPath<T> suspend(Predicate<T> predicate) {
       path.add(new SuspendSegment<>(predicate));
+      return this;
+   }
+   
+   public CharacterPath<T> suspend(Supplier<CompletableFuture<?>> future) {
+      path.add(new CompletableFutureSegment<>(future));
       return this;
    }
 }

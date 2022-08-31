@@ -6,7 +6,9 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class BasePath<T extends Movable> implements Path<T> {
 
@@ -45,6 +47,11 @@ public class BasePath<T extends Movable> implements Path<T> {
 
    public Path<T> suspend(Predicate<T> predicate) {
       path.add(new SuspendSegment<>(predicate));
+      return this;
+   }
+
+   public Path<T> suspend(Supplier<CompletableFuture<?>> future) {
+      path.add(new CompletableFutureSegment<>(future));
       return this;
    }
 }
