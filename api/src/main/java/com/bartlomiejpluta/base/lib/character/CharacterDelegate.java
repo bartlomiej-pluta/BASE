@@ -57,6 +57,11 @@ public abstract class CharacterDelegate implements Character {
    }
 
    @Override
+   public Movement move(Direction direction) {
+      return character.move(direction);
+   }
+
+   @Override
    public Direction getFaceDirection() {
       return character.getFaceDirection();
    }

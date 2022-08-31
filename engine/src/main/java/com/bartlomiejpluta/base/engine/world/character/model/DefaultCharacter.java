@@ -145,6 +145,13 @@ public class DefaultCharacter extends MovableSprite implements Character {
    }
 
    @Override
+   public Movement move(Direction direction) {
+      var movement = prepareMovement(direction);
+      layer.pushMovement(movement);
+      return movement;
+   }
+
+   @Override
    public boolean move(Movement movement) {
       if (super.move(movement)) {
          faceDirection = movement.getDirection();

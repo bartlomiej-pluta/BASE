@@ -25,7 +25,7 @@ public class RandomMovementAI<N extends NPC> implements AI {
       if (!npc.isMoving()) {
          if (accumulator > threshold) {
             Direction direction = Direction.values()[random.nextInt(4)];
-            layer.pushMovement(npc.prepareMovement(direction));
+            npc.move(direction);
             accumulator = 0.0f;
             threshold = random.nextFloat() * intervalSeconds;
          }
