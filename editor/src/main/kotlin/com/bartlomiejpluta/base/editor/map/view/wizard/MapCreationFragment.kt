@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.view.wizard
 
+import com.bartlomiejpluta.base.editor.code.view.select.SelectJavaClassFragment
 import com.bartlomiejpluta.base.editor.map.model.map.GameMapBuilder
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import com.bartlomiejpluta.base.editor.util.fx.TextFieldUtil
@@ -94,6 +95,26 @@ class MapCreationFragment : Fragment("Basic Data") {
             textfield(mapBuilderVM.handlerProperty) {
                required()
                trimWhitespace()
+            }
+         }
+
+         field("Map Handler base class") {
+            hbox {
+               textfield(mapBuilderVM.handlerBaseClassProperty) {
+                  trimWhitespace()
+               }
+
+               button("Select") {
+                  action {
+                     find<SelectJavaClassFragment>(Scope()).apply {
+                        onComplete { className ->
+                           mapBuilderVM.handlerBaseClassProperty.value = className
+                        }
+
+                        openModal(block = true, resizable = false)
+                     }
+                  }
+               }
             }
          }
       }

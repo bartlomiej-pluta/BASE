@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.project.context
 
+import com.bartlomiejpluta.base.api.map.handler.MapHandler
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAssetData
 import com.bartlomiejpluta.base.editor.asset.model.Asset
@@ -101,7 +102,7 @@ class DefaultProjectContext : ProjectContext {
       javaClassService.createClassFile(project.runner, project.codeFSNode, "game_runner.ftl")
    }
 
-   override fun importMap(name: String, map: GameMap) {
+   override fun importMap(name: String, handlerBaseClass: String?, map: GameMap) {
       project?.let {
          UID.next(it.maps.map(Asset::uid)).let { uid ->
             val asset = GameMapAsset(it, uid, name)
@@ -120,6 +121,9 @@ class DefaultProjectContext : ProjectContext {
                   }
                }
                model["map_code"] = name.split("\\s+".toRegex()).joinToString("_") { part -> part.lowercase() }
+               model["inheritanceKeyword"] = handlerBaseClass?.let { "extends " } ?: "implements"
+               model["mapBaseClassName"] = handlerBaseClass?.substringAfterLast(".") ?: MAP_HANDLER_NAME
+               model["mapBaseImport"] = handlerBaseClass ?: MAP_HANDLER_CANONICAL_NAME
             }
 
             File(it.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
@@ -130,6 +134,7 @@ class DefaultProjectContext : ProjectContext {
    override fun importMapFromFile(
       name: String,
       handler: String,
+      handlerBaseClass: String?,
       file: File,
       replaceTileSet: (String, String) -> String,
       replaceAutoTile: (String, String) -> String,
@@ -145,6 +150,17 @@ class DefaultProjectContext : ProjectContext {
 
             javaClassService.createClassFile(handler, project.codeFSNode, "map_handler.ftl") { model ->
                model["mapUid"] = uid
+               model["mapName"] = name
+               model["mapCode"] = name.split("\\s+".toRegex()).joinToString("") { part ->
+                  part.replaceFirstChar { c ->
+                     if (c.isLowerCase()) c.titlecase(Locale.getDefault())
+                     else c.toString()
+                  }
+               }
+               model["map_code"] = name.split("\\s+".toRegex()).joinToString("_") { part -> part.lowercase() }
+               model["inheritanceKeyword"] = handlerBaseClass?.let { "extends" } ?: "implements"
+               model["mapBaseClassName"] = handlerBaseClass?.substringAfterLast(".") ?: MAP_HANDLER_NAME
+               model["mapBaseImport"] = handlerBaseClass ?: MAP_HANDLER_CANONICAL_NAME
             }
 
             File(project.mapsDirectory, asset.source).outputStream().use { fos -> mapSerializer.serialize(map, fos) }
@@ -360,5 +376,10 @@ class DefaultProjectContext : ProjectContext {
 
    override fun saveScript(code: Code) {
       code.fileNode.writeText(code.code)
+   }
+
+   companion object {
+      private val MAP_HANDLER_NAME = MapHandler::class.java.simpleName
+      private val MAP_HANDLER_CANONICAL_NAME = MapHandler::class.java.canonicalName
    }
 }

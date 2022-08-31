@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.view.wizard
 
+import com.bartlomiejpluta.base.editor.code.view.select.SelectJavaClassFragment
 import com.bartlomiejpluta.base.editor.map.model.map.GameMapBuilder
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapBuilderVM
 import javafx.stage.FileChooser
@@ -51,7 +52,7 @@ class MapImportFragment : Fragment("Basic Data") {
             }
          }
 
-         label("Only tile, object and color layers will be imported. Any image layers will be dropped out.")
+         label("Only tile, auto tile, object and color layers will be imported. Any image layers will be dropped out.")
 
          field("Map name") {
             textfield(mapBuilderVM.nameProperty) {
@@ -63,6 +64,26 @@ class MapImportFragment : Fragment("Basic Data") {
             textfield(mapBuilderVM.handlerProperty) {
                required()
                trimWhitespace()
+            }
+         }
+
+         field("Map Handler base class") {
+            hbox {
+               textfield(mapBuilderVM.handlerBaseClassProperty) {
+                  trimWhitespace()
+               }
+
+               button("Select") {
+                  action {
+                     find<SelectJavaClassFragment>(Scope()).apply {
+                        onComplete { className ->
+                           mapBuilderVM.handlerBaseClassProperty.value = className
+                        }
+
+                        openModal(block = true, resizable = false)
+                     }
+                  }
+               }
             }
          }
       }

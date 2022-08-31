@@ -24,6 +24,9 @@ class GameMapBuilderVM : ItemViewModel<GameMapBuilder>(GameMapBuilder()) {
    val handlerProperty = bind(GameMapBuilder::handlerProperty, autocommit = true)
    var handler by handlerProperty
 
+   val handlerBaseClassProperty = bind(GameMapBuilder::handlerBaseClassProperty, autocommit = true)
+   var handlerBaseClass by handlerBaseClassProperty
+
    val fileProperty = bind(GameMapBuilder::fileProperty, autocommit = true)
    var file by fileProperty
 }

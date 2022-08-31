@@ -81,7 +81,7 @@ class MainController : Controller() {
                columns = vm.columns
                handler = vm.handler
             }
-            projectContext.importMap(vm.name, map)
+            projectContext.importMap(vm.name, vm.handlerBaseClass?.takeIf { it.isNotEmpty() }, map)
             openItems[scope] = GameMapVM(map)
          }
 
@@ -95,20 +95,28 @@ class MainController : Controller() {
       setInScope(vm, scope)
       find<MapImportFragment>(scope).apply {
          onComplete {
-            val map = projectContext.importMapFromFile(vm.name, vm.handler, File(vm.file), ::askForNewTileSetAsset, ::askForNewAutoTileAsset)
+            val map = projectContext.importMapFromFile(
+               vm.name,
+               vm.handler,
+               vm.handlerBaseClass?.takeIf { it.isNotEmpty() },
+               File(vm.file),
+               ::askForNewTileSetAsset,
+               ::askForNewAutoTileAsset
+            )
             openItems[scope] = GameMapVM(map)
          }
 
          openModal(block = true, resizable = false)
       }
    }
+
    private fun askForNewTileSetAsset(name: String, uid: String): String {
       var newUid = ""
 
       find<SelectGraphicAssetFragment<TileSetAsset>>(
          Scope(),
          SelectGraphicAssetFragment<TileSetAsset>::assets to projectContext.project?.tileSets!!,
-         SelectGraphicAssetFragment<TileSetAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Tile Set asset data with UID: [$uid].\nPlease select asset you would like to apply for layer $name.\n".toProperty(),
+         SelectGraphicAssetFragment<TileSetAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Tile Set asset data with UID: [$uid].\nPlease select asset you would like to apply for layer [$name].\n".toProperty(),
          SelectGraphicAssetFragment<TileSetAsset>::cancelable to false.toProperty()
       ).apply {
          title = "Select Tile Set for layer $name"
@@ -129,7 +137,7 @@ class MainController : Controller() {
       find<SelectGraphicAssetFragment<AutoTileAsset>>(
          Scope(),
          SelectGraphicAssetFragment<AutoTileAsset>::assets to projectContext.project?.autoTiles!!,
-         SelectGraphicAssetFragment<AutoTileAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Auto Tile asset data with UID: [$uid].\nPlease select asset you would like to apply for layer $name.\n".toProperty(),
+         SelectGraphicAssetFragment<AutoTileAsset>::comment to "You are importing a tile layer which originally was defined\nwith an other Auto Tile asset data with UID: [$uid].\nPlease select asset you would like to apply for layer [$name].\n".toProperty(),
          SelectGraphicAssetFragment<AutoTileAsset>::cancelable to false.toProperty()
       ).apply {
          title = "Select Auto Tile for layer $name"

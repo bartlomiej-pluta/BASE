@@ -10,9 +10,12 @@ import com.bartlomiejpluta.base.api.runner.GameRunner;
 
 public class ${className} implements GameRunner {
    private static final Logger log = LoggerFactory.getLogger(${className}.class);
+   private static ${className} INSTANCE;
 
    @Override
    public void init(Context context) {
+      ${className}.INSTANCE = this;
+
       // Resume engine, because it is initially paused
       context.resume();
 
@@ -21,7 +24,7 @@ public class ${className} implements GameRunner {
    }
 
    @Override
-   public void input(Screen screen) {
+   public void input(Input input) {
 
    }
 
@@ -33,5 +36,9 @@ public class ${className} implements GameRunner {
    @Override
    public void dispose() {
       // Do something after game loop is end
+   }
+
+   public static ${className} instance() {
+      return INSTANCE;
    }
 }

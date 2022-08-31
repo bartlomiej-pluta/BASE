@@ -32,9 +32,16 @@ interface ProjectContext {
    fun open(file: File)
    fun createNewProject(project: Project)
 
-   fun importMap(name: String, map: GameMap)
-   fun importMapFromFile(name: String, handler: String, file: File, replaceTileSet: (String, String) -> String, replaceAutoTile: (String, String) -> String,
+   fun importMap(name: String, handlerBaseClass: String?, map: GameMap)
+   fun importMapFromFile(
+      name: String,
+      handler: String,
+      handlerBaseClass: String?,
+      file: File,
+      replaceTileSet: (String, String) -> String,
+      replaceAutoTile: (String, String) -> String,
    ): GameMap
+
    fun loadMap(uid: String): GameMap
    fun saveMap(map: GameMap)
 
