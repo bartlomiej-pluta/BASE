@@ -2,6 +2,7 @@ package com.bartlomiejpluta.base.lib.icon;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
@@ -13,6 +14,8 @@ import lombok.NonNull;
 import org.joml.Matrix4fc;
 import org.joml.Vector2fc;
 import org.joml.Vector2ic;
+
+import java.util.function.Consumer;
 
 public abstract class IconDelegate implements Icon {
    protected final Icon icon;
@@ -219,6 +222,16 @@ public abstract class IconDelegate implements Icon {
    @Override
    public void setZIndex(int zIndex) {
       icon.setZIndex(zIndex);
+   }
+
+   @Override
+   public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
+      icon.addEventListener(type, listener);
+   }
+
+   @Override
+   public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
+      icon.removeEventListener(type, listener);
    }
 
    @Override

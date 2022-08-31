@@ -19,8 +19,4 @@ public interface Character extends Movable, Animated, Entity {
    void changeCharacterSet(String characterSetUid);
 
    CompletableFuture<Void> performInstantAnimation();
-
-   <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener);
-
-   <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener);
 }

@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.lib.entity;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.move.Direction;
@@ -12,6 +13,8 @@ import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import org.joml.Matrix4fc;
 import org.joml.Vector2fc;
 import org.joml.Vector2ic;
+
+import java.util.function.Consumer;
 
 public abstract class EntityDelegate implements Entity {
    protected final Entity entity;
@@ -193,6 +196,16 @@ public abstract class EntityDelegate implements Entity {
    @Override
    public void setZIndex(int zIndex) {
       entity.setZIndex(zIndex);
+   }
+
+   @Override
+   public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
+      entity.addEventListener(type, listener);
+   }
+
+   @Override
+   public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
+      entity.removeEventListener(type, listener);
    }
 
    @Override

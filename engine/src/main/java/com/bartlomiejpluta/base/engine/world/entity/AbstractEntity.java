@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.engine.world.entity;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.entity.Entity;
 import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.world.location.LocationableModel;
@@ -10,6 +11,8 @@ import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.lib.event.EventHandler;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.function.Consumer;
 
 public class AbstractEntity extends LocationableModel implements Entity {
    private final EventHandler eventHandler = new EventHandler();
@@ -33,6 +36,16 @@ public class AbstractEntity extends LocationableModel implements Entity {
    @Override
    public void onRemove(ObjectLayer layer) {
       this.layer = null;
+   }
+
+   @Override
+   public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.addListener(type, listener);
+   }
+
+   @Override
+   public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.removeListener(type, listener);
    }
 
    @Override

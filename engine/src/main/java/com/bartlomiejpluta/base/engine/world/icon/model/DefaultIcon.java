@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.world.icon.model;
 
 import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
@@ -12,6 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
+
+import java.util.function.Consumer;
 
 public class DefaultIcon extends Sprite implements Icon {
    private final EventHandler eventHandler = new EventHandler();
@@ -63,11 +66,6 @@ public class DefaultIcon extends Sprite implements Icon {
    @Override
    public void onRemove(ObjectLayer layer) {
       this.layer = null;
-   }
-
-   @Override
-   public <E extends Event> void handleEvent(E event) {
-      eventHandler.handleEvent(event);
    }
 
    @Override
@@ -145,6 +143,21 @@ public class DefaultIcon extends Sprite implements Icon {
    @Override
    public float getScaleY() {
       return iconScale.y;
+   }
+
+   @Override
+   public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.addListener(type, listener);
+   }
+
+   @Override
+   public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
+      eventHandler.removeListener(type, listener);
+   }
+
+   @Override
+   public <E extends Event> void handleEvent(E event) {
+      eventHandler.handleEvent(event);
    }
 
    @Override
