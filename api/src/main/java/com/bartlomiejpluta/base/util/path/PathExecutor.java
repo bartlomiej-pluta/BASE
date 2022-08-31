@@ -61,4 +61,9 @@ public class PathExecutor<T extends Movable> {
 
       return result;
    }
+
+   public void reset() {
+      iteration = 0;
+      current = 0;
+   }
 }
