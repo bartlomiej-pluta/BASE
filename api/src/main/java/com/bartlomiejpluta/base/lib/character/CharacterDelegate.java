@@ -58,7 +58,9 @@ public abstract class CharacterDelegate implements Character {
 
    @Override
    public Movement move(Direction direction) {
-      return character.move(direction);
+      var movement = prepareMovement(direction);
+      getLayer().pushMovement(movement);
+      return movement;
    }
 
    @Override
