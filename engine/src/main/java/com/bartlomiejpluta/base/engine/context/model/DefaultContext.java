@@ -43,16 +43,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 @Slf4j
 @Builder
 public class DefaultContext implements Context {
-   private final Map<String, Object> globals = new HashMap<>();
 
    @NonNull
    private final GameEngine engine;
@@ -287,106 +284,6 @@ public class DefaultContext implements Context {
    @Override
    public <E extends Event> void removeEventListener(EventType<E> type, Consumer<E> listener) {
       eventHandler.removeListener(type, listener);
-   }
-
-   @Override
-   public void putGlobal(String key, Object value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, boolean value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, byte value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, short value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, int value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, long value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, float value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, double value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public void putGlobal(String key, char value) {
-      globals.put(key, value);
-   }
-
-   @Override
-   public Object getGlobal(String key) {
-      return globals.get(key);
-   }
-
-   @Override
-   public <T> T getGlobal(String key, Class<T> type) {
-      return type.cast(globals.get(key));
-   }
-
-   @Override
-   public boolean getBooleanGlobal(String key) {
-      return (boolean) globals.get(key);
-   }
-
-   @Override
-   public byte getByteGlobal(String key) {
-      return (byte) globals.get(key);
-   }
-
-   @Override
-   public short getShortGlobal(String key) {
-      return (short) globals.get(key);
-   }
-
-   @Override
-   public int getIntGlobal(String key) {
-      return (int) globals.get(key);
-   }
-
-   @Override
-   public long getLongGlobal(String key) {
-      return (long) globals.get(key);
-   }
-
-   @Override
-   public float getFloatGlobal(String key) {
-      return (float) globals.get(key);
-   }
-
-   @Override
-   public double getDoubleGlobal(String key) {
-      return (double) globals.get(key);
-   }
-
-   @Override
-   public char getCharGlobal(String key) {
-      return (char) globals.get(key);
-   }
-
-   @Override
-   public String getStringGlobal(String key) {
-      return (String) globals.get(key);
    }
 
    @Override
