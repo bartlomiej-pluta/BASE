@@ -15,8 +15,6 @@ public interface Window extends Widget {
 
    CompletableFuture<Window> getFuture();
 
-   void setFuture(CompletableFuture<Window> future);
-
    default void onOpen(WindowManager manager, Object[] args) {
       // do nothing
    }

@@ -6,7 +6,6 @@ import com.bartlomiejpluta.base.api.gui.*;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -24,7 +23,6 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    protected WindowPosition windowPosition = WindowPosition.CENTER;
 
    @Getter
-   @Setter
    protected CompletableFuture<Window> future;
 
    protected BaseWindow(Context context, GUI gui, Map<String, Component> refs) {
@@ -104,6 +102,7 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    @Override
    public void onOpen(WindowManager manager, Object[] args) {
       this.manager = manager;
+      this.future = new CompletableFuture<>();
       content.focus();
    }
 

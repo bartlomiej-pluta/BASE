@@ -63,8 +63,6 @@ public final class WindowManager extends BaseWidget {
    }
 
    public CompletableFuture<Window> open(@NonNull Window window, Object... args) {
-      window.setFuture(new CompletableFuture<>());
-
       if (windows.isEmpty()) {
          input.addKeyEventHandler(this::forwardKeyEventToTopWindow);
       }
