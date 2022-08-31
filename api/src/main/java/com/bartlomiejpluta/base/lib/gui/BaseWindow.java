@@ -6,8 +6,10 @@ import com.bartlomiejpluta.base.api.gui.*;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
@@ -15,11 +17,15 @@ import static java.util.Objects.requireNonNull;
 public abstract class BaseWindow extends BaseWidget implements Window {
    @Getter
    private final Map<String, Component> refs;
-   protected Context context;
-   protected GUI gui;
+   protected final Context context;
+   protected final GUI gui;
    protected WindowManager manager;
    protected Component content;
    protected WindowPosition windowPosition = WindowPosition.CENTER;
+
+   @Getter
+   @Setter
+   protected CompletableFuture<Window> future;
 
    protected BaseWindow(Context context, GUI gui, Map<String, Component> refs) {
       this.context = context;

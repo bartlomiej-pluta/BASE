@@ -1,5 +1,7 @@
 package com.bartlomiejpluta.base.api.gui;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface Window extends Widget {
    void setContent(Component component);
 
@@ -10,6 +12,10 @@ public interface Window extends Widget {
    Component reference(String ref);
 
    <T extends Component> T reference(String ref, Class<T> type);
+
+   CompletableFuture<Window> getFuture();
+
+   void setFuture(CompletableFuture<Window> future);
 
    default void onOpen(WindowManager manager, Object[] args) {
       // do nothing

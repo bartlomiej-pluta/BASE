@@ -10,8 +10,7 @@ import lombok.Setter;
 
 import java.util.Deque;
 import java.util.LinkedList;
-
-import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CompletableFuture;
 
 public final class WindowManager extends BaseWidget {
    private final Input input;
@@ -29,7 +28,7 @@ public final class WindowManager extends BaseWidget {
       this(context, DisplayMode.DISPLAY_STACK, UpdateMode.UPDATE_ALL);
    }
 
-   public WindowManager(Context context, DisplayMode displayMode, UpdateMode updateMode) {
+   public WindowManager(@NonNull Context context, @NonNull DisplayMode displayMode, @NonNull UpdateMode updateMode) {
       this.input = context.getInput();
 
       super.setSizeMode(SizeMode.RELATIVE, SizeMode.RELATIVE);
@@ -63,8 +62,8 @@ public final class WindowManager extends BaseWidget {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
-   public void open(Window window, Object... args) {
-      requireNonNull(window, "Window cannot be null");
+   public CompletableFuture<Window> open(@NonNull Window window, Object... args) {
+      window.setFuture(new CompletableFuture<>());
 
       if (windows.isEmpty()) {
          input.addKeyEventHandler(this::forwardKeyEventToTopWindow);
@@ -72,7 +71,9 @@ public final class WindowManager extends BaseWidget {
 
       windows.addLast(window);
       window.setParent(this);
-      window.onOpen(this, args != null ? args : new Object[] {});
+      window.onOpen(this, args != null ? args : new Object[]{});
+
+      return window.getFuture();
    }
 
    private void forwardKeyEventToTopWindow(KeyEvent event) {
@@ -101,6 +102,8 @@ public final class WindowManager extends BaseWidget {
       if (windows.isEmpty()) {
          input.removeKeyEventHandler(this::forwardKeyEventToTopWindow);
       }
+
+      window.getFuture().complete(window);
    }
 
    public int size() {
@@ -154,48 +157,48 @@ public final class WindowManager extends BaseWidget {
    private void drawWindow(Screen screen, Window window, GUI gui) {
       switch (window.getWindowPosition()) {
          case TOP -> window.setPosition(
-               (screen.getWidth() - window.getWidth()) / 2,
-               window.getMarginTop()
+                 (screen.getWidth() - window.getWidth()) / 2,
+                 window.getMarginTop()
          );
 
          case TOP_RIGHT -> window.setPosition(
-               screen.getWidth() - window.getWidth() - window.getMarginRight(),
-               window.getMarginTop()
+                 screen.getWidth() - window.getWidth() - window.getMarginRight(),
+                 window.getMarginTop()
          );
 
          case RIGHT -> window.setPosition(
-               screen.getWidth() - window.getWidth() - window.getMarginRight(),
-               (screen.getHeight() - window.getHeight()) / 2
+                 screen.getWidth() - window.getWidth() - window.getMarginRight(),
+                 (screen.getHeight() - window.getHeight()) / 2
          );
 
          case BOTTOM_RIGHT -> window.setPosition(
-               screen.getWidth() - window.getWidth() - window.getMarginRight(),
-               screen.getHeight() - window.getHeight() - window.getMarginBottom()
+                 screen.getWidth() - window.getWidth() - window.getMarginRight(),
+                 screen.getHeight() - window.getHeight() - window.getMarginBottom()
          );
 
          case BOTTOM -> window.setPosition(
-               (screen.getWidth() - window.getWidth()) / 2,
-               screen.getHeight() - window.getHeight() - window.getMarginBottom()
+                 (screen.getWidth() - window.getWidth()) / 2,
+                 screen.getHeight() - window.getHeight() - window.getMarginBottom()
          );
 
          case BOTTOM_LEFT -> window.setPosition(
-               window.getMarginLeft(),
-               screen.getHeight() - window.getHeight() - window.getMarginBottom()
+                 window.getMarginLeft(),
+                 screen.getHeight() - window.getHeight() - window.getMarginBottom()
          );
 
          case LEFT -> window.setPosition(
-               window.getMarginLeft(),
-               (screen.getHeight() - window.getHeight()) / 2
+                 window.getMarginLeft(),
+                 (screen.getHeight() - window.getHeight()) / 2
          );
 
          case TOP_LEFT -> window.setPosition(
-               window.getMarginLeft(),
-               window.getMarginTop()
+                 window.getMarginLeft(),
+                 window.getMarginTop()
          );
 
          case CENTER -> window.setPosition(
-               (screen.getWidth() - window.getWidth()) / 2,
-               (screen.getHeight() - window.getHeight()) / 2
+                 (screen.getWidth() - window.getWidth()) / 2,
+                 (screen.getHeight() - window.getHeight()) / 2
          );
       }
 
