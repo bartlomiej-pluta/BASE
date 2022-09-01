@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.lib.gui;
 
 import com.bartlomiejpluta.base.api.context.Context;
+import com.bartlomiejpluta.base.api.gui.Attribute;
 import com.bartlomiejpluta.base.api.gui.Component;
 import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.gui.SizeMode;
@@ -23,6 +24,26 @@ public class BorderLayout extends BaseContainer {
       }
 
       super.add(component);
+   }
+
+   @Override
+   @Attribute("width")
+   public void setWidth(String width) {
+      super.setWidth(width);
+
+      if (widthMode == SizeMode.AUTO) {
+         throw new IllegalStateException("Border layout does not support AUTO sizing mode");
+      }
+   }
+
+   @Override
+   @Attribute("height")
+   public void setHeight(String height) {
+      super.setHeight(height);
+
+      if (heightMode == SizeMode.AUTO) {
+         throw new IllegalStateException("Border layout does not support AUTO sizing mode");
+      }
    }
 
    @Override
@@ -86,7 +107,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition((layout.getWidth() - getWidth()) / 2, layout.getMarginTop());
+         setPosition((layout.getWidth() - getWidth()) / 2, layout.getMarginTop() + layout.getPaddingTop());
       }
    }
 
@@ -98,7 +119,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition(layout.getWidth() - getWidth() - getMarginRight(), getMarginTop());
+         setPosition(layout.getWidth() - getWidth() - getMarginRight() - layout.getPaddingRight(), getMarginTop() + layout.getPaddingTop());
       }
    }
 
@@ -110,7 +131,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition(layout.getWidth() - getWidth() - getMarginRight(), (layout.getHeight() - getHeight()) / 2);
+         setPosition(layout.getWidth() - getWidth() - getMarginRight() - layout.getPaddingRight(), (layout.getHeight() - getHeight()) / 2);
       }
    }
 
@@ -122,7 +143,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition(layout.getWidth() - getWidth() - getMarginRight(), layout.getHeight() - getHeight() - getMarginBottom());
+         setPosition(layout.getWidth() - getWidth() - getMarginRight() - layout.getPaddingRight(), layout.getHeight() - getHeight() - getMarginBottom() - layout.getPaddingBottom());
       }
    }
 
@@ -134,7 +155,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition((layout.getWidth() - getWidth()) / 2, layout.getHeight() - getHeight() - getMarginBottom());
+         setPosition((layout.getWidth() - getWidth()) / 2, layout.getHeight() - getHeight() - getMarginBottom() - layout.getPaddingBottom());
       }
    }
 
@@ -146,7 +167,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition(getMarginLeft(), layout.getHeight() - getHeight() - getMarginBottom());
+         setPosition(getMarginLeft() + layout.getPaddingLeft(), layout.getHeight() - getHeight() - getMarginBottom() - layout.getPaddingBottom());
       }
    }
 
@@ -158,7 +179,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition(getMarginLeft(), (layout.getHeight() - getHeight()) / 2);
+         setPosition(getMarginLeft() + layout.getPaddingLeft(), (layout.getHeight() - getHeight()) / 2);
       }
    }
 
@@ -170,7 +191,7 @@ public class BorderLayout extends BaseContainer {
 
       @Override
       protected void setPosition(BorderLayout layout) {
-         setPosition(getMarginLeft(), getMarginTop());
+         setPosition(getMarginLeft() + layout.getPaddingLeft(), getMarginTop() + layout.getPaddingTop());
       }
    }
 

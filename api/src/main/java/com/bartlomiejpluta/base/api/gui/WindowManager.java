@@ -62,6 +62,26 @@ public final class WindowManager extends BaseWidget {
       throw new UnsupportedOperationException("Window Manager is hardcoded to be of MATCH_PARENT mode");
    }
 
+   @Override
+   @Attribute("width")
+   public void setWidth(String width) {
+      super.setWidth(width);
+
+      if (widthMode == SizeMode.AUTO) {
+         throw new IllegalStateException("Border layout does not support AUTO sizing mode");
+      }
+   }
+
+   @Override
+   @Attribute("height")
+   public void setHeight(String height) {
+      super.setHeight(height);
+
+      if (heightMode == SizeMode.AUTO) {
+         throw new IllegalStateException("Border layout does not support AUTO sizing mode");
+      }
+   }
+
    public CompletableFuture<Window> open(@NonNull Window window, Object... args) {
       if (windows.isEmpty()) {
          input.addKeyEventHandler(this::forwardKeyEventToTopWindow);

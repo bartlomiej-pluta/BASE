@@ -34,7 +34,7 @@ public abstract class ComponentWrapper extends BaseComponent {
 
    @Override
    public void draw(Screen screen, GUI gui) {
-      component.setPosition(x + component.getMarginLeft(), y + component.getMarginTop());
+      component.setPosition(x + paddingLeft + component.getMarginLeft(), y + paddingTop + component.getMarginTop());
       component.draw(screen, gui);
    }
 }
