@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.api.move.Movable;
 
 import java.util.List;
 
+import static java.lang.Math.max;
 import static java.util.Collections.emptyList;
 
 public class PathExecutor<T extends Movable> {
@@ -60,6 +61,10 @@ public class PathExecutor<T extends Movable> {
       }
 
       return result;
+   }
+
+   public void setCurrentSegment(int segmentNumber) {
+      this.current = max(0, segmentNumber - 1);
    }
 
    public void reset() {
