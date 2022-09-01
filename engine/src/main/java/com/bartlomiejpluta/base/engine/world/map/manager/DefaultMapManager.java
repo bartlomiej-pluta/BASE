@@ -110,4 +110,16 @@ public class DefaultMapManager implements MapManager {
 
       return handler;
    }
+
+   @Override
+   public void resetMaps() {
+      log.info("Removing maps and map handlers from cache");
+
+      var mapsSize = maps.size();
+      var handlersSize = handlers.size();
+      maps.clear();
+      handlers.clear();
+
+      log.info("Removed {} maps and {} map handlers from cache", mapsSize, handlersSize);
+   }
 }

@@ -9,4 +9,6 @@ import com.bartlomiejpluta.base.internal.gc.Cleanable;
 
 public interface MapManager extends AssetManager<GameMapAsset, DefaultGameMap>, Cleanable {
    MapHandler loadHandler(Context context, String mapUid);
+
+   void resetMaps();
 }

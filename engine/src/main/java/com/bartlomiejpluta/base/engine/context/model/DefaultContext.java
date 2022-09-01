@@ -277,6 +277,12 @@ public class DefaultContext implements Context {
    }
 
    @Override
+   public void resetMaps() {
+      log.info("Resetting maps");
+      mapManager.resetMaps();
+   }
+
+   @Override
    public <E extends Event> void addEventListener(EventType<E> type, Consumer<E> listener) {
       eventHandler.addListener(type, listener);
    }
