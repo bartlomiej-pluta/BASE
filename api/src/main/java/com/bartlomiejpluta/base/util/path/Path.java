@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface Path<T extends Movable> {
    List<? extends PathSegment<T>> getPath();
+
+   int getLength();
+
+   boolean isEmpty();
 }

@@ -10,5 +10,7 @@ import java.util.LinkedList;
 public interface PathFinder {
    <T extends Movable> MovementPath<T> findPath(ObjectLayer layer, T start, Vector2ic end);
 
+   <T extends Movable> MovementPath<T> findPath(ObjectLayer layer, Vector2ic start, Vector2ic end);
+
    LinkedList<Vector2ic> findSequence(ObjectLayer layer, Vector2ic start, Vector2ic end);
 }

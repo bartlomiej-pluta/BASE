@@ -54,7 +54,7 @@ public abstract class FollowObjectAI<N extends NPC, T extends Locationable> impl
          } else if (sees(npc, target, layer, distance)) {
             follow(npc, target, layer, dt);
 
-            if (path == null) {
+            if (path == null || path.isEmpty()) {
                path = finder.findPath(layer, npc, target.getCoordinates());
                executor.setPath(path);
             }

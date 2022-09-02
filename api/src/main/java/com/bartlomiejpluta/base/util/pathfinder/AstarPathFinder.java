@@ -15,6 +15,15 @@ import java.util.function.Function;
 
 import static java.lang.Math.abs;
 
+/*
+   The heuristic can be used to control A*’s behavior.
+      - At one extreme, if h(n) is 0, then only g(n) plays a role, and A* turns into Dijkstra’s Algorithm, which is guaranteed to find a shortest path.
+      - If h(n) is always lower than (or equal to) the cost of moving from n to the goal, then A* is guaranteed to find a shortest path. The lower h(n) is, the more node A* expands, making it slower.
+      - If h(n) is exactly equal to the cost of moving from n to the goal, then A* will only follow the best path and never expand anything else, making it very fast. Although you can’t make this happen in all cases, you can make it exact in some special cases. It’s nice to know that given perfect information, A* will behave perfectly.
+      - If h(n) is sometimes greater than the cost of moving from n to the goal, then A* is not guaranteed to find a shortest path, but it can run faster.
+      - At the other extreme, if h(n) is very high relative to g(n), then only h(n) plays a role, and A* turns into Greedy Best-First-Search.
+   https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+ */
 public class AstarPathFinder implements PathFinder {
    private static final LinkedList<Vector2ic> EMPTY_LINKED_LIST = new LinkedList<>();
 
@@ -29,10 +38,10 @@ public class AstarPathFinder implements PathFinder {
     *  +---+---+---+
     */
    private static final Vector2i[] ADJACENT = new Vector2i[]{
-         new Vector2i(-1, 0),
-         new Vector2i(0, -1),
-         new Vector2i(1, 0),
-         new Vector2i(0, 1)
+           new Vector2i(-1, 0),
+           new Vector2i(0, -1),
+           new Vector2i(1, 0),
+           new Vector2i(0, 1)
    };
 
    private final int maxNodes;
@@ -43,7 +52,12 @@ public class AstarPathFinder implements PathFinder {
 
    @Override
    public <T extends Movable> MovementPath<T> findPath(ObjectLayer layer, T start, Vector2ic end) {
-      return astar(layer, start.getCoordinates(), end, this::recreatePath);
+      return findPath(layer, start.getCoordinates(), end);
+   }
+
+   @Override
+   public <T extends Movable> MovementPath<T> findPath(ObjectLayer layer, Vector2ic start, Vector2ic end) {
+      return astar(layer, start, end, this::recreatePath);
    }
 
    private <T extends Movable> MovementPath<T> recreatePath(Node node) {
@@ -59,8 +73,8 @@ public class AstarPathFinder implements PathFinder {
          var currentY = current.position.y();
 
          path.addFirst(Direction.ofVector(
-               currentX - current.parent.position.x(),
-               currentY - current.parent.position.y()
+                 currentX - current.parent.position.x(),
+                 currentY - current.parent.position.y()
          ), currentX, currentY);
 
          current = current.parent;
@@ -97,16 +111,14 @@ public class AstarPathFinder implements PathFinder {
       var startNode = new Node(start);
       var endNode = new Node(end);
 
-      // The heuristic function defined as Manhattan distance to the end node
-      Function<Node, Float> h = node -> manhattanDistance(node.position, end);
 
       // The start node has the actual cost 0 and estimated is a Manhattan distance to the end node
       startNode.g = 0.0f;
-      startNode.f = h.apply(startNode);
+      startNode.f = heuristic(startNode.position, end);
 
       // We are starting with one open node (the start one) end empty closed lists
       var open = new PriorityQueue<Node>();
-      var closed = new HashSet<Node>();
+      var closed = new HashSet<Vector2ic>();
       open.add(startNode);
 
       // As long as there are at least one open node
@@ -125,7 +137,7 @@ public class AstarPathFinder implements PathFinder {
          // And the same time we are removing the node from open list
          // and pushing it to closed one as we no longer need to analyze this node
          var current = open.poll();
-         closed.add(current);
+         closed.add(current.position);
 
          // If we found the node with f score and it is
          // actually an end node, we have most likely found a best path
@@ -157,10 +169,8 @@ public class AstarPathFinder implements PathFinder {
 
             // If we already analyzed this node,
             // we are free to skip it to not analyze it once again
-            for (var closedNode : closed) {
-               if (closedNode.position.equals(position)) {
-                  continue adjacent;
-               }
+            if (closed.contains(position)) {
+               continue;
             }
 
             // Get rid of nodes that are not reachable (blocked or something is staying on there)
@@ -185,7 +195,7 @@ public class AstarPathFinder implements PathFinder {
             // path further
             neighbour.parent = current;
             neighbour.g = current.g + 1;
-            neighbour.f = neighbour.g + h.apply(neighbour);
+            neighbour.f = neighbour.g + heuristic(neighbour.position, end);
 
             // If the node already exists in open list,
             // we need to compare current neighbour with existing node
@@ -211,8 +221,9 @@ public class AstarPathFinder implements PathFinder {
       return pathProducer.apply(null);
    }
 
-   private float manhattanDistance(Vector2ic a, Vector2ic b) {
-      return (abs(a.x() - b.x()) + abs(a.y() - b.y()));
+   // The heuristic function defined as Manhattan distance to the end node
+   private float heuristic(Vector2ic node, Vector2ic end) {
+      return (abs(node.x() - end.x()) + abs(node.y() - end.y()));
    }
 
    private static class Node implements Comparable<Node> {

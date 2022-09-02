@@ -15,6 +15,16 @@ public class BasePath<T extends Movable> implements Path<T> {
    @Getter
    private final List<PathSegment<T>> path = new ArrayList<>();
 
+   @Override
+   public int getLength() {
+      return path.size();
+   }
+
+   @Override
+   public boolean isEmpty() {
+      return path.isEmpty();
+   }
+
    public Path<T> add(PathSegment<T> segment) {
       path.add(segment);
       return this;

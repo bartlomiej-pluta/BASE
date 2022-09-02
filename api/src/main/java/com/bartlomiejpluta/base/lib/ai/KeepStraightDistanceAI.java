@@ -60,7 +60,7 @@ public abstract class KeepStraightDistanceAI<N extends NPC, T extends Locationab
          idle(npc, target, layer, dt);
       }
 
-      if (path == null) {
+      if (path == null || path.isEmpty()) {
          // We are considering only straight positions against the target ("@"), for example
          // when minRange is 3 and maxRange is 6, then we are considering only "O"-marked positions.
          // The X means some obstacle for which we'd like to prune the positions after that:
