@@ -7,4 +7,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Attribute {
    String value();
+   String separator() default "|";
 }

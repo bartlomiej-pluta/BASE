@@ -24,13 +24,9 @@ public class FPSMonitor extends BaseComponent {
       background.setRGBA(0x444444AA);
    }
 
-   @Attribute("monitor")
-   public void setMonitor(Integer[] options) {
-      if (options.length != 2) {
-         throw new IllegalArgumentException("Expected 2 parameters: batch size and number of samples");
-      }
-
-      this.fpsProfiler = FPSProfiler.create(options[0], options[1]);
+   @Attribute(value = "monitor", separator = ",")
+   public void setMonitor(Integer batchSize, Integer samples) {
+      this.fpsProfiler = FPSProfiler.create(batchSize, samples);
    }
 
    public void setColor(Integer hex) {

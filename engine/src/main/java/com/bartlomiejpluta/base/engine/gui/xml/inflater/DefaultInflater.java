@@ -3,6 +3,7 @@ package com.bartlomiejpluta.base.engine.gui.xml.inflater;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.gui.*;
 import com.bartlomiejpluta.base.engine.error.AppException;
+import com.bartlomiejpluta.base.engine.error.ParseException;
 import com.bartlomiejpluta.base.engine.util.reflection.ClassLoader;
 import lombok.SneakyThrows;
 import org.codehaus.janino.ExpressionEvaluator;
@@ -19,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @org.springframework.stereotype.Component
 public class DefaultInflater implements Inflater {
@@ -140,9 +142,16 @@ public class DefaultInflater implements Inflater {
 
    private void setAttribute(Class<? extends Widget> clazz, Widget widget, Node attribute) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
       for (var setter : clazz.getMethods()) {
-         if (setter.isAnnotationPresent(Attribute.class) && setter.getAnnotation(Attribute.class).value().equals(attribute.getLocalName()) && setter.getParameterCount() == 1) {
-            var value = parseSimpleValue(setter, attribute.getNodeValue());
-            setter.invoke(widget, value);
+         var annotation = setter.getAnnotation(Attribute.class);
+         if (setter.isAnnotationPresent(Attribute.class) && annotation.value().equals(attribute.getLocalName())) {
+            if (setter.getParameterCount() == 1) {
+               var value = parseSimpleValue(setter, annotation.separator(), attribute.getNodeValue());
+               setter.invoke(widget, value);
+            } else {
+               var values = parseExpandedValues(setter, annotation.separator(), attribute.getNodeValue());
+               setter.invoke(widget, values);
+            }
+
             return;
          }
       }
@@ -260,58 +269,88 @@ public class DefaultInflater implements Inflater {
       return "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
    }
 
-   private static Object parseSimpleValue(Method method, String value) {
-      var type = method.getParameterTypes()[0];
+   private static Object[] parseExpandedValues(Method method, String separator, String value) {
+      var parameters = method.getParameters();
+      var types = method.getParameterTypes();
+      var items = value.split(separator);
 
-      if (type.isArray()) {
-         var arrayType = type.getComponentType();
-         var items = value.split("\\|");
-         var values = Array.newInstance(arrayType, items.length);
-         for (int i = 0; i < items.length; ++i) {
-            Array.set(values, i, parseSimpleValue(arrayType, items[i].trim()));
-         }
-
-         return values;
+      if (types.length != items.length) {
+         throw new AppException("Unable to parse [" + value + "] for [" + method.getName() + "] method: expected [" + types.length + "] arguments, get [" + items.length + "]");
       }
 
-      return parseSimpleValue(type, value);
+      var values = (Object[]) Array.newInstance(Object.class, items.length);
+      for (int i = 0; i < items.length; ++i) {
+         try {
+            var parsedValue = parseSimpleValue(types[i], items[i].trim());
+            Array.set(values, i, parsedValue);
+         } catch (ParseException ex) {
+            throw new AppException("Parsing [" + parameters[i].getName() + "] error: " + ex.getMessage(), ex);
+         }
+      }
+
+      return values;
    }
 
-   @SuppressWarnings("unchecked")
-   private static Object parseSimpleValue(Class<?> type, String value) {
-      if (type == String.class) {
-         return value;
+   private static Object parseSimpleValue(Method method, String separator, String value) {
+      try {
+         var type = method.getParameterTypes()[0];
+
+         if (type.isArray()) {
+            var arrayType = type.getComponentType();
+            var items = value.split(Pattern.quote(separator));
+            var values = Array.newInstance(arrayType, items.length);
+            for (int i = 0; i < items.length; ++i) {
+               Array.set(values, i, parseSimpleValue(arrayType, items[i].trim()));
+            }
+
+            return values;
+         }
+
+         return parseSimpleValue(type, value);
+      } catch (ParseException ex) {
+         throw new AppException(ex.getMessage(), ex);
+      }
+   }
+
+   @SuppressWarnings({"unchecked", "rawtypes"})
+   private static Object parseSimpleValue(Class<?> type, String value) throws ParseException {
+      try {
+         if (type == String.class) {
+            return value;
+         }
+
+         if (type == Short.TYPE || type == Short.class) {
+            return Short.valueOf(value);
+         }
+
+         if (type == Integer.TYPE || type == Integer.class) {
+            return Integer.valueOf(value);
+         }
+
+         if (type == Long.TYPE || type == Long.class) {
+            return Long.valueOf(value);
+         }
+
+         if (type == Boolean.TYPE || type == Boolean.class) {
+            return Boolean.valueOf(value);
+         }
+
+         if (type == Float.TYPE || type == Float.class) {
+            return Float.valueOf(value);
+         }
+
+         if (type == Double.TYPE || type == Double.class) {
+            return Double.valueOf(value);
+         }
+
+         if (type.isEnum()) {
+            return Enum.valueOf((Class<? extends Enum>) type, value.toUpperCase());
+         }
+      } catch (IllegalArgumentException | ClassCastException ex) {
+         throw new ParseException("Unable to parse [" + value + "] as [" + type.getSimpleName() + "]", ex);
       }
 
-      if (type == Short.TYPE || type == Short.class) {
-         return Short.valueOf(value);
-      }
-
-      if (type == Integer.TYPE || type == Integer.class) {
-         return Integer.valueOf(value);
-      }
-
-      if (type == Long.TYPE || type == Long.class) {
-         return Long.valueOf(value);
-      }
-
-      if (type == Boolean.TYPE || type == Boolean.class) {
-         return Boolean.valueOf(value);
-      }
-
-      if (type == Float.TYPE || type == Float.class) {
-         return Float.valueOf(value);
-      }
-
-      if (type == Double.TYPE || type == Double.class) {
-         return Double.valueOf(value);
-      }
-
-      if (type.isEnum()) {
-         return Enum.valueOf((Class<? extends Enum>) type, value.toUpperCase());
-      }
-
-      throw new AppException("Attribute of type [" + type.getCanonicalName() + "] is not supported");
+      throw new ParseException("Attribute of type [" + type.getCanonicalName() + "] is not supported");
    }
 
    @SneakyThrows
