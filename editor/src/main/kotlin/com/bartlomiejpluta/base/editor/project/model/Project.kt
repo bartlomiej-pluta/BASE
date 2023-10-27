@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.editor.project.model
 import com.bartlomiejpluta.base.editor.animation.asset.AnimationAsset
 import com.bartlomiejpluta.base.editor.audio.asset.SoundAsset
 import com.bartlomiejpluta.base.editor.autotile.asset.AutoTileAsset
-import com.bartlomiejpluta.base.editor.database.source.DataSource
+import com.bartlomiejpluta.base.editor.database.source.H2DBDataSource
 import com.bartlomiejpluta.base.editor.characterset.asset.CharacterSetAsset
 import com.bartlomiejpluta.base.editor.file.model.FileSystemNode
 import com.bartlomiejpluta.base.editor.gui.font.asset.FontAsset
@@ -128,7 +128,7 @@ class Project {
       createObjectBinding({ File(buildOutDirectory, PROJECT_OUTPUT_JAR_FILE) }, buildOutDirectoryProperty)
    val buildOutputJarFile by buildOutputJarFileProperty
 
-   lateinit var database: DataSource
+   lateinit var database: H2DBDataSource
 
    init {
       sourceDirectoryProperty.addListener { _, _, dir ->
@@ -155,7 +155,7 @@ class Project {
    }
 
    fun init() {
-      database = DataSource(databaseFile)
+      database = H2DBDataSource(databaseFile)
       mkdirs()
    }
 
@@ -180,7 +180,7 @@ class Project {
 
    companion object {
       const val PROJECT_FILE = "project.bep"
-      const val DATABASE_FILE = "data"
+      const val DATABASE_FILE = "data.sql"
       const val DATABASE_DUMP_FILE = "data.sql"
       const val PROJECT_OUTPUT_JAR_FILE = "game.jar"
 

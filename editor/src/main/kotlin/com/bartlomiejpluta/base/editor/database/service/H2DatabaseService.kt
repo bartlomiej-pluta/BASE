@@ -7,6 +7,7 @@ import com.bartlomiejpluta.base.editor.database.model.data.Query
 import com.bartlomiejpluta.base.editor.database.model.schema.SchemaDatabase
 import com.bartlomiejpluta.base.editor.database.model.schema.SchemaTable
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
+import org.h2.tools.Script
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import tornadofx.observableListOf
@@ -32,10 +33,10 @@ class H2DatabaseService : DatabaseService {
                val results = prepareStatement("SHOW COLUMNS FROM ${table.name}").executeQuery()
                while (results.next()) {
                   table.addColumn(
-                     results.getString("FIELD"),
-                     results.getString("TYPE"),
-                     results.getBoolean("NULL"),
-                     results.getString("KEY") == "PRI"
+                          results.getString("FIELD"),
+                          results.getString("TYPE"),
+                          results.getBoolean("NULL"),
+                          results.getString("KEY") == "PRI"
                   )
                }
             }
@@ -79,5 +80,13 @@ class H2DatabaseService : DatabaseService {
       }
 
       return@run null
+   }
+
+   override fun dump() {
+      projectContext.project?.databaseFile?.let { file ->
+         run {
+            Script.process(this, file.absolutePath, "", "")
+         }
+      }
    }
 }

@@ -11,4 +11,6 @@ interface DatabaseService {
    fun <T> run(op: Connection.() -> T): T?
 
    fun execute(statement: String, name: String, schema: SchemaTable? = null): Query?
+
+   fun dump()
 }

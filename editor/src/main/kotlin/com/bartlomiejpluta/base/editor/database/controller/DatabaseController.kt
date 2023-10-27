@@ -16,7 +16,7 @@ class DatabaseController : Controller() {
    private val databaseService: DatabaseService by di()
 
    fun execute(statement: String, name: String, schema: SchemaTable? = null): Query? = try {
-      databaseService.execute(statement, name, schema)
+      databaseService.execute(statement, name, schema).also { databaseService.dump() }
    } catch (e: SQLException) {
       sqlErrorAlert(e)
       null
@@ -25,6 +25,7 @@ class DatabaseController : Controller() {
    fun execute(op: Connection.() -> Unit): Boolean = databaseService.run {
       try {
          op(this)
+         databaseService.dump()
          true
       } catch (e: SQLException) {
          sqlErrorAlert(e)
@@ -40,6 +41,7 @@ class DatabaseController : Controller() {
          .forEach(PreparedStatement::execute)
 
       commit()
+      databaseService.dump()
    }
 
    private fun sqlErrorAlert(e: SQLException) =
