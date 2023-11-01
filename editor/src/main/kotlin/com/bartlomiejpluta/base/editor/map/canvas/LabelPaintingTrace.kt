@@ -1,14 +1,10 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
-import com.bartlomiejpluta.base.editor.code.model.Code
-import com.bartlomiejpluta.base.editor.code.model.CodeScope
-import com.bartlomiejpluta.base.editor.code.model.CodeType
-import com.bartlomiejpluta.base.editor.code.view.editor.CodeSnippetFragment
-import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
-import com.bartlomiejpluta.base.editor.file.model.DummyFileNode
+import com.bartlomiejpluta.base.editor.common.view.StringInputFragment
+import com.bartlomiejpluta.base.editor.common.viewmodel.StringVM
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
-import com.bartlomiejpluta.base.editor.map.model.obj.MapObject
+import com.bartlomiejpluta.base.editor.map.model.obj.MapLabel
 import com.bartlomiejpluta.base.editor.map.viewmodel.BrushVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
@@ -16,20 +12,20 @@ import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.render.input.MapMouseEvent
 import javafx.collections.ObservableList
 import javafx.scene.input.MouseButton
+import tornadofx.Scope
 import tornadofx.find
 import tornadofx.setInScope
-import tornadofx.toProperty
 
-class ObjectPaintingTrace(
+class LabelPaintingTrace(
    private val projectContext: ProjectContext,
    private val map: GameMapVM,
    override val commandName: String
 ) : PaintingTrace {
-   private lateinit var objects: ObservableList<MapObject>
+   private lateinit var labels: ObservableList<MapLabel>
    private lateinit var event: MapMouseEvent
 
-   private var newObject: MapObject? = null
-   private var formerObject: MapObject? = null
+   private var newLabel: MapLabel? = null
+   private var formerLabel: MapLabel? = null
    private var x = 0
    private var y = 0
 
@@ -44,31 +40,30 @@ class ObjectPaintingTrace(
          return
       }
 
-      objects = (editorStateVM.selectedLayer as ObjectLayer).objects
-      formerObject = objects.firstOrNull { it.x == x && it.y == y }
+      labels = (editorStateVM.selectedLayer as ObjectLayer).labels
+      formerLabel = labels.firstOrNull { it.x == x && it.y == y }
 
       event = mouseEvent
    }
 
-   private fun createOrUpdateObject() {
-      showCodeDialog(formerObject?.code ?: initialCode)?.let {
-         newObject = MapObject(x, y, it)
-         objects.remove(formerObject)
-         objects.add(newObject)
+   private fun createOrUpdateLabel() {
+      showCodeDialog(formerLabel?.label ?: "")?.let {
+         newLabel = MapLabel(x, y, it)
+         labels.remove(formerLabel)
+         labels.add(newLabel)
          executed = true
       }
    }
 
    private fun showCodeDialog(initialContent: String): String? {
-      val scope = CodeScope(1, 1)
-      val code = Code(DummyFileNode(), CodeType.JAVA.toProperty(), initialContent)
-      val vm = CodeVM(code)
+      val scope = Scope()
+      val vm = StringVM(initialContent)
       setInScope(vm, scope)
 
       var content: String? = null
 
-      find<CodeSnippetFragment>(scope).apply {
-         title = "Define object"
+      find<StringInputFragment>(scope).apply {
+         title = "Set label"
 
          onComplete {
             content = it
@@ -80,40 +75,21 @@ class ObjectPaintingTrace(
       return content
    }
 
-   private val initialCode: String
-      get() = """
-         /*  
-          *  Following final parameters are available to use:
-          *  here: MapPin - the composite object containing current map UID, 
-          *        layer's index and x,y coordinates of the current tile          
-          *  x: int - the x coordinate of the current tile
-          *  y: int - the y coordinate of the current tile 
-          *  layer: ObjectLayer - current object layer's index
-          *  map: GameMap - current map          
-          *  handler: ${className(map.handler)} - current map handler
-          *  runner: ${className(projectContext.project?.runner)} - the game runner of the project
-          *  context: Context - the game context
-          */
-         
-      """.trimIndent()
-
-   private fun className(canonical: String?) = canonical?.substringAfterLast(".") ?: ""
-
-   private fun moveObject(newX: Int, newY: Int) {
+   private fun moveLabel(newX: Int, newY: Int) {
       if (newY >= map.rows || newX >= map.columns || newY < 0 || newX < 0) {
          return
       }
 
-      formerObject?.let {
-         newObject = MapObject(newX, newY, it.code)
-         objects.remove(formerObject)
-         objects.add(newObject)
+      formerLabel?.let {
+         newLabel = MapLabel(newX, newY, it.label)
+         labels.remove(formerLabel)
+         labels.add(newLabel)
          executed = true
       }
    }
 
-   private fun removeObject() {
-      objects.remove(formerObject)
+   private fun removeLabel() {
+      labels.remove(formerLabel)
       executed = true
    }
 
@@ -128,15 +104,15 @@ class ObjectPaintingTrace(
 
       // Moving
       if (brushVM.mode == BrushMode.PAINTING_MODE && (dx != 0 || dy != 0)) {
-         moveObject(newX, newY)
+         moveLabel(newX, newY)
          return
       }
 
       // Creating new or updating existing one or removing
       if (event.event.clickCount > 1 && brushVM.mode == BrushMode.PAINTING_MODE) {
          when (event.button) {
-            MouseButton.PRIMARY -> createOrUpdateObject()
-            MouseButton.SECONDARY -> removeObject()
+            MouseButton.PRIMARY -> createOrUpdateLabel()
+            MouseButton.SECONDARY -> removeLabel()
             else -> {
             }
          }
@@ -146,18 +122,18 @@ class ObjectPaintingTrace(
 
       // Removing
       if (brushVM.mode == BrushMode.ERASING_MODE) {
-         removeObject()
+         removeLabel()
       }
    }
 
    override fun undo() {
-      objects.remove(newObject)
-      formerObject?.let(objects::add)
+      labels.remove(newLabel)
+      formerLabel?.let(labels::add)
    }
 
    override fun redo() {
-      objects.remove(formerObject)
-      newObject?.let(objects::add)
+      labels.remove(formerLabel)
+      newLabel?.let(labels::add)
    }
 
    override val supportedButtons = arrayOf(MouseButton.PRIMARY, MouseButton.SECONDARY)

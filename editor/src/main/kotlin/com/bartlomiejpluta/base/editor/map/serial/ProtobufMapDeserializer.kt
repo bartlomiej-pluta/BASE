@@ -4,6 +4,7 @@ import com.bartlomiejpluta.base.editor.map.model.enumeration.ImageLayerMode
 import com.bartlomiejpluta.base.editor.map.model.enumeration.PassageAbility
 import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
+import com.bartlomiejpluta.base.editor.map.model.obj.MapLabel
 import com.bartlomiejpluta.base.editor.map.model.obj.MapObject
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.tileset.model.Tile
@@ -121,7 +122,11 @@ class ProtobufMapDeserializer : MapDeserializer {
          MapObject(it.x, it.y, it.code)
       }
 
-      return ObjectLayer(proto.name, rows, columns, objects, proto.objectLayer.javaImports, passageMap)
+      val labels = proto.objectLayer.labelsList.map {
+         MapLabel(it.x, it.y, it.label)
+      }
+
+      return ObjectLayer(proto.name, rows, columns, objects, proto.objectLayer.javaImports, passageMap, labels)
    }
 
    private fun deserializeColorLayer(proto: GameMapProto.Layer): Layer {

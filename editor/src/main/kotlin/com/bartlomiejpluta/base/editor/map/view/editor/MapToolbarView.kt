@@ -165,5 +165,16 @@ class MapToolbarView : View() {
             brushVM.commit()
          }
       }
+
+      togglebutton(value = BrushTool.LABEL, group = objectLayerTool) {
+         graphic = FontIcon("fa-star")
+
+         visibleWhen(isObjectLayerSelected)
+
+         action {
+            brushVM.tool = BrushTool.LABEL
+            brushVM.commit()
+         }
+      }
    }
 }

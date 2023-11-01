@@ -381,12 +381,11 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                      .addStatement("var list = new \$T<\$T>()", LinkedList::class.java, model)
                      .beginControlFlow("\$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
                      .addStatement(
-                        "var filter = filters.stream().map(f -> String.format(\"`%s` %s ?\", f.column.column, f.op.getOp())).collect(\$T.joining(\" AND \"))",
-                        COLLECTORS_CLASS
+                           "var filter = filters.isEmpty() ? \"\" : \" WHERE \" + filters.stream().map(f -> String.format(\"`%s` %s ?\", f.column.column, f.op.getOp())).collect(\$T.joining(\" AND \"))",                        COLLECTORS_CLASS
                      )
                      .addStatement("var order = ordering.isEmpty() ? \"\" : \" ORDER BY \" + ordering.stream().collect(\$T.joining(\", \"))", COLLECTORS_CLASS)
                      .apply {
-                        val sql = "SELECT * FROM `${table.name}` WHERE "
+                        val sql = "SELECT * FROM `${table.name}` "
                         addStatement("var statement = db.prepareStatement(\"$sql\" + filter + order)")
                      }
                      .addStatement("var i = 1")
@@ -406,6 +405,39 @@ class DataAccessObjectCodeGenerator : CodeGenerator {
                      .endControlFlow(")")
                      .addStatement("return list")
                      .build()
+               )
+               .addMethod(
+                  MethodSpec.methodBuilder("first")
+                      .addModifiers(Modifier.PUBLIC)
+                      .returns(model)
+                      .addStatement("var list = new \$T<\$T>()", LinkedList::class.java, model)
+                      .beginControlFlow("return \$T.INSTANCE.getContext().withDatabase(db ->", CONTEXT_HOLDER)
+                      .addStatement(
+                          "var filter = filters.isEmpty() ? \"\" : \" WHERE \" + filters.stream().map(f -> String.format(\"`%s` %s ?\", f.column.column, f.op.getOp())).collect(\$T.joining(\" AND \"))",
+                          COLLECTORS_CLASS
+                      )
+                      .addStatement("var order = ordering.isEmpty() ? \"\" : \" ORDER BY \" + ordering.stream().collect(\$T.joining(\", \"))", COLLECTORS_CLASS)
+                      .apply {
+                        val sql = "SELECT * FROM `${table.name}` "
+                        addStatement("var statement = db.prepareStatement(\"$sql\" + filter + order + \" FETCH FIRST ROW ONLY\")")
+                      }
+                      .addStatement("var i = 1")
+                      .beginControlFlow("for (var f : filters)")
+                      .addStatement("statement.setObject(i++, f.value)")
+                      .endControlFlow()
+                      .addStatement("var result = statement.executeQuery()")
+                      .beginControlFlow("if(result.next())")
+                      .addStatement("var model = ${model.simpleName()}.builder()")
+                      .apply {
+                        table.columns.forEach { column ->
+                          addStatement("model.${snakeToCamelCase(column.name)}(result.${dbToGetMethod(column)}(\"${column.name}\"))")
+                        }
+                      }
+                      .addStatement("return model.build()")
+                      .endControlFlow()
+                      .addStatement("return null")
+                      .endControlFlow(")")
+                      .build()
                )
                .build()
          )

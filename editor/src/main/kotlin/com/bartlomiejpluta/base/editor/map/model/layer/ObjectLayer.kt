@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.editor.map.model.layer
 
 import com.bartlomiejpluta.base.editor.map.model.enumeration.PassageAbility
+import com.bartlomiejpluta.base.editor.map.model.obj.MapLabel
 import com.bartlomiejpluta.base.editor.map.model.obj.MapObject
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.asObservable
@@ -14,12 +15,15 @@ class ObjectLayer(
    columns: Int,
    objects: List<MapObject> = mutableListOf(),
    javaImports: String = "",
-   passageMap: Array<Array<PassageAbility>> = Array(rows) { Array(columns) { PassageAbility.ALLOW } }
+   passageMap: Array<Array<PassageAbility>> = Array(rows) { Array(columns) { PassageAbility.ALLOW } },
+   labels: List<MapLabel> = mutableListOf()
 ) : Layer {
    var passageMap = passageMap
       private set
 
    val objects = objects.asObservable()
+
+   val labels = labels.asObservable()
 
    override val nameProperty = SimpleStringProperty(name)
 

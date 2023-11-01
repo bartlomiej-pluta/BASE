@@ -4,5 +4,6 @@ enum class BrushTool {
    DEFAULT,
 
    // Object Layer
-   PASSAGE
+   PASSAGE,
+   LABEL
 }

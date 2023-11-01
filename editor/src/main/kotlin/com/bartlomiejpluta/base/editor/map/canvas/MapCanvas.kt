@@ -6,9 +6,12 @@ import com.bartlomiejpluta.base.editor.map.model.layer.*
 import com.bartlomiejpluta.base.editor.map.viewmodel.EditorStateVM
 import com.bartlomiejpluta.base.editor.map.viewmodel.GameMapVM
 import com.bartlomiejpluta.base.editor.render.model.Renderable
+import javafx.geometry.VPos
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.WritableImage
 import javafx.scene.paint.Color
+import javafx.scene.text.Font
+import javafx.scene.text.TextAlignment
 
 
 class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, private val painter: MapPainter) :
@@ -157,6 +160,7 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       }
 
       renderObjects(gc, objectLayer)
+      renderLabels(gc, objectLayer)
    }
 
    private fun renderObjectPassageMap(gc: GraphicsContext, objectLayer: ObjectLayer) {
@@ -194,6 +198,60 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
          gc.globalAlpha = alpha
          gc.fill = fill
       }
+   }
+
+   private fun renderLabels(gc: GraphicsContext, objectLayer: ObjectLayer) {
+      val alpha = gc.globalAlpha
+      val fill = gc.fill
+      val width = gc.lineWidth
+      val align = gc.textAlign
+      val baseLine = gc.textBaseline
+      val font = gc.font
+
+//      gc.font = LABEL_FONT
+
+      for (mapLabel in objectLayer.labels) {
+
+//         gc.globalAlpha = OBJECT_FILL_ALPHA
+//         gc.fill = OBJECT_COLOR
+//
+//         gc.fillRect(
+//            mapObject.x * tileWidth + OBJECT_MARGIN,
+//            mapObject.y * tileHeight + OBJECT_MARGIN,
+//            tileWidth - 2 * OBJECT_MARGIN,
+//            tileHeight - 2 * OBJECT_MARGIN
+//         )
+
+         gc.globalAlpha = 1.0
+         gc.stroke = LABEL_COLOR
+         gc.fill = LABEL_COLOR
+         gc.lineWidth = LABEL_FONT_WIDTH
+
+         gc.textAlign = TextAlignment.CENTER
+         gc.textBaseline = VPos.CENTER
+
+         gc.fillText(
+            "${mapLabel.label[0]}.${mapLabel.label[mapLabel.label.lastIndex]}",
+            mapLabel.x * tileWidth + tileWidth / 2,
+            mapLabel.y * tileHeight + tileHeight / 2
+         )
+
+         gc.lineWidth = LABEL_WIDTH
+
+         gc.strokeRect(
+            mapLabel.x * tileWidth + LABEL_MARGIN + LABEL_WIDTH/2,
+            mapLabel.y * tileHeight + LABEL_MARGIN + LABEL_WIDTH/2,
+            tileWidth - 2 * LABEL_MARGIN - LABEL_WIDTH/2,
+            tileHeight - 2 * LABEL_MARGIN - LABEL_WIDTH/2
+         )
+      }
+
+      gc.globalAlpha = alpha
+      gc.fill = fill
+      gc.lineWidth = width
+      gc.textAlign = align
+      gc.textBaseline = baseLine
+      gc.font = font
    }
 
    private fun renderColorLayer(gc: GraphicsContext, colorLayer: ColorLayer) {
@@ -238,7 +296,11 @@ class MapCanvas(val map: GameMapVM, private val editorStateVM: EditorStateVM, pr
       private val BACKGROUND_COLOR2 = Color.color(0.8, 0.8, 0.8, 1.0)
 
       private val OBJECT_COLOR = Color.WHITE
+      private val LABEL_COLOR = Color.CYAN
+      private val LABEL_WIDTH = 2.0
+      private val LABEL_FONT_WIDTH = 4.0
       private const val OBJECT_FILL_ALPHA = 0.3
       private const val OBJECT_MARGIN = 4
+      private const val LABEL_MARGIN = 1
    }
 }

@@ -37,9 +37,11 @@ class MapObjectsCodeGenerator : CodeGenerator {
    private fun generateMapObjects(asset: GameMapAsset, map: GameMap, project: Project) {
       val runner = className(project.runner)
 
-      map.layers
-         .mapNotNull { it as? ObjectLayer }
-         .forEach { generateLayerClass(project.buildGeneratedCodeDirectory, asset, map, it, runner) }
+      map.layers.forEachIndexed { index, layer ->
+         if (layer is ObjectLayer) {
+            generateLayerClass(project.buildGeneratedCodeDirectory, asset, map, layer, index, runner)
+         }
+      }
    }
 
    private fun generateLayerClass(
@@ -47,6 +49,7 @@ class MapObjectsCodeGenerator : CodeGenerator {
       asset: GameMapAsset,
       map: GameMap,
       layer: ObjectLayer,
+      layerIndex: Int,
       runner: ClassName
    ) {
       val packageName = "com.bartlomiejpluta.base.generated.map"
@@ -77,6 +80,7 @@ class MapObjectsCodeGenerator : CodeGenerator {
             .addParameter(EngineObjectLayer::class.java, "layer", Modifier.FINAL)
             .addParameter(TypeName.INT, "x", Modifier.FINAL)
             .addParameter(TypeName.INT, "y", Modifier.FINAL)
+            .addParameter(MAP_PIN_TYPE, "here", Modifier.FINAL)
             .addCode(it.code)
             .build()
             .let(generatedClass::addMethod)
@@ -93,7 +97,7 @@ class MapObjectsCodeGenerator : CodeGenerator {
          .addStatement("var customHandler = (\$T) handler", handler)
 
       layer.objects.forEach {
-         runMethod.addStatement("_${it.x}x${it.y}(context, customRunner, customHandler, map, layer, ${it.x}, ${it.y})")
+         runMethod.addStatement("_${it.x}x${it.y}(context, customRunner, customHandler, map, layer, ${it.x}, ${it.y}, \$T.builder().map(\"${map.uid}\").layer($layerIndex).x(${it.x}).y(${it.y}).build())", MAP_PIN_TYPE)
       }
 
       generatedClass
@@ -132,5 +136,6 @@ class MapObjectsCodeGenerator : CodeGenerator {
 
    companion object {
       private val GENERATOR_NAME = MapObjectsCodeGenerator::class.java.canonicalName
+      val MAP_PIN_TYPE = ClassName.get("com.bartlomiejpluta.base.api.map.layer.object", "MapPin")
    }
 }

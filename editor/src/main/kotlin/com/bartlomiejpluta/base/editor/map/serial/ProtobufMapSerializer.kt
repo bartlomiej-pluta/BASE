@@ -60,6 +60,15 @@ class ProtobufMapSerializer : MapSerializer {
                   })
                }
             }
+            .also { proto ->
+               layer.labels.map {
+                  proto.addLabels(GameMapProto.MapLabel.newBuilder().apply {
+                     x = it.x
+                     y = it.y
+                     label = it.label
+                  })
+               }
+            }
             .setJavaImports(layer.javaImports)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }

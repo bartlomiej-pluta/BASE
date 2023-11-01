@@ -72,6 +72,7 @@ class MapPainter(
             is AutoTileLayer -> AutoTilePaintingTrace(mapVM, "Paint trace")
             is ObjectLayer -> when (brushVM.tool) {
                BrushTool.DEFAULT -> ObjectPaintingTrace(projectContext, mapVM, "Update object")
+               BrushTool.LABEL -> LabelPaintingTrace(projectContext, mapVM, "Update label")
                else -> PassageAbilityPaintingTrace(mapVM, "Toggle passage")
             }
             is ImageLayer -> ImagePositionPaintingTrace(mapVM, "Move Image Layer")
