@@ -91,7 +91,7 @@ class AssetMapCodeGenerator : CodeGenerator {
          )
          .addMethod(
             MethodSpec
-               .methodBuilder("get")
+               .methodBuilder("byName")
                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                .returns(className)
                .addParameter(TypeName.get(String::class.java), "name")
