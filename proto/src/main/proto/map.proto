@@ -11,6 +11,7 @@ message GameMap {
   required uint32 tileHeight = 5;
   repeated Layer layers = 6;
   required string handler = 7;
+  required string javaImports = 8;
 }
 
 message Layer {
@@ -41,8 +42,7 @@ message AutoTileLayer {
 message ObjectLayer {
   repeated PassageAbility passageMap = 1;
   repeated MapObject objects = 2;
-  required string javaImports = 3;
-  repeated MapLabel labels = 4;
+  repeated MapLabel labels = 3;
 }
 
 enum PassageAbility {
