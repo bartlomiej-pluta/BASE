@@ -37,6 +37,10 @@ public abstract class BaseContainer extends BaseComponent {
       component.setParent(null);
    }
 
+   public void removeAllChildren() {
+      this.children.clear();
+   }
+
    protected float maxChildrenWidth() {
       var theWidestChild = 0.0f;
 

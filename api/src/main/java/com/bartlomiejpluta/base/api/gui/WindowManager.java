@@ -82,7 +82,7 @@ public final class WindowManager extends BaseWidget {
       }
    }
 
-   public CompletableFuture<Window> open(@NonNull Window window, Object... args) {
+   public CompletableFuture<Object> open(@NonNull Window window, Object... args) {
       if (windows.isEmpty()) {
          input.addKeyEventHandler(this::forwardKeyEventToTopWindow);
       }
@@ -92,6 +92,10 @@ public final class WindowManager extends BaseWidget {
       window.onOpen(this, args != null ? args : new Object[]{});
 
       return window.getFuture();
+   }
+
+   public <T> CompletableFuture<T> openForResult(Class<T> resultClass, @NonNull Window window, Object... args) {
+      return open(window, args).thenApply(resultClass::cast);
    }
 
    private void forwardKeyEventToTopWindow(KeyEvent event) {
@@ -108,7 +112,7 @@ public final class WindowManager extends BaseWidget {
       }
    }
 
-   public void close() {
+   public void resolve(Object result) {
       if (windows.isEmpty()) {
          return;
       }
@@ -121,7 +125,11 @@ public final class WindowManager extends BaseWidget {
          input.removeKeyEventHandler(this::forwardKeyEventToTopWindow);
       }
 
-      window.getFuture().complete(window);
+      window.getFuture().complete(result == null ? window : result);
+   }
+
+   public void close() {
+      resolve(null);
    }
 
    public int size() {
@@ -175,48 +183,48 @@ public final class WindowManager extends BaseWidget {
    private void drawWindow(Screen screen, Window window, GUI gui) {
       switch (window.getWindowPosition()) {
          case TOP -> window.setPosition(
-                 (screen.getWidth() - window.getWidth()) / 2,
-                 window.getMarginTop()
+               (screen.getWidth() - window.getWidth()) / 2,
+               window.getMarginTop()
          );
 
          case TOP_RIGHT -> window.setPosition(
-                 screen.getWidth() - window.getWidth() - window.getMarginRight(),
-                 window.getMarginTop()
+               screen.getWidth() - window.getWidth() - window.getMarginRight(),
+               window.getMarginTop()
          );
 
          case RIGHT -> window.setPosition(
-                 screen.getWidth() - window.getWidth() - window.getMarginRight(),
-                 (screen.getHeight() - window.getHeight()) / 2
+               screen.getWidth() - window.getWidth() - window.getMarginRight(),
+               (screen.getHeight() - window.getHeight()) / 2
          );
 
          case BOTTOM_RIGHT -> window.setPosition(
-                 screen.getWidth() - window.getWidth() - window.getMarginRight(),
-                 screen.getHeight() - window.getHeight() - window.getMarginBottom()
+               screen.getWidth() - window.getWidth() - window.getMarginRight(),
+               screen.getHeight() - window.getHeight() - window.getMarginBottom()
          );
 
          case BOTTOM -> window.setPosition(
-                 (screen.getWidth() - window.getWidth()) / 2,
-                 screen.getHeight() - window.getHeight() - window.getMarginBottom()
+               (screen.getWidth() - window.getWidth()) / 2,
+               screen.getHeight() - window.getHeight() - window.getMarginBottom()
          );
 
          case BOTTOM_LEFT -> window.setPosition(
-                 window.getMarginLeft(),
-                 screen.getHeight() - window.getHeight() - window.getMarginBottom()
+               window.getMarginLeft(),
+               screen.getHeight() - window.getHeight() - window.getMarginBottom()
          );
 
          case LEFT -> window.setPosition(
-                 window.getMarginLeft(),
-                 (screen.getHeight() - window.getHeight()) / 2
+               window.getMarginLeft(),
+               (screen.getHeight() - window.getHeight()) / 2
          );
 
          case TOP_LEFT -> window.setPosition(
-                 window.getMarginLeft(),
-                 window.getMarginTop()
+               window.getMarginLeft(),
+               window.getMarginTop()
          );
 
          case CENTER -> window.setPosition(
-                 (screen.getWidth() - window.getWidth()) / 2,
-                 (screen.getHeight() - window.getHeight()) / 2
+               (screen.getWidth() - window.getWidth()) / 2,
+               (screen.getHeight() - window.getHeight()) / 2
          );
       }
 

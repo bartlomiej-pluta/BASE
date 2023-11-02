@@ -13,7 +13,7 @@ public interface Window extends Widget {
 
    <T extends Component> T reference(String ref, Class<T> type);
 
-   CompletableFuture<Window> getFuture();
+   CompletableFuture<Object> getFuture();
 
    default void onOpen(WindowManager manager, Object[] args) {
       // do nothing

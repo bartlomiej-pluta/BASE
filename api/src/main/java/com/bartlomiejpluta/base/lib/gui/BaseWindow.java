@@ -23,12 +23,24 @@ public abstract class BaseWindow extends BaseWidget implements Window {
    protected WindowPosition windowPosition = WindowPosition.CENTER;
 
    @Getter
-   protected CompletableFuture<Window> future;
+   protected CompletableFuture<Object> future;
 
    protected BaseWindow(Context context, GUI gui, Map<String, Component> refs) {
       this.context = context;
       this.gui = gui;
       this.refs = refs;
+   }
+
+   protected void close() {
+      if (manager != null) {
+         manager.close();
+      }
+   }
+
+   protected void resolve(Object result) {
+      if (manager != null) {
+         manager.resolve(result);
+      }
    }
 
    @Override
