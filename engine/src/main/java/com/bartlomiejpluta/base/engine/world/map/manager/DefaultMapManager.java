@@ -86,7 +86,7 @@ public class DefaultMapManager implements MapManager {
             throw new AppException("The map asset with UID: [%s] has not been loaded yet", uid);
          }
 
-         var handlerClassName = map.getHandler();
+         var handlerClassName = format("com.bartlomiejpluta.base.generated.map.MapInitializer_%s", uid.replace("-", "_"));
          log.info("Creating new handler: [{}] for the map with ID: [{}]", handlerClassName, uid);
          var handlerClass = classLoader.<MapHandler>loadClass(handlerClassName);
          handler = handlerClass.getConstructor().newInstance();
@@ -94,18 +94,8 @@ public class DefaultMapManager implements MapManager {
 
          handler.onCreate(context, map);
 
-         var layers = map.getLayers();
-         for (var layer : layers) {
-            if (layer instanceof ObjectLayer) {
-               var packageName = "com.bartlomiejpluta.base.generated.map";
-               var purifiedUid = uid.replace("-", "_");
-               var layerIndex = layers.indexOf(layer);
-               var className = format("%s.MapInitializer_%s$$Layer%d", packageName, purifiedUid, layerIndex);
-               var initializerClass = classLoader.<MapInitializer>loadClass(className);
-               var initializer = initializerClass.getConstructor().newInstance();
-               initializer.run(context, handler, map, (ObjectLayer) layer);
-            }
-         }
+         var initializer = (MapInitializer) handler;
+         initializer.initialize();
       }
 
       return handler;

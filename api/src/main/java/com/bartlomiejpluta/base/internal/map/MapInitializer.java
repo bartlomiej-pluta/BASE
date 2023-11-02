@@ -6,5 +6,5 @@ import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 
 public interface MapInitializer {
-   void run(final Context context, final MapHandler handler, final GameMap map, final ObjectLayer layer);
+   void initialize();
 }
