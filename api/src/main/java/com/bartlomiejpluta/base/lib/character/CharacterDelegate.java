@@ -149,6 +149,11 @@ public abstract class CharacterDelegate implements Character {
    }
 
    @Override
+   public double euclideanDistance(Locationable other) {
+      return character.euclideanDistance(other);
+   }
+
+   @Override
    public Direction getDirectionTowards(Locationable target) {
       return character.getDirectionTowards(target);
    }
@@ -226,6 +231,11 @@ public abstract class CharacterDelegate implements Character {
    @Override
    public float euclideanDistance(Placeable other) {
       return character.euclideanDistance(other);
+   }
+
+   @Override
+   public double euclideanDistance(Vector2ic coordinates) {
+      return character.euclideanDistance(coordinates);
    }
 
    @Override

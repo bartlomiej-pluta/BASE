@@ -71,4 +71,8 @@ public class Distance {
    public static double euclidean(Vector2dc a, Vector2dc b) {
       return sqrt((a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y()));
    }
+
+   public static double euclidean(Vector2ic a, Vector2ic b) {
+      return sqrt((a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y()));
+   }
 }

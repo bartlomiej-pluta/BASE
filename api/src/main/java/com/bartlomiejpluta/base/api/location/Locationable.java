@@ -26,7 +26,11 @@ public interface Locationable extends Placeable {
 
    int manhattanDistance(Vector2ic coordinates);
 
+   double euclideanDistance(Vector2ic coordinates);
+
    int chebyshevDistance(Locationable other);
 
    int manhattanDistance(Locationable other);
+
+   double euclideanDistance(Locationable other);
 }

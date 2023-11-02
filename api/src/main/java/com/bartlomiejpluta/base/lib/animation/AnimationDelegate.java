@@ -180,6 +180,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public double euclideanDistance(Vector2ic coordinates) {
+      return animation.euclideanDistance(coordinates);
+   }
+
+   @Override
    public Matrix4fc getModelMatrix() {
       return animation.getModelMatrix();
    }
@@ -222,6 +227,11 @@ public abstract class AnimationDelegate implements Animation {
    @Override
    public int manhattanDistance(Locationable other) {
       return animation.manhattanDistance(other);
+   }
+
+   @Override
+   public double euclideanDistance(Locationable other) {
+      return animation.euclideanDistance(other);
    }
 
    @Override

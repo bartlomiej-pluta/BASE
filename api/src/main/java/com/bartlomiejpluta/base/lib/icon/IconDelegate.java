@@ -95,6 +95,16 @@ public abstract class IconDelegate implements Icon {
    }
 
    @Override
+   public double euclideanDistance(Vector2ic coordinates) {
+      return icon.euclideanDistance(coordinates);
+   }
+
+   @Override
+   public double euclideanDistance(Locationable other) {
+      return icon.euclideanDistance(other);
+   }
+
+   @Override
    public Direction getDirectionTowards(Locationable target) {
       return icon.getDirectionTowards(target);
    }

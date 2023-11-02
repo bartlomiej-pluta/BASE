@@ -69,6 +69,11 @@ public abstract class EntityDelegate implements Entity {
    }
 
    @Override
+   public double euclideanDistance(Locationable other) {
+      return entity.euclideanDistance(other);
+   }
+
+   @Override
    public Direction getDirectionTowards(Locationable target) {
       return entity.getDirectionTowards(target);
    }
@@ -146,6 +151,11 @@ public abstract class EntityDelegate implements Entity {
    @Override
    public float euclideanDistance(Placeable other) {
       return entity.euclideanDistance(other);
+   }
+
+   @Override
+   public double euclideanDistance(Vector2ic coordinates) {
+      return entity.euclideanDistance(coordinates);
    }
 
    @Override

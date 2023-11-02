@@ -108,5 +108,15 @@ public abstract class LocationableModel extends Model implements Locationable {
       return Distance.manhattan(this.coordinates, other.getCoordinates());
    }
 
+   @Override
+   public double euclideanDistance(Vector2ic coordinates) {
+      return Distance.euclidean(this.coordinates.x, this.coordinates.y, coordinates.x(), coordinates.y());
+   }
+
+   @Override
+   public double euclideanDistance(Locationable other) {
+      return Distance.euclidean(this.coordinates.x, this.coordinates.y, other.getCoordinates().x(), other.getCoordinates().y());
+   }
+
    private enum PlacingMode {BY_POSITION, BY_COORDINATES}
 }
