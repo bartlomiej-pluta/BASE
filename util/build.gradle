@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.bartlomiejpluta.base'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":proto")
+    implementation "com.google.protobuf:protobuf-java-util:$protobufVersion"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+task wrapper(type: Wrapper) {
+
+}
+
+task prepareKotlinBuildScriptModel {
+
+}
