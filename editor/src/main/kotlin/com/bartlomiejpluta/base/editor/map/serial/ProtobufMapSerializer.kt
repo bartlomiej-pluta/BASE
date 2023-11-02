@@ -19,6 +19,7 @@ class ProtobufMapSerializer : MapSerializer {
       protoMap.tileWidth = item.tileWidth.toInt()
       protoMap.tileHeight = item.tileHeight.toInt()
       protoMap.handler = item.handler
+      protoMap.javaImports = item.javaImports
 
       item.layers.forEach { layer -> protoMap.addLayers(serializeLayer(layer)) }
 
@@ -69,7 +70,6 @@ class ProtobufMapSerializer : MapSerializer {
                   })
                }
             }
-            .setJavaImports(layer.javaImports)
             .build()
             .let { GameMapProto.Layer.newBuilder().setName(layer.name).setObjectLayer(it).build() }
 

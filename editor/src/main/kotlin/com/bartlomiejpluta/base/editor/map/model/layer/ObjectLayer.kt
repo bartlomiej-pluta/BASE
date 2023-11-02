@@ -7,14 +7,12 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.asObservable
 import tornadofx.getValue
 import tornadofx.setValue
-import tornadofx.toProperty
 
 class ObjectLayer(
    name: String,
    rows: Int,
    columns: Int,
    objects: List<MapObject> = mutableListOf(),
-   javaImports: String = "",
    passageMap: Array<Array<PassageAbility>> = Array(rows) { Array(columns) { PassageAbility.ALLOW } },
    labels: List<MapLabel> = mutableListOf()
 ) : Layer {
@@ -26,9 +24,6 @@ class ObjectLayer(
    val labels = labels.asObservable()
 
    override val nameProperty = SimpleStringProperty(name)
-
-   val javaImportsProperty = javaImports.toProperty()
-   var javaImports by javaImportsProperty
 
    override fun resize(rows: Int, columns: Int) {
       passageMap = Array(rows) { row ->

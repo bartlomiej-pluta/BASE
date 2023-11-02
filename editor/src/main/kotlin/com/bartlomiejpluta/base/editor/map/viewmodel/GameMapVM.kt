@@ -33,6 +33,9 @@ class GameMapVM(map: GameMap) : ItemViewModel<GameMap>(map) {
 
    val handlerProperty = bind(GameMap::handlerProperty)
    var handler by handlerProperty
+
+   val javaImportsProperty = bind(GameMap::javaImportsProperty)
+   val javaImports by javaImportsProperty
 }
 
 

@@ -37,6 +37,7 @@ class ProtobufMapDeserializer : MapDeserializer {
       map.rows = proto.rows
       map.columns = proto.columns
       map.handler = proto.handler
+      map.javaImports = proto.javaImports
 
       proto.layersList
          .filter { it.hasTileLayer() || it.hasAutoTileLayer() || it.hasObjectLayer() || it.hasColorLayer() }
@@ -126,7 +127,7 @@ class ProtobufMapDeserializer : MapDeserializer {
          MapLabel(it.x, it.y, it.label)
       }
 
-      return ObjectLayer(proto.name, rows, columns, objects, proto.objectLayer.javaImports, passageMap, labels)
+      return ObjectLayer(proto.name, rows, columns, objects, passageMap, labels)
    }
 
    private fun deserializeColorLayer(proto: GameMapProto.Layer): Layer {

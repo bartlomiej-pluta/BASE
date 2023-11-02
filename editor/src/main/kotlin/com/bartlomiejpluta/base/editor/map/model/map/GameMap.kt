@@ -1,13 +1,13 @@
 package com.bartlomiejpluta.base.editor.map.model.map
 
 import com.bartlomiejpluta.base.editor.map.model.layer.Layer
-import com.bartlomiejpluta.base.editor.tileset.model.TileSet
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import tornadofx.getValue
 import tornadofx.setValue
+import tornadofx.toProperty
 
 
 class GameMap(val tileWidth: Double, val tileHeight: Double) {
@@ -32,6 +32,9 @@ class GameMap(val tileWidth: Double, val tileHeight: Double) {
 
    val handlerProperty = SimpleStringProperty()
    var handler by handlerProperty
+
+   val javaImportsProperty = "".toProperty()
+   var javaImports by javaImportsProperty
 
    init {
       rowsProperty.addListener { _, _, newValue ->

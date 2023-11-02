@@ -1,12 +1,9 @@
 package com.bartlomiejpluta.base.editor.code.build.generator
 
-import com.bartlomiejpluta.base.api.context.Context
-import com.bartlomiejpluta.base.api.map.handler.MapHandler
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
-import com.bartlomiejpluta.base.editor.project.model.Project
 import com.bartlomiejpluta.base.internal.map.MapInitializer
 import com.squareup.javapoet.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,32 +27,15 @@ class MapObjectsCodeGenerator : CodeGenerator {
       projectContext.project?.let { project ->
          project.maps
             .map { it to projectContext.loadMap(it.uid) }
-            .forEach { generateMapObjects(it.first, it.second, project) }
+            .forEach { generateMapInitializer(project.buildGeneratedCodeDirectory, it.first, it.second) }
       }
    }
 
-   private fun generateMapObjects(asset: GameMapAsset, map: GameMap, project: Project) {
-      val runner = className(project.runner)
-
-      map.layers.forEachIndexed { index, layer ->
-         if (layer is ObjectLayer) {
-            generateLayerClass(project.buildGeneratedCodeDirectory, asset, map, layer, index, runner)
-         }
-      }
-   }
-
-   private fun generateLayerClass(
-      directory: File,
-      asset: GameMapAsset,
-      map: GameMap,
-      layer: ObjectLayer,
-      layerIndex: Int,
-      runner: ClassName
-   ) {
+   private fun generateMapInitializer(directory: File, asset: GameMapAsset, map: GameMap) {
       val packageName = "com.bartlomiejpluta.base.generated.map"
       val className = ClassName.get(
          packageName,
-         format("MapInitializer_%s\$\$Layer%d", map.uid.replace("-", "_"), map.layers.indexOf(layer))
+         format("MapInitializer_%s", map.uid.replace("-", "_"))
       )
 
       val annotation = AnnotationSpec.builder(Generated::class.java)
@@ -64,44 +44,43 @@ class MapObjectsCodeGenerator : CodeGenerator {
          .addMember("comments", "\$S", "Initializer for map '${asset.name}' (UID: ${asset.uid})")
          .build()
 
-      val handler = className(map.handler)
       val generatedClass = TypeSpec.classBuilder(className)
          .addSuperinterface(MapInitializer::class.java)
+         .superclass(className(map.handler))
          .addModifiers(Modifier.FINAL, Modifier.PUBLIC)
          .addAnnotation(annotation)
 
-      layer.objects.forEach {
-         MethodSpec.methodBuilder("_${it.x}x${it.y}")
-            .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-            .addParameter(Context::class.java, "context", Modifier.FINAL)
-            .addParameter(runner, "runner", Modifier.FINAL)
-            .addParameter(handler, "handler", Modifier.FINAL)
-            .addParameter(EngineGameMap::class.java, "map", Modifier.FINAL)
-            .addParameter(EngineObjectLayer::class.java, "layer", Modifier.FINAL)
-            .addParameter(TypeName.INT, "x", Modifier.FINAL)
-            .addParameter(TypeName.INT, "y", Modifier.FINAL)
-            .addParameter(MAP_PIN_TYPE, "here", Modifier.FINAL)
-            .addCode(it.code.replace("\$", "\$\$"))
-            .build()
-            .let(generatedClass::addMethod)
+      map.layers.forEachIndexed { index, layer ->
+         if (layer is ObjectLayer) {
+            layer.objects.forEach {
+               MethodSpec.methodBuilder("_layer${index}_${it.x}x${it.y}")
+                  .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                  .addParameter(EngineGameMap::class.java, "map", Modifier.FINAL)
+                  .addParameter(EngineObjectLayer::class.java, "layer", Modifier.FINAL)
+                  .addParameter(TypeName.INT, "x", Modifier.FINAL)
+                  .addParameter(TypeName.INT, "y", Modifier.FINAL)
+                  .addParameter(MAP_PIN_TYPE, "here", Modifier.FINAL)
+                  .addCode(it.code.replace("\$", "\$\$"))
+                  .build()
+                  .let(generatedClass::addMethod)
+            }
+         }
       }
 
-      val runMethod = MethodSpec.methodBuilder("run")
+      val initializeMethod = MethodSpec.methodBuilder("initialize")
          .addAnnotation(Override::class.java)
          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-         .addParameter(Context::class.java, "context", Modifier.FINAL)
-         .addParameter(MapHandler::class.java, "handler", Modifier.FINAL)
-         .addParameter(EngineGameMap::class.java, "map", Modifier.FINAL)
-         .addParameter(EngineObjectLayer::class.java, "layer", Modifier.FINAL)
-         .addStatement("var customRunner = (\$T) context.getGameRunner()", runner)
-         .addStatement("var customHandler = (\$T) handler", handler)
 
-      layer.objects.forEach {
-         runMethod.addStatement("_${it.x}x${it.y}(context, customRunner, customHandler, map, layer, ${it.x}, ${it.y}, \$T.builder().map(\"${map.uid}\").layer($layerIndex).x(${it.x}).y(${it.y}).build())", MAP_PIN_TYPE)
+      map.layers.forEachIndexed { index, layer ->
+         if (layer is ObjectLayer) {
+            layer.objects.forEach {
+               initializeMethod.addStatement("_layer${index}_${it.x}x${it.y}(map, map.getObjectLayer(${index}), ${it.x}, ${it.y}, \$T.builder().map(\"${map.uid}\").layer($index).x(${it.x}).y(${it.y}).build())", MAP_PIN_TYPE)
+            }
+         }
       }
 
       generatedClass
-         .addMethod(runMethod.build())
+         .addMethod(initializeMethod.build())
 
       val javaFile = JavaFile
          .builder(packageName, generatedClass.build())
@@ -117,7 +96,7 @@ class MapObjectsCodeGenerator : CodeGenerator {
             if (s.startsWith("package ")) {
                println()
                println("// User imports")
-               for (i in layer.javaImports.lines()) {
+               for (i in map.javaImports.lines()) {
                   println(i)
                }
                println("// End of user imports")
