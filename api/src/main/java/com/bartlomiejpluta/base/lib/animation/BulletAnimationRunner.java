@@ -13,6 +13,7 @@ import lombok.NonNull;
 import org.joml.Vector2fc;
 import org.joml.Vector2i;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -126,7 +127,7 @@ public class BulletAnimationRunner implements AnimationRunner {
    }
 
    @Override
-   public void run(Context context, Layer layer, Vector2fc origin) {
+   public CompletableFuture<Void> run(Context context, Layer layer, Vector2fc origin) {
       var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, null, onHit, onMiss);
 
       animation.setPosition(origin);
@@ -140,10 +141,12 @@ public class BulletAnimationRunner implements AnimationRunner {
       animation.followPath(path, range, true, true);
 
       layer.pushAnimation(animation);
+
+      return animation.getFuture().thenApply(a -> null);
    }
 
    @Override
-   public void run(Context context, Layer layer, Movable origin) {
+   public CompletableFuture<Void> run(Context context, Layer layer, Movable origin) {
       var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, origin, onHit, onMiss);
 
       animation.setCoordinates(origin.getCoordinates());
@@ -157,6 +160,8 @@ public class BulletAnimationRunner implements AnimationRunner {
       animation.followPath(path, range, true, true);
 
       layer.pushAnimation(animation);
+
+      return animation.getFuture().thenApply(a -> null);
    }
 
    private static class BulletAnimation extends DelayedAnimation {

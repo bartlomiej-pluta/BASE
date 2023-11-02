@@ -17,6 +17,8 @@ import lombok.Setter;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
 
+import java.util.concurrent.CompletableFuture;
+
 import static com.bartlomiejpluta.base.util.path.PathProgress.DONE;
 import static com.bartlomiejpluta.base.util.path.PathProgress.SEGMENT_FAILED;
 
@@ -43,6 +45,9 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    private boolean finishOnFail;
    private Layer layer;
    private boolean isObjectLayer = false;
+
+   @Getter
+   private final CompletableFuture<Animation> future = new CompletableFuture<>();
 
    public DefaultAnimation(Mesh mesh, Material material, @NonNull Vector2fc[] frames) {
       super(mesh, material);

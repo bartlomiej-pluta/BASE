@@ -54,6 +54,7 @@ public abstract class BaseLayer implements Layer, Updatable {
 
          if (animation.finished()) {
             animations.remove(animation);
+            animation.getFuture().complete(animation);
             animation.onFinish(this);
          }
       }

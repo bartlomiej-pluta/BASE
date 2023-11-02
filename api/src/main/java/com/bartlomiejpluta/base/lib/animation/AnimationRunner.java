@@ -5,8 +5,10 @@ import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.move.Movable;
 import org.joml.Vector2fc;
 
-public interface AnimationRunner {
-   void run(Context context, Layer layer, Vector2fc origin);
+import java.util.concurrent.CompletableFuture;
 
-   void run(Context context, Layer layer, Movable origin);
+public interface AnimationRunner {
+   CompletableFuture<Void> run(Context context, Layer layer, Vector2fc origin);
+
+   CompletableFuture<Void> run(Context context, Layer layer, Movable origin);
 }

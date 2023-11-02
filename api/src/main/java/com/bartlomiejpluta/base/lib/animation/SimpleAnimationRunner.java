@@ -7,6 +7,8 @@ import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.util.path.Path;
 import org.joml.Vector2fc;
 
+import java.util.concurrent.CompletableFuture;
+
 public class SimpleAnimationRunner implements AnimationRunner {
    private final String animationUid;
 
@@ -81,7 +83,7 @@ public class SimpleAnimationRunner implements AnimationRunner {
    }
 
    @Override
-   public void run(Context context, Layer layer, Vector2fc origin) {
+   public CompletableFuture<Void> run(Context context, Layer layer, Vector2fc origin) {
       var animation = new DelayedAnimation(context.createAnimation(animationUid), delay);
 
       animation.setPosition(origin);
@@ -97,10 +99,11 @@ public class SimpleAnimationRunner implements AnimationRunner {
       }
 
       layer.pushAnimation(animation);
+      return animation.getFuture().thenApply(a -> null);
    }
 
    @Override
-   public void run(Context context, Layer layer, Movable origin) {
+   public CompletableFuture<Void> run(Context context, Layer layer, Movable origin) {
       var animation = new DelayedAnimation(context.createAnimation(animationUid), delay);
 
       animation.setCoordinates(origin.getCoordinates());
@@ -117,5 +120,6 @@ public class SimpleAnimationRunner implements AnimationRunner {
 
       layer.pushAnimation(animation);
 
+      return animation.getFuture().thenApply(a -> null);
    }
 }

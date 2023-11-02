@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.lib.animation;
 
+import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.move.Movable;
@@ -9,8 +10,10 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.joml.Vector2fc;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 import static java.lang.Math.max;
 
@@ -130,7 +133,9 @@ public class RandomAnimationsRunner implements AnimationRunner {
    }
 
    @Override
-   public void run(Context context, Layer layer, Vector2fc origin) {
+   public CompletableFuture<Void> run(Context context, Layer layer, Vector2fc origin) {
+      var futures = new CompletableFuture[count];
+
       for (int i = 0; i < count; ++i) {
          var animation = context.createAnimation(animationUids.get(random.nextInt(animationUids.size())));
 
@@ -146,11 +151,17 @@ public class RandomAnimationsRunner implements AnimationRunner {
          animation.setRotation(rotationDistribution != null ? (float) rotationDistribution.sample() : rotation);
 
          layer.pushAnimation(new DelayedAnimation(animation, (int) (delayDistribution != null ? delayDistribution.sample() : delay)));
+
+         futures[i] = animation.getFuture();
       }
+
+      return CompletableFuture.allOf(futures);
    }
 
    @Override
-   public void run(Context context, Layer layer, Movable origin) {
+   public CompletableFuture<Void> run(Context context, Layer layer, Movable origin) {
+      var futures = new CompletableFuture[count];
+
       for (int i = 0; i < count; ++i) {
          var animation = context.createAnimation(animationUids.get(random.nextInt(animationUids.size())));
 
@@ -169,7 +180,10 @@ public class RandomAnimationsRunner implements AnimationRunner {
          animation.setRotation(rotationDistribution != null ? (float) rotationDistribution.sample() : rotation);
 
          layer.pushAnimation(new DelayedAnimation(animation, (int) (delayDistribution != null ? delayDistribution.sample() : delay)));
+
+         futures[i] = animation.getFuture();
       }
 
+      return CompletableFuture.allOf(futures);
    }
 }

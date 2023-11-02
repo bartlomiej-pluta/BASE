@@ -6,6 +6,8 @@ import com.bartlomiejpluta.base.internal.logic.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.util.path.Path;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface Animation extends Movable, Animated, Renderable, Updatable {
 
    Integer getRepeat();
@@ -17,6 +19,8 @@ public interface Animation extends Movable, Animated, Renderable, Updatable {
    void onAdd(Layer layer);
 
    void onFinish(Layer layer);
+
+   CompletableFuture<Animation> getFuture();
 
    void finish();
 

@@ -15,6 +15,8 @@ import org.joml.Matrix4fc;
 import org.joml.Vector2fc;
 import org.joml.Vector2ic;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class AnimationDelegate implements Animation {
    private final Animation animation;
 
@@ -270,6 +272,11 @@ public abstract class AnimationDelegate implements Animation {
    @Override
    public void finish() {
       animation.finish();
+   }
+
+   @Override
+   public CompletableFuture<Animation> getFuture() {
+      return animation.getFuture();
    }
 
    @Override
