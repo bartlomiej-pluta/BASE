@@ -88,7 +88,7 @@ class ObjectPaintingTrace(
           *        layer's index and x,y coordinates of the current tile          
           *  x: int - the x coordinate of the current tile
           *  y: int - the y coordinate of the current tile 
-          *  layer: ObjectLayer - current object layer's index
+          *  layer: ObjectLayer - current object layer
           *  map: GameMap - current map          
           *  handler: ${className(map.handler)} - current map handler
           *  runner: ${className(projectContext.project?.runner)} - the game runner of the project

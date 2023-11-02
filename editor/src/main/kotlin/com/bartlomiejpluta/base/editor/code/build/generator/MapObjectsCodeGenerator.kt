@@ -81,7 +81,7 @@ class MapObjectsCodeGenerator : CodeGenerator {
             .addParameter(TypeName.INT, "x", Modifier.FINAL)
             .addParameter(TypeName.INT, "y", Modifier.FINAL)
             .addParameter(MAP_PIN_TYPE, "here", Modifier.FINAL)
-            .addCode(it.code)
+            .addCode(it.code.replace("\$", "\$\$"))
             .build()
             .let(generatedClass::addMethod)
       }
