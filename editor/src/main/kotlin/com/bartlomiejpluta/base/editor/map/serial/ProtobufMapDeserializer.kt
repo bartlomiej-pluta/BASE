@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 import java.io.InputStream
 
 @Component
-class ProtobufMapDeserializer : MapDeserializer {
+open class ProtobufMapDeserializer : BinaryMapDeserializer {
 
    @Autowired
    private lateinit var appContext: ApplicationContext
@@ -30,8 +30,13 @@ class ProtobufMapDeserializer : MapDeserializer {
       input: InputStream,
       replaceTileSet: (String, String) -> String,
       replaceAutoTile: (String, String) -> String
+   ): GameMap = buildObject(GameMapProto.GameMap.parseFrom(input), replaceTileSet, replaceAutoTile)
+
+   fun buildObject(
+      proto: GameMapProto.GameMap,
+      replaceTileSet: (String, String) -> String,
+      replaceAutoTile: (String, String) -> String
    ): GameMap {
-      val proto = GameMapProto.GameMap.parseFrom(input)
       val map = GameMap(proto.tileWidth.toDouble(), proto.tileHeight.toDouble())
       map.uid = proto.uid
       map.rows = proto.rows

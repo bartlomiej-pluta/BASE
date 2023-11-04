@@ -24,7 +24,9 @@ class DefaultProjectAssembler : ProjectAssembler {
    }
 
    private fun tryToAssembly(project: Project, targetJar: File) {
-      packager.pack(project.mapsDirectory, targetJar, "BOOT-INF/classes/project/maps")
+      packager.copy(project.binaryProjectFile, targetJar, "BOOT-INF/classes/project")
+      packager.pack(project.buildAssetsMapsDir, targetJar, "BOOT-INF/classes/project/maps")
+
       packager.pack(project.tileSetsDirectory, targetJar, "BOOT-INF/classes/project/tilesets")
       packager.pack(project.autoTilesDirectory, targetJar, "BOOT-INF/classes/project/autotiles")
       packager.pack(project.imagesDirectory, targetJar, "BOOT-INF/classes/project/images")
@@ -34,7 +36,6 @@ class DefaultProjectAssembler : ProjectAssembler {
       packager.pack(project.fontsDirectory, targetJar, "BOOT-INF/classes/project/fonts")
       packager.pack(project.widgetsDirectory, targetJar, "BOOT-INF/classes/project/widgets")
       packager.pack(project.audioDirectory, targetJar, "BOOT-INF/classes/project/audio")
-      packager.copy(project.projectFile, targetJar, "BOOT-INF/classes/project")
    }
 
    companion object {

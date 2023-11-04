@@ -3,7 +3,7 @@ package com.bartlomiejpluta.base.editor.code.build.generator
 import com.bartlomiejpluta.base.editor.asset.model.Asset
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
-import com.bartlomiejpluta.base.editor.map.serial.MapDeserializer
+import com.bartlomiejpluta.base.editor.map.serial.TextMapDeserializer
 import com.bartlomiejpluta.base.editor.project.context.ProjectContext
 import com.bartlomiejpluta.base.editor.project.model.Project
 import com.squareup.javapoet.*
@@ -22,7 +22,7 @@ class AssetMapCodeGenerator : CodeGenerator {
    private lateinit var projectContext: ProjectContext
 
    @Autowired
-   private lateinit var mapDeserializer: MapDeserializer
+   private lateinit var mapDeserializer: TextMapDeserializer
 
    override fun generate() {
       projectContext.project?.let(::generateAssetClasses)

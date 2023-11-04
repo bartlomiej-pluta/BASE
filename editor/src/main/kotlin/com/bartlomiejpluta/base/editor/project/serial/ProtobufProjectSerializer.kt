@@ -16,9 +16,11 @@ import org.springframework.stereotype.Component
 import java.io.OutputStream
 
 @Component
-class ProtobufProjectSerializer : ProjectSerializer {
+class ProtobufProjectSerializer : BinaryProjectSerializer {
 
-   override fun serialize(item: Project, output: OutputStream) {
+   override fun serialize(item: Project, output: OutputStream) = buildProto(item).writeTo(output)
+   
+   fun buildProto(item: Project): ProjectProto.Project {
       val proto = ProjectProto.Project.newBuilder()
       proto.name = item.name
       proto.runner = item.runner
@@ -32,18 +34,18 @@ class ProtobufProjectSerializer : ProjectSerializer {
       proto.addAllFonts(item.fonts.map(this::serializeFont))
       proto.addAllWidgets(item.widgets.map(this::serializeWidget))
       proto.addAllSounds(item.sounds.map(this::serializeSound))
-      proto.build().writeTo(output)
+      return proto.build()
    }
 
    private fun serializeMap(map: GameMapAsset) = ProjectProto.GameMapAsset.newBuilder()
       .setUid(map.uid)
-      .setSource(map.source)
+      .setSource(map.binarySource)
       .setName(map.name)
       .build()
 
    private fun serializeTileSet(tileSet: TileSetAsset) = ProjectProto.TileSetAsset.newBuilder()
       .setUid(tileSet.uid)
-      .setSource(tileSet.source)
+      .setSource(tileSet.binarySource)
       .setName(tileSet.name)
       .setRows(tileSet.rows)
       .setColumns(tileSet.columns)
@@ -51,7 +53,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
 
    private fun serializeAutoTile(autoTile: AutoTileAsset) = ProjectProto.AutoTileSetAsset.newBuilder()
       .setUid(autoTile.uid)
-      .setSource(autoTile.source)
+      .setSource(autoTile.binarySource)
       .setName(autoTile.name)
       .setRows(autoTile.rows)
       .setColumns(autoTile.columns)
@@ -60,13 +62,13 @@ class ProtobufProjectSerializer : ProjectSerializer {
 
    private fun serializeImage(image: ImageAsset) = ProjectProto.ImageAsset.newBuilder()
       .setUid(image.uid)
-      .setSource(image.source)
+      .setSource(image.binarySource)
       .setName(image.name)
       .build()
 
    private fun serializeCharacterSet(characterSet: CharacterSetAsset) = ProjectProto.CharacterSetAsset.newBuilder()
       .setUid(characterSet.uid)
-      .setSource(characterSet.source)
+      .setSource(characterSet.binarySource)
       .setName(characterSet.name)
       .setRows(characterSet.rows)
       .setColumns(characterSet.columns)
@@ -74,7 +76,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
 
    private fun serializeAnimation(animation: AnimationAsset) = ProjectProto.AnimationAsset.newBuilder()
       .setUid(animation.uid)
-      .setSource(animation.source)
+      .setSource(animation.binarySource)
       .setName(animation.name)
       .setRows(animation.rows)
       .setColumns(animation.columns)
@@ -82,7 +84,7 @@ class ProtobufProjectSerializer : ProjectSerializer {
 
    private fun serializeIconSet(iconSet: IconSetAsset) = ProjectProto.IconSetAsset.newBuilder()
       .setUid(iconSet.uid)
-      .setSource(iconSet.source)
+      .setSource(iconSet.binarySource)
       .setName(iconSet.name)
       .setRows(iconSet.rows)
       .setColumns(iconSet.columns)
@@ -90,19 +92,19 @@ class ProtobufProjectSerializer : ProjectSerializer {
 
    private fun serializeFont(font: FontAsset) = ProjectProto.FontAsset.newBuilder()
       .setUid(font.uid)
-      .setSource(font.source)
+      .setSource(font.binarySource)
       .setName(font.name)
       .build()
 
    private fun serializeWidget(widget: WidgetAsset) = ProjectProto.WidgetAsset.newBuilder()
       .setUid(widget.uid)
-      .setSource(widget.source)
+      .setSource(widget.binarySource)
       .setName(widget.name)
       .build()
 
    private fun serializeSound(sound: SoundAsset) = ProjectProto.SoundAsset.newBuilder()
       .setUid(sound.uid)
-      .setSource(sound.source)
+      .setSource(sound.binarySource)
       .setName(sound.name)
       .build()
 }

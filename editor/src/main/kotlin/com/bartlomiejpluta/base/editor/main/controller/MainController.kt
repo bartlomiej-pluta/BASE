@@ -155,7 +155,7 @@ class MainController : Controller() {
    fun openProject() {
       chooseFile(
          title = "Load Project",
-         filters = arrayOf(FileChooser.ExtensionFilter("BASE Editor Project (*.bep)", "*.bep")),
+         filters = arrayOf(FileChooser.ExtensionFilter("BASE Editor Project (*.json)", "*.json")),
       ).getOrNull(0)?.let {
          clearResources()
          projectContext.open(it)

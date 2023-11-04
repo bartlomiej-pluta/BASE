@@ -17,25 +17,23 @@ import org.springframework.stereotype.Component
 import java.io.InputStream
 
 @Component
-class ProtobufProjectDeserializer : ProjectDeserializer {
+open class ProtobufProjectDeserializer : BinaryProjectDeserializer {
 
-   override fun deserialize(input: InputStream): Project {
-      val proto = ProjectProto.Project.parseFrom(input)
+   override fun deserialize(input: InputStream): Project = buildObject(ProjectProto.Project.parseFrom(input))
 
-      return Project().apply {
-         name = proto.name
-         runner = proto.runner
-         maps.addAll(proto.mapsList.map { deserializeMap(this, it) })
-         tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(this, it) })
-         autoTiles.addAll(proto.autoTilesList.map { deserializeAutoTile(this, it) })
-         images.addAll(proto.imagesList.map { deserializeImage(this, it) })
-         characterSets.addAll(proto.characterSetsList.map { deserializeCharacterSet(this, it) })
-         animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
-         iconSets.addAll(proto.iconSetsList.map { deserializeIconSet(this, it) })
-         fonts.addAll(proto.fontsList.map { deserializeFont(this, it) })
-         widgets.addAll(proto.widgetsList.map { deserializeWidget(this, it) })
-         sounds.addAll(proto.soundsList.map { deserializeSound(this, it) })
-      }
+   fun buildObject(proto: ProjectProto.Project): Project = Project().apply {
+      name = proto.name
+      runner = proto.runner
+      maps.addAll(proto.mapsList.map { deserializeMap(this, it) })
+      tileSets.addAll(proto.tileSetsList.map { deserializeTileSet(this, it) })
+      autoTiles.addAll(proto.autoTilesList.map { deserializeAutoTile(this, it) })
+      images.addAll(proto.imagesList.map { deserializeImage(this, it) })
+      characterSets.addAll(proto.characterSetsList.map { deserializeCharacterSet(this, it) })
+      animations.addAll(proto.animationsList.map { deserializeAnimation(this, it) })
+      iconSets.addAll(proto.iconSetsList.map { deserializeIconSet(this, it) })
+      fonts.addAll(proto.fontsList.map { deserializeFont(this, it) })
+      widgets.addAll(proto.widgetsList.map { deserializeWidget(this, it) })
+      sounds.addAll(proto.soundsList.map { deserializeSound(this, it) })
    }
 
    private fun deserializeMap(project: Project, map: ProjectProto.GameMapAsset) = GameMapAsset(

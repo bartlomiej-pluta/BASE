@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component
 import java.io.OutputStream
 
 @Component
-class ProtobufMapSerializer : MapSerializer {
+open class ProtobufMapSerializer : BinaryMapSerializer {
 
-   override fun serialize(item: GameMap, output: OutputStream) {
+   override fun serialize(item: GameMap, output: OutputStream) = buildProto(item).writeTo(output)
+
+   fun buildProto(item: GameMap): GameMapProto.GameMap {
       val protoMap = GameMapProto.GameMap.newBuilder()
       protoMap.uid = item.uid
       protoMap.rows = item.rows
@@ -23,7 +25,7 @@ class ProtobufMapSerializer : MapSerializer {
 
       item.layers.forEach { layer -> protoMap.addLayers(serializeLayer(layer)) }
 
-      protoMap.build().writeTo(output)
+      return protoMap.build()
    }
 
    private fun serializeLayer(layer: Layer): GameMapProto.Layer {

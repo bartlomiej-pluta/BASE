@@ -37,6 +37,9 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
 
+    // JSON Proto
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+
     // GUI
     implementation "no.tornado:tornadofx:${tornadoFxVersion}"
     implementation platform("org.kordamp.ikonli:ikonli-bom:${ikonliVersion}")

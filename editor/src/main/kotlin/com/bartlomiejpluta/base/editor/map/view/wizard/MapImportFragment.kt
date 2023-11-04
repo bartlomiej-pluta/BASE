@@ -45,7 +45,7 @@ class MapImportFragment : Fragment("Basic Data") {
                   action {
                      mapBuilderVM.fileProperty.value = chooseFile(
                         title = "Map file location",
-                        filters = arrayOf(FileChooser.ExtensionFilter("Map files (*.dat)", "*.dat"))
+                        filters = arrayOf(FileChooser.ExtensionFilter("Map files (*.json)", "*.json"))
                      ).getOrNull(0)?.absolutePath
                   }
                }

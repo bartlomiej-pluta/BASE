@@ -128,6 +128,16 @@ class Project {
       createObjectBinding({ File(buildOutDirectory, PROJECT_OUTPUT_JAR_FILE) }, buildOutDirectoryProperty)
    val buildOutputJarFile by buildOutputJarFileProperty
 
+   val buildAssetsDirProperty = SimpleObjectProperty<File>()
+   var buildAssetsDir by buildAssetsDirProperty
+      private set
+
+   val binaryProjectFileProperty = createObjectBinding({ File(buildAssetsDir, BINARY_PROJECT_FILE) }, buildAssetsDirProperty)
+   val binaryProjectFile by binaryProjectFileProperty
+
+   val buildAssetsMapsDirProperty = createObjectBinding({ File(buildAssetsDir, MAPS_DIR) }, buildAssetsDirProperty)
+   val buildAssetsMapsDir by buildAssetsMapsDirProperty
+
    lateinit var database: H2DBDataSource
 
    init {
@@ -148,6 +158,7 @@ class Project {
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
             buildDependenciesDirectory = File(it, BUILD_DEPENDENCIES_DIR)
             buildGeneratedCodeDirectory = File(it, BUILD_GENERATED_DIR)
+            buildAssetsDir = File(it, BUILD_ASSETS_DIR)
             buildDatabaseDumpDirectory = File(it, BUILD_DATABASE_DUMP_DIR)
             buildOutDirectory = File(it, BUILD_OUT_DIR)
          }
@@ -179,7 +190,8 @@ class Project {
    }
 
    companion object {
-      const val PROJECT_FILE = "project.bep"
+      const val PROJECT_FILE = "project.json"
+      const val BINARY_PROJECT_FILE = "project.bep"
       const val DATABASE_FILE = "data.sql"
       const val DATABASE_DUMP_FILE = "data.sql"
       const val PROJECT_OUTPUT_JAR_FILE = "game.jar"
@@ -200,6 +212,7 @@ class Project {
       const val BUILD_OUT_DIR = "$BUILD_DIR/out"
       const val BUILD_DEPENDENCIES_DIR = "$BUILD_DIR/dependencies"
       const val BUILD_GENERATED_DIR = "$BUILD_DIR/generated"
+      const val BUILD_ASSETS_DIR = "$BUILD_DIR/assets"
       const val BUILD_DATABASE_DUMP_DIR = "$BUILD_DIR/db"
    }
 }

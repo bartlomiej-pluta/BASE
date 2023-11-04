@@ -25,11 +25,11 @@ import com.bartlomiejpluta.base.editor.image.asset.ImageAsset
 import com.bartlomiejpluta.base.editor.image.asset.ImageAssetData
 import com.bartlomiejpluta.base.editor.map.asset.GameMapAsset
 import com.bartlomiejpluta.base.editor.map.model.map.GameMap
-import com.bartlomiejpluta.base.editor.map.serial.MapDeserializer
-import com.bartlomiejpluta.base.editor.map.serial.MapSerializer
+import com.bartlomiejpluta.base.editor.map.serial.TextMapDeserializer
+import com.bartlomiejpluta.base.editor.map.serial.TextMapSerializer
 import com.bartlomiejpluta.base.editor.project.model.Project
-import com.bartlomiejpluta.base.editor.project.serial.ProjectDeserializer
-import com.bartlomiejpluta.base.editor.project.serial.ProjectSerializer
+import com.bartlomiejpluta.base.editor.project.serial.TextProjectDeserializer
+import com.bartlomiejpluta.base.editor.project.serial.TextProjectSerializer
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAsset
 import com.bartlomiejpluta.base.editor.tileset.asset.TileSetAssetData
 import com.bartlomiejpluta.base.editor.tileset.model.TileSet
@@ -53,16 +53,16 @@ class DefaultProjectContext : ProjectContext {
    private val autoTileCache = mutableMapOf<String, AutoTile>()
 
    @Autowired
-   private lateinit var projectSerializer: ProjectSerializer
+   private lateinit var projectSerializer: TextProjectSerializer
 
    @Autowired
-   private lateinit var projectDeserializer: ProjectDeserializer
+   private lateinit var projectDeserializer: TextProjectDeserializer
 
    @Autowired
-   private lateinit var mapSerializer: MapSerializer
+   private lateinit var mapSerializer: TextMapSerializer
 
    @Autowired
-   private lateinit var mapDeserializer: MapDeserializer
+   private lateinit var mapDeserializer: TextMapDeserializer
 
    @Autowired
    private lateinit var javaClassService: JavaClassService

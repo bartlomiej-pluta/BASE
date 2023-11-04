@@ -1,5 +1,6 @@
 package com.bartlomiejpluta.base.editor.code.build.pipeline
 
+import com.bartlomiejpluta.base.editor.code.build.asset.AssetSerializer
 import com.bartlomiejpluta.base.editor.code.build.compiler.Compiler
 import com.bartlomiejpluta.base.editor.code.build.database.DatabaseAssembler
 import com.bartlomiejpluta.base.editor.code.build.exception.BuildException
@@ -37,6 +38,9 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
    @Autowired
    private lateinit var engineProvider: GameEngineProvider
+
+   @Autowired
+   private lateinit var assetSerializer: AssetSerializer
 
    @Autowired
    private lateinit var projectAssembler: ProjectAssembler
@@ -125,6 +129,9 @@ class DefaultBuildPipelineService : BuildPipelineService {
 
       out.println("Linking compilation units...")
       packager.pack(project.buildClassesDirectory, outputFile, "BOOT-INF/classes")
+
+      out.println("Serializing project assets...")
+      assetSerializer.serializeAssets(project)
 
       out.println("Assembling project assets...")
       projectAssembler.assembly(project, outputFile, out, err)
