@@ -45,7 +45,7 @@ open class ProtobufMapDeserializer : BinaryMapDeserializer {
       map.javaImports = proto.javaImports
 
       proto.layersList
-         .filter { it.hasTileLayer() || it.hasAutoTileLayer() || it.hasObjectLayer() || it.hasColorLayer() }
+         .filter { it.hasTileLayer() || it.hasAutoTileLayer() || it.hasObjectLayer() || it.hasColorLayer() || it.hasImageLayer() }
          .forEach { map.layers.add(deserializeLayer(map.rows, map.columns, it, replaceTileSet, replaceAutoTile)) }
 
       return map
