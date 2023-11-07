@@ -1,6 +1,7 @@
 package com.bartlomiejpluta.base.engine.core.gl.shader.manager;
 
 import com.bartlomiejpluta.base.engine.core.gl.shader.program.GLShaderProgram;
+import com.bartlomiejpluta.base.engine.error.AppException;
 import com.bartlomiejpluta.base.engine.util.res.ResourcesManager;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import com.bartlomiejpluta.base.internal.render.ShaderProgram;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.lang.String.format;
 
 @Slf4j
 @Component
@@ -20,6 +24,7 @@ import java.util.Map;
 public class DefaultShaderManager implements ShaderManager {
    private final ResourcesManager resourcesManager;
    private final Map<String, ShaderProgram> shaders = new HashMap<>();
+   private final Map<String, AtomicInteger> counters = new HashMap<>();
    private ShaderProgram current;
 
    @Override
@@ -139,6 +144,42 @@ public class DefaultShaderManager implements ShaderManager {
    @Override
    public ShaderManager setUniforms(String uniformName, Uniform[] uniforms) {
       current.setUniforms(uniformName, uniforms);
+      return this;
+   }
+
+   @Override
+   public ShaderManager createCounter(String counterName) {
+      if (counters.containsKey(counterName)) {
+         throw new AppException(format("The [%s] counter already exists", counterName));
+      }
+
+      log.info("Creating {} uniform counter", counterName);
+      counters.put(counterName, new AtomicInteger(0));
+      return this;
+   }
+
+   @Override
+   public int nextNumber(String counterName) {
+      return counters.get(counterName).getAndIncrement();
+   }
+
+   @Override
+   public int topNumber(String counterName) {
+      return counters.get(counterName).get();
+   }
+
+   @Override
+   public ShaderManager setUniformCounter(String uniformName, String counterName) {
+      setUniform(uniformName, counters.get(counterName).get());
+      return this;
+   }
+
+   @Override
+   public ShaderManager resetCounters() {
+      for(var counter : counters.values()) {
+         counter.set(0);
+      }
+
       return this;
    }
 

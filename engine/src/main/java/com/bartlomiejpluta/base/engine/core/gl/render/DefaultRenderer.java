@@ -2,6 +2,8 @@ package com.bartlomiejpluta.base.engine.core.gl.render;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.engine.core.gl.shader.constant.CounterName;
+import com.bartlomiejpluta.base.engine.core.gl.shader.constant.RenderConstants;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
@@ -22,15 +24,27 @@ public class DefaultRenderer implements Renderer {
    public void init() {
       log.info("Initializing renderer");
       shaderManager
-            .createShader("default", "/shaders/default.vs", "/shaders/default.fs")
-            .selectShader("default")
-            .createUniform(UniformName.UNI_VIEW_MODEL_MATRIX)
-            .createUniform(UniformName.UNI_PROJECTION_MATRIX)
-            .createUniform(UniformName.UNI_OBJECT_COLOR)
-            .createUniform(UniformName.UNI_HAS_OBJECT_TEXTURE)
-            .createUniform(UniformName.UNI_TEXTURE_SAMPLER)
-            .createUniform(UniformName.UNI_SPRITE_SIZE)
-            .createUniform(UniformName.UNI_SPRITE_POSITION);
+         .createShader("default", "/shaders/default.vs", "/shaders/default.fs")
+         .selectShader("default")
+         .createUniform(UniformName.UNI_VIEW_MODEL_MATRIX)
+         .createUniform(UniformName.UNI_MODEL_MATRIX)
+         .createUniform(UniformName.UNI_PROJECTION_MATRIX)
+         .createUniform(UniformName.UNI_OBJECT_COLOR)
+         .createUniform(UniformName.UNI_HAS_OBJECT_TEXTURE)
+         .createUniform(UniformName.UNI_TEXTURE_SAMPLER)
+         .createUniform(UniformName.UNI_SPRITE_SIZE)
+         .createUniform(UniformName.UNI_SPRITE_POSITION)
+         .createUniform(UniformName.UNI_AMBIENT)
+         .createUniform(UniformName.UNI_ACTIVE_LIGHTS)
+         .createCounter(CounterName.LIGHT);
+
+      for(int i=0; i<RenderConstants.MAX_LIGHTS; ++i) {
+         shaderManager.createUniform(UniformName.UNI_LIGHTS + "[" + i + "].position");
+         shaderManager.createUniform(UniformName.UNI_LIGHTS + "[" + i + "].intensity");
+         shaderManager.createUniform(UniformName.UNI_LIGHTS + "[" + i + "].constantAttenuation");
+         shaderManager.createUniform(UniformName.UNI_LIGHTS + "[" + i + "].linearAttenuation");
+         shaderManager.createUniform(UniformName.UNI_LIGHTS + "[" + i + "].quadraticAttenuation");
+      }
    }
 
    @Override
@@ -39,6 +53,7 @@ public class DefaultRenderer implements Renderer {
       updateViewport(screen);
 
       shaderManager.selectShader("default").useSelectedShader();
+      shaderManager.resetCounters();
 
       // Important note:
       // The camera render method must be invoked **before** each consecutive item renders

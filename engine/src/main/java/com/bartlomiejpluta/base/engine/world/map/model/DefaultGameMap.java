@@ -12,6 +12,7 @@ import com.bartlomiejpluta.base.api.map.layer.object.PassageAbility;
 import com.bartlomiejpluta.base.api.map.layer.tile.TileLayer;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.engine.util.mesh.MeshManager;
 import com.bartlomiejpluta.base.engine.world.autotile.model.AutoTileSet;
 import com.bartlomiejpluta.base.engine.world.map.layer.autotile.DefaultAutoTileLayer;
@@ -27,6 +28,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +60,9 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
    @Getter
    private final String handler;
 
+   @Getter
+   private final Vector3f ambientColor = new Vector3f(1, 1, 1);
+
    public DefaultGameMap(int tileWidth, int tileHeight, int rows, int columns, String handler) {
       this.rows = rows;
       this.columns = columns;
@@ -77,9 +82,16 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
 
    @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
+      shaderManager.setUniform(UniformName.UNI_AMBIENT, ambientColor);
+
       for (var layer : layers) {
          layer.render(screen, camera, shaderManager);
       }
+   }
+
+   @Override
+   public Layer getLayer(int layerIndex) {
+      return layers.get(layerIndex);
    }
 
    @Override
@@ -111,6 +123,13 @@ public class DefaultGameMap implements Renderable, Updatable, GameMap {
 
          layer.handleEvent(event);
       }
+   }
+
+   @Override
+   public void setAmbientColor(float red, float green, float blue) {
+      this.ambientColor.x = red;
+      this.ambientColor.y = green;
+      this.ambientColor.z = blue;
    }
 
    public TileLayer createTileLayer(@NonNull TileSet tileSet) {

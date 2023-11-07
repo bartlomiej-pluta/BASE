@@ -41,4 +41,14 @@ public interface ShaderManager extends Cleanable {
    ShaderManager setUniform(String uniformName, int index, Uniform uniform);
 
    ShaderManager setUniforms(String uniformName, Uniform[] uniforms);
+
+   ShaderManager createCounter(String counterName);
+
+   int nextNumber(String counterName);
+
+   int topNumber(String counterName);
+
+   ShaderManager setUniformCounter(String uniformName, String counterName);
+
+   ShaderManager resetCounters();
 }

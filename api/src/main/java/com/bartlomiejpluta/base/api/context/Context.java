@@ -11,6 +11,7 @@ import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
+import com.bartlomiejpluta.base.api.light.Light;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
@@ -46,6 +47,8 @@ public interface Context extends Updatable, Renderable, Disposable {
    Animation createAnimation(String animationUid);
 
    Entity createAbstractEntity();
+
+   Light createLight();
 
    Icon createIcon(String iconSetUid, int row, int column);
 

@@ -13,6 +13,7 @@ import com.bartlomiejpluta.base.api.gui.GUI;
 import com.bartlomiejpluta.base.api.icon.Icon;
 import com.bartlomiejpluta.base.api.image.Image;
 import com.bartlomiejpluta.base.api.input.Input;
+import com.bartlomiejpluta.base.api.light.Light;
 import com.bartlomiejpluta.base.api.map.handler.MapHandler;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
@@ -29,6 +30,7 @@ import com.bartlomiejpluta.base.engine.world.entity.AbstractEntity;
 import com.bartlomiejpluta.base.engine.world.icon.manager.IconManager;
 import com.bartlomiejpluta.base.engine.world.icon.manager.IconSetManager;
 import com.bartlomiejpluta.base.engine.world.image.manager.ImageManager;
+import com.bartlomiejpluta.base.engine.world.light.DefaultLight;
 import com.bartlomiejpluta.base.engine.world.map.manager.MapManager;
 import com.bartlomiejpluta.base.engine.world.map.model.DefaultGameMap;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
@@ -169,6 +171,11 @@ public class DefaultContext implements Context {
    @Override
    public Entity createAbstractEntity() {
       return new AbstractEntity();
+   }
+
+   @Override
+   public Light createLight() {
+      return new DefaultLight();
    }
 
    @Override

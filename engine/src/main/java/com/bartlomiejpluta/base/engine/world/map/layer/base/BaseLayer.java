@@ -3,11 +3,15 @@ package com.bartlomiejpluta.base.engine.world.map.layer.base;
 import com.bartlomiejpluta.base.api.animation.Animation;
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.event.Event;
+import com.bartlomiejpluta.base.api.light.Light;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.screen.Screen;
+import com.bartlomiejpluta.base.engine.core.gl.shader.constant.CounterName;
+import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
 import com.bartlomiejpluta.base.internal.logic.Updatable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
+import lombok.Getter;
 import lombok.NonNull;
 import org.joml.Vector2fc;
 
@@ -22,6 +26,9 @@ public abstract class BaseLayer implements Layer, Updatable {
    protected final Vector2fc stepSize;
 
    protected final ArrayList<Animation> animations = new ArrayList<>();
+
+   @Getter
+   protected final ArrayList<Light> lights = new ArrayList<>();
 
    public BaseLayer(@NonNull GameMap map) {
       this.map = map;
@@ -38,6 +45,26 @@ public abstract class BaseLayer implements Layer, Updatable {
    @Override
    public GameMap getMap() {
       return map;
+   }
+
+   @Override
+   public void addLight(Light light) {
+      lights.add(light);
+      light.setStepSize(stepSize.x(), stepSize.y());
+   }
+
+   @Override
+   public void removeLight(Light light) {
+      // Disclaimer
+      // This is a workaround for concurrent modification exception
+      // which is thrown when entity is tried to be removed
+      // in the body of for-each-entity loop
+      lights.remove(lights.indexOf(light));
+   }
+
+   @Override
+   public void clearLights() {
+      lights.clear();
    }
 
    @Override
@@ -58,6 +85,11 @@ public abstract class BaseLayer implements Layer, Updatable {
             animation.onFinish(this);
          }
       }
+
+      // Disclaimer as above for lights
+      for (int i = 0; i < lights.size(); ++i) {
+         lights.get(i).update(dt);
+      }
    }
 
    @Override
@@ -65,6 +97,12 @@ public abstract class BaseLayer implements Layer, Updatable {
       for (var animation : animations) {
          animation.render(screen, camera, shaderManager);
       }
+
+      for (var light : lights) {
+         light.render(screen, camera, shaderManager);
+      }
+
+      shaderManager.setUniformCounter(UniformName.UNI_ACTIVE_LIGHTS, CounterName.LIGHT);
    }
 
    @Override

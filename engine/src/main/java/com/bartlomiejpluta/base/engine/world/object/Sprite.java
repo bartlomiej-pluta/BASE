@@ -38,6 +38,7 @@ public abstract class Sprite extends LocationableModel implements Renderable {
       }
 
       shaderManager.setUniform(UniformName.UNI_VIEW_MODEL_MATRIX, camera.computeViewModelMatrix(getModelMatrix()));
+      shaderManager.setUniform(UniformName.UNI_MODEL_MATRIX, getModelMatrix());
       material.render(screen, camera, shaderManager);
       mesh.render(screen, camera, shaderManager);
    }
