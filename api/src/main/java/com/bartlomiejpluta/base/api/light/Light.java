@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.api.light;
 
 import com.bartlomiejpluta.base.api.location.Locationable;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import org.joml.Vector3fc;
 

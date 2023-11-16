@@ -1,7 +1,7 @@
 package com.bartlomiejpluta.base.api.gui;
 
 import com.bartlomiejpluta.base.internal.gc.Disposable;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 
 public interface GUI extends Renderable, Updatable, Disposable {

@@ -16,7 +16,7 @@ import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.runner.GameRunner;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.internal.gc.Disposable;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.util.lambda.UncheckedConsumer;
 import com.bartlomiejpluta.base.util.lambda.UncheckedFunction;

@@ -9,7 +9,7 @@ import com.bartlomiejpluta.base.api.map.model.GameMap;
 import com.bartlomiejpluta.base.api.screen.Screen;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.CounterName;
 import com.bartlomiejpluta.base.engine.core.gl.shader.constant.UniformName;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.Getter;
 import lombok.NonNull;

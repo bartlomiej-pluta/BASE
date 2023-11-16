@@ -1,6 +1,6 @@
 package com.bartlomiejpluta.base.api.animation;
 
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 
 public interface Animated extends Updatable {
    boolean isAnimationEnabled();

@@ -6,15 +6,11 @@ import com.bartlomiejpluta.base.engine.core.engine.DefaultGameEngine;
 import com.bartlomiejpluta.base.engine.core.gl.object.material.Material;
 import com.bartlomiejpluta.base.engine.core.gl.object.mesh.Mesh;
 import com.bartlomiejpluta.base.engine.world.animation.model.AnimatedSprite;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
-import com.bartlomiejpluta.base.util.math.Distance;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.util.math.MathUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.joml.Vector2f;
-import org.joml.Vector2fc;
-import org.joml.Vector2i;
-import org.joml.Vector2ic;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;

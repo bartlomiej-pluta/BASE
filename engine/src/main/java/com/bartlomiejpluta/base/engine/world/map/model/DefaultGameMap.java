@@ -21,7 +21,7 @@ import com.bartlomiejpluta.base.engine.world.map.layer.image.DefaultImageLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.object.DefaultObjectLayer;
 import com.bartlomiejpluta.base.engine.world.map.layer.tile.DefaultTileLayer;
 import com.bartlomiejpluta.base.engine.world.tileset.model.TileSet;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 import com.bartlomiejpluta.base.internal.render.ShaderManager;
 import lombok.Getter;

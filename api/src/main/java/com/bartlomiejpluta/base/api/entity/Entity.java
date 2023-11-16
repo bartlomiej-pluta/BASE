@@ -5,7 +5,7 @@ import com.bartlomiejpluta.base.api.event.EventType;
 import com.bartlomiejpluta.base.api.event.Reactive;
 import com.bartlomiejpluta.base.api.location.Locationable;
 import com.bartlomiejpluta.base.api.map.layer.object.ObjectLayer;
-import com.bartlomiejpluta.base.internal.logic.Updatable;
+import com.bartlomiejpluta.base.internal.program.Updatable;
 import com.bartlomiejpluta.base.internal.render.Renderable;
 
 import java.util.function.Consumer;

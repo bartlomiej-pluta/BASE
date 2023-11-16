@@ -1,4 +1,4 @@
-package com.bartlomiejpluta.base.engine.logic;
+package com.bartlomiejpluta.base.engine.program;
 
 import com.bartlomiejpluta.base.api.camera.Camera;
 import com.bartlomiejpluta.base.api.context.Context;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class DefaultGameLogic implements GameLogic {
+public class DefaultGameProgram implements GameProgram {
    private final Renderer renderer;
    private Camera camera;
    private Input input;
@@ -24,9 +24,10 @@ public class DefaultGameLogic implements GameLogic {
 
    @Override
    public void init(Screen screen, Context context) {
+      log.info("Initializing game program");
+
       this.context = context;
 
-      log.info("Initializing game logic");
       renderer.init();
 
       log.info("Creating camera model");
