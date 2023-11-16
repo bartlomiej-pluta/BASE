@@ -35,6 +35,11 @@ public class BasePath<T extends Movable> implements Path<T> {
       return this;
    }
 
+   public Path<T> insertPath(Path<T> path) {
+      this.path.addAll(path.getPath());
+      return this;
+   }
+
    public Path<T> move(Direction direction) {
       path.add(new MoveSegment<>(direction));
       return this;

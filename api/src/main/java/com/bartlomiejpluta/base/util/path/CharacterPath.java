@@ -35,6 +35,11 @@ public class CharacterPath<T extends Character> implements Path<T> {
       return this;
    }
 
+   public CharacterPath<T> insertPath(Path<T> path) {
+      this.path.addAll(path.getPath());
+      return this;
+   }
+
    public CharacterPath<T> move(Direction direction) {
       path.add(new MoveSegment<>(direction));
       return this;

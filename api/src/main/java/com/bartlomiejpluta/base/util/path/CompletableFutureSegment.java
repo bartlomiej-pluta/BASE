@@ -10,10 +10,13 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class CompletableFutureSegment<T extends Movable> implements PathSegment<T> {
    private final Supplier<CompletableFuture<?>> futureSupplier;
+   private CompletableFuture<?> future;
 
    @Override
    public PathProgress perform(T movable, ObjectLayer layer, float dt) {
-      var future = futureSupplier.get();
+      if (future == null) {
+         future = futureSupplier.get();
+      }
 
       if (future.isCancelled() || future.isCompletedExceptionally()) {
          return PathProgress.SEGMENT_FAILED;
