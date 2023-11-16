@@ -35,6 +35,11 @@ public class Warp extends EntityDelegate {
    public void update(float dt) {
       if (entity != null && entity.getCoordinates().equals(getCoordinates())) {
          beforeWarp();
+
+         if(entity.getLayer() != null) {
+            entity.getLayer().removeEntity(entity);
+         }
+
          context.openMap(mapUid);
          context.getMap().getObjectLayer(layer).addEntity(entity);
          entity.setCoordinates(x, y);
