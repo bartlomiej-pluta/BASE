@@ -84,13 +84,14 @@ class ObjectPaintingTrace(
       get() = """
          /*  
           *  Following final parameters are available to use:
+          *  this: ? extends ${className(map.handler)} - an object of ${className(map.handler)}'s generated subclass
+          *        so has an access to all members except the private ones
           *  here: MapPin - the composite object containing current map UID, 
           *        layer's index and x,y coordinates of the current tile          
           *  x: int - the x coordinate of the current tile
           *  y: int - the y coordinate of the current tile 
           *  layer: ObjectLayer - current object layer
-          *  map: GameMap - current map          
-          *  handler: ${className(map.handler)} - current map handler
+          *  map: GameMap - current map
           *  runner: ${className(projectContext.project?.runner)} - the game runner of the project
           *  context: Context - the game context
           */
