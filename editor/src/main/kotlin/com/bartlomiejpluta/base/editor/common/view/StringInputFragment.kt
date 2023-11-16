@@ -3,8 +3,12 @@ package com.bartlomiejpluta.base.editor.common.view
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-class StringInputFragment : Fragment("Enter value") {
-   val valueProperty = SimpleStringProperty()
+class StringInputFragment : Fragment("Define value") {
+   val initialValue by param("")
+   val fieldsetLabel by param(title)
+   val label by param("Value: ")
+
+   val valueProperty = SimpleStringProperty(initialValue)
    var value by valueProperty
 
    private var onCompleteConsumer: ((String) -> Unit)? = null
@@ -13,13 +17,16 @@ class StringInputFragment : Fragment("Enter value") {
       this.onCompleteConsumer = consumer
    }
 
-
-   override val root = borderpane {
-      center = textfield(valueProperty) {
-         whenDocked { requestFocus() }
+   override val root = form {
+      fieldset(fieldsetLabel) {
+         field(label) {
+            textfield(valueProperty) {
+               whenDocked { requestFocus() }
+            }
+         }
       }
 
-      bottom = buttonbar {
+      buttonbar {
          button("Apply") {
             action {
                onCompleteConsumer?.let { it(value) }

@@ -1,7 +1,6 @@
 package com.bartlomiejpluta.base.editor.map.canvas
 
 import com.bartlomiejpluta.base.editor.common.view.StringInputFragment
-import com.bartlomiejpluta.base.editor.common.viewmodel.StringVM
 import com.bartlomiejpluta.base.editor.map.model.brush.BrushMode
 import com.bartlomiejpluta.base.editor.map.model.layer.ObjectLayer
 import com.bartlomiejpluta.base.editor.map.model.obj.MapLabel
@@ -14,7 +13,6 @@ import javafx.collections.ObservableList
 import javafx.scene.input.MouseButton
 import tornadofx.Scope
 import tornadofx.find
-import tornadofx.setInScope
 
 class LabelPaintingTrace(
    private val projectContext: ProjectContext,
@@ -57,13 +55,14 @@ class LabelPaintingTrace(
 
    private fun showCodeDialog(initialContent: String): String? {
       val scope = Scope()
-      val vm = StringVM(initialContent)
-      setInScope(vm, scope)
 
       var content: String? = null
 
-      find<StringInputFragment>(scope).apply {
-         title = "Set label"
+      find<StringInputFragment>(scope,
+         StringInputFragment::initialValue to initialContent,
+         StringInputFragment::fieldsetLabel to "Define label",
+         StringInputFragment::label to "Label: ").apply {
+         title = "Label"
 
          onComplete {
             content = it
