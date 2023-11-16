@@ -5,6 +5,7 @@ import com.bartlomiejpluta.base.editor.asset.view.list.AssetsListView
 import com.bartlomiejpluta.base.editor.asset.viewmodel.GraphicAssetVM
 import com.bartlomiejpluta.base.editor.code.view.build.BuildLogsView
 import com.bartlomiejpluta.base.editor.code.view.editor.CodeEditorFragment
+import com.bartlomiejpluta.base.editor.code.view.list.LogicFilesView
 import com.bartlomiejpluta.base.editor.code.view.list.ScriptFilesView
 import com.bartlomiejpluta.base.editor.code.viewmodel.CodeVM
 import com.bartlomiejpluta.base.editor.database.view.list.TablesListView
@@ -34,6 +35,7 @@ class MainView : View("BASE Game Editor") {
    private val mainMenuView = find<MainMenuView>()
    private val assetsView = find<AssetsListView>()
    private val scriptFilesView = find<ScriptFilesView>()
+   private val logicFilesView = find<LogicFilesView>()
    private val buildLogsView = find<BuildLogsView>()
    private val processLogsView = find<ProcessLogsView>()
    private val projectPropertiesView = find<ProjectParametersView>()
@@ -111,6 +113,10 @@ class MainView : View("BASE Game Editor") {
       left = drawer(multiselect = true) {
          item("Code", expanded = false) {
             this += scriptFilesView
+         }
+
+         item("Logic", expanded = false) {
+            this += logicFilesView
          }
 
          item("Assets", expanded = false) {

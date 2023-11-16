@@ -95,6 +95,12 @@ class Project {
    val codeFSNodeProperty = createObjectBinding({ FileSystemNode(codeDirectory) }, codeDirectoryProperty)
    val codeFSNode by codeFSNodeProperty
 
+   val logicDirectoryProperty = SimpleObjectProperty<File>()
+   var logicDirectory by logicDirectoryProperty
+      private set
+   val logicFSNodeProperty = createObjectBinding({ FileSystemNode(logicDirectory) }, logicDirectoryProperty)
+   val logicFSNode by logicFSNodeProperty
+
    // Build directories
    val buildDirectoryProperty = SimpleObjectProperty<File>()
    var buildDirectory by buildDirectoryProperty
@@ -154,6 +160,7 @@ class Project {
             widgetsDirectory = File(it, WIDGETS_DIR)
             audioDirectory = File(it, AUDIO_DIR)
             codeDirectory = File(it, CODE_DIR)
+            logicDirectory = File(it, LOGIC_DIR)
             buildDirectory = File(it, BUILD_DIR)
             buildClassesDirectory = File(it, BUILD_CLASSES_DIR)
             buildDependenciesDirectory = File(it, BUILD_DEPENDENCIES_DIR)
@@ -187,6 +194,7 @@ class Project {
       widgetsDirectory?.mkdirs()
       audioDirectory?.mkdirs()
       codeDirectory?.mkdirs()
+      logicDirectory?.mkdirs()
    }
 
    companion object {
@@ -207,6 +215,7 @@ class Project {
       const val WIDGETS_DIR = "widgets"
       const val AUDIO_DIR = "audio"
       const val CODE_DIR = "src/main/java"
+      const val LOGIC_DIR = "src/main/prolog"
       const val BUILD_DIR = "build"
       const val BUILD_CLASSES_DIR = "$BUILD_DIR/classes"
       const val BUILD_OUT_DIR = "$BUILD_DIR/out"

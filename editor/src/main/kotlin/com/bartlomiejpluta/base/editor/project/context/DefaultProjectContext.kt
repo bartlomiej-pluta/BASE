@@ -363,6 +363,7 @@ class DefaultProjectContext : ProjectContext {
                "java" -> CodeType.JAVA
                "xml" -> CodeType.XML
                "sql" -> CodeType.SQL
+               "pl" -> CodeType.PROLOG
                else -> throw IllegalStateException("Unsupported script type")
             }
          }))
