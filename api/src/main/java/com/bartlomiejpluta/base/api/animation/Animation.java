@@ -25,4 +25,6 @@ public interface Animation extends Movable, Animated, Renderable, Updatable {
    void finish();
 
    boolean finished();
+
+   Layer getLayer();
 }

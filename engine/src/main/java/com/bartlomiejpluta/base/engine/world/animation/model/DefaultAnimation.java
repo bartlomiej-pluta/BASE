@@ -43,6 +43,8 @@ public class DefaultAnimation extends MovableSprite implements Animation {
    private PathExecutor<Animation> pathExecutor = new PathExecutor<>(this);
    private boolean finishOnEnd;
    private boolean finishOnFail;
+
+   @Getter
    private Layer layer;
    private boolean isObjectLayer = false;
 

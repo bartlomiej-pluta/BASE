@@ -5,9 +5,11 @@ import com.bartlomiejpluta.base.api.context.Context;
 import com.bartlomiejpluta.base.api.map.layer.base.Layer;
 import com.bartlomiejpluta.base.api.move.Movable;
 import com.bartlomiejpluta.base.util.path.Path;
+import lombok.NonNull;
 import org.joml.Vector2fc;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class SimpleAnimationRunner implements AnimationRunner {
    private final String animationUid;
@@ -24,6 +26,7 @@ public class SimpleAnimationRunner implements AnimationRunner {
    private boolean finishOnPathFail;
    private float offsetX = 0;
    private float offsetY = 0;
+   private Consumer<Animation> customizer;
 
    public SimpleAnimationRunner(String animationUid) {
       this.animationUid = animationUid;
@@ -82,6 +85,11 @@ public class SimpleAnimationRunner implements AnimationRunner {
       return this;
    }
 
+   public SimpleAnimationRunner customize(@NonNull Consumer<Animation> customizer) {
+      this.customizer = customizer;
+      return this;
+   }
+
    @Override
    public CompletableFuture<Void> run(Context context, Layer layer, Vector2fc origin) {
       var animation = new DelayedAnimation(context.createAnimation(animationUid), delay);
@@ -99,6 +107,11 @@ public class SimpleAnimationRunner implements AnimationRunner {
       }
 
       layer.pushAnimation(animation);
+
+      if (customizer != null) {
+         customizer.accept(animation);
+      }
+
       return animation.getFuture().thenApply(a -> null);
    }
 
@@ -119,6 +132,10 @@ public class SimpleAnimationRunner implements AnimationRunner {
       }
 
       layer.pushAnimation(animation);
+
+      if (customizer != null) {
+         customizer.accept(animation);
+      }
 
       return animation.getFuture().thenApply(a -> null);
    }

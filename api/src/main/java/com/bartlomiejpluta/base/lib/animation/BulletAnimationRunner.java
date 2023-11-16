@@ -36,6 +36,7 @@ public class BulletAnimationRunner implements AnimationRunner {
    private Path<Animation> path;
    private BiConsumer<Movable, Entity> onHit;
    private BiConsumer<Movable, Animation> onMiss;
+   private Consumer<Animation> customizer;
    private float offsetX = 0;
    private float offsetY = 0;
 
@@ -126,6 +127,11 @@ public class BulletAnimationRunner implements AnimationRunner {
       return this;
    }
 
+   public BulletAnimationRunner customize(@NonNull Consumer<Animation> customizer) {
+      this.customizer = customizer;
+      return this;
+   }
+
    @Override
    public CompletableFuture<Void> run(Context context, Layer layer, Vector2fc origin) {
       var animation = new BulletAnimation(context.createAnimation(animationUid), delay, direction, null, onHit, onMiss);
@@ -141,6 +147,10 @@ public class BulletAnimationRunner implements AnimationRunner {
       animation.followPath(path, range, true, true);
 
       layer.pushAnimation(animation);
+
+      if(customizer != null) {
+         customizer.accept(animation);
+      }
 
       return animation.getFuture().thenApply(a -> null);
    }
@@ -160,6 +170,10 @@ public class BulletAnimationRunner implements AnimationRunner {
       animation.followPath(path, range, true, true);
 
       layer.pushAnimation(animation);
+
+      if(customizer != null) {
+         customizer.accept(animation);
+      }
 
       return animation.getFuture().thenApply(a -> null);
    }

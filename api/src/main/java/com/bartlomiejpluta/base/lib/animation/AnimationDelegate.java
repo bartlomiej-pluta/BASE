@@ -290,6 +290,11 @@ public abstract class AnimationDelegate implements Animation {
    }
 
    @Override
+   public Layer getLayer() {
+      return animation.getLayer();
+   }
+
+   @Override
    public void render(Screen screen, Camera camera, ShaderManager shaderManager) {
       animation.render(screen, camera, shaderManager);
    }
