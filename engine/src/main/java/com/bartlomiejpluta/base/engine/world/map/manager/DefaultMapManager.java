@@ -95,7 +95,7 @@ public class DefaultMapManager implements MapManager {
          handler.onCreate(context, map);
 
          var initializer = (MapInitializer) handler;
-         initializer.initialize();
+         initializer.initialize(context);
       }
 
       return handler;
