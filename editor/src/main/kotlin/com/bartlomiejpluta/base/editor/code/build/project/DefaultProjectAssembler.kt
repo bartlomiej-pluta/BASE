@@ -36,7 +36,6 @@ class DefaultProjectAssembler : ProjectAssembler {
       packager.pack(project.fontsDirectory, targetJar, "BOOT-INF/classes/project/fonts")
       packager.pack(project.widgetsDirectory, targetJar, "BOOT-INF/classes/project/widgets")
       packager.pack(project.audioDirectory, targetJar, "BOOT-INF/classes/project/audio")
-      packager.pack(project.logicDirectory, targetJar, "BOOT-INF/classes/project/logic")
    }
 
    companion object {
