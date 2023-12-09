@@ -29,7 +29,13 @@ sourceSets {
 protobuf {
     // Fetch protoc compiler
     protoc {
-        artifact = "com.google.protobuf:protoc:$protobufVersion"
+        def protobufExecutable = System.getenv("PROTOBUF_EXECUTABLE")
+
+        if (protobufExecutable == null) {
+            artifact = "com.google.protobuf:protoc:$protobufVersion"
+        } else {
+            path = protobufExecutable
+        }
     }
 
     generatedFilesBaseDir = "$projectDir/build/proto/"
